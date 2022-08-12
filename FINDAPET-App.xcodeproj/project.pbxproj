@@ -9,23 +9,25 @@
 /* Begin PBXBuildFile section */
 		E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F4F28A69BD2004C5172 /* AppDelegate.swift */; };
 		E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F5128A69BD2004C5172 /* SceneDelegate.swift */; };
-		E3D74F5428A69BD2004C5172 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F5328A69BD2004C5172 /* ViewController.swift */; };
-		E3D74F5728A69BD2004C5172 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3D74F5528A69BD2004C5172 /* Main.storyboard */; };
 		E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F5828A69BD2004C5172 /* FINDAPET_App.xcdatamodeld */; };
 		E3D74F5C28A69BD4004C5172 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3D74F5B28A69BD4004C5172 /* Assets.xcassets */; };
 		E3D74F5F28A69BD4004C5172 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3D74F5D28A69BD4004C5172 /* LaunchScreen.storyboard */; };
+		E3D74F6D28A6A7FC004C5172 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3D74F6F28A6A7FC004C5172 /* Localizable.strings */; };
+		E3D74F7328A6A815004C5172 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E3D74F7528A6A815004C5172 /* Localizable.stringsdict */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E3D74F4C28A69BD2004C5172 /* FINDAPET-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FINDAPET-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3D74F4F28A69BD2004C5172 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E3D74F5128A69BD2004C5172 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		E3D74F5328A69BD2004C5172 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		E3D74F5628A69BD2004C5172 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E3D74F5928A69BD2004C5172 /* FINDAPET_App.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FINDAPET_App.xcdatamodel; sourceTree = "<group>"; };
 		E3D74F5B28A69BD4004C5172 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E3D74F5E28A69BD4004C5172 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E3D74F6028A69BD4004C5172 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E3D74F6E28A6A7FC004C5172 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E3D74F7028A6A7FD004C5172 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E3D74F7428A6A815004C5172 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		E3D74F7628A6A816004C5172 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,16 +60,48 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
-				E3D74F4F28A69BD2004C5172 /* AppDelegate.swift */,
-				E3D74F5128A69BD2004C5172 /* SceneDelegate.swift */,
-				E3D74F5328A69BD2004C5172 /* ViewController.swift */,
-				E3D74F5528A69BD2004C5172 /* Main.storyboard */,
-				E3D74F5B28A69BD4004C5172 /* Assets.xcassets */,
-				E3D74F5D28A69BD4004C5172 /* LaunchScreen.storyboard */,
-				E3D74F6028A69BD4004C5172 /* Info.plist */,
-				E3D74F5828A69BD2004C5172 /* FINDAPET_App.xcdatamodeld */,
+				E3D74F6928A6A6D6004C5172 /* Localization */,
+				E3D74F6828A6A508004C5172 /* Core Data */,
+				E3D74F6728A6A4F8004C5172 /* Sources */,
+				E3D74F6628A6A4CD004C5172 /* Supporting Files */,
 			);
 			path = "FINDAPET-App";
+			sourceTree = "<group>";
+		};
+		E3D74F6628A6A4CD004C5172 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E3D74F4F28A69BD2004C5172 /* AppDelegate.swift */,
+				E3D74F5128A69BD2004C5172 /* SceneDelegate.swift */,
+				E3D74F5D28A69BD4004C5172 /* LaunchScreen.storyboard */,
+				E3D74F6028A69BD4004C5172 /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E3D74F6728A6A4F8004C5172 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E3D74F5B28A69BD4004C5172 /* Assets.xcassets */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		E3D74F6828A6A508004C5172 /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				E3D74F5828A69BD2004C5172 /* FINDAPET_App.xcdatamodeld */,
+			);
+			path = "Core Data";
+			sourceTree = "<group>";
+		};
+		E3D74F6928A6A6D6004C5172 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				E3D74F6F28A6A7FC004C5172 /* Localizable.strings */,
+				E3D74F7528A6A815004C5172 /* Localizable.stringsdict */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +146,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = E3D74F4328A69BD2004C5172;
 			productRefGroup = E3D74F4D28A69BD2004C5172 /* Products */;
@@ -129,8 +164,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3D74F5F28A69BD4004C5172 /* LaunchScreen.storyboard in Resources */,
+				E3D74F7328A6A815004C5172 /* Localizable.stringsdict in Resources */,
+				E3D74F6D28A6A7FC004C5172 /* Localizable.strings in Resources */,
 				E3D74F5C28A69BD4004C5172 /* Assets.xcassets in Resources */,
-				E3D74F5728A69BD2004C5172 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +178,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */,
-				E3D74F5428A69BD2004C5172 /* ViewController.swift in Sources */,
 				E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */,
 				E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */,
 			);
@@ -151,20 +186,30 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		E3D74F5528A69BD2004C5172 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E3D74F5628A69BD2004C5172 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		E3D74F5D28A69BD4004C5172 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E3D74F5E28A69BD4004C5172 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		E3D74F6F28A6A7FC004C5172 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E3D74F6E28A6A7FC004C5172 /* en */,
+				E3D74F7028A6A7FD004C5172 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		E3D74F7528A6A815004C5172 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E3D74F7428A6A815004C5172 /* en */,
+				E3D74F7628A6A816004C5172 /* ru */,
+			);
+			name = Localizable.stringsdict;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -174,6 +219,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -234,6 +280,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -292,12 +339,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "FINDAPET-App/Info.plist";
+				INFOPLIST_FILE = "FINDAPET-App/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = FINDAPET;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIMainStoryboardFile = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -319,12 +368,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "FINDAPET-App/Info.plist";
+				INFOPLIST_FILE = "FINDAPET-App/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = FINDAPET;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIMainStoryboardFile = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
