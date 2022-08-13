@@ -14,6 +14,11 @@
 		E3D74F5F28A69BD4004C5172 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3D74F5D28A69BD4004C5172 /* LaunchScreen.storyboard */; };
 		E3D74F6D28A6A7FC004C5172 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3D74F6F28A6A7FC004C5172 /* Localizable.strings */; };
 		E3D74F7328A6A815004C5172 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E3D74F7528A6A815004C5172 /* Localizable.stringsdict */; };
+		E3D74F7B28A6AA91004C5172 /* Schemes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F7A28A6AA91004C5172 /* Schemes.swift */; };
+		E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F7C28A6AB26004C5172 /* Hosts.swift */; };
+		E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F7E28A6ABB6004C5172 /* Ports.swift */; };
+		E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F8028A6AC3F004C5172 /* Paths.swift */; };
+		E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +33,11 @@
 		E3D74F7028A6A7FD004C5172 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E3D74F7428A6A815004C5172 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E3D74F7628A6A816004C5172 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		E3D74F7A28A6AA91004C5172 /* Schemes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schemes.swift; sourceTree = "<group>"; };
+		E3D74F7C28A6AB26004C5172 /* Hosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hosts.swift; sourceTree = "<group>"; };
+		E3D74F7E28A6ABB6004C5172 /* Ports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ports.swift; sourceTree = "<group>"; };
+		E3D74F8028A6AC3F004C5172 /* Paths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paths.swift; sourceTree = "<group>"; };
+		E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstructor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +70,7 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E3D74F7728A6A8E4004C5172 /* URLContructor */,
 				E3D74F6928A6A6D6004C5172 /* Localization */,
 				E3D74F6828A6A508004C5172 /* Core Data */,
 				E3D74F6728A6A4F8004C5172 /* Sources */,
@@ -102,6 +113,26 @@
 				E3D74F7528A6A815004C5172 /* Localizable.stringsdict */,
 			);
 			path = Localization;
+			sourceTree = "<group>";
+		};
+		E3D74F7728A6A8E4004C5172 /* URLContructor */ = {
+			isa = PBXGroup;
+			children = (
+				E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */,
+				E3D74F8228A6AD74004C5172 /* URLParts */,
+			);
+			path = URLContructor;
+			sourceTree = "<group>";
+		};
+		E3D74F8228A6AD74004C5172 /* URLParts */ = {
+			isa = PBXGroup;
+			children = (
+				E3D74F7A28A6AA91004C5172 /* Schemes.swift */,
+				E3D74F7C28A6AB26004C5172 /* Hosts.swift */,
+				E3D74F7E28A6ABB6004C5172 /* Ports.swift */,
+				E3D74F8028A6AC3F004C5172 /* Paths.swift */,
+			);
+			path = URLParts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,9 +208,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
+				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
 				E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */,
 				E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */,
 				E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */,
+				E3D74F7B28A6AA91004C5172 /* Schemes.swift in Sources */,
+				E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */,
+				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
