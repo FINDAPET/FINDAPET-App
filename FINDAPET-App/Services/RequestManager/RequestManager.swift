@@ -19,19 +19,19 @@ final class RequestManager {
         var req = URLRequest(url: url)
         
         req.httpMethod = method.rawValue
-        req.setValue(HTTPHeaders.applicationJson.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
+        req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
         
         if let authMode = authMode {
             switch authMode {
             case .base(let email, let password):
                 req.setValue(
-                    HTTPHeaders.authString(email: email, password: password),
-                    forHTTPHeaderField: HTTPHeaders.authorization.rawValue
+                    Headers.authString(email: email, password: password),
+                    forHTTPHeaderField: Headers.authorization.rawValue
                 )
             case .bearer(let value):
                 req.setValue(
-                    HTTPHeaders.bearerAuthString(token: value),
-                    forHTTPHeaderField: HTTPHeaders.authorization.rawValue
+                    Headers.bearerAuthString(token: value),
+                    forHTTPHeaderField: Headers.authorization.rawValue
                 )
             }
         }
@@ -93,19 +93,19 @@ final class RequestManager {
         var req = URLRequest(url: url)
         
         req.httpMethod = method.rawValue
-        req.setValue(HTTPHeaders.applicationJson.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
+        req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
         
         if let authMode = authMode {
             switch authMode {
             case .base(let email, let password):
                 req.setValue(
-                    HTTPHeaders.authString(email: email, password: password),
-                    forHTTPHeaderField: HTTPHeaders.authorization.rawValue
+                    Headers.authString(email: email, password: password),
+                    forHTTPHeaderField: Headers.authorization.rawValue
                 )
             case .bearer(let value):
                 req.setValue(
-                    HTTPHeaders.bearerAuthString(token: value),
-                    forHTTPHeaderField: HTTPHeaders.authorization.rawValue
+                    Headers.bearerAuthString(token: value),
+                    forHTTPHeaderField: Headers.authorization.rawValue
                 )
             }
         }
@@ -177,19 +177,19 @@ final class RequestManager {
         var req = URLRequest(url: url)
         
         req.httpMethod = method.rawValue
-        req.setValue(HTTPHeaders.applicationJson.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
+        req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
         
         if let authMode = authMode {
             switch authMode {
             case .base(let email, let password):
                 req.setValue(
-                    HTTPHeaders.authString(email: email, password: password),
-                    forHTTPHeaderField: HTTPHeaders.authorization.rawValue
+                    Headers.authString(email: email, password: password),
+                    forHTTPHeaderField: Headers.authorization.rawValue
                 )
             case .bearer(let value):
                 req.setValue(
-                    HTTPHeaders.bearerAuthString(token: value),
-                    forHTTPHeaderField: HTTPHeaders.authorization.rawValue
+                    Headers.bearerAuthString(token: value),
+                    forHTTPHeaderField: Headers.authorization.rawValue
                 )
             }
         }
@@ -244,19 +244,19 @@ final class RequestManager {
         var req = URLRequest(url: url)
         
         req.httpMethod = method.rawValue
-        req.setValue(HTTPHeaders.applicationJson.rawValue, forHTTPHeaderField: HTTPHeaders.contentType.rawValue)
+        req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
         
         if let authMode = authMode {
             switch authMode {
             case .base(let email, let password):
                 req.setValue(
-                    HTTPHeaders.authString(email: email, password: password),
-                    forHTTPHeaderField: HTTPHeaders.authorization.rawValue
+                    Headers.authString(email: email, password: password),
+                    forHTTPHeaderField: Headers.authorization.rawValue
                 )
             case .bearer(let value):
                 req.setValue(
-                    HTTPHeaders.bearerAuthString(token: value),
-                    forHTTPHeaderField: HTTPHeaders.authorization.rawValue
+                    Headers.bearerAuthString(token: value),
+                    forHTTPHeaderField: Headers.authorization.rawValue
                 )
             }
         }

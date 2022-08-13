@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum HTTPHeaders: String {
+enum Headers: String {
     case applicationJson = "application/json"
     case contentType = "Content-Type"
     case authorization = "Authorization"
