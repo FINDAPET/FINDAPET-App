@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */; };
+		E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */; };
+		E34ABC3428A7906500A7D2C8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3328A7906500A7D2C8 /* User.swift */; };
+		E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3528A7951600A7D2C8 /* Offer.swift */; };
+		E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3728A7961E00A7D2C8 /* Deal.swift */; };
+		E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3928A796EA00A7D2C8 /* Ad.swift */; };
+		E34ABC3C28A7BD4300A7D2C8 /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3B28A7BD4300A7D2C8 /* HTTPMethods.swift */; };
+		E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3D28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift */; };
+		E34ABC4028A7BDD500A7D2C8 /* HTTPHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3F28A7BDD500A7D2C8 /* HTTPHeaders.swift */; };
+		E34ABC4328A7C59B00A7D2C8 /* RequestErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC4228A7C59B00A7D2C8 /* RequestErrors.swift */; };
 		E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F4F28A69BD2004C5172 /* AppDelegate.swift */; };
 		E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F5128A69BD2004C5172 /* SceneDelegate.swift */; };
 		E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F5828A69BD2004C5172 /* FINDAPET_App.xcdatamodeld */; };
@@ -22,6 +32,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
+		E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
+		E34ABC3328A7906500A7D2C8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E34ABC3528A7951600A7D2C8 /* Offer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Offer.swift; sourceTree = "<group>"; };
+		E34ABC3728A7961E00A7D2C8 /* Deal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deal.swift; sourceTree = "<group>"; };
+		E34ABC3928A796EA00A7D2C8 /* Ad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ad.swift; sourceTree = "<group>"; };
+		E34ABC3B28A7BD4300A7D2C8 /* HTTPMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethods.swift; sourceTree = "<group>"; };
+		E34ABC3D28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPAuthentaficationMode.swift; sourceTree = "<group>"; };
+		E34ABC3F28A7BDD500A7D2C8 /* HTTPHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPHeaders.swift; sourceTree = "<group>"; };
+		E34ABC4228A7C59B00A7D2C8 /* RequestErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestErrors.swift; sourceTree = "<group>"; };
 		E3D74F4C28A69BD2004C5172 /* FINDAPET-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FINDAPET-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3D74F4F28A69BD2004C5172 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E3D74F5128A69BD2004C5172 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +71,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E34ABC2D28A771A600A7D2C8 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */,
+				E34ABC3B28A7BD4300A7D2C8 /* HTTPMethods.swift */,
+				E34ABC3D28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift */,
+				E34ABC3F28A7BDD500A7D2C8 /* HTTPHeaders.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E34ABC3028A7722800A7D2C8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */,
+				E34ABC3328A7906500A7D2C8 /* User.swift */,
+				E34ABC3528A7951600A7D2C8 /* Offer.swift */,
+				E34ABC3728A7961E00A7D2C8 /* Deal.swift */,
+				E34ABC3928A796EA00A7D2C8 /* Ad.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E34ABC4128A7C31400A7D2C8 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC4228A7C59B00A7D2C8 /* RequestErrors.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
 		E3D74F4328A69BD2004C5172 = {
 			isa = PBXGroup;
 			children = (
@@ -70,6 +121,9 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E34ABC4128A7C31400A7D2C8 /* Errors */,
+				E34ABC3028A7722800A7D2C8 /* Models */,
+				E34ABC2D28A771A600A7D2C8 /* Services */,
 				E3D74F7728A6A8E4004C5172 /* URLContructor */,
 				E3D74F6928A6A6D6004C5172 /* Localization */,
 				E3D74F6828A6A508004C5172 /* Core Data */,
@@ -208,14 +262,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
 				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
+				E34ABC4028A7BDD500A7D2C8 /* HTTPHeaders.swift in Sources */,
+				E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */,
 				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
+				E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */,
 				E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */,
 				E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */,
+				E34ABC4328A7C59B00A7D2C8 /* RequestErrors.swift in Sources */,
 				E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */,
 				E3D74F7B28A6AA91004C5172 /* Schemes.swift in Sources */,
 				E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */,
+				E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */,
 				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
+				E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */,
+				E34ABC3C28A7BD4300A7D2C8 /* HTTPMethods.swift in Sources */,
+				E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */,
+				E34ABC3428A7906500A7D2C8 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
