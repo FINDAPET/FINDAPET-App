@@ -49,8 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         (granted, error) in
           print("Permission granted: \(granted)")
           
-          showNotificationSettingsUI = true
-
           guard granted else { return }
         
           self.getNotificationSettings()

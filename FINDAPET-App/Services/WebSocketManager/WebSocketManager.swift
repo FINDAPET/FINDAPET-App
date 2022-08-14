@@ -15,7 +15,7 @@ final class WebSocketManager {
         completionHandler: @escaping (String?, Error?) -> Void
     ) {
         var req = URLRequest(url: url)
-        let configuration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier ?? "")
+        let configuration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier ?? "com.artemiy.FINDAPET-App")
         
         req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
         
@@ -69,7 +69,7 @@ final class WebSocketManager {
         completionHandler: @escaping (Data?, Error?) -> Void
     ) {
         var req = URLRequest(url: url)
-        let configuration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier ?? "")
+        let configuration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier ?? "com.artemiy.FINDAPET-App")
         
         req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
         

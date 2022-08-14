@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */; };
 		E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334DFCC28A82687000A2316 /* NotificationManager.swift */; };
 		E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */; };
 		E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePayManager.swift; sourceTree = "<group>"; };
 		E334DFC728A81D9F000A2316 /* FINDAPET-App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "FINDAPET-App.entitlements"; sourceTree = "<group>"; };
 		E334DFCC28A82687000A2316 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
@@ -94,6 +96,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E31BEE4B28A96A7600E29A1C /* ApplePayManager */ = {
+			isa = PBXGroup;
+			children = (
+				E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */,
+			);
+			path = ApplePayManager;
+			sourceTree = "<group>";
+		};
 		E334DFCB28A8265B000A2316 /* NotificationManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +116,7 @@
 		E34ABC2D28A771A600A7D2C8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E31BEE4B28A96A7600E29A1C /* ApplePayManager */,
 				E334DFCB28A8265B000A2316 /* NotificationManager */,
 				E34ABC5A28A7D6AB00A7D2C8 /* WebSocketManager */,
 				E34ABC5228A7D37B00A7D2C8 /* KeychainManager */,
@@ -359,6 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
+				E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */,
 				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
 				E34ABC4028A7BDD500A7D2C8 /* Headers.swift in Sources */,
 				E34ABC4528A7CE2E00A7D2C8 /* RegistrationErrors.swift in Sources */,
@@ -542,7 +554,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "FINDAPET-App/FINDAPET-App.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "FINDAPET-App/Services/NotificationManager/FINDAPET-App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FY2MUX2TBL;
@@ -560,7 +572,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "artemiy.FINDAPET-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.artemiy.FINDAPET-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -573,7 +585,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "FINDAPET-App/FINDAPET-App.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "FINDAPET-App/Services/NotificationManager/FINDAPET-App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FY2MUX2TBL;
@@ -591,7 +603,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "artemiy.FINDAPET-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.artemiy.FINDAPET-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
