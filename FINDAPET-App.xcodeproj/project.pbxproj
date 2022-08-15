@@ -7,6 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */; };
+		E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334DFCC28A82687000A2316 /* NotificationManager.swift */; };
+		E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */; };
+		E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */; };
+		E34ABC3428A7906500A7D2C8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3328A7906500A7D2C8 /* User.swift */; };
+		E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3528A7951600A7D2C8 /* Offer.swift */; };
+		E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3728A7961E00A7D2C8 /* Deal.swift */; };
+		E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3928A796EA00A7D2C8 /* Ad.swift */; };
+		E34ABC3C28A7BD4300A7D2C8 /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3B28A7BD4300A7D2C8 /* HTTPMethods.swift */; };
+		E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3D28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift */; };
+		E34ABC4028A7BDD500A7D2C8 /* Headers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3F28A7BDD500A7D2C8 /* Headers.swift */; };
+		E34ABC4328A7C59B00A7D2C8 /* RequestErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC4228A7C59B00A7D2C8 /* RequestErrors.swift */; };
+		E34ABC4528A7CE2E00A7D2C8 /* RegistrationErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC4428A7CE2E00A7D2C8 /* RegistrationErrors.swift */; };
+		E34ABC4928A7CE9F00A7D2C8 /* RegistrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC4828A7CE9F00A7D2C8 /* RegistrationManager.swift */; };
+		E34ABC4C28A7CEC100A7D2C8 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC4B28A7CEC100A7D2C8 /* String.swift */; };
+		E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC4E28A7D15F00A7D2C8 /* UserDefaultsManager.swift */; };
+		E34ABC5128A7D30E00A7D2C8 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5028A7D30E00A7D2C8 /* UserDefaultsKeys.swift */; };
+		E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5328A7D39200A7D2C8 /* KeychainManager.swift */; };
+		E34ABC5728A7D40900A7D2C8 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E34ABC5628A7D40900A7D2C8 /* KeychainAccess */; };
+		E34ABC5928A7D48300A7D2C8 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */; };
+		E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */; };
+		E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */; };
 		E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F4F28A69BD2004C5172 /* AppDelegate.swift */; };
 		E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F5128A69BD2004C5172 /* SceneDelegate.swift */; };
 		E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F5828A69BD2004C5172 /* FINDAPET_App.xcdatamodeld */; };
@@ -19,9 +41,32 @@
 		E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F7E28A6ABB6004C5172 /* Ports.swift */; };
 		E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F8028A6AC3F004C5172 /* Paths.swift */; };
 		E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */; };
+		E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePayManager.swift; sourceTree = "<group>"; };
+		E334DFC728A81D9F000A2316 /* FINDAPET-App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "FINDAPET-App.entitlements"; sourceTree = "<group>"; };
+		E334DFCC28A82687000A2316 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
+		E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
+		E34ABC3328A7906500A7D2C8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E34ABC3528A7951600A7D2C8 /* Offer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Offer.swift; sourceTree = "<group>"; };
+		E34ABC3728A7961E00A7D2C8 /* Deal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deal.swift; sourceTree = "<group>"; };
+		E34ABC3928A796EA00A7D2C8 /* Ad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ad.swift; sourceTree = "<group>"; };
+		E34ABC3B28A7BD4300A7D2C8 /* HTTPMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethods.swift; sourceTree = "<group>"; };
+		E34ABC3D28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPAuthentaficationMode.swift; sourceTree = "<group>"; };
+		E34ABC3F28A7BDD500A7D2C8 /* Headers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Headers.swift; sourceTree = "<group>"; };
+		E34ABC4228A7C59B00A7D2C8 /* RequestErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestErrors.swift; sourceTree = "<group>"; };
+		E34ABC4428A7CE2E00A7D2C8 /* RegistrationErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationErrors.swift; sourceTree = "<group>"; };
+		E34ABC4828A7CE9F00A7D2C8 /* RegistrationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationManager.swift; sourceTree = "<group>"; };
+		E34ABC4B28A7CEC100A7D2C8 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		E34ABC4E28A7D15F00A7D2C8 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		E34ABC5028A7D30E00A7D2C8 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
+		E34ABC5328A7D39200A7D2C8 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
+		E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSAuthentaficationMode.swift; sourceTree = "<group>"; };
 		E3D74F4C28A69BD2004C5172 /* FINDAPET-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FINDAPET-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3D74F4F28A69BD2004C5172 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E3D74F5128A69BD2004C5172 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -38,6 +83,7 @@
 		E3D74F7E28A6ABB6004C5172 /* Ports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ports.swift; sourceTree = "<group>"; };
 		E3D74F8028A6AC3F004C5172 /* Paths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paths.swift; sourceTree = "<group>"; };
 		E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstructor.swift; sourceTree = "<group>"; };
+		E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,12 +91,120 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E34ABC5728A7D40900A7D2C8 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E31BEE4B28A96A7600E29A1C /* ApplePayManager */ = {
+			isa = PBXGroup;
+			children = (
+				E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */,
+				E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */,
+			);
+			path = ApplePayManager;
+			sourceTree = "<group>";
+		};
+		E334DFCB28A8265B000A2316 /* NotificationManager */ = {
+			isa = PBXGroup;
+			children = (
+				E334DFC728A81D9F000A2316 /* FINDAPET-App.entitlements */,
+				E334DFCC28A82687000A2316 /* NotificationManager.swift */,
+			);
+			path = NotificationManager;
+			sourceTree = "<group>";
+		};
+		E34ABC2D28A771A600A7D2C8 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E31BEE4B28A96A7600E29A1C /* ApplePayManager */,
+				E334DFCB28A8265B000A2316 /* NotificationManager */,
+				E34ABC5A28A7D6AB00A7D2C8 /* WebSocketManager */,
+				E34ABC5228A7D37B00A7D2C8 /* KeychainManager */,
+				E34ABC4D28A7D0F100A7D2C8 /* UserDefaultsManager */,
+				E34ABC4728A7CE7200A7D2C8 /* RegistrationManager */,
+				E34ABC4628A7CE5F00A7D2C8 /* RequestManager */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E34ABC3028A7722800A7D2C8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */,
+				E34ABC3328A7906500A7D2C8 /* User.swift */,
+				E34ABC3528A7951600A7D2C8 /* Offer.swift */,
+				E34ABC3728A7961E00A7D2C8 /* Deal.swift */,
+				E34ABC3928A796EA00A7D2C8 /* Ad.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E34ABC4128A7C31400A7D2C8 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC4228A7C59B00A7D2C8 /* RequestErrors.swift */,
+				E34ABC4428A7CE2E00A7D2C8 /* RegistrationErrors.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		E34ABC4628A7CE5F00A7D2C8 /* RequestManager */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */,
+				E34ABC3B28A7BD4300A7D2C8 /* HTTPMethods.swift */,
+				E34ABC3D28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift */,
+				E34ABC3F28A7BDD500A7D2C8 /* Headers.swift */,
+			);
+			path = RequestManager;
+			sourceTree = "<group>";
+		};
+		E34ABC4728A7CE7200A7D2C8 /* RegistrationManager */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC4828A7CE9F00A7D2C8 /* RegistrationManager.swift */,
+			);
+			path = RegistrationManager;
+			sourceTree = "<group>";
+		};
+		E34ABC4A28A7CEB100A7D2C8 /* TypeExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC4B28A7CEC100A7D2C8 /* String.swift */,
+			);
+			path = TypeExtensions;
+			sourceTree = "<group>";
+		};
+		E34ABC4D28A7D0F100A7D2C8 /* UserDefaultsManager */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC4E28A7D15F00A7D2C8 /* UserDefaultsManager.swift */,
+				E34ABC5028A7D30E00A7D2C8 /* UserDefaultsKeys.swift */,
+			);
+			path = UserDefaultsManager;
+			sourceTree = "<group>";
+		};
+		E34ABC5228A7D37B00A7D2C8 /* KeychainManager */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC5328A7D39200A7D2C8 /* KeychainManager.swift */,
+				E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */,
+			);
+			path = KeychainManager;
+			sourceTree = "<group>";
+		};
+		E34ABC5A28A7D6AB00A7D2C8 /* WebSocketManager */ = {
+			isa = PBXGroup;
+			children = (
+				E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */,
+				E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */,
+			);
+			path = WebSocketManager;
+			sourceTree = "<group>";
+		};
 		E3D74F4328A69BD2004C5172 = {
 			isa = PBXGroup;
 			children = (
@@ -70,6 +224,10 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E34ABC4A28A7CEB100A7D2C8 /* TypeExtensions */,
+				E34ABC4128A7C31400A7D2C8 /* Errors */,
+				E34ABC3028A7722800A7D2C8 /* Models */,
+				E34ABC2D28A771A600A7D2C8 /* Services */,
 				E3D74F7728A6A8E4004C5172 /* URLContructor */,
 				E3D74F6928A6A6D6004C5172 /* Localization */,
 				E3D74F6828A6A508004C5172 /* Core Data */,
@@ -151,6 +309,9 @@
 			dependencies = (
 			);
 			name = "FINDAPET-App";
+			packageProductDependencies = (
+				E34ABC5628A7D40900A7D2C8 /* KeychainAccess */,
+			);
 			productName = "FINDAPET-App";
 			productReference = E3D74F4C28A69BD2004C5172 /* FINDAPET-App.app */;
 			productType = "com.apple.product-type.application";
@@ -180,6 +341,9 @@
 				ru,
 			);
 			mainGroup = E3D74F4328A69BD2004C5172;
+			packageReferences = (
+				E34ABC5528A7D40900A7D2C8 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+			);
 			productRefGroup = E3D74F4D28A69BD2004C5172 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -208,14 +372,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
+				E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */,
 				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
+				E34ABC4028A7BDD500A7D2C8 /* Headers.swift in Sources */,
+				E34ABC4528A7CE2E00A7D2C8 /* RegistrationErrors.swift in Sources */,
+				E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */,
+				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
+				E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */,
+				E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */,
 				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
+				E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */,
+				E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */,
+				E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */,
 				E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */,
 				E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */,
+				E34ABC4328A7C59B00A7D2C8 /* RequestErrors.swift in Sources */,
+				E34ABC4928A7CE9F00A7D2C8 /* RegistrationManager.swift in Sources */,
 				E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */,
 				E3D74F7B28A6AA91004C5172 /* Schemes.swift in Sources */,
+				E34ABC5928A7D48300A7D2C8 /* KeychainKeys.swift in Sources */,
+				E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */,
+				E34ABC5128A7D30E00A7D2C8 /* UserDefaultsKeys.swift in Sources */,
 				E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */,
+				E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */,
 				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
+				E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */,
+				E34ABC3C28A7BD4300A7D2C8 /* HTTPMethods.swift in Sources */,
+				E34ABC4C28A7CEC100A7D2C8 /* String.swift in Sources */,
+				E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */,
+				E34ABC3428A7906500A7D2C8 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,8 +558,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "FINDAPET-App/Services/NotificationManager/FINDAPET-App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FY2MUX2TBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FINDAPET-App/Supporting Files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = FINDAPET;
@@ -388,7 +576,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "artemiy.FINDAPET-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.artemiy.FINDAPET-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -401,8 +589,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "FINDAPET-App/Services/NotificationManager/FINDAPET-App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FY2MUX2TBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FINDAPET-App/Supporting Files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = FINDAPET;
@@ -417,7 +607,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "artemiy.FINDAPET-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.artemiy.FINDAPET-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -447,6 +637,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E34ABC5528A7D40900A7D2C8 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E34ABC5628A7D40900A7D2C8 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E34ABC5528A7D40900A7D2C8 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		E3D74F5828A69BD2004C5172 /* FINDAPET_App.xcdatamodeld */ = {
