@@ -41,6 +41,7 @@
 		E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F7E28A6ABB6004C5172 /* Ports.swift */; };
 		E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F8028A6AC3F004C5172 /* Paths.swift */; };
 		E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */; };
+		E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +83,7 @@
 		E3D74F7E28A6ABB6004C5172 /* Ports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ports.swift; sourceTree = "<group>"; };
 		E3D74F8028A6AC3F004C5172 /* Paths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paths.swift; sourceTree = "<group>"; };
 		E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstructor.swift; sourceTree = "<group>"; };
+		E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */,
+				E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */,
 			);
 			path = ApplePayManager;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
 				E34ABC4028A7BDD500A7D2C8 /* Headers.swift in Sources */,
 				E34ABC4528A7CE2E00A7D2C8 /* RegistrationErrors.swift in Sources */,
+				E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */,
 				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
 				E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */,
 				E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */,

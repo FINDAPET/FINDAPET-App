@@ -27,9 +27,7 @@ final class ApplePayManager {
         req.countryCode = countryCode
         req.currencyCode = currencyCode
         req.paymentSummaryItems = [PKPaymentSummaryItem(label: title, amount: NSDecimalNumber(value: sum))]
-        req.supportedCountries = [
-            "AM", "AZ", "BY", "BE", "BG", "CA", "CN", "HR", "CY", "CZ", "DO", "EE", "FI", "FR", "DE", "GR", "RU"
-        ]
+        req.supportedCountries = Set(CountryCodes.allCases.map { $0.rawValue })
         
         delegate.present(controller, animated: true)
     }
