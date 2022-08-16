@@ -1,0 +1,50 @@
+//
+//  RegistrationCoordinator.swift
+//  FINDAPET-App
+//
+//  Created by Artemiy Zuzin on 16.08.2022.
+//
+
+import Foundation
+import UIKit
+
+protocol RegistrationCoordinatable {
+    var coordinatorDelegate: RegistrationCoordinator? { get set }
+}
+
+final class RegistrationCoordinator: Coordinator {
+    
+    let navigationController = UINavigationController()
+    
+    func start() {
+        self.setupViews()
+        
+        if KeychainManager.read(key: .token) != nil {
+            self.goToMainTabBar()
+        } else {
+            self.goToOnboarding()
+        }
+    }
+    
+    func goToOnboarding() {
+        // push onboarding
+    }
+    
+    func goToRegistration(mode: RegistrationMode) {
+        // push registration
+    }
+    
+    func goToMainTabBar() {
+        let coordinator = MainTabBarCoordinator()
+        
+        coordinator.coordinatorDelegate = self
+        coordinator.start()
+        
+        self.navigationController.pushViewController(coordinator.tabBar, animated: true)
+    }
+    
+    private func setupViews() {
+        self.navigationController.navigationBar.isHidden = true
+    }
+    
+}
