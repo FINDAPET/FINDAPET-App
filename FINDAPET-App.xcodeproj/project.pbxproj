@@ -29,6 +29,13 @@
 		E34ABC5928A7D48300A7D2C8 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */; };
 		E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */; };
 		E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */; };
+		E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */; };
+		E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67828ABD3BA00468ED2 /* UIColor.swift */; };
+		E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */; };
+		E3CEE67D28ABD6D500468ED2 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67C28ABD6D400468ED2 /* ProfileCoordinator.swift */; };
+		E3CEE67F28ABD88800468ED2 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67E28ABD88800468ED2 /* Coordinator.swift */; };
+		E3CEE68228ABE4DC00468ED2 /* RegistrationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE68128ABE4DC00468ED2 /* RegistrationCoordinator.swift */; };
+		E3CEE68528ABE77B00468ED2 /* RegistrationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE68428ABE77B00468ED2 /* RegistrationMode.swift */; };
 		E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F4F28A69BD2004C5172 /* AppDelegate.swift */; };
 		E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F5128A69BD2004C5172 /* SceneDelegate.swift */; };
 		E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F5828A69BD2004C5172 /* FINDAPET_App.xcdatamodeld */; };
@@ -67,6 +74,13 @@
 		E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
 		E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSAuthentaficationMode.swift; sourceTree = "<group>"; };
+		E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
+		E3CEE67828ABD3BA00468ED2 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
+		E3CEE67C28ABD6D400468ED2 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
+		E3CEE67E28ABD88800468ED2 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		E3CEE68128ABE4DC00468ED2 /* RegistrationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationCoordinator.swift; sourceTree = "<group>"; };
+		E3CEE68428ABE77B00468ED2 /* RegistrationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationMode.swift; sourceTree = "<group>"; };
 		E3D74F4C28A69BD2004C5172 /* FINDAPET-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FINDAPET-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3D74F4F28A69BD2004C5172 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E3D74F5128A69BD2004C5172 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -174,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				E34ABC4B28A7CEC100A7D2C8 /* String.swift */,
+				E3CEE67828ABD3BA00468ED2 /* UIColor.swift */,
 			);
 			path = TypeExtensions;
 			sourceTree = "<group>";
@@ -205,6 +220,26 @@
 			path = WebSocketManager;
 			sourceTree = "<group>";
 		};
+		E3CEE67528ABD2E200468ED2 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */,
+				E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */,
+				E3CEE67C28ABD6D400468ED2 /* ProfileCoordinator.swift */,
+				E3CEE68128ABE4DC00468ED2 /* RegistrationCoordinator.swift */,
+				E3CEE67E28ABD88800468ED2 /* Coordinator.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		E3CEE68328ABE72D00468ED2 /* RegistrationModule */ = {
+			isa = PBXGroup;
+			children = (
+				E3CEE68428ABE77B00468ED2 /* RegistrationMode.swift */,
+			);
+			path = RegistrationModule;
+			sourceTree = "<group>";
+		};
 		E3D74F4328A69BD2004C5172 = {
 			isa = PBXGroup;
 			children = (
@@ -224,6 +259,8 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E3CEE68328ABE72D00468ED2 /* RegistrationModule */,
+				E3CEE67528ABD2E200468ED2 /* Navigation */,
 				E34ABC4A28A7CEB100A7D2C8 /* TypeExtensions */,
 				E34ABC4128A7C31400A7D2C8 /* Errors */,
 				E34ABC3028A7722800A7D2C8 /* Models */,
@@ -372,17 +409,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3CEE68528ABE77B00468ED2 /* RegistrationMode.swift in Sources */,
 				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
 				E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */,
 				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
 				E34ABC4028A7BDD500A7D2C8 /* Headers.swift in Sources */,
+				E3CEE67D28ABD6D500468ED2 /* ProfileCoordinator.swift in Sources */,
 				E34ABC4528A7CE2E00A7D2C8 /* RegistrationErrors.swift in Sources */,
+				E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */,
 				E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */,
 				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
 				E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */,
 				E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */,
+				E3CEE68228ABE4DC00468ED2 /* RegistrationCoordinator.swift in Sources */,
 				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
 				E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */,
+				E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */,
 				E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */,
 				E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */,
 				E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */,
@@ -396,10 +438,12 @@
 				E34ABC5128A7D30E00A7D2C8 /* UserDefaultsKeys.swift in Sources */,
 				E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */,
 				E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */,
+				E3CEE67F28ABD88800468ED2 /* Coordinator.swift in Sources */,
 				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
 				E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */,
 				E34ABC3C28A7BD4300A7D2C8 /* HTTPMethods.swift in Sources */,
 				E34ABC4C28A7CEC100A7D2C8 /* String.swift in Sources */,
+				E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */,
 				E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */,
 				E34ABC3428A7906500A7D2C8 /* User.swift in Sources */,
 			);
