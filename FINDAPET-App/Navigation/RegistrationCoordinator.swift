@@ -27,7 +27,14 @@ final class RegistrationCoordinator: Coordinator {
     }
     
     func goToOnboarding() {
-        // push onboarding
+        let router = OnboardingRouter()
+        let interactor = OnboardingInteractor()
+        let presenter = OnboardingPresenter(router: router, interactor: interactor)
+        let viewController = OnboardingViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        self.navigationController.pushViewController(viewController, animated: true)
     }
     
     func goToRegistration(mode: RegistrationMode) {

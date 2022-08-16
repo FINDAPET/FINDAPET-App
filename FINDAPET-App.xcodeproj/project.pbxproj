@@ -29,6 +29,11 @@
 		E34ABC5928A7D48300A7D2C8 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */; };
 		E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */; };
 		E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */; };
+		E3BC6CA128ABF91800CDA167 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E3BC6CA028ABF91800CDA167 /* SnapKit */; };
+		E3BC6CAB28ABFBAA00CDA167 /* OnboardingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BC6CA728ABFBAA00CDA167 /* OnboardingPresenter.swift */; };
+		E3BC6CAC28ABFBAA00CDA167 /* OnboardingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BC6CA828ABFBAA00CDA167 /* OnboardingRouter.swift */; };
+		E3BC6CAE28ABFBAA00CDA167 /* OnboardingInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BC6CAA28ABFBAA00CDA167 /* OnboardingInteractor.swift */; };
+		E3BC6CB028ABFBBE00CDA167 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BC6CAF28ABFBBE00CDA167 /* OnboardingViewController.swift */; };
 		E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */; };
 		E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67828ABD3BA00468ED2 /* UIColor.swift */; };
 		E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */; };
@@ -74,6 +79,10 @@
 		E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
 		E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSAuthentaficationMode.swift; sourceTree = "<group>"; };
+		E3BC6CA728ABFBAA00CDA167 /* OnboardingPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnboardingPresenter.swift; path = ../OnboardingPresenter.swift; sourceTree = "<group>"; };
+		E3BC6CA828ABFBAA00CDA167 /* OnboardingRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnboardingRouter.swift; path = ../OnboardingRouter.swift; sourceTree = "<group>"; };
+		E3BC6CAA28ABFBAA00CDA167 /* OnboardingInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnboardingInteractor.swift; path = ../OnboardingInteractor.swift; sourceTree = "<group>"; };
+		E3BC6CAF28ABFBBE00CDA167 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnboardingViewController.swift; path = ../OnboardingViewController.swift; sourceTree = "<group>"; };
 		E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
 		E3CEE67828ABD3BA00468ED2 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
@@ -106,6 +115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E34ABC5728A7D40900A7D2C8 /* KeychainAccess in Frameworks */,
+				E3BC6CA128ABF91800CDA167 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,6 +230,18 @@
 			path = WebSocketManager;
 			sourceTree = "<group>";
 		};
+		E3BC6CA628ABFB8D00CDA167 /* OnboardingModule */ = {
+			isa = PBXGroup;
+			children = (
+				E3BC6CA828ABFBAA00CDA167 /* OnboardingRouter.swift */,
+				E3BC6CAA28ABFBAA00CDA167 /* OnboardingInteractor.swift */,
+				E3BC6CA728ABFBAA00CDA167 /* OnboardingPresenter.swift */,
+				E3BC6CAF28ABFBBE00CDA167 /* OnboardingViewController.swift */,
+			);
+			name = OnboardingModule;
+			path = "../../../../../Library/Mobile Documents/com~apple~CloudDocs/.Trash/OnboardingModule";
+			sourceTree = "<group>";
+		};
 		E3CEE67528ABD2E200468ED2 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
@@ -259,6 +281,7 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E3BC6CA628ABFB8D00CDA167 /* OnboardingModule */,
 				E3CEE68328ABE72D00468ED2 /* RegistrationModule */,
 				E3CEE67528ABD2E200468ED2 /* Navigation */,
 				E34ABC4A28A7CEB100A7D2C8 /* TypeExtensions */,
@@ -348,6 +371,7 @@
 			name = "FINDAPET-App";
 			packageProductDependencies = (
 				E34ABC5628A7D40900A7D2C8 /* KeychainAccess */,
+				E3BC6CA028ABF91800CDA167 /* SnapKit */,
 			);
 			productName = "FINDAPET-App";
 			productReference = E3D74F4C28A69BD2004C5172 /* FINDAPET-App.app */;
@@ -380,6 +404,7 @@
 			mainGroup = E3D74F4328A69BD2004C5172;
 			packageReferences = (
 				E34ABC5528A7D40900A7D2C8 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				E3BC6C9F28ABF91800CDA167 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = E3D74F4D28A69BD2004C5172 /* Products */;
 			projectDirPath = "";
@@ -419,15 +444,19 @@
 				E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */,
 				E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */,
 				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
+				E3BC6CB028ABFBBE00CDA167 /* OnboardingViewController.swift in Sources */,
+				E3BC6CAC28ABFBAA00CDA167 /* OnboardingRouter.swift in Sources */,
 				E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */,
 				E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */,
 				E3CEE68228ABE4DC00468ED2 /* RegistrationCoordinator.swift in Sources */,
 				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
 				E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */,
 				E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */,
+				E3BC6CAE28ABFBAA00CDA167 /* OnboardingInteractor.swift in Sources */,
 				E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */,
 				E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */,
 				E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */,
+				E3BC6CAB28ABFBAA00CDA167 /* OnboardingPresenter.swift in Sources */,
 				E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */,
 				E34ABC4328A7C59B00A7D2C8 /* RequestErrors.swift in Sources */,
 				E34ABC4928A7CE9F00A7D2C8 /* RegistrationManager.swift in Sources */,
@@ -691,6 +720,14 @@
 				kind = branch;
 			};
 		};
+		E3BC6C9F28ABF91800CDA167 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -698,6 +735,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E34ABC5528A7D40900A7D2C8 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		E3BC6CA028ABF91800CDA167 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E3BC6C9F28ABF91800CDA167 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 
