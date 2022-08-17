@@ -27,6 +27,7 @@ final class URLConstructor {
     }
     
     static let localhost = URLConstructor(host: .localhost, port: .localhost)
+    static let `default` = URLConstructor(host: .localhost, port: .localhost)
     
     func auth() -> URL {
         self.baseHTTPURL

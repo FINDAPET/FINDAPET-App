@@ -38,7 +38,18 @@ final class RegistrationCoordinator: Coordinator {
     }
     
     func goToRegistration(mode: RegistrationMode) {
-        // push registration
+        let router = RegistrationRouter()
+        let interactor = RegistrationInteractor()
+        let presenter = RegistrationPresenter(router: router, interactor: interactor, mode: mode)
+        let viewController = RegistrationViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func goToEditProfile(user: User.Input? = nil) {
+        // push edit profile
     }
     
     func goToMainTabBar() {

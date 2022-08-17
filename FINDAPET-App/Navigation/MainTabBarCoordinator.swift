@@ -41,6 +41,7 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
     }
     
     private func setupViews() {
+        self.tabBar.navigationController?.navigationBar.isHidden = true
         self.tabBar.viewControllers = [
             self.feedCoordinator.navigationController,
             self.profileCoordinator.navigationController

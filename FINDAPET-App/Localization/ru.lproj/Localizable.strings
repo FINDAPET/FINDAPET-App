@@ -12,3 +12,14 @@
 "Log In" = "Войти";
 "Sign In" = "Зарегестрироваться";
 "FINDAPET is a convenient app for buying and selling purebred animals from catteries all over the world." = "FINDAPET - удобное приложение для покупки и продажи породистых животных из питомников со всего мира.";
+"Error" = "Ошибка";
+"Not Found" = "Не найдено";
+"Not Autorized" = "Пользователь не авторизирован";
+"Server Error" = "Ошибка сервера";
+"Incorrect Data" = "Неверные данные";
+"Failed to make a request" = "Не удалось произвести запрос";
+"Email isn't valid" = "Некорректный email";
+"Password is too short" = "Пароль слишком короткий";
+"Password must be 8 charecters long." = "Пароль должен иметь 8 символов.";
+"Back" = "Назад";
+"Password" = "Пароль";

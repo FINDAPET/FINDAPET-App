@@ -8,5 +8,5 @@
 import Foundation
 
 enum RequestErrors: Error {
-    case decodingFailed, encodingFailed, dataIsEqualToNil, statrusCodeError(statusCode: Int), responseIsEqualToNil
+    case decodingFailed, encodingFailed, dataIsEqualToNil, statusCodeError(statusCode: Int), responseIsEqualToNil
 }
