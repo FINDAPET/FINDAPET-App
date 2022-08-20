@@ -36,7 +36,7 @@ final class OnboardingViewController: UIViewController {
     private let logoImageView: UIImageView = {
         let view = UIImageView()
         
-        view.image = UIImage(named: "<#image name#>")
+        view.image = UIImage(named: "Appicon")
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view

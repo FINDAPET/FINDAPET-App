@@ -36,7 +36,7 @@ final class RegistrationViewController: UIViewController {
     private let logoImageView: UIImageView = {
         let view = UIImageView()
         
-        view.image = UIImage(named: "<#image name#>")
+        view.image = UIImage(named: "Appicon")
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -54,6 +54,7 @@ final class RegistrationViewController: UIViewController {
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.layer.borderWidth = 0.5
+        view.tintColor = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
         view.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.leftViewMode = .always
@@ -76,6 +77,7 @@ final class RegistrationViewController: UIViewController {
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.layer.borderWidth = 0.5
+        view.tintColor = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
         view.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.leftViewMode = .always
@@ -115,6 +117,19 @@ final class RegistrationViewController: UIViewController {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.keyboadWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
         
         self.view.addSubview(self.scrollView)
         
@@ -158,16 +173,46 @@ final class RegistrationViewController: UIViewController {
     @objc private func registrationButtonDidTap() {
         switch self.presenter.mode {
         case .logIn:
-            self.presenter.auth(email: self.emailTextField.text ?? "", password: self.emailTextField.text ?? "") { _, error in
+            self.presenter.auth(email: self.emailTextField.text ?? "", password: self.emailTextField.text ?? "") { token, error in
                 self.error(error) { [ weak self ] in
-                    self?.presenter.goToMainTabBar()
+                    guard let token = token else {
+                        self?.presentAlert(title: NSLocalizedString("Failed to make a request", comment: ""))
+                        
+                        return
+                    }
+                    
+                    if token.user.name.isEmpty {
+                        let user = User.Input(
+                            id: token.user.id,
+                            name: token.user.name,
+                            description: token.user.description,
+                            isCatteryWaitVerify: token.user.isCatteryWaitVerify
+                        )
+                        
+                        self?.presenter.goToEditProfile(user: user)
+                    } else {
+                        self?.presenter.goToMainTabBar()
+                    }
                 }
             }
         case .signIn:
             self.presenter.createUser(user: User.Create(email: self.emailTextField.text ?? "", password: self.emailTextField.text ?? "")) { [ weak self ] error in
-                self?.presenter.auth(email: self?.emailTextField.text ?? "", password: self?.emailTextField.text ?? "") { _, error in
+                self?.presenter.auth(email: self?.emailTextField.text ?? "", password: self?.emailTextField.text ?? "") { token, error in
                     self?.error(error) { [ weak self ] in
-                        self?.presenter.goToMainTabBar()
+                        guard let token = token else {
+                            self?.presentAlert(title: NSLocalizedString("Failed to make a request", comment: ""))
+                            
+                            return
+                        }
+                        
+                        let user = User.Input(
+                            id: token.user.id,
+                            name: token.user.name,
+                            description: token.user.description,
+                            isCatteryWaitVerify: token.user.isCatteryWaitVerify
+                        )
+                        
+                        self?.presenter.goToEditProfile(user: user)
                     }
                 }
             }

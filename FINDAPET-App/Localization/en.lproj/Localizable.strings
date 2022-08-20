@@ -23,3 +23,12 @@
 "Password must be 8 charecters long." = "Password must be 8 charecters long.";
 "Back" = "Back";
 "Password" = "Password";
+"Save" = "Save";
+"Main" = "Main";
+"Your name or your cattery name" = "Your name or your cattery name";
+"Description(optional)" = "Description(optional)";
+"Register as a cattery(optional)" = "Register as a cattery(optional)";
+"Cattery documents" = "Cattery documents";
+"Name field is empty" = "Name field is empty";
+"Cattery document image is empty" = "Cattery document image is empty";
+"Fill in all required fields" = "Fill in all required fields";

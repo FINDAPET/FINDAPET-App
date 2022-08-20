@@ -9,6 +9,12 @@ import Foundation
 
 struct User: Decodable {
     var id: UUID?
+    var name: String
+    var isActiveCattery: Bool
+    var isCatteryWaitVerify: Bool
+    var avatarPath: String?
+    var documentPath: String?
+    var description: String?
 }
 
 extension User {

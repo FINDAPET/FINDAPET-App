@@ -23,3 +23,12 @@
 "Password must be 8 charecters long." = "Пароль должен иметь 8 символов.";
 "Back" = "Назад";
 "Password" = "Пароль";
+"Save" = "Сохранить";
+"Main" = "Основные";
+"Your name or your cattery name" = "Ваше имя или название вашего питомника";
+"Description(optional)" = "Описание(необязательно)";
+"Register as a cattery(optional)" = "Зарегестрироваться как питомник(необязательно)";
+"Cattery documents" = "Документы питомника";
+"Name field is empty" = "Поле имени пустое";
+"Cattery document image is empty" = "Фотография документа питомника отсутствует";
+"Fill in all required fields" = "Заполните все обязательные поля";

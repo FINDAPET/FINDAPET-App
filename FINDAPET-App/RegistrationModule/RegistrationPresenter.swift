@@ -21,8 +21,8 @@ final class RegistrationPresenter {
     
 //    MARK: Routing
     
-    func goToEditProfile() {
-        self.router.goToEditProfile()
+    func goToEditProfile(user: User.Input) {
+        self.router.goToEditProfile(user: user)
     }
     
     func goToMainTabBar() {

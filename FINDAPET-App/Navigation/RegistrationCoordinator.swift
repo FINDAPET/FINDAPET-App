@@ -48,8 +48,15 @@ final class RegistrationCoordinator: Coordinator {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func goToEditProfile(user: User.Input? = nil) {
-        // push edit profile
+    func goToEditProfile(user: User.Input) {
+        let router = EditProfileRouter()
+        let interactor = EditProfileInteractor()
+        let presenter = EditProfilePresenter(router: router, interactor: interactor, user: user)
+        let viewController = EditProfileViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        self.navigationController.pushViewController(viewController, animated: true)
     }
     
     func goToMainTabBar() {

@@ -11,7 +11,7 @@ final class RegistrationRouter: RegistrationCoordinatable {
     
     var coordinatorDelegate: RegistrationCoordinator?
     
-    func goToEditProfile(user: User.Input? = nil) {
+    func goToEditProfile(user: User.Input) {
         self.coordinatorDelegate?.goToEditProfile(user: user)
     }
     

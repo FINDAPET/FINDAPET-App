@@ -58,6 +58,11 @@
 		E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F7E28A6ABB6004C5172 /* Ports.swift */; };
 		E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F8028A6AC3F004C5172 /* Paths.swift */; };
 		E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */; };
+		E3D9570328AFD63500CCF566 /* EditProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9570228AFD63500CCF566 /* EditProfileRouter.swift */; };
+		E3D9570528AFD64200CCF566 /* EditProfileInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9570428AFD64200CCF566 /* EditProfileInteractor.swift */; };
+		E3D9570728AFD65000CCF566 /* EditProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9570628AFD65000CCF566 /* EditProfilePresenter.swift */; };
+		E3D9570928AFD65900CCF566 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9570828AFD65900CCF566 /* EditProfileViewController.swift */; };
+		E3D9570E28B0129100CCF566 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9570D28B0129100CCF566 /* CustomTextField.swift */; };
 		E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */; };
 /* End PBXBuildFile section */
 
@@ -116,6 +121,11 @@
 		E3D74F7E28A6ABB6004C5172 /* Ports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ports.swift; sourceTree = "<group>"; };
 		E3D74F8028A6AC3F004C5172 /* Paths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paths.swift; sourceTree = "<group>"; };
 		E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstructor.swift; sourceTree = "<group>"; };
+		E3D9570228AFD63500CCF566 /* EditProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRouter.swift; sourceTree = "<group>"; };
+		E3D9570428AFD64200CCF566 /* EditProfileInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInteractor.swift; sourceTree = "<group>"; };
+		E3D9570628AFD65000CCF566 /* EditProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilePresenter.swift; sourceTree = "<group>"; };
+		E3D9570828AFD65900CCF566 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		E3D9570D28B0129100CCF566 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -296,6 +306,8 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E3D9570C28B0125B00CCF566 /* CustomUIElements */,
+				E3D9570128AFD5A400CCF566 /* EditProfileModule */,
 				E305EC7128ACCC3D00A3AAD3 /* OnboardingModule */,
 				E3CEE68328ABE72D00468ED2 /* RegistrationModule */,
 				E3CEE67528ABD2E200468ED2 /* Navigation */,
@@ -365,6 +377,25 @@
 				E3D74F8028A6AC3F004C5172 /* Paths.swift */,
 			);
 			path = URLParts;
+			sourceTree = "<group>";
+		};
+		E3D9570128AFD5A400CCF566 /* EditProfileModule */ = {
+			isa = PBXGroup;
+			children = (
+				E3D9570228AFD63500CCF566 /* EditProfileRouter.swift */,
+				E3D9570428AFD64200CCF566 /* EditProfileInteractor.swift */,
+				E3D9570628AFD65000CCF566 /* EditProfilePresenter.swift */,
+				E3D9570828AFD65900CCF566 /* EditProfileViewController.swift */,
+			);
+			path = EditProfileModule;
+			sourceTree = "<group>";
+		};
+		E3D9570C28B0125B00CCF566 /* CustomUIElements */ = {
+			isa = PBXGroup;
+			children = (
+				E3D9570D28B0129100CCF566 /* CustomTextField.swift */,
+			);
+			path = CustomUIElements;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -456,6 +487,7 @@
 				E313B89828ACE36200E33975 /* RegistrationRouter.swift in Sources */,
 				E313B8A028AD01A500E33975 /* UIViewController.swift in Sources */,
 				E3CEE67D28ABD6D500468ED2 /* ProfileCoordinator.swift in Sources */,
+				E3D9570E28B0129100CCF566 /* CustomTextField.swift in Sources */,
 				E34ABC4528A7CE2E00A7D2C8 /* RegistrationErrors.swift in Sources */,
 				E305EC7728ACCC7600A3AAD3 /* OnboardingPresenter.swift in Sources */,
 				E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */,
@@ -472,6 +504,7 @@
 				E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */,
 				E313B89A28ACE37B00E33975 /* RegistrationInteractor.swift in Sources */,
 				E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */,
+				E3D9570728AFD65000CCF566 /* EditProfilePresenter.swift in Sources */,
 				E34ABC4328A7C59B00A7D2C8 /* RequestErrors.swift in Sources */,
 				E34ABC4928A7CE9F00A7D2C8 /* RegistrationManager.swift in Sources */,
 				E313B89C28ACE38D00E33975 /* RegistrationPresenter.swift in Sources */,
@@ -485,14 +518,17 @@
 				E305EC7B28ACD78200A3AAD3 /* OnboardingRouter.swift in Sources */,
 				E3CEE67F28ABD88800468ED2 /* Coordinator.swift in Sources */,
 				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
+				E3D9570328AFD63500CCF566 /* EditProfileRouter.swift in Sources */,
 				E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */,
 				E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */,
+				E3D9570528AFD64200CCF566 /* EditProfileInteractor.swift in Sources */,
 				E34ABC3C28A7BD4300A7D2C8 /* HTTPMethods.swift in Sources */,
 				E313B89E28ACE39800E33975 /* RegistrationViewController.swift in Sources */,
 				E34ABC4C28A7CEC100A7D2C8 /* String.swift in Sources */,
 				E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */,
 				E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */,
 				E34ABC3428A7906500A7D2C8 /* User.swift in Sources */,
+				E3D9570928AFD65900CCF566 /* EditProfileViewController.swift in Sources */,
 				E305EC7528ACCC6800A3AAD3 /* OnboardingInteractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
