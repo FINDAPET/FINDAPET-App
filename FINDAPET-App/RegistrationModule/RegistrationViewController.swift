@@ -181,6 +181,8 @@ final class RegistrationViewController: UIViewController {
                         return
                     }
                     
+                    self?.presenter.writeKeychainBearer(token: token.value)
+                    
                     if token.user.name.isEmpty {
                         let user = User.Input(
                             id: token.user.id,
@@ -204,6 +206,8 @@ final class RegistrationViewController: UIViewController {
                             
                             return
                         }
+                        
+                        self?.presenter.writeKeychainBearer(token: token.value)
                         
                         let user = User.Input(
                             id: token.user.id,

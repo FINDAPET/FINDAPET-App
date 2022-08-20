@@ -58,6 +58,7 @@ final class EditProfileViewController: UIViewController {
         view.setTitleColor(.white, for: .normal)
         view.backgroundColor = .accentColor
         view.layer.cornerRadius = 25
+        view.addTarget(self, action: #selector(self.saveButtonDidTap), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -166,6 +167,10 @@ final class EditProfileViewController: UIViewController {
 //    MARK: Setup Views
     
     private func setupViews() {
+        if self.presenter.readUserDefaultsIsFirstEdititng() {
+            self.navigationController?.navigationBar.isHidden = true
+        }
+        
         let basicTextFields = self.createTextFieldsView(
             title: NSLocalizedString("Main", comment: ""),
             fields: [
@@ -173,7 +178,7 @@ final class EditProfileViewController: UIViewController {
                     placeholder: NSLocalizedString("Your name or your cattery name", comment: ""),
                     text: self.presenter.user.name,
                     action: { [ weak self ] textField in
-                        self?.presenter.user.name = textField.text ?? ""}
+                        self?.presenter.user.name = textField.text ?? "" }
                 ),
                 (
                     placeholder: NSLocalizedString("Description(optional)", comment: ""),
@@ -283,8 +288,21 @@ final class EditProfileViewController: UIViewController {
         
         self.presenter.editUser { error in
             self.error(error) { [ weak self ] in
+                if self?.presenter.user.isCatteryWaitVerify ?? false {
+                    self?.presenter.webSocket { message, error in
+                        if error != nil {
+                            return
+                        }
+                        
+                        if let message = message, message == "aprooved" {
+                            self?.presenter.createNotification(title: NSLocalizedString("Your cattery is confirmed", comment: ""))
+                        }
+                    }
+                }
+                
                 self?.presenter.writeUserDefaultsIsFirstEdititng()
                 self?.presenter.goToMainTabBar()
+                self?.presentAlert(title: NSLocalizedString("When your kennel is verified we will send you a notification", comment: ""))
             }
         }
     }

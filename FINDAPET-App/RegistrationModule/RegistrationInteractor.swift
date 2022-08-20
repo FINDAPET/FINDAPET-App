@@ -32,12 +32,12 @@ final class RegistrationInteractor {
 //    MARK: Keychain
     
     func writeKeychainBasic(email: String, password: String) {
-        KeychainManager.write(value: email, key: .email)
-        KeychainManager.write(value: password, key: .password)
+        KeychainManager.shared.write(value: email, key: .email)
+        KeychainManager.shared.write(value: password, key: .password)
     }
     
     func writeKeychainBearer(token: String) {
-        KeychainManager.write(value: token, key: .token)
+        KeychainManager.shared.write(value: token, key: .token)
     }
     
 //    MARK: Registration

@@ -40,4 +40,16 @@ final class EditProfilePresenter {
         self.interactor.writeUserDefaultsProperty(false, with: .isFirstEditing)
     }
     
+//    MARK: WecSockets
+    
+    func webSocket(completionHandler: @escaping (String?, Error?) -> Void) {
+        self.interactor.webSocket(completionHandler: completionHandler)
+    }
+    
+//    MARK: Notifications
+    
+    func createNotification(title: String) {
+        self.interactor.createNotification(title: title)
+    }
+    
 }

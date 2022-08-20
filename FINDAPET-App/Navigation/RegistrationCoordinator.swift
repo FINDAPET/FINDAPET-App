@@ -19,7 +19,7 @@ final class RegistrationCoordinator: Coordinator {
     func start() {
         self.setupViews()
         
-        if KeychainManager.read(key: .token) != nil {
+        if KeychainManager.shared.read(key: .token) != nil, !(UserDefaultsManager.read(key: .isFirstEditing) as? Bool ?? true) {
             self.goToMainTabBar()
         } else {
             self.goToOnboarding()

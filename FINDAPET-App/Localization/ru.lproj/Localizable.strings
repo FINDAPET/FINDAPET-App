@@ -32,3 +32,5 @@
 "Name field is empty" = "Поле имени пустое";
 "Cattery document image is empty" = "Фотография документа питомника отсутствует";
 "Fill in all required fields" = "Заполните все обязательные поля";
+"Your cattery is confirmed" = "Ваш питомник подтвержден";
+"When your kennel is verified we will send you a notification" = "Когда ваш питомник будет подтвежден мы отправим вам уведомление";

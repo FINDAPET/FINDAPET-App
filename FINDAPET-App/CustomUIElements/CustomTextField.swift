@@ -16,16 +16,12 @@ final class CustomTextField: UITextField {
         self.action = action
         
         super.init(frame: CGRect(x: 1, y: 1, width: 1, height: 1))
+        
+        self.addTarget(self, action: #selector(objcAction), for: .allEditingEvents)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.addTarget(self, action: #selector(objcAction), for: .editingDidEnd)
     }
     
     @objc private func objcAction() {
