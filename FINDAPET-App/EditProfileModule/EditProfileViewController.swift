@@ -139,6 +139,16 @@ final class EditProfileViewController: UIViewController {
         return view
     }()
     
+    private lazy var avatarImagePickerControllerDelegate = AvatarImagePickerControllerDelegate { [ weak self ] image in
+        self?.avatarImageView.image = image
+        self?.presenter.user.avatarData = image.pngData() ?? (UIImage(named: "empty avatar")?.pngData() ?? Data())
+        
+    }
+    private lazy var documentImagePickerControllerDelegate = DocumentImagePickerControllerDelegate { [ weak self ] image in
+        self?.documentImageView.image = image
+        self?.presenter.user.documentData = image.pngData()
+    }
+    
 //    MARK: Life Cycle
     
     override func viewDidLoad() {
@@ -187,21 +197,11 @@ final class EditProfileViewController: UIViewController {
                 )
             ]
         )
-                     
-        let avatarImagePickerControllerDelegate = AvatarImagePickerControllerDelegate { [ weak self ] image in
-            self?.avatarImageView.image = image
-            self?.presenter.user.avatarData = image.pngData() ?? (UIImage(named: "empty avatar")?.pngData() ?? Data())
-            
-        }
-        let documentImagePickerControllerDelegate = DocumentImagePickerControllerDelegate { [ weak self ] image in
-            self?.documentImageView.image = image
-            self?.presenter.user.documentData = image.pngData()
-        }
         
         self.view.backgroundColor = .backgroundColor
         
-        self.avatarImagePickerController.delegate = avatarImagePickerControllerDelegate
-        self.documentImagePickerController.delegate = documentImagePickerControllerDelegate
+        self.avatarImagePickerController.delegate = self.avatarImagePickerControllerDelegate
+        self.documentImagePickerController.delegate = self.documentImagePickerControllerDelegate
         
         self.view.addSubview(self.scrollView)
         
@@ -288,18 +288,6 @@ final class EditProfileViewController: UIViewController {
         
         self.presenter.editUser { error in
             self.error(error) { [ weak self ] in
-                if self?.presenter.user.isCatteryWaitVerify ?? false {
-                    self?.presenter.webSocket { message, error in
-                        if error != nil {
-                            return
-                        }
-                        
-                        if let message = message, message == "aprooved" {
-                            self?.presenter.createNotification(title: NSLocalizedString("Your cattery is confirmed", comment: ""))
-                        }
-                    }
-                }
-                
                 self?.presenter.writeUserDefaultsIsFirstEdititng()
                 self?.presenter.goToMainTabBar()
                 self?.presentAlert(title: NSLocalizedString("When your kennel is verified we will send you a notification", comment: ""))

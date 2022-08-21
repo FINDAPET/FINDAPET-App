@@ -51,10 +51,14 @@ final class WebSocketManager {
                 default:
                     break
                 }
+                
+                webSocketTask.cancel()
             case .failure(let error):
                 print("❌ Error: \(error.localizedDescription)")
                 
                 completionHandler(nil, error)
+                
+                webSocketTask.cancel()
                 
                 return
             }
@@ -105,10 +109,14 @@ final class WebSocketManager {
                 default:
                     break
                 }
+                
+                webSocketTask.cancel()
             case .failure(let error):
                 print("❌ Error: \(error.localizedDescription)")
                 
                 completionHandler(nil, error)
+                
+                webSocketTask.cancel()
                 
                 return
             }

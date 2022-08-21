@@ -21,16 +21,6 @@ final class EditProfileInteractor {
         )
     }
     
-//    MARK: WebSockets
-    
-    func webSocket(completionHandler: @escaping (String?, Error?) -> Void) {
-        WebSocketManager.webSocket(
-            url: URLConstructor.default.userWaitVerify(),
-            authMode: .bearer(value: self.getToken() ?? ""),
-            completionHandler: completionHandler
-        )
-    }
-    
 //    MARK: UserDefaults
     
     func readUserDefaultsProperty(with key: UserDefaultsKeys) -> Any? {
