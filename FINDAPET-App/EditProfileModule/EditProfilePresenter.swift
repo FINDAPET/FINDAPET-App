@@ -40,6 +40,10 @@ final class EditProfilePresenter {
         self.interactor.writeUserDefaultsProperty(false, with: .isFirstEditing)
     }
     
+    func readUserDefaultsDeviceToken() -> String? {
+        self.interactor.readUserDefaultsProperty(with: .deviceToken) as? String
+    }
+    
 //    MARK: Notifications
     
     func createNotification(title: String) {

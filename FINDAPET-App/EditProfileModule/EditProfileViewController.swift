@@ -286,11 +286,16 @@ final class EditProfileViewController: UIViewController {
             self.presenter.user.documentData = nil
         }
         
+        self.presenter.user.deviceToken = self.presenter.readUserDefaultsDeviceToken()
+        
         self.presenter.editUser { error in
             self.error(error) { [ weak self ] in
                 self?.presenter.writeUserDefaultsIsFirstEdititng()
                 self?.presenter.goToMainTabBar()
-                self?.presentAlert(title: NSLocalizedString("When your kennel is verified we will send you a notification", comment: ""))
+                
+                if self?.presenter.readUserDefaultsDeviceToken() != nil {
+                    self?.presentAlert(title: NSLocalizedString("When your kennel is verified we will send you a notification", comment: ""))
+                }
             }
         }
     }
