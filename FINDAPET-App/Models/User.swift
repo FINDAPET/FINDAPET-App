@@ -9,6 +9,12 @@ import Foundation
 
 struct User: Decodable {
     var id: UUID?
+    var name: String
+    var isActiveCattery: Bool
+    var isCatteryWaitVerify: Bool
+    var avatarPath: String?
+    var documentPath: String?
+    var description: String?
 }
 
 extension User {
@@ -18,14 +24,16 @@ extension User {
         var avatarData: Data?
         var documentData: Data?
         var description: String?
+        var deviceToken: String?
         var isCatteryWaitVerify: Bool
         
-        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false) {
+        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, deviceToken: String? = nil) {
             self.id = id
             self.name = name
             self.avatarData = avatarData
             self.documentData = documentData
             self.description = description
+            self.deviceToken = deviceToken
             self.isCatteryWaitVerify = isCatteryWaitVerify
         }
     }

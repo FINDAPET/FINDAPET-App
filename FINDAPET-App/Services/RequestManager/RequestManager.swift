@@ -40,7 +40,9 @@ final class RequestManager {
             if let error = error {
                 print("❌ Error: \(error.localizedDescription)")
                 
-                completionHandler(nil, error)
+                DispatchQueue.main.async {
+                    completionHandler(nil, error)
+                }
                 
                 return
             }
@@ -49,7 +51,9 @@ final class RequestManager {
                 guard httpURLResponse.statusCode == 200 else {
                     print("❌ Error: status code is equal to \(httpURLResponse.statusCode)")
                     
-                    completionHandler(nil, RequestErrors.statrusCodeError(statusCode: httpURLResponse.statusCode))
+                    DispatchQueue.main.async {
+                        completionHandler(nil, RequestErrors.statusCodeError(statusCode: httpURLResponse.statusCode))
+                    }
                     
                     return
                 }
@@ -57,7 +61,9 @@ final class RequestManager {
                 guard let data = data else {
                     print("❌ Error: data is equal to nil.")
                     
-                    completionHandler(nil, RequestErrors.dataIsEqualToNil)
+                    DispatchQueue.main.async {
+                        completionHandler(nil, RequestErrors.dataIsEqualToNil)
+                    }
                     
                     return
                 }
@@ -65,21 +71,27 @@ final class RequestManager {
                 guard let model = try? JSONDecoder().decode(T.self, from: data) else {
                     print("❌ Error: decoding failed.")
                     
-                    completionHandler(nil, RequestErrors.decodingFailed)
+                    DispatchQueue.main.async {
+                        completionHandler(nil, RequestErrors.decodingFailed)
+                    }
                     
                     return
                 }
                 
-                completionHandler(model, nil)
-                
+                DispatchQueue.main.async {
+                    completionHandler(model, nil)
+                }
             } else {
                 print("❌ Error: response is equal to nil.")
                 
-                completionHandler(nil, RequestErrors.responseIsEqualToNil)
+                DispatchQueue.main.async {
+                    completionHandler(nil, RequestErrors.responseIsEqualToNil)
+                }
                 
                 return
             }
         }
+        .resume()
     }
     
     // MARK: 2
@@ -117,7 +129,9 @@ final class RequestManager {
                 if let error = error {
                     print("❌ Error: \(error.localizedDescription)")
                     
-                    completionHandler(nil, error)
+                    DispatchQueue.main.async {
+                        completionHandler(nil, error)
+                    }
                     
                     return
                 }
@@ -126,7 +140,9 @@ final class RequestManager {
                     guard httpURLResponse.statusCode == 200 else {
                         print("❌ Error: status code is equal to \(httpURLResponse.statusCode)")
                         
-                        completionHandler(nil, RequestErrors.statrusCodeError(statusCode: httpURLResponse.statusCode))
+                        DispatchQueue.main.async {
+                            completionHandler(nil, RequestErrors.statusCodeError(statusCode:httpURLResponse.statusCode))
+                        }
                         
                         return
                     }
@@ -134,7 +150,9 @@ final class RequestManager {
                     guard let data = data else {
                         print("❌ Error: data is equal to nil.")
                         
-                        completionHandler(nil, RequestErrors.dataIsEqualToNil)
+                        DispatchQueue.main.async {
+                            completionHandler(nil, RequestErrors.dataIsEqualToNil)
+                        }
                         
                         return
                     }
@@ -142,21 +160,27 @@ final class RequestManager {
                     guard let model = try? JSONDecoder().decode(T2.self, from: data) else {
                         print("❌ Error: decoding failed.")
                         
-                        completionHandler(nil, RequestErrors.decodingFailed)
+                        DispatchQueue.main.async {
+                            completionHandler(nil, RequestErrors.decodingFailed)
+                        }
                         
                         return
                     }
                     
-                    completionHandler(model, nil)
-                    
+                    DispatchQueue.main.async {
+                        completionHandler(model, nil)
+                    }
                 } else {
                     print("❌ Error: response is equal to nil.")
                     
-                    completionHandler(nil, RequestErrors.responseIsEqualToNil)
+                    DispatchQueue.main.async {
+                        completionHandler(nil, RequestErrors.responseIsEqualToNil)
+                    }
                     
                     return
                 }
             }
+            .resume()
         } else {
             print("❌ Error: encoding failed.")
             
@@ -201,7 +225,9 @@ final class RequestManager {
                 if let error = error {
                     print("❌ Error: \(error.localizedDescription)")
                     
-                    completionHandler(error)
+                    DispatchQueue.main.async {
+                        completionHandler(error)
+                    }
                     
                     return
                 }
@@ -210,21 +236,28 @@ final class RequestManager {
                     guard httpURLResponse.statusCode == 200 else {
                         print("❌ Error: status code is equal to \(httpURLResponse.statusCode)")
                         
-                        completionHandler(RequestErrors.statrusCodeError(statusCode: httpURLResponse.statusCode))
-                        
+                        DispatchQueue.main.async {
+                            completionHandler(RequestErrors.statusCodeError(statusCode:
+                                                                                httpURLResponse.statusCode))
+                        }
                         return
                     }
                     
-                    completionHandler(nil)
+                        DispatchQueue.main.async {
+                            completionHandler(nil)
+                        }
                     
                 } else {
                     print("❌ Error: response is equal to nil.")
                     
-                    completionHandler(RequestErrors.responseIsEqualToNil)
+                    DispatchQueue.main.async {
+                        completionHandler(RequestErrors.responseIsEqualToNil)
+                    }
                     
                     return
                 }
             }
+            .resume()
         } else {
             print("❌ Error: encoding failed.")
             
@@ -265,7 +298,9 @@ final class RequestManager {
             if let error = error {
                 print("❌ Error: \(error.localizedDescription)")
                 
-                completionHandler(error)
+                DispatchQueue.main.async {
+                    completionHandler(error)
+                }
                 
                 return
             }
@@ -274,12 +309,16 @@ final class RequestManager {
                 guard httpURLResponse.statusCode == 200 else {
                     print("❌ Error: status code is equal to \(httpURLResponse.statusCode)")
                     
-                    completionHandler(RequestErrors.statrusCodeError(statusCode: httpURLResponse.statusCode))
+                    DispatchQueue.main.async {
+                        completionHandler(RequestErrors.statusCodeError(statusCode: httpURLResponse.statusCode))
+                    }
                     
                     return
                 }
                 
-                completionHandler(nil)
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
                 
             } else {
                 print("❌ Error: response is equal to nil.")
@@ -289,6 +328,8 @@ final class RequestManager {
                 return
             }
         }
+        .resume()
     }
+    
     
 }

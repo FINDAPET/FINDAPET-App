@@ -19,7 +19,7 @@ final class RegistrationCoordinator: Coordinator {
     func start() {
         self.setupViews()
         
-        if KeychainManager.read(key: .token) != nil {
+        if KeychainManager.shared.read(key: .token) != nil, !(UserDefaultsManager.read(key: .isFirstEditing) as? Bool ?? true) {
             self.goToMainTabBar()
         } else {
             self.goToOnboarding()
@@ -27,11 +27,36 @@ final class RegistrationCoordinator: Coordinator {
     }
     
     func goToOnboarding() {
-        // push onboarding
+        let router = OnboardingRouter()
+        let interactor = OnboardingInteractor()
+        let presenter = OnboardingPresenter(router: router, interactor: interactor)
+        let viewController = OnboardingViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        self.navigationController.pushViewController(viewController, animated: true)
     }
     
     func goToRegistration(mode: RegistrationMode) {
-        // push registration
+        let router = RegistrationRouter()
+        let interactor = RegistrationInteractor()
+        let presenter = RegistrationPresenter(router: router, interactor: interactor, mode: mode)
+        let viewController = RegistrationViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func goToEditProfile(user: User.Input) {
+        let router = EditProfileRouter()
+        let interactor = EditProfileInteractor()
+        let presenter = EditProfilePresenter(router: router, interactor: interactor, user: user)
+        let viewController = EditProfileViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        self.navigationController.pushViewController(viewController, animated: true)
     }
     
     func goToMainTabBar() {

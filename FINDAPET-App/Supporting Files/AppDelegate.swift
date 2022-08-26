@@ -74,6 +74,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       
         let token = tokenParts.joined()
         
+        UserDefaultsManager.write(data: token, key: .deviceToken)
+        
         print("Device Token: \(token)")
     }
 

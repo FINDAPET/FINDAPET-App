@@ -10,12 +10,20 @@ import KeychainAccess
 
 final class KeychainManager {
     
-    static func write(value: String, key: KeychainKeys) {
-        Keychain()[key.rawValue] = value
+    private let keychain: Keychain
+    
+    init(keychain: Keychain) {
+        self.keychain = keychain
     }
     
-    static func read(key: KeychainKeys) -> String? {
-        Keychain()[key.rawValue]
+    static let shared = KeychainManager(keychain: Keychain())
+    
+    func write(value: String, key: KeychainKeys) {
+        self.keychain[key.rawValue] = value
+    }
+    
+    func read(key: KeychainKeys) -> String? {
+        self.keychain[key.rawValue]
     }
     
 }
