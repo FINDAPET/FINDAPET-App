@@ -19,6 +19,8 @@ final class RegistrationPresenter {
         self.mode = mode
     }
     
+    var isAgreeWithPrivacyPolicy = false
+    
 //    MARK: Routing
     
     func goToEditProfile(user: User.Input) {
@@ -27,6 +29,10 @@ final class RegistrationPresenter {
     
     func goToMainTabBar() {
         self.router.goToMainTabBar()
+    }
+    
+    func goToPrivacyPolicy() {
+        self.router.goToPrivacyPolicy()
     }
     
 //    MARK: Requests

@@ -87,6 +87,31 @@ final class RegistrationViewController: UIViewController {
         return view
     }()
     
+    private lazy var checkmarkImageView: UIImageView = {
+        let view = UIImageView()
+        
+        view.image = UIImage(systemName: "square")
+        view.image?.withTintColor(.accentColor)
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapCheckmarkImageView)))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var privacyPolicyButton: UIButton = {
+        let view = UIButton()
+        
+        view.setTitle(NSLocalizedString("Privacy policy", comment: ""), for: .normal)
+        view.titleLabel?.font = .systemFont(ofSize: 20)
+        view.titleLabel?.numberOfLines = .zero
+        view.setTitleColor(.link, for: .normal)
+        view.addTarget(self, action: #selector(self.didTapPrivacyPolicyButton), for: .touchUpInside)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var registrationButton: UIButton = {
         let view = UIButton()
         
@@ -136,6 +161,8 @@ final class RegistrationViewController: UIViewController {
         self.scrollView.addSubview(self.logoImageView)
         self.scrollView.addSubview(self.emailTextField)
         self.scrollView.addSubview(self.passwordTextField)
+        self.scrollView.addSubview(self.checkmarkImageView)
+        self.scrollView.addSubview(self.privacyPolicyButton)
         self.scrollView.addSubview(self.registrationButton)
         
         self.scrollView.snp.makeConstraints { make in
@@ -160,9 +187,25 @@ final class RegistrationViewController: UIViewController {
             make.height.equalTo(50)
         }
         
+        self.checkmarkImageView.snp.makeConstraints { make in
+            make.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+            make.top.equalTo(self.passwordTextField.snp.bottom).inset(-25)
+            make.width.height.equalTo(50)
+        }
+        
+        self.privacyPolicyButton.snp.makeConstraints { make in
+            make.leading.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+            make.trailing.equalTo(self.checkmarkImageView.snp.leading).inset(15)
+            make.centerY.equalTo(self.checkmarkImageView)
+        }
+        
+        self.privacyPolicyButton.titleLabel?.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+        }
+        
         self.registrationButton.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.top.equalTo(self.passwordTextField.snp.bottom).inset(-50)
+            make.top.equalTo(self.privacyPolicyButton.snp.bottom).inset(-50)
             make.height.equalTo(50)
             make.bottom.equalToSuperview().inset(50)
         }
@@ -171,6 +214,12 @@ final class RegistrationViewController: UIViewController {
 //    MARK: Actions
     
     @objc private func registrationButtonDidTap() {
+        guard self.presenter.isAgreeWithPrivacyPolicy else {
+            self.presentAlert(title: NSLocalizedString("You don't agree with the privacy policy", comment: ""))
+            
+            return
+        }
+        
         switch self.presenter.mode {
         case .logIn:
             self.presenter.auth(email: self.emailTextField.text ?? "", password: self.emailTextField.text ?? "") { token, error in
@@ -239,6 +288,20 @@ final class RegistrationViewController: UIViewController {
     @objc private func keyboardWillHide(notification: NSNotification) {
         self.scrollView.contentInset.bottom = .zero
         self.scrollView.verticalScrollIndicatorInsets = .zero
+    }
+    
+    @objc private func didTapCheckmarkImageView() {
+        if !self.presenter.isAgreeWithPrivacyPolicy {
+            self.checkmarkImageView.image = UIImage(systemName: "checkmark.square")
+        } else {
+            self.checkmarkImageView.image = UIImage(systemName: "square")
+        }
+        
+        self.presenter.isAgreeWithPrivacyPolicy.toggle()
+    }
+    
+    @objc private func didTapPrivacyPolicyButton() {
+        self.presenter.goToPrivacyPolicy()
     }
 
 }
