@@ -36,7 +36,7 @@ final class RegistrationViewController: UIViewController {
     private let logoImageView: UIImageView = {
         let view = UIImageView()
         
-        view.image = UIImage(named: "Appicon")
+        view.image = UIImage(named: "logo")
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -172,12 +172,12 @@ final class RegistrationViewController: UIViewController {
         self.logoImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview().multipliedBy(0.5)
             make.centerX.equalTo(self.view.safeAreaLayoutGuide)
-            make.width.height.equalTo(50)
+            make.width.height.equalTo(250)
         }
         
         self.emailTextField.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.top.equalTo(self.logoImageView.snp.bottom).inset(-100)
+            make.top.equalTo(self.logoImageView.snp.bottom).inset(-50)
             make.height.equalTo(50)
         }
         
