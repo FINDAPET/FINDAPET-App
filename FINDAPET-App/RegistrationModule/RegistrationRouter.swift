@@ -19,4 +19,8 @@ final class RegistrationRouter: RegistrationCoordinatable {
         self.coordinatorDelegate?.goToMainTabBar()
     }
     
+    func goToPrivacyPolicy() {
+        self.coordinatorDelegate?.goToPrivacyPolicy()
+    }
+    
 }

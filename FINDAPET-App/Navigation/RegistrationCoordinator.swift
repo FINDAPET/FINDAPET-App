@@ -59,6 +59,17 @@ final class RegistrationCoordinator: Coordinator {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
+    func goToPrivacyPolicy() {
+        let router = PrivacyPolicyRouter()
+        let interactor = PrivacyPolicyInteractor()
+        let presenter = PrivacyPolicyPresenter(router: router, interactor: interactor)
+        let viewController = PrivacyPolicyViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
     func goToMainTabBar() {
         let coordinator = MainTabBarCoordinator()
         
