@@ -107,7 +107,7 @@ final class EditProfileViewController: UIViewController {
         
         view.text = NSLocalizedString("Register as a cattery(optional)", comment: "")
         view.textColor = .textColor
-        view.font = .systemFont(ofSize: 14, weight: .regular)
+        view.font = .systemFont(ofSize: 16, weight: .regular)
         view.numberOfLines = 0
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -134,6 +134,20 @@ final class EditProfileViewController: UIViewController {
         view.image?.withTintColor(.accentColor)
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapCheckmarkImageView)))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var infoLabel: UILabel = {
+        let view = UILabel()
+        
+        view.numberOfLines = 0
+        view.text = "*" + NSLocalizedString("Verified catteries are always marked for the buyer", comment: "")
+        view.textColor = .lightGray
+        view.font = .systemFont(ofSize: 14)
+        view.isHidden = self.presenter.user.avatarData == nil ? true : false
+        view.alpha = self.presenter.user.avatarData == nil ? 0 : 1
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -211,15 +225,16 @@ final class EditProfileViewController: UIViewController {
         self.scrollView.addSubview(self.checkmarkLabel)
         self.scrollView.addSubview(self.catteryDocumentLabel)
         self.scrollView.addSubview(self.documentImageView)
+        self.scrollView.addSubview(self.infoLabel)
         self.scrollView.addSubview(self.saveButton)
         
         self.scrollView.snp.makeConstraints { make in
-            make.leading.trailing.top.bottom.width.equalToSuperview()
+            make.leading.trailing.top.bottom.width.equalTo(self.view.safeAreaLayoutGuide)
         }
         
         self.avatarImageView.snp.makeConstraints { make in
             make.centerX.equalTo(self.view)
-            make.top.equalToSuperview().inset(25)
+            make.top.equalToSuperview().inset(15)
             make.width.height.equalTo(100)
         }
         
@@ -236,7 +251,7 @@ final class EditProfileViewController: UIViewController {
         
         self.checkmarkLabel.snp.makeConstraints { make in
             make.leading.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.trailing.equalTo(self.checkmarkImageView.snp.leading).inset(15)
+            make.trailing.equalTo(self.checkmarkImageView.snp.leading).inset(-15)
             make.centerY.equalTo(self.checkmarkImageView)
         }
         
@@ -251,13 +266,18 @@ final class EditProfileViewController: UIViewController {
             make.width.equalTo(self.documentImageView.snp.height)
         }
         
-        self.saveButton.snp.makeConstraints { make in
+        self.infoLabel.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.top.equalTo(self.documentImageView.snp.bottom).inset(-15)
-            make.bottom.equalToSuperview().inset(25)
-            make.height.equalTo(50)
+            make.top.equalTo(self.documentImageView.snp.bottom).inset(-10)
         }
         
+        self.saveButton.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+            make.top.equalTo(self.checkmarkLabel.snp.bottom).inset(-25)
+            make.bottom.equalToSuperview().inset(15)
+            make.height.equalTo(50)
+        }
+                
     }
     
 //    MARK: Actions
@@ -270,20 +290,6 @@ final class EditProfileViewController: UIViewController {
             )
             
             return
-        }
-        
-        guard (self.presenter.user.documentData != nil && self.presenter.user.isCatteryWaitVerify) ||
-        (self.presenter.user.documentData == nil && !self.presenter.user.isCatteryWaitVerify) else {
-            self.presentAlert(
-                title: NSLocalizedString("Cattery document image is empty", comment: ""),
-                message: NSLocalizedString("Fill in all required fields", comment: "")
-            )
-            
-            return
-        }
-        
-        if !self.presenter.user.isCatteryWaitVerify && self.presenter.user.documentData != nil {
-            self.presenter.user.documentData = nil
         }
         
         self.presenter.user.deviceToken = self.presenter.readUserDefaultsDeviceToken()
@@ -313,12 +319,40 @@ final class EditProfileViewController: UIViewController {
             self.presenter.user.isCatteryWaitVerify = true
             self.catteryDocumentLabel.isHidden = false
             self.documentImageView.isHidden = false
+            self.infoLabel.isHidden = false
             self.checkmarkImageView.image = UIImage(systemName: "checkmark.square")
             self.checkmarkImageView.image?.withTintColor(.accentColor)
             
-            UIView.animate(withDuration: 0.5) { [ weak self ] in
-                self?.catteryDocumentLabel.alpha = 1
-                self?.documentImageView.alpha = 1
+            UIView.animate(withDuration: 0.35) { [ weak self ] in
+                guard let self = self else {
+                    return
+                }
+                
+                self.saveButton.frame.origin = CGPoint(
+                    x: self.saveButton.frame.minX,
+                    y: self.infoLabel.frame.maxY + 25
+                )
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [ weak self ] in
+                guard let self  = self else {
+                    return
+                }
+                
+                self.saveButton.snp.removeConstraints()
+                
+                self.saveButton.snp.makeConstraints { make in
+                    make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+                    make.top.equalTo(self.infoLabel.snp.bottom).inset(-25)
+                    make.bottom.equalToSuperview().inset(15)
+                    make.height.equalTo(50)
+                }
+                
+                UIView.animate(withDuration: 0.5) {
+                    self.catteryDocumentLabel.alpha = 1
+                    self.documentImageView.alpha = 1
+                    self.infoLabel.alpha = 1
+                }
             }
         } else if self.presenter.readUserDefaultsIsFirstEdititng() {
             self.presenter.user.isCatteryWaitVerify = false
@@ -328,11 +362,42 @@ final class EditProfileViewController: UIViewController {
             UIView.animate(withDuration: 0.5) { [ weak self ] in
                 self?.catteryDocumentLabel.alpha = 0
                 self?.documentImageView.alpha = 0
+                self?.infoLabel.alpha = 0
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [ weak self ] in
                 self?.catteryDocumentLabel.isHidden = true
                 self?.documentImageView.isHidden = true
+                self?.infoLabel.isHidden = true
+                self?.presenter.user.documentData = nil
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [ weak self ] in
+                guard let self = self else {
+                    return
+                }
+                
+                UIView.animate(withDuration: 0.35) { [ weak self ] in
+                    guard let self = self else {
+                        return
+                    }
+                    
+                    self.saveButton.frame.origin = CGPoint(
+                        x: self.saveButton.frame.minX,
+                        y: self.checkmarkLabel.frame.maxY + 25
+                    )
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    self.saveButton.snp.removeConstraints()
+                    
+                    self.saveButton.snp.makeConstraints { make in
+                        make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+                        make.top.equalTo(self.checkmarkLabel.snp.bottom).inset(-25)
+                        make.bottom.equalToSuperview().inset(15)
+                        make.height.equalTo(50)
+                    }
+                }
             }
         }
     }

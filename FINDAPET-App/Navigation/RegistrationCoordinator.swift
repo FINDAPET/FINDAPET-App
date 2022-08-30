@@ -17,13 +17,15 @@ final class RegistrationCoordinator: Coordinator {
     let navigationController = UINavigationController()
     
     func start() {
-        self.setupViews()
+//        self.setupViews()
+//
+//        if KeychainManager.shared.read(key: .token) != nil, !(UserDefaultsManager.read(key: .isFirstEditing) as? Bool ?? true) {
+//            self.goToMainTabBar()
+//        } else {
+//            self.goToOnboarding()
+//        }
         
-        if KeychainManager.shared.read(key: .token) != nil, !(UserDefaultsManager.read(key: .isFirstEditing) as? Bool ?? true) {
-            self.goToMainTabBar()
-        } else {
-            self.goToOnboarding()
-        }
+        self.goToEditProfile(user: User.Input(name: "", isCatteryWaitVerify: false))
     }
     
     func goToOnboarding() {
