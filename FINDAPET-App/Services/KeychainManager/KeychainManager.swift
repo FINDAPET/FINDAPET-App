@@ -18,7 +18,7 @@ final class KeychainManager {
     
     static let shared = KeychainManager(keychain: Keychain())
     
-    func write(value: String, key: KeychainKeys) {
+    func write(value: String?, key: KeychainKeys) {
         self.keychain[key.rawValue] = value
     }
     

@@ -20,13 +20,21 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
     
     func start() {
         self.setupViews()
+        self.goToProfile()
     }
     
-    func goToProfile() {
-        // push profile
+    func goToProfile(userID: UUID? = nil) {
+        let router = ProfileRouter()
+        let interactor = ProfileInteractor()
+        let presenter = ProfilePresenter(router: router, interactor: interactor, userID: userID)
+        let viewController = ProfileViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func goToDeals() {
+    func goToDeals(isFindable: Bool) {
         // push deals
     }
     
@@ -36,6 +44,30 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
     
     func goToOffers() {
         // push offers
+    }
+    
+    func goToCreateDeal() {
+        // push create deal
+    }
+    
+    func goToCreateOffer() {
+        // push create offer
+    }
+    
+    func goToCreateAd() {
+        // push create ad
+    }
+    
+    func goToInfo() {
+        // push info
+    }
+    
+    func goToOnboarding() {
+        let registrationCoordinator = RegistrationCoordinator()
+        
+        registrationCoordinator.start()
+        
+        self.navigationController.pushViewController(registrationCoordinator.navigationController, animated: true)
     }
     
     private func setupViews() {

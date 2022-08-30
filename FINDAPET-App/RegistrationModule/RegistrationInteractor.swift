@@ -46,4 +46,10 @@ final class RegistrationInteractor {
         RegistrationManager.isValidData(email: email, password: password, completionHandler: completionHandler)
     }
     
+//    MARK: User Defaults
+    
+    func write(key: UserDefaultsKeys, data: Any) {
+        UserDefaultsManager.write(data: data, key: key)
+    }
+    
 }

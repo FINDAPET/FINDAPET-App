@@ -257,6 +257,7 @@ final class RegistrationViewController: UIViewController {
                         }
                         
                         self?.presenter.writeKeychainBearer(token: token.value)
+                        self?.presenter.writeUserID(id: token.user.id)
                         
                         let user = User.Input(
                             id: token.user.id,
