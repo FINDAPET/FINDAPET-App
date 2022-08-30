@@ -28,7 +28,7 @@
 "Your name or your cattery name" = "Ваше имя или название вашего питомника";
 "Description(optional)" = "Описание(необязательно)";
 "Register as a cattery(optional)" = "Зарегестрироваться как питомник(необязательно)";
-"Cattery documents" = "Документы питомника";
+"Cattery documents" = "Документы питомника(необязательно)";
 "Name field is empty" = "Поле имени пустое";
 "Cattery document image is empty" = "Фотография документа питомника отсутствует";
 "Fill in all required fields" = "Заполните все обязательные поля";
@@ -39,3 +39,4 @@
 "Privacy policy" = "Политика конфеденциальности";
 "Do you agree with privacy policy?" = "Вы согласны с политикой конфеденциальности?";
 "You don't agree with the privacy policy" = "Вы не согласны с политикой конфиденциальности";
+"Verified catteries are always marked for the buyer" = "Верифицированные питомники всегда помечаются для покупателя и отображаются выше в списке";

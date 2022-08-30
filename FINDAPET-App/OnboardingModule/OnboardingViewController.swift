@@ -100,7 +100,7 @@ final class OnboardingViewController: UIViewController {
         self.scrollView.addSubview(self.logInButton)
         
         self.scrollView.snp.makeConstraints { make in
-            make.width.leading.trailing.top.bottom.equalToSuperview()
+            make.width.leading.trailing.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         
         self.logoImageView.snp.makeConstraints { make in
@@ -108,18 +108,18 @@ final class OnboardingViewController: UIViewController {
             make.top.equalToSuperview()
             make.height.equalTo(self.logoImageView.snp.width)
         }
-        
+
         self.textLabel.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.top.equalTo(self.logoImageView.snp.bottom).inset(-10)
         }
-        
+
         self.signInButton.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.top.equalTo(self.textLabel.snp.bottom).inset(-15)
             make.height.equalTo(50)
         }
-        
+
         self.logInButton.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.top.equalTo(self.signInButton.snp.bottom).inset(-10)

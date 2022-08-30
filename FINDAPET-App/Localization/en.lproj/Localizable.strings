@@ -28,7 +28,7 @@
 "Your name or your cattery name" = "Your name or your cattery name";
 "Description(optional)" = "Description(optional)";
 "Register as a cattery(optional)" = "Register as a cattery(optional)";
-"Cattery documents" = "Cattery documents";
+"Cattery documents" = "Cattery documents(optional)";
 "Name field is empty" = "Name field is empty";
 "Cattery document image is empty" = "Cattery document image is empty";
 "Fill in all required fields" = "Fill in all required fields";
@@ -39,3 +39,4 @@
 "Privacy policy" = "Privacy policy";
 "Do you agree with privacy policy?" = "Do you agree with privacy policy?";
 "You don't agree with the privacy policy" = "You don't agree with the privacy policy";
+"Verified catteries are always marked for the buyer" = "Verified catteries are always marked for the buyer and are displayed above in the list";
