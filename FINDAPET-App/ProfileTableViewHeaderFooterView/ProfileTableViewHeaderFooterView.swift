@@ -89,6 +89,10 @@ class ProfileTableViewHeaderFooterView: UITableViewHeaderFooterView {
             make.leading.top.equalToSuperview().inset(15)
             make.width.height.equalTo(150)
             make.bottom.greaterThanOrEqualToSuperview().inset(15)
+            
+            if self.descriptionLabel.frame.maxY < self.avatarImageView.frame.maxY {
+                make.bottom.equalToSuperview().inset(15)
+            }
         }
         
         self.nameLabel.snp.makeConstraints { make in
@@ -101,17 +105,45 @@ class ProfileTableViewHeaderFooterView: UITableViewHeaderFooterView {
             make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
             make.trailing.equalToSuperview().inset(15)
             make.top.equalTo(self.nameLabel.snp.bottom).inset(-15)
-            make.bottom.greaterThanOrEqualToSuperview().inset(15)
+            
+            if self.descriptionLabel.frame.maxY >= self.avatarImageView.frame.maxY {
+                make.bottom.equalToSuperview().inset(15)
+            }
         }
     }
     
 //    MARK: Actions
     
     @objc private func didTapDescriptionLabel(_ sender: UILabel) {
-        if sender.numberOfLines == .zero {
-            self.descriptionLabel.numberOfLines = 5
-        } else if sender.numberOfLines == 5 {
-            self.descriptionLabel.numberOfLines = .zero
+        UIView.animate(withDuration: 0.3) { [ weak self ] in
+            if sender.numberOfLines == .zero {
+                self?.descriptionLabel.numberOfLines = 5
+            } else if sender.numberOfLines == 5 {
+                self?.descriptionLabel.numberOfLines = .zero
+            }
+        }
+        
+        self.avatarImageView.snp.removeConstraints()
+        self.descriptionLabel.snp.removeConstraints()
+        
+        self.avatarImageView.snp.makeConstraints { make in
+            make.leading.top.equalToSuperview().inset(15)
+            make.width.height.equalTo(150)
+            make.bottom.greaterThanOrEqualToSuperview().inset(15)
+            
+            if self.descriptionLabel.frame.maxY < self.avatarImageView.frame.maxY {
+                make.bottom.equalToSuperview().inset(15)
+            }
+        }
+        
+        self.descriptionLabel.snp.makeConstraints { make in
+            make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
+            make.trailing.equalToSuperview().inset(15)
+            make.top.equalTo(self.nameLabel.snp.bottom).inset(-15)
+            
+            if self.descriptionLabel.frame.maxY >= self.avatarImageView.frame.maxY {
+                make.bottom.equalToSuperview().inset(15)
+            }
         }
     }
 
