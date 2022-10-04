@@ -8,10 +8,10 @@
 import UIKit
 import SnapKit
 
-class ProfileTableViewHeaderFooterView: UITableViewHeaderFooterView {
+class ProfileTableViewCell: UITableViewCell {
     
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.setupViews()
     }
@@ -20,7 +20,7 @@ class ProfileTableViewHeaderFooterView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    static let id = String(describing: ProfileTableViewHeaderFooterView.self)
+    static let id = String(describing: ProfileTableViewCell.self)
     
     var user: User.Output? {
         didSet {
@@ -76,6 +76,13 @@ class ProfileTableViewHeaderFooterView: UITableViewHeaderFooterView {
         return view
     }()
     
+//    MARK: Life Cycle
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.setupViews()
+    }
+    
 //    MARK: Setup Views
     
     private func setupViews() {
@@ -88,9 +95,8 @@ class ProfileTableViewHeaderFooterView: UITableViewHeaderFooterView {
         self.avatarImageView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().inset(15)
             make.width.height.equalTo(150)
-            make.bottom.greaterThanOrEqualToSuperview().inset(15)
-            
-            if self.descriptionLabel.frame.maxY < self.avatarImageView.frame.maxY {
+
+            if self.descriptionLabel.frame.maxY <= self.avatarImageView.frame.maxY {
                 make.bottom.equalToSuperview().inset(15)
             }
         }
@@ -105,8 +111,8 @@ class ProfileTableViewHeaderFooterView: UITableViewHeaderFooterView {
             make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
             make.trailing.equalToSuperview().inset(15)
             make.top.equalTo(self.nameLabel.snp.bottom).inset(-15)
-            
-            if self.descriptionLabel.frame.maxY >= self.avatarImageView.frame.maxY {
+
+            if self.descriptionLabel.frame.maxY > self.avatarImageView.frame.maxY {
                 make.bottom.equalToSuperview().inset(15)
             }
         }

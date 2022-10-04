@@ -70,7 +70,7 @@ final class EditProfileViewController: UIViewController {
         view.image = self.presenter.user.avatarData == nil ? UIImage(systemName: "plus") : UIImage(data: self.presenter.user.avatarData ?? Data())
         view.backgroundColor = .textFieldColor
         view.tintColor = .lightGray
-        view.layer.cornerRadius = 50
+        view.layer.cornerRadius = 48
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.clipsToBounds = true

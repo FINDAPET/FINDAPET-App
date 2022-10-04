@@ -42,7 +42,7 @@
 		E34ABC5928A7D48300A7D2C8 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */; };
 		E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */; };
 		E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */; };
-		E35BBA9728BE6C590048F525 /* ProfileTableViewHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35BBA9628BE6C590048F525 /* ProfileTableViewHeaderFooterView.swift */; };
+		E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */; };
 		E3BC6CA128ABF91800CDA167 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E3BC6CA028ABF91800CDA167 /* SnapKit */; };
 		E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */; };
 		E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67828ABD3BA00468ED2 /* UIColor.swift */; };
@@ -111,7 +111,7 @@
 		E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
 		E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSAuthentaficationMode.swift; sourceTree = "<group>"; };
-		E35BBA9628BE6C590048F525 /* ProfileTableViewHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewHeaderFooterView.swift; sourceTree = "<group>"; };
+		E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 		E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
 		E3CEE67828ABD3BA00468ED2 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
@@ -292,12 +292,12 @@
 			path = WebSocketManager;
 			sourceTree = "<group>";
 		};
-		E35BBA9528BE6C190048F525 /* ProfileTableViewHeaderFooterView */ = {
+		E35BBA9528BE6C190048F525 /* ProfileTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				E35BBA9628BE6C590048F525 /* ProfileTableViewHeaderFooterView.swift */,
+				E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */,
 			);
-			path = ProfileTableViewHeaderFooterView;
+			path = ProfileTableViewCell;
 			sourceTree = "<group>";
 		};
 		E3CEE67528ABD2E200468ED2 /* Navigation */ = {
@@ -344,7 +344,7 @@
 			isa = PBXGroup;
 			children = (
 				E3D9570C28B0125B00CCF566 /* CustomUIElements */,
-				E35BBA9528BE6C190048F525 /* ProfileTableViewHeaderFooterView */,
+				E35BBA9528BE6C190048F525 /* ProfileTableViewCell */,
 				E312607C28BE39810097D040 /* ProfileModule */,
 				E3E4D69E28B92B9E002B0BE6 /* PrivacyPolicyModule */,
 				E3D9570128AFD5A400CCF566 /* EditProfileModule */,
@@ -574,7 +574,7 @@
 				E305EC7B28ACD78200A3AAD3 /* OnboardingRouter.swift in Sources */,
 				E3CEE67F28ABD88800468ED2 /* Coordinator.swift in Sources */,
 				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
-				E35BBA9728BE6C590048F525 /* ProfileTableViewHeaderFooterView.swift in Sources */,
+				E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */,
 				E3D9570328AFD63500CCF566 /* EditProfileRouter.swift in Sources */,
 				E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */,
 				E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */,

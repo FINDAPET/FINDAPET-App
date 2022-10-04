@@ -62,6 +62,13 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         // push info
     }
     
+    func goToEditProfile(user: User.Input) {
+        self.navigationController.pushViewController(
+            RegistrationCoordinator().getEditProfile(user: user),
+            animated: true
+        )
+    }
+    
     func goToOnboarding() {
         let registrationCoordinator = RegistrationCoordinator()
         

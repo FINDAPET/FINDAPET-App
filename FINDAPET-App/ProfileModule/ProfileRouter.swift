@@ -39,4 +39,8 @@ final class ProfileRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.goToInfo()
     }
     
+    func gotoEditProfile(user: User.Input) {
+        self.coordinatorDelegate?.goToEditProfile(user: user)
+    }
+    
 }

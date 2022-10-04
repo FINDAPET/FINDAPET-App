@@ -59,6 +59,14 @@ final class RegistrationCoordinator: Coordinator {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
+    func getEditProfile(user: User.Input) -> EditProfileViewController {
+        let router = EditProfileRouter()
+        let interactor = EditProfileInteractor()
+        let presenter = EditProfilePresenter(router: router, interactor: interactor, user: user)
+        
+        return EditProfileViewController(presenter: presenter)
+    }
+    
     func goToPrivacyPolicy() {
         let router = PrivacyPolicyRouter()
         let interactor = PrivacyPolicyInteractor()

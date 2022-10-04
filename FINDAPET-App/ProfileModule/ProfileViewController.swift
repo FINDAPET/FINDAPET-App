@@ -34,9 +34,9 @@ final class ProfileViewController: UIViewController {
     }()
     
     private let tableView: UITableView = {
-        let view = UITableView(frame: .zero, style: .grouped)
+        let view = UITableView(frame: .zero, style: .plain)
         
-//        view.isHidden = true
+        view.backgroundColor = .systemGray6
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -66,10 +66,7 @@ final class ProfileViewController: UIViewController {
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        self.tableView.register(
-            ProfileTableViewHeaderFooterView.self,
-            forHeaderFooterViewReuseIdentifier: ProfileTableViewHeaderFooterView.id
-        )
+        self.tableView.register(ProfileTableViewCell.self, forCellReuseIdentifier: ProfileTableViewCell.id)
         
         self.view.addSubview(self.activityIndicatorView)
         self.view.addSubview(self.tableView)
@@ -132,7 +129,7 @@ final class ProfileViewController: UIViewController {
 extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8//self.presenter.userID != nil ? 8 : 1
+        return 9//self.presenter.userID != nil ? 9 : 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -146,20 +143,28 @@ extension ProfileViewController: UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            config.text = NSLocalizedString("Deals", comment: "")
+            guard let newCell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.id) as? ProfileTableViewCell else {
+                return cell
+            }
+            
+            newCell.user = self.presenter.user
+            
+            return newCell
         case 1:
-            config.text = NSLocalizedString("My offers", comment: "")
+            config.text = NSLocalizedString("Deals", comment: "")
         case 2:
-            config.text = NSLocalizedString("Suggested offers", comment: "")
+            config.text = NSLocalizedString("My offers", comment: "")
         case 3:
-            config.text = NSLocalizedString("My ad", comment: "")
+            config.text = NSLocalizedString("Suggested offers", comment: "")
         case 4:
-            config.text = NSLocalizedString("Create deal", comment: "")
+            config.text = NSLocalizedString("My ad", comment: "")
         case 5:
-            config.text = NSLocalizedString("Create ad", comment: "")
+            config.text = NSLocalizedString("Create deal", comment: "")
         case 6:
-            config.text = NSLocalizedString("Edit profile", comment: "")
+            config.text = NSLocalizedString("Create ad", comment: "")
         case 7:
+            config.text = NSLocalizedString("Edit profile", comment: "")
+        case 8:
             config.text = NSLocalizedString("Log Out", comment: "")
             config.textProperties.color = .systemRed
         default:
@@ -174,18 +179,6 @@ extension ProfileViewController: UITableViewDataSource {
 }
 
 extension ProfileViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let view = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: ProfileTableViewHeaderFooterView.id
-        ) as? ProfileTableViewHeaderFooterView else {
-            return nil
-        }
-        
-        view.user = self.presenter.user
-        
-        return view
-    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -204,22 +197,16 @@ extension ProfileViewController: UITableViewDelegate {
         case 6:
             self.presenter.goToCreateAd()
         case 7:
+            self.presenter.goToEditProfile()
+        case 8:
             self.logOut()
         default:
             break
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard let headerView = self.tableView(tableView, viewForHeaderInSection: section) else {
-            return .zero
-        }
-        
-        return headerView.systemLayoutSizeFitting(CGSize(width: tableView.bounds.width, height: 0)).height
-    }
-    
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return UITableView.automaticDimension
     }
     
 }

@@ -51,6 +51,16 @@ final class ProfilePresenter {
         self.router.goToInfo()
     }
     
+    func goToEditProfile() {
+        self.router.gotoEditProfile(user: User.Input(
+            id: self.user?.id,
+            name: self.user?.name ?? "",
+            avatarData: self.user?.avatarData,
+            documentData: self.user?.documentData,
+            description: self.user?.description ?? ""
+        ))
+    }
+    
 //    MARK: Requests
     
     func getUser(completionHandler: @escaping (User.Output?, Error?) -> Void) {
