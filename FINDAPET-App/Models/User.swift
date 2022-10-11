@@ -26,15 +26,19 @@ extension User {
         var description: String?
         var deviceToken: String?
         var isCatteryWaitVerify: Bool
+        var chatRoomsID: [UUID]
+        var countryCode: String?
         
-        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, deviceToken: String? = nil) {
+        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, deviceToken: String? = nil, chatRoomsID: [UUID] = [UUID](), countryCode: String? = nil) {
             self.id = id
             self.name = name
             self.avatarData = avatarData
             self.documentData = documentData
             self.description = description
-            self.deviceToken = deviceToken
             self.isCatteryWaitVerify = isCatteryWaitVerify
+            self.deviceToken = deviceToken
+            self.chatRoomsID = chatRoomsID
+            self.countryCode = countryCode
         }
     }
 }
@@ -51,6 +55,7 @@ extension User {
         var ads: [Ad.Output]
         var myOffers: [Offer.Output]
         var offers: [Offer.Output]
+        var chatRooms: [ChatRoom.Output]
     }
 }
 

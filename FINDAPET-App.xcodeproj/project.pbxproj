@@ -21,6 +21,8 @@
 		E313B89E28ACE39800E33975 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E313B89D28ACE39800E33975 /* RegistrationViewController.swift */; };
 		E313B8A028AD01A500E33975 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E313B89F28AD01A500E33975 /* UIViewController.swift */; };
 		E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */; };
+		E325351D28F58C6500878A7F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E325351C28F58C6500878A7F /* Message.swift */; };
+		E325351F28F58CE600878A7F /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E325351E28F58CE600878A7F /* ChatRoom.swift */; };
 		E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334DFCC28A82687000A2316 /* NotificationManager.swift */; };
 		E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */; };
 		E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */; };
@@ -90,6 +92,8 @@
 		E313B89D28ACE39800E33975 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		E313B89F28AD01A500E33975 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePayManager.swift; sourceTree = "<group>"; };
+		E325351C28F58C6500878A7F /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		E325351E28F58CE600878A7F /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
 		E334DFC728A81D9F000A2316 /* FINDAPET-App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "FINDAPET-App.entitlements"; sourceTree = "<group>"; };
 		E334DFCC28A82687000A2316 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
@@ -223,6 +227,8 @@
 				E34ABC3528A7951600A7D2C8 /* Offer.swift */,
 				E34ABC3728A7961E00A7D2C8 /* Deal.swift */,
 				E34ABC3928A796EA00A7D2C8 /* Ad.swift */,
+				E325351C28F58C6500878A7F /* Message.swift */,
+				E325351E28F58CE600878A7F /* ChatRoom.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -531,6 +537,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3CEE68528ABE77B00468ED2 /* RegistrationMode.swift in Sources */,
+				E325351D28F58C6500878A7F /* Message.swift in Sources */,
 				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
 				E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */,
 				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
@@ -587,6 +594,7 @@
 				E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */,
 				E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */,
 				E34ABC3428A7906500A7D2C8 /* User.swift in Sources */,
+				E325351F28F58CE600878A7F /* ChatRoom.swift in Sources */,
 				E3D9570928AFD65900CCF566 /* EditProfileViewController.swift in Sources */,
 				E305EC7528ACCC6800A3AAD3 /* OnboardingInteractor.swift in Sources */,
 				E3E4D6A428B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift in Sources */,

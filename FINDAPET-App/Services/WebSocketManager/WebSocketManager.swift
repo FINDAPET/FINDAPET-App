@@ -9,11 +9,12 @@ import Foundation
 
 final class WebSocketManager {
     
+//    MARK: Request 1
     static func webSocket(
         url: URL,
         authMode: WSAuthentaficationMode?,
         completionHandler: @escaping (String?, Error?) -> Void
-    ) {
+    ) -> URLSessionWebSocketTask {
         var req = URLRequest(url: url)
         let configuration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier ?? "com.artemiy.FINDAPET-App")
         
@@ -65,13 +66,16 @@ final class WebSocketManager {
         }
         
         webSocketTask.resume()
+        
+        return webSocketTask
     }
     
-    static func webSocket(
+//    MARK: Request 2
+    static func webSocket<T: Decodable>(
         url: URL,
         authMode: WSAuthentaficationMode?,
-        completionHandler: @escaping (Data?, Error?) -> Void
-    ) {
+        completionHandler: @escaping (T?, Error?) -> Void
+    ) -> URLSessionWebSocketTask {
         var req = URLRequest(url: url)
         let configuration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier ?? "com.artemiy.FINDAPET-App")
         
@@ -105,7 +109,15 @@ final class WebSocketManager {
             case .success(let message):
                 switch message {
                 case .data(let data):
-                    completionHandler(data, nil)
+                    guard let model = try? JSONDecoder().decode(T.self, from: data) else {
+                        print("❌ Error: decoding failed.")
+                        
+                        completionHandler(nil, RequestErrors.decodingFailed)
+                        
+                        return
+                    }
+                    
+                    completionHandler(model, nil)
                 default:
                     break
                 }
@@ -123,6 +135,134 @@ final class WebSocketManager {
         }
         
         webSocketTask.resume()
+        
+        return webSocketTask
     }
+    
+    //    MARK: Request 3
+        static func webSocket(
+            url: URL,
+            authMode: WSAuthentaficationMode?,
+            completionHandler: @escaping (String?, Error?) -> Void
+        ) {
+            var req = URLRequest(url: url)
+            let configuration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier ?? "com.artemiy.FINDAPET-App")
+            
+            req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
+            
+            configuration.sessionSendsLaunchEvents = true
+            configuration.isDiscretionary = true
+            configuration.allowsCellularAccess = true
+            configuration.shouldUseExtendedBackgroundIdleMode = true
+            configuration.waitsForConnectivity = true
+            
+            if let authMode = authMode {
+                switch authMode {
+                case .base(let email, let password):
+                    req.setValue(
+                        Headers.authString(email: email, password: password),
+                        forHTTPHeaderField: Headers.authorization.rawValue
+                    )
+                case .bearer(let value):
+                    req.setValue(
+                        Headers.bearerAuthString(token: value),
+                        forHTTPHeaderField: Headers.authorization.rawValue
+                    )
+                }
+            }
+            
+            let webSocketTask = URLSession(configuration: configuration).webSocketTask(with: req)
+            
+            webSocketTask.receive { result in
+                switch result {
+                case .success(let message):
+                    switch message {
+                    case .string(let string):
+                        completionHandler(string, nil)
+                    default:
+                        break
+                    }
+                    
+                    webSocketTask.cancel()
+                case .failure(let error):
+                    print("❌ Error: \(error.localizedDescription)")
+                    
+                    completionHandler(nil, error)
+                    
+                    webSocketTask.cancel()
+                    
+                    return
+                }
+            }
+            
+            webSocketTask.resume()
+        }
+        
+    //    MARK: Request 4
+    static func webSocket<T: Decodable>(
+            url: URL,
+            authMode: WSAuthentaficationMode?,
+            completionHandler: @escaping (T?, Error?) -> Void
+        ) {
+            var req = URLRequest(url: url)
+            let configuration = URLSessionConfiguration.background(withIdentifier: Bundle.main.bundleIdentifier ?? "com.artemiy.FINDAPET-App")
+            
+            req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
+            
+            configuration.sessionSendsLaunchEvents = true
+            configuration.isDiscretionary = true
+            configuration.allowsCellularAccess = true
+            configuration.shouldUseExtendedBackgroundIdleMode = true
+            configuration.waitsForConnectivity = true
+            
+            if let authMode = authMode {
+                switch authMode {
+                case .base(let email, let password):
+                    req.setValue(
+                        Headers.authString(email: email, password: password),
+                        forHTTPHeaderField: Headers.authorization.rawValue
+                    )
+                case .bearer(let value):
+                    req.setValue(
+                        Headers.bearerAuthString(token: value),
+                        forHTTPHeaderField: Headers.authorization.rawValue
+                    )
+                }
+            }
+            
+            let webSocketTask = URLSession(configuration: configuration).webSocketTask(with: req)
+            
+            webSocketTask.receive { result in
+                switch result {
+                case .success(let message):
+                    switch message {
+                    case .data(let data):
+                        guard let model = try? JSONDecoder().decode(T.self, from: data) else {
+                            print("❌ Error: decoding failed.")
+                            
+                            completionHandler(nil, RequestErrors.decodingFailed)
+                            
+                            return
+                        }
+                        
+                        completionHandler(model, nil)
+                    default:
+                        break
+                    }
+                    
+                    webSocketTask.cancel()
+                case .failure(let error):
+                    print("❌ Error: \(error.localizedDescription)")
+                    
+                    completionHandler(nil, error)
+                    
+                    webSocketTask.cancel()
+                    
+                    return
+                }
+            }
+            
+            webSocketTask.resume()
+        }
     
 }
