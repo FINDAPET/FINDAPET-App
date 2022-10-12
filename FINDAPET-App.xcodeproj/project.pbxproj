@@ -45,6 +45,9 @@
 		E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */; };
 		E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */; };
 		E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */; };
+		E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */; };
+		E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F328F70CD000C67387 /* PurchaseManager.swift */; };
+		E3A173F628F70E1A00C67387 /* ProductsID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F528F70E1A00C67387 /* ProductsID.swift */; };
 		E3BC6CA128ABF91800CDA167 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E3BC6CA028ABF91800CDA167 /* SnapKit */; };
 		E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */; };
 		E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67828ABD3BA00468ED2 /* UIColor.swift */; };
@@ -96,6 +99,7 @@
 		E325351E28F58CE600878A7F /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
 		E334DFC728A81D9F000A2316 /* FINDAPET-App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "FINDAPET-App.entitlements"; sourceTree = "<group>"; };
 		E334DFCC28A82687000A2316 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		E337A3EF28F7132700FA6417 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
 		E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
 		E34ABC3328A7906500A7D2C8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -116,6 +120,9 @@
 		E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSAuthentaficationMode.swift; sourceTree = "<group>"; };
 		E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
+		E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseErrors.swift; sourceTree = "<group>"; };
+		E3A173F328F70CD000C67387 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
+		E3A173F528F70E1A00C67387 /* ProductsID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsID.swift; sourceTree = "<group>"; };
 		E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
 		E3CEE67828ABD3BA00468ED2 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
@@ -198,15 +205,24 @@
 		E334DFCB28A8265B000A2316 /* NotificationManager */ = {
 			isa = PBXGroup;
 			children = (
-				E334DFC728A81D9F000A2316 /* FINDAPET-App.entitlements */,
 				E334DFCC28A82687000A2316 /* NotificationManager.swift */,
 			);
 			path = NotificationManager;
 			sourceTree = "<group>";
 		};
+		E337A3F028F7143700FA6417 /* StoreProducts */ = {
+			isa = PBXGroup;
+			children = (
+				E337A3EF28F7132700FA6417 /* Configuration.storekit */,
+				E3A173F528F70E1A00C67387 /* ProductsID.swift */,
+			);
+			path = StoreProducts;
+			sourceTree = "<group>";
+		};
 		E34ABC2D28A771A600A7D2C8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E3A173F228F70CB600C67387 /* PurchaseManager */,
 				E31BEE4B28A96A7600E29A1C /* ApplePayManager */,
 				E334DFCB28A8265B000A2316 /* NotificationManager */,
 				E34ABC5A28A7D6AB00A7D2C8 /* WebSocketManager */,
@@ -238,6 +254,7 @@
 			children = (
 				E34ABC4228A7C59B00A7D2C8 /* RequestErrors.swift */,
 				E34ABC4428A7CE2E00A7D2C8 /* RegistrationErrors.swift */,
+				E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */,
 			);
 			path = Errors;
 			sourceTree = "<group>";
@@ -306,6 +323,22 @@
 			path = ProfileTableViewCell;
 			sourceTree = "<group>";
 		};
+		E3A173F228F70CB600C67387 /* PurchaseManager */ = {
+			isa = PBXGroup;
+			children = (
+				E3A173F328F70CD000C67387 /* PurchaseManager.swift */,
+			);
+			path = PurchaseManager;
+			sourceTree = "<group>";
+		};
+		E3A173F728F70E7B00C67387 /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				E334DFC728A81D9F000A2316 /* FINDAPET-App.entitlements */,
+			);
+			path = Entitlements;
+			sourceTree = "<group>";
+		};
 		E3CEE67528ABD2E200468ED2 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
@@ -349,6 +382,8 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E337A3F028F7143700FA6417 /* StoreProducts */,
+				E3A173F728F70E7B00C67387 /* Entitlements */,
 				E3D9570C28B0125B00CCF566 /* CustomUIElements */,
 				E35BBA9528BE6C190048F525 /* ProfileTableViewCell */,
 				E312607C28BE39810097D040 /* ProfileModule */,
@@ -536,7 +571,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3A173F628F70E1A00C67387 /* ProductsID.swift in Sources */,
 				E3CEE68528ABE77B00468ED2 /* RegistrationMode.swift in Sources */,
+				E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */,
 				E325351D28F58C6500878A7F /* Message.swift in Sources */,
 				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
 				E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */,
@@ -593,6 +630,7 @@
 				E34ABC4C28A7CEC100A7D2C8 /* String.swift in Sources */,
 				E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */,
 				E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */,
+				E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */,
 				E34ABC3428A7906500A7D2C8 /* User.swift in Sources */,
 				E325351F28F58CE600878A7F /* ChatRoom.swift in Sources */,
 				E3D9570928AFD65900CCF566 /* EditProfileViewController.swift in Sources */,
