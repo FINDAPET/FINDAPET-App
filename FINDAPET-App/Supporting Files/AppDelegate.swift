@@ -15,6 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.registerForPushNotifications()
         
+        do {
+            try YandexMobileMetricaManager.start(with: ymmYnadexMetricaAPIKey)
+        } catch {
+            print("❌ Error: \(error.localizedDescription)")
+        }
+        
         return true
     }
     
