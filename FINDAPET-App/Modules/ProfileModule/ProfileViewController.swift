@@ -16,6 +16,8 @@ final class ProfileViewController: UIViewController {
         self.presenter = presenter
         
         super.init(nibName: nil, bundle: nil)
+        
+        self.presenter.callBack = { [ weak self ] in self?.tableView.reloadData() }
     }
     
     required init?(coder: NSCoder) {
@@ -129,7 +131,7 @@ final class ProfileViewController: UIViewController {
 extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 9//self.presenter.userID != nil ? 9 : 2
+        return self.presenter.userID != nil ? 9 : self.presenter.user?.deals.count ?? 0 + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

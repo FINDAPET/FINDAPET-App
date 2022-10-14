@@ -12,4 +12,7 @@ enum ProductsID: String, CaseIterable {
     case premiumSubscriptionThreeMonth = "com.FINDAPET.premium.subscription.three.months"
     case premiumSubscriptionSixMonth = "com.FINDAPET.premium.subscription.six.months"
     case premiumSubscriptionOneYear = "com.FINDAPET.premium.subscription.one.year"
+    case adOneWeek = "com.FINDAPET.ad.one.week"
+    case adOneMonth = "com.FINDAPET.ad.one.month"
+    case premiumDeal = "com.FINDAPET.premium.deal"
 }

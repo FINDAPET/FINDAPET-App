@@ -10,6 +10,7 @@ import Foundation
 final class ProfilePresenter {
     
     let userID: UUID?
+    var callBack: (() -> Void)?
     private let router: ProfileRouter
     private let interactor: ProfileInteractor
     
@@ -19,7 +20,11 @@ final class ProfilePresenter {
         self.userID = userID
     }
     
-    var user: User.Output?
+    var user: User.Output? {
+        didSet {
+            self.callBack?()
+        }
+    }
         
 //    MARK: Routing
     

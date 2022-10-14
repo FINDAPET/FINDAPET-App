@@ -50,6 +50,8 @@
 		E35E09F228F739F200B310D1 /* YandexMobileMetricaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */; };
 		E35E09F428F73A9000B310D1 /* YandexMobileMetricaErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F328F73A9000B310D1 /* YandexMobileMetricaErrors.swift */; };
 		E35E09F628F73B9D00B310D1 /* YandexMobileMetrica.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F528F73B9D00B310D1 /* YandexMobileMetrica.swift */; };
+		E36F622528F9E5F1007C7623 /* ExchangeConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36F622428F9E5F1007C7623 /* ExchangeConvert.swift */; };
+		E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */; };
 		E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F328F70CD000C67387 /* PurchaseManager.swift */; };
 		E3A173F628F70E1A00C67387 /* ProductsID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F528F70E1A00C67387 /* ProductsID.swift */; };
 		E3BC6CA128ABF91800CDA167 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E3BC6CA028ABF91800CDA167 /* SnapKit */; };
@@ -128,6 +130,8 @@
 		E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexMobileMetricaManager.swift; sourceTree = "<group>"; };
 		E35E09F328F73A9000B310D1 /* YandexMobileMetricaErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexMobileMetricaErrors.swift; sourceTree = "<group>"; };
 		E35E09F528F73B9D00B310D1 /* YandexMobileMetrica.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexMobileMetrica.swift; sourceTree = "<group>"; };
+		E36F622428F9E5F1007C7623 /* ExchangeConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeConvert.swift; sourceTree = "<group>"; };
+		E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealTableViewCell.swift; sourceTree = "<group>"; };
 		E3A173F328F70CD000C67387 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		E3A173F528F70E1A00C67387 /* ProductsID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsID.swift; sourceTree = "<group>"; };
 		E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
@@ -254,6 +258,7 @@
 				E34ABC3928A796EA00A7D2C8 /* Ad.swift */,
 				E325351C28F58C6500878A7F /* Message.swift */,
 				E325351E28F58CE600878A7F /* ChatRoom.swift */,
+				E36F622428F9E5F1007C7623 /* ExchangeConvert.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -349,6 +354,35 @@
 			path = YandexMobileMetrica;
 			sourceTree = "<group>";
 		};
+		E36F622628F9EBA8007C7623 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				E3CEE68328ABE72D00468ED2 /* RegistrationModule */,
+				E305EC7128ACCC3D00A3AAD3 /* OnboardingModule */,
+				E3D9570128AFD5A400CCF566 /* EditProfileModule */,
+				E3E4D69E28B92B9E002B0BE6 /* PrivacyPolicyModule */,
+				E312607C28BE39810097D040 /* ProfileModule */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		E37AC6A428F82CD4003AC7D3 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				E37AC6A728F82D00003AC7D3 /* DealTableViewCell */,
+				E35BBA9528BE6C190048F525 /* ProfileTableViewCell */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		E37AC6A728F82D00003AC7D3 /* DealTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */,
+			);
+			path = DealTableViewCell;
+			sourceTree = "<group>";
+		};
 		E3A173F228F70CB600C67387 /* PurchaseManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -408,15 +442,11 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E36F622628F9EBA8007C7623 /* Modules */,
+				E37AC6A428F82CD4003AC7D3 /* Cells */,
 				E337A3F028F7143700FA6417 /* StoreProducts */,
 				E3A173F728F70E7B00C67387 /* Entitlements */,
 				E3D9570C28B0125B00CCF566 /* CustomUIElements */,
-				E35BBA9528BE6C190048F525 /* ProfileTableViewCell */,
-				E312607C28BE39810097D040 /* ProfileModule */,
-				E3E4D69E28B92B9E002B0BE6 /* PrivacyPolicyModule */,
-				E3D9570128AFD5A400CCF566 /* EditProfileModule */,
-				E305EC7128ACCC3D00A3AAD3 /* OnboardingModule */,
-				E3CEE68328ABE72D00468ED2 /* RegistrationModule */,
 				E3CEE67528ABD2E200468ED2 /* Navigation */,
 				E34ABC4A28A7CEB100A7D2C8 /* TypeExtensions */,
 				E34ABC4128A7C31400A7D2C8 /* Errors */,
@@ -648,6 +678,7 @@
 				E305EC7B28ACD78200A3AAD3 /* OnboardingRouter.swift in Sources */,
 				E3CEE67F28ABD88800468ED2 /* Coordinator.swift in Sources */,
 				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
+				E36F622528F9E5F1007C7623 /* ExchangeConvert.swift in Sources */,
 				E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */,
 				E3D9570328AFD63500CCF566 /* EditProfileRouter.swift in Sources */,
 				E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */,
@@ -661,6 +692,7 @@
 				E34ABC4C28A7CEC100A7D2C8 /* String.swift in Sources */,
 				E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */,
 				E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */,
+				E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */,
 				E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */,
 				E35E09F628F73B9D00B310D1 /* YandexMobileMetrica.swift in Sources */,
 				E34ABC3428A7906500A7D2C8 /* User.swift in Sources */,
@@ -825,7 +857,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = "FINDAPET-App/Services/NotificationManager/FINDAPET-App.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "FINDAPET-App/Entitlements/FINDAPET-App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FY2MUX2TBL;
@@ -858,7 +890,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = "FINDAPET-App/Services/NotificationManager/FINDAPET-App.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "FINDAPET-App/Entitlements/FINDAPET-App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FY2MUX2TBL;
