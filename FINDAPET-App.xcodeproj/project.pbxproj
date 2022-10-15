@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9751EFE89DD1E849B12EB89A /* Pods_FINDAPET_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0069F6F7569E49496BFBF69F /* Pods_FINDAPET_App.framework */; };
 		E305EC7528ACCC6800A3AAD3 /* OnboardingInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E305EC7428ACCC6800A3AAD3 /* OnboardingInteractor.swift */; };
 		E305EC7728ACCC7600A3AAD3 /* OnboardingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E305EC7628ACCC7600A3AAD3 /* OnboardingPresenter.swift */; };
 		E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E305EC7828ACCC8100A3AAD3 /* OnboardingViewController.swift */; };
@@ -89,8 +88,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0069F6F7569E49496BFBF69F /* Pods_FINDAPET_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FINDAPET_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A34AB937FF41F437F5C3B26F /* Pods-FINDAPET-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FINDAPET-App.release.xcconfig"; path = "Target Support Files/Pods-FINDAPET-App/Pods-FINDAPET-App.release.xcconfig"; sourceTree = "<group>"; };
 		E305EC7428ACCC6800A3AAD3 /* OnboardingInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingInteractor.swift; sourceTree = "<group>"; };
 		E305EC7628ACCC7600A3AAD3 /* OnboardingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPresenter.swift; sourceTree = "<group>"; };
 		E305EC7828ACCC8100A3AAD3 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
@@ -173,7 +170,6 @@
 		E3E4D6A328B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyPresenter.swift; sourceTree = "<group>"; };
 		E3E4D6A528B92C07002B0BE6 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
-		F32DA49C3BE27040F85CC0F2 /* Pods-FINDAPET-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FINDAPET-App.debug.xcconfig"; path = "Target Support Files/Pods-FINDAPET-App/Pods-FINDAPET-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,7 +177,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9751EFE89DD1E849B12EB89A /* Pods_FINDAPET_App.framework in Frameworks */,
 				E32AC0D728FB182F00081886 /* SnapKit in Frameworks */,
 				E32AC0DA28FB184100081886 /* KeychainAccess in Frameworks */,
 			);
@@ -193,18 +188,8 @@
 		2DF0613C5AA5C329C9CCAD12 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F32DA49C3BE27040F85CC0F2 /* Pods-FINDAPET-App.debug.xcconfig */,
-				A34AB937FF41F437F5C3B26F /* Pods-FINDAPET-App.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		B553F5B03D94416AC4EA1EC1 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				0069F6F7569E49496BFBF69F /* Pods_FINDAPET_App.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		E305EC7128ACCC3D00A3AAD3 /* OnboardingModule */ = {
@@ -463,7 +448,6 @@
 				E3D74F4E28A69BD2004C5172 /* FINDAPET-App */,
 				E3D74F4D28A69BD2004C5172 /* Products */,
 				2DF0613C5AA5C329C9CCAD12 /* Pods */,
-				B553F5B03D94416AC4EA1EC1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -590,11 +574,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E3D74F6328A69BD4004C5172 /* Build configuration list for PBXNativeTarget "FINDAPET-App" */;
 			buildPhases = (
-				301DBAF7028152F2437322FD /* [CP] Check Pods Manifest.lock */,
 				E3D74F4828A69BD2004C5172 /* Sources */,
 				E3D74F4928A69BD2004C5172 /* Frameworks */,
 				E3D74F4A28A69BD2004C5172 /* Resources */,
-				AA60A278DBCBC2A0853462C4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -660,48 +642,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		301DBAF7028152F2437322FD /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FINDAPET-App-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AA60A278DBCBC2A0853462C4 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FINDAPET-App/Pods-FINDAPET-App-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FINDAPET-App/Pods-FINDAPET-App-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FINDAPET-App/Pods-FINDAPET-App-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E3D74F4828A69BD2004C5172 /* Sources */ = {
@@ -933,7 +873,6 @@
 		};
 		E3D74F6428A69BD4004C5172 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F32DA49C3BE27040F85CC0F2 /* Pods-FINDAPET-App.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -967,7 +906,6 @@
 		};
 		E3D74F6528A69BD4004C5172 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A34AB937FF41F437F5C3B26F /* Pods-FINDAPET-App.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
