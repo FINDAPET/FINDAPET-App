@@ -56,6 +56,7 @@
 		E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */; };
 		E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F328F70CD000C67387 /* PurchaseManager.swift */; };
 		E3A173F628F70E1A00C67387 /* ProductsID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F528F70E1A00C67387 /* ProductsID.swift */; };
+		E3C52DA628FB4576002D6FC5 /* YandexMobileMetrica in Frameworks */ = {isa = PBXBuildFile; productRef = E3C52DA528FB4576002D6FC5 /* YandexMobileMetrica */; };
 		E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */; };
 		E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67828ABD3BA00468ED2 /* UIColor.swift */; };
 		E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */; };
@@ -177,6 +178,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3C52DA628FB4576002D6FC5 /* YandexMobileMetrica in Frameworks */,
 				E32AC0D728FB182F00081886 /* SnapKit in Frameworks */,
 				E32AC0DA28FB184100081886 /* KeychainAccess in Frameworks */,
 			);
@@ -185,13 +187,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2DF0613C5AA5C329C9CCAD12 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		E305EC7128ACCC3D00A3AAD3 /* OnboardingModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -447,7 +442,6 @@
 			children = (
 				E3D74F4E28A69BD2004C5172 /* FINDAPET-App */,
 				E3D74F4D28A69BD2004C5172 /* Products */,
-				2DF0613C5AA5C329C9CCAD12 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -586,6 +580,7 @@
 			packageProductDependencies = (
 				E32AC0D628FB182F00081886 /* SnapKit */,
 				E32AC0D928FB184100081886 /* KeychainAccess */,
+				E3C52DA528FB4576002D6FC5 /* YandexMobileMetrica */,
 			);
 			productName = "FINDAPET-App";
 			productReference = E3D74F4C28A69BD2004C5172 /* FINDAPET-App.app */;
@@ -619,6 +614,7 @@
 			packageReferences = (
 				E32AC0D528FB182F00081886 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				E32AC0D828FB184100081886 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				E3C52DA428FB4576002D6FC5 /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */,
 			);
 			productRefGroup = E3D74F4D28A69BD2004C5172 /* Products */;
 			projectDirPath = "";
@@ -977,6 +973,14 @@
 				kind = branch;
 			};
 		};
+		E3C52DA428FB4576002D6FC5 /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/yandexmobile/metrica-sdk-ios";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -989,6 +993,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E32AC0D828FB184100081886 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		E3C52DA528FB4576002D6FC5 /* YandexMobileMetrica */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E3C52DA428FB4576002D6FC5 /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */;
+			productName = YandexMobileMetrica;
 		};
 /* End XCSwiftPackageProductDependency section */
 
