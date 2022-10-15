@@ -16,7 +16,7 @@ final class EditProfileInteractor {
             model: model,
             method: .PUT,
             authMode: .bearer(value: self.getToken() ?? ""),
-            url: URLConstructor.default.changeUser(),
+            url: URLConstructor.defaultHTTP.changeUser(),
             completionHandler: completionHandler
         )
     }

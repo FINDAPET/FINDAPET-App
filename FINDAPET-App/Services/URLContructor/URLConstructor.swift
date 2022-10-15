@@ -9,22 +9,7 @@ import Foundation
 
 final class URLConstructor {
     
-    private let baseHTTPURL: URL
-    private let baseWSURL: URL
-    
-    init(host: Hosts, port: Ports? = nil) {
-        var urlComponents = URLComponents()
-        
-        urlComponents.host = host.rawValue
-        urlComponents.port = port?.rawValue
-        urlComponents.scheme = Schemes.http.rawValue
-        
-        self.baseHTTPURL = urlComponents.url ?? URL(fileURLWithPath: "")
-        
-        urlComponents.scheme = Schemes.ws.rawValue
-        
-        self.baseWSURL = urlComponents.url ?? URL(fileURLWithPath: "")
-    }
+    private let baseURL: URL
     
     init(scheme: Schemes, host: Hosts, port: Ports? = nil) {
         var urlComponents = URLComponents()
@@ -33,48 +18,49 @@ final class URLConstructor {
         urlComponents.port = port?.rawValue
         urlComponents.scheme = scheme.rawValue
         
-        self.baseHTTPURL = urlComponents.url ?? URL(fileURLWithPath: "")
-        self.baseWSURL = urlComponents.url ?? URL(fileURLWithPath: "")
+        self.baseURL = urlComponents.url ?? URL(fileURLWithPath: "")
     }
     
-    static let localhost = URLConstructor(host: .localhost, port: .localhost)
-    static let `default` = URLConstructor(host: .localhost, port: .localhost)
-    static let exchange = URLConstructor(host: .exchange)
+    static let localhostHTTP = URLConstructor(scheme: .http, host: .localhost, port: .localhost)
+    static let localhostWS = URLConstructor(scheme: .ws, host: .localhost, port: .localhost)
+    static let defaultHTTP = URLConstructor(scheme: .http, host: .localhost, port: .localhost)
+    static let defaultWS = URLConstructor(scheme: .ws, host: .localhost, port: .localhost)
+    static let exchange = URLConstructor(scheme: .http, host: .exchange)
     
 //    MARK: Auth
     func auth() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.auth.rawValue)
     }
     
 //    MARK: Log Out
     func logOut() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.logOut.rawValue)
     }
     
 //    MARK: User
     func newUser() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(Paths.new.rawValue)
     }
     
     func someUser(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
     }
     
     func someUserDeals(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.deals.rawValue)
     }
     
     func someUserBoughtDeals(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.deals.rawValue)
@@ -82,21 +68,21 @@ final class URLConstructor {
     }
     
     func someUserAds(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.ads.rawValue)
     }
     
     func someUserOffers(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.offers.rawValue)
     }
     
     func someUserMyOffers(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.offers.rawValue)
@@ -104,19 +90,19 @@ final class URLConstructor {
     }
     
     func changeUser() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(Paths.change.rawValue)
     }
     
     func user() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(Paths.me.rawValue)
     }
     
     func deleteUser(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.delete.rawValue)
@@ -124,7 +110,7 @@ final class URLConstructor {
     }
     
     func createAdmin(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.admin.rawValue)
@@ -132,7 +118,7 @@ final class URLConstructor {
     }
     
     func deleteAdmin(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.admin.rawValue)
@@ -140,7 +126,7 @@ final class URLConstructor {
     }
     
     func catteryesAll() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
             .appendingPathComponent(Paths.catteryes.rawValue)
@@ -148,13 +134,13 @@ final class URLConstructor {
     }
     
     func userUpdate() -> URL {
-        self.baseWSURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(Paths.update.rawValue)
     }
     
     func usersAll() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
             .appendingPathComponent(Paths.users.rawValue)
@@ -162,7 +148,7 @@ final class URLConstructor {
     }
     
     func waitCatteryesAll() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
             .appendingPathComponent(Paths.catteryes.rawValue)
@@ -171,7 +157,7 @@ final class URLConstructor {
     }
     
     func aprooveCattery(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.approove.rawValue)
@@ -180,7 +166,7 @@ final class URLConstructor {
     }
     
     func deleteCatteryAdmin(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.delete.rawValue)
@@ -190,80 +176,80 @@ final class URLConstructor {
     
 //    MARK: Offer
     func deleteOffer(offerID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.offers.rawValue)
             .appendingPathComponent(offerID.uuidString)
             .appendingPathComponent(Paths.delete.rawValue)
     }
     
     func allOffers() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.offers.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
             .appendingPathComponent(Paths.admin.rawValue)
     }
     
     func newOffer() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.offers.rawValue)
             .appendingPathComponent(Paths.new.rawValue)
     }
     
 //    MARK: Deal
     func allDeals() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
     }
     
     func someDeal(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
             .appendingPathComponent(userID.uuidString)
     }
     
     func someDealOffers(userID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
             .appendingPathComponent(userID.uuidString)
             .appendingPathComponent(Paths.offers.rawValue)
     }
     
     func newDeal() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
             .appendingPathComponent(Paths.new.rawValue)
     }
     
     func changeDeal() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
             .appendingPathComponent(Paths.change.rawValue)
     }
     
     func deactiveteDeal(dealID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
             .appendingPathComponent(dealID.uuidString)
             .appendingPathComponent(Paths.deactivate.rawValue)
     }
     
     func activeteDeal(dealID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
             .appendingPathComponent(dealID.uuidString)
             .appendingPathComponent(Paths.activate.rawValue)
     }
     
     func deleteDeal(dealID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
             .appendingPathComponent(dealID.uuidString)
             .appendingPathComponent(Paths.delete.rawValue)
     }
     
     func soldDeal(dealID: UUID, offerID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
             .appendingPathComponent(dealID.uuidString)
             .appendingPathComponent(Paths.offer.rawValue)
@@ -273,54 +259,54 @@ final class URLConstructor {
     
 //    MARK: Ad
     func allAds() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.ads.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
     }
     
     func newAd() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.ads.rawValue)
             .appendingPathComponent(Paths.new.rawValue)
     }
     
     func newAdAdmin() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.ads.rawValue)
             .appendingPathComponent(Paths.new.rawValue)
             .appendingPathComponent(Paths.admin.rawValue)
     }
     
     func changeAdAdmin() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.ads.rawValue)
             .appendingPathComponent(Paths.change.rawValue)
             .appendingPathComponent(Paths.admin.rawValue)
     }
     
     func allAdsAdmin() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.ads.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
             .appendingPathComponent(Paths.admin.rawValue)
     }
     
     func deactivateAd(adID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.ads.rawValue)
             .appendingPathComponent(adID.uuidString)
             .appendingPathComponent(Paths.deactivate.rawValue)
     }
     
     func activateAd(adID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.ads.rawValue)
             .appendingPathComponent(adID.uuidString)
             .appendingPathComponent(Paths.activate.rawValue)
     }
     
     func deleteAd(adID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.ads.rawValue)
             .appendingPathComponent(adID.uuidString)
             .appendingPathComponent(Paths.delete.rawValue)
@@ -328,45 +314,45 @@ final class URLConstructor {
     
 //    MARK: Chat Room
     func allChatRoomsAdmin() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
             .appendingPathComponent(Paths.admin.rawValue)
     }
     
     func allChatRooms() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
     }
     
     func chatRoom(chatRoomID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)
             .appendingPathComponent(chatRoomID.uuidString)
     }
     
     func newChatRoom() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)
             .appendingPathComponent(Paths.new.rawValue)
     }
     
     func changeChatRoom() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)
             .appendingPathComponent(Paths.change.rawValue)
     }
     
     func chatRoomWith(userID: UUID) -> URL {
-        self.baseWSURL
+        self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)
             .appendingPathComponent(Paths.with.rawValue)
             .appendingPathComponent(userID.uuidString)
     }
     
     func deleteChatRoom(chatRoomID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)
             .appendingPathComponent(Paths.delete.rawValue)
             .appendingPathComponent(chatRoomID.uuidString)
@@ -374,40 +360,40 @@ final class URLConstructor {
     
 //    MARK: Message
     func allMessagesAdmin() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.messages.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
             .appendingPathComponent(Paths.admin.rawValue)
     }
     
     func allMessages(chatRoomID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.messages.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
             .appendingPathComponent(chatRoomID.uuidString)
     }
     
     func message(chatRoomID: UUID, messageID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.messages.rawValue)
             .appendingPathComponent(chatRoomID.uuidString)
             .appendingPathComponent(messageID.uuidString)
     }
     
     func newMessage() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.messages.rawValue)
             .appendingPathComponent(Paths.new.rawValue)
     }
     
     func changeMessage() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.messages.rawValue)
             .appendingPathComponent(Paths.change.rawValue)
     }
     
     func deleteMessage(messageID: UUID) -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.messages.rawValue)
             .appendingPathComponent(Paths.delete.rawValue)
             .appendingPathComponent(messageID.uuidString)
@@ -415,7 +401,7 @@ final class URLConstructor {
     
 //    MARK: Exchange
     func convert() -> URL {
-        self.baseHTTPURL
+        self.baseURL
             .appendingPathComponent(Paths.convert.rawValue)
     }
     

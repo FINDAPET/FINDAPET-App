@@ -22,12 +22,16 @@ final class ApplePayManager {
         controller.delegate = delegate
         
         req.merchantIdentifier = "merchant.artemiy.FINDAPET-App"
-        req.supportedNetworks = [.visa, .masterCard, .discover, .mir, .chinaUnionPay, .quicPay]
         req.merchantCapabilities = .capability3DS
+        req.supportedNetworks = [.visa, .masterCard, .discover, .chinaUnionPay, .quicPay]
         req.countryCode = countryCode
         req.currencyCode = currencyCode
         req.paymentSummaryItems = [PKPaymentSummaryItem(label: title, amount: NSDecimalNumber(value: sum))]
         req.supportedCountries = Set(CountryCodes.allCases.map { $0.rawValue })
+        
+        if #available(iOS 14.5, *) {
+            req.supportedNetworks.append(.mir)
+        }
         
         delegate.present(controller, animated: true)
     }

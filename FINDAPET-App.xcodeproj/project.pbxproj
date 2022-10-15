@@ -50,6 +50,8 @@
 		E35E09F228F739F200B310D1 /* YandexMobileMetricaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */; };
 		E35E09F428F73A9000B310D1 /* YandexMobileMetricaErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F328F73A9000B310D1 /* YandexMobileMetricaErrors.swift */; };
 		E35E09F628F73B9D00B310D1 /* YandexMobileMetrica.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F528F73B9D00B310D1 /* YandexMobileMetrica.swift */; };
+		E35EC91F28FB02DE00868C0A /* ApplicationRequestErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35EC91E28FB02DE00868C0A /* ApplicationRequestErrors.swift */; };
+		E35EC92228FB02EC00868C0A /* ApplicationRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35EC92128FB02EC00868C0A /* ApplicationRequestManager.swift */; };
 		E36F622528F9E5F1007C7623 /* ExchangeConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36F622428F9E5F1007C7623 /* ExchangeConvert.swift */; };
 		E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */; };
 		E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F328F70CD000C67387 /* PurchaseManager.swift */; };
@@ -130,6 +132,8 @@
 		E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexMobileMetricaManager.swift; sourceTree = "<group>"; };
 		E35E09F328F73A9000B310D1 /* YandexMobileMetricaErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexMobileMetricaErrors.swift; sourceTree = "<group>"; };
 		E35E09F528F73B9D00B310D1 /* YandexMobileMetrica.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexMobileMetrica.swift; sourceTree = "<group>"; };
+		E35EC91E28FB02DE00868C0A /* ApplicationRequestErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationRequestErrors.swift; sourceTree = "<group>"; };
+		E35EC92128FB02EC00868C0A /* ApplicationRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationRequestManager.swift; sourceTree = "<group>"; };
 		E36F622428F9E5F1007C7623 /* ExchangeConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeConvert.swift; sourceTree = "<group>"; };
 		E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealTableViewCell.swift; sourceTree = "<group>"; };
 		E3A173F328F70CD000C67387 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
@@ -234,6 +238,7 @@
 		E34ABC2D28A771A600A7D2C8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E35EC92028FB02EC00868C0A /* ApplicationRequestManager */,
 				E35E09F028F739CC00B310D1 /* YandexMobileMetricaManager */,
 				E3A173F228F70CB600C67387 /* PurchaseManager */,
 				E31BEE4B28A96A7600E29A1C /* ApplePayManager */,
@@ -270,6 +275,7 @@
 				E34ABC4428A7CE2E00A7D2C8 /* RegistrationErrors.swift */,
 				E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */,
 				E35E09F328F73A9000B310D1 /* YandexMobileMetricaErrors.swift */,
+				E35EC91E28FB02DE00868C0A /* ApplicationRequestErrors.swift */,
 			);
 			path = Errors;
 			sourceTree = "<group>";
@@ -352,6 +358,14 @@
 				E35E09F528F73B9D00B310D1 /* YandexMobileMetrica.swift */,
 			);
 			path = YandexMobileMetrica;
+			sourceTree = "<group>";
+		};
+		E35EC92028FB02EC00868C0A /* ApplicationRequestManager */ = {
+			isa = PBXGroup;
+			children = (
+				E35EC92128FB02EC00868C0A /* ApplicationRequestManager.swift */,
+			);
+			path = ApplicationRequestManager;
 			sourceTree = "<group>";
 		};
 		E36F622628F9EBA8007C7623 /* Modules */ = {
@@ -651,6 +665,7 @@
 				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
 				E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */,
 				E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */,
+				E35EC91F28FB02DE00868C0A /* ApplicationRequestErrors.swift in Sources */,
 				E3CEE68228ABE4DC00468ED2 /* RegistrationCoordinator.swift in Sources */,
 				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
 				E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */,
@@ -671,6 +686,7 @@
 				E3D74F7B28A6AA91004C5172 /* Schemes.swift in Sources */,
 				E3E4D6A228B92BF4002B0BE6 /* PrivacyPolicyInteractor.swift in Sources */,
 				E34ABC5928A7D48300A7D2C8 /* KeychainKeys.swift in Sources */,
+				E35EC92228FB02EC00868C0A /* ApplicationRequestManager.swift in Sources */,
 				E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */,
 				E34ABC5128A7D30E00A7D2C8 /* UserDefaultsKeys.swift in Sources */,
 				E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */,
@@ -870,7 +886,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -903,7 +919,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

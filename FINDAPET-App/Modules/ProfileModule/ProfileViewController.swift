@@ -136,13 +136,50 @@ extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        var config = cell.defaultContentConfiguration()
         
         cell.backgroundColor = .backgroundColor
         
-        config.textProperties.font = .systemFont(ofSize: 17)
-        config.textProperties.color = .textColor
-        
+        if #available(iOS 14.0, *) {
+            var config = cell.defaultContentConfiguration()
+            
+            config.textProperties.font = .systemFont(ofSize: 17)
+            config.textProperties.color = .textColor
+            
+            switch indexPath.row {
+            case 0:
+                guard let newCell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.id) as? ProfileTableViewCell else {
+                    return cell
+                }
+                
+                newCell.user = self.presenter.user
+                
+                return newCell
+            case 1:
+                config.text = NSLocalizedString("Deals", comment: "")
+            case 2:
+                config.text = NSLocalizedString("My offers", comment: "")
+            case 3:
+                config.text = NSLocalizedString("Suggested offers", comment: "")
+            case 4:
+                config.text = NSLocalizedString("My ad", comment: "")
+            case 5:
+                config.text = NSLocalizedString("Create deal", comment: "")
+            case 6:
+                config.text = NSLocalizedString("Create ad", comment: "")
+            case 7:
+                config.text = NSLocalizedString("Edit profile", comment: "")
+            case 8:
+                config.text = NSLocalizedString("Log Out", comment: "")
+                config.textProperties.color = .systemRed
+            default:
+                break
+            }
+            
+            cell.contentConfiguration = config
+            
+            return cell
+        }
+                
         switch indexPath.row {
         case 0:
             guard let newCell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.id) as? ProfileTableViewCell else {
@@ -153,28 +190,26 @@ extension ProfileViewController: UITableViewDataSource {
             
             return newCell
         case 1:
-            config.text = NSLocalizedString("Deals", comment: "")
+            cell.textLabel?.text = NSLocalizedString("Deals", comment: "")
         case 2:
-            config.text = NSLocalizedString("My offers", comment: "")
+            cell.textLabel?.text = NSLocalizedString("My offers", comment: "")
         case 3:
-            config.text = NSLocalizedString("Suggested offers", comment: "")
+            cell.textLabel?.text = NSLocalizedString("Suggested offers", comment: "")
         case 4:
-            config.text = NSLocalizedString("My ad", comment: "")
+            cell.textLabel?.text = NSLocalizedString("My ad", comment: "")
         case 5:
-            config.text = NSLocalizedString("Create deal", comment: "")
+            cell.textLabel?.text = NSLocalizedString("Create deal", comment: "")
         case 6:
-            config.text = NSLocalizedString("Create ad", comment: "")
+            cell.textLabel?.text = NSLocalizedString("Create ad", comment: "")
         case 7:
-            config.text = NSLocalizedString("Edit profile", comment: "")
+            cell.textLabel?.text = NSLocalizedString("Edit profile", comment: "")
         case 8:
-            config.text = NSLocalizedString("Log Out", comment: "")
-            config.textProperties.color = .systemRed
+            cell.textLabel?.text = NSLocalizedString("Log Out", comment: "")
+            cell.textLabel?.textColor = .systemRed
         default:
             break
         }
-        
-        cell.contentConfiguration = config
-        
+                
         return cell
     }
     

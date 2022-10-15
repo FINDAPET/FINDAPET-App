@@ -12,7 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        let coordinator = ProfileCoordinator()
+        let coordinator = RegistrationCoordinator()
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         

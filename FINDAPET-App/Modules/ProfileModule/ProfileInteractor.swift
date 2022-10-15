@@ -15,7 +15,7 @@ final class ProfileInteractor {
         RequestManager.request(
             method: .GET,
             authMode: .bearer(value: self.getBearrerToken() ?? ""),
-            url: URLConstructor.default.user(),
+            url: URLConstructor.defaultHTTP.user(),
             completionHandler: completionHandler
         )
     }
@@ -23,7 +23,7 @@ final class ProfileInteractor {
     func getSomeUser(userID: UUID, completionHandler: @escaping (User.Output?, Error?) -> Void) {
         RequestManager.request(
             method: .GET,
-            url: URLConstructor.default.someUser(userID: userID),
+            url: URLConstructor.defaultHTTP.someUser(userID: userID),
             completionHandler: completionHandler
         )
     }
@@ -32,7 +32,7 @@ final class ProfileInteractor {
         RequestManager.request(
             method: .DELETE,
             authMode: .bearer(value: self.getBearrerToken() ?? ""),
-            url: URLConstructor.default.logOut(),
+            url: URLConstructor.defaultHTTP.logOut(),
             completionHandler: completionHandler
         )
     }

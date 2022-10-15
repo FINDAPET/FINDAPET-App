@@ -15,7 +15,7 @@ final class RegistrationInteractor {
         RequestManager.request(
             model: user,
             method: .POST,
-            url: URLConstructor.default.newUser(),
+            url: URLConstructor.defaultHTTP.newUser(),
             completionHandler: completionHandler
         )
     }
@@ -24,7 +24,7 @@ final class RegistrationInteractor {
         RequestManager.request(
             method: .GET,
             authMode: .base(email: email, password: password),
-            url: URLConstructor.default.auth(),
+            url: URLConstructor.defaultHTTP.auth(),
             completionHandler: completionHandler
         )
     }
