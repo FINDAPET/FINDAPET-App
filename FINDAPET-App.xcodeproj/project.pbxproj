@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9751EFE89DD1E849B12EB89A /* Pods_FINDAPET_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0069F6F7569E49496BFBF69F /* Pods_FINDAPET_App.framework */; };
 		E305EC7528ACCC6800A3AAD3 /* OnboardingInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E305EC7428ACCC6800A3AAD3 /* OnboardingInteractor.swift */; };
 		E305EC7728ACCC7600A3AAD3 /* OnboardingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E305EC7628ACCC7600A3AAD3 /* OnboardingPresenter.swift */; };
 		E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E305EC7828ACCC8100A3AAD3 /* OnboardingViewController.swift */; };
@@ -23,6 +24,8 @@
 		E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */; };
 		E325351D28F58C6500878A7F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E325351C28F58C6500878A7F /* Message.swift */; };
 		E325351F28F58CE600878A7F /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E325351E28F58CE600878A7F /* ChatRoom.swift */; };
+		E32AC0D728FB182F00081886 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E32AC0D628FB182F00081886 /* SnapKit */; };
+		E32AC0DA28FB184100081886 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E32AC0D928FB184100081886 /* KeychainAccess */; };
 		E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334DFCC28A82687000A2316 /* NotificationManager.swift */; };
 		E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */; };
 		E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */; };
@@ -40,13 +43,11 @@
 		E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC4E28A7D15F00A7D2C8 /* UserDefaultsManager.swift */; };
 		E34ABC5128A7D30E00A7D2C8 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5028A7D30E00A7D2C8 /* UserDefaultsKeys.swift */; };
 		E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5328A7D39200A7D2C8 /* KeychainManager.swift */; };
-		E34ABC5728A7D40900A7D2C8 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E34ABC5628A7D40900A7D2C8 /* KeychainAccess */; };
 		E34ABC5928A7D48300A7D2C8 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */; };
 		E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */; };
 		E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */; };
 		E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */; };
 		E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */; };
-		E35E09EF28F7397800B310D1 /* YandexMobileMetrica in Frameworks */ = {isa = PBXBuildFile; productRef = E35E09EE28F7397800B310D1 /* YandexMobileMetrica */; };
 		E35E09F228F739F200B310D1 /* YandexMobileMetricaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */; };
 		E35E09F428F73A9000B310D1 /* YandexMobileMetricaErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F328F73A9000B310D1 /* YandexMobileMetricaErrors.swift */; };
 		E35E09F628F73B9D00B310D1 /* YandexMobileMetrica.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F528F73B9D00B310D1 /* YandexMobileMetrica.swift */; };
@@ -56,7 +57,6 @@
 		E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */; };
 		E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F328F70CD000C67387 /* PurchaseManager.swift */; };
 		E3A173F628F70E1A00C67387 /* ProductsID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F528F70E1A00C67387 /* ProductsID.swift */; };
-		E3BC6CA128ABF91800CDA167 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E3BC6CA028ABF91800CDA167 /* SnapKit */; };
 		E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */; };
 		E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67828ABD3BA00468ED2 /* UIColor.swift */; };
 		E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */; };
@@ -89,6 +89,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0069F6F7569E49496BFBF69F /* Pods_FINDAPET_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FINDAPET_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A34AB937FF41F437F5C3B26F /* Pods-FINDAPET-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FINDAPET-App.release.xcconfig"; path = "Target Support Files/Pods-FINDAPET-App/Pods-FINDAPET-App.release.xcconfig"; sourceTree = "<group>"; };
 		E305EC7428ACCC6800A3AAD3 /* OnboardingInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingInteractor.swift; sourceTree = "<group>"; };
 		E305EC7628ACCC7600A3AAD3 /* OnboardingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPresenter.swift; sourceTree = "<group>"; };
 		E305EC7828ACCC8100A3AAD3 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 		E3E4D6A328B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyPresenter.swift; sourceTree = "<group>"; };
 		E3E4D6A528B92C07002B0BE6 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
+		F32DA49C3BE27040F85CC0F2 /* Pods-FINDAPET-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FINDAPET-App.debug.xcconfig"; path = "Target Support Files/Pods-FINDAPET-App/Pods-FINDAPET-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,15 +181,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E35E09EF28F7397800B310D1 /* YandexMobileMetrica in Frameworks */,
-				E34ABC5728A7D40900A7D2C8 /* KeychainAccess in Frameworks */,
-				E3BC6CA128ABF91800CDA167 /* SnapKit in Frameworks */,
+				9751EFE89DD1E849B12EB89A /* Pods_FINDAPET_App.framework in Frameworks */,
+				E32AC0D728FB182F00081886 /* SnapKit in Frameworks */,
+				E32AC0DA28FB184100081886 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2DF0613C5AA5C329C9CCAD12 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F32DA49C3BE27040F85CC0F2 /* Pods-FINDAPET-App.debug.xcconfig */,
+				A34AB937FF41F437F5C3B26F /* Pods-FINDAPET-App.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B553F5B03D94416AC4EA1EC1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0069F6F7569E49496BFBF69F /* Pods_FINDAPET_App.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E305EC7128ACCC3D00A3AAD3 /* OnboardingModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -442,6 +462,8 @@
 			children = (
 				E3D74F4E28A69BD2004C5172 /* FINDAPET-App */,
 				E3D74F4D28A69BD2004C5172 /* Products */,
+				2DF0613C5AA5C329C9CCAD12 /* Pods */,
+				B553F5B03D94416AC4EA1EC1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -568,9 +590,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E3D74F6328A69BD4004C5172 /* Build configuration list for PBXNativeTarget "FINDAPET-App" */;
 			buildPhases = (
+				301DBAF7028152F2437322FD /* [CP] Check Pods Manifest.lock */,
 				E3D74F4828A69BD2004C5172 /* Sources */,
 				E3D74F4928A69BD2004C5172 /* Frameworks */,
 				E3D74F4A28A69BD2004C5172 /* Resources */,
+				AA60A278DBCBC2A0853462C4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -578,9 +602,8 @@
 			);
 			name = "FINDAPET-App";
 			packageProductDependencies = (
-				E34ABC5628A7D40900A7D2C8 /* KeychainAccess */,
-				E3BC6CA028ABF91800CDA167 /* SnapKit */,
-				E35E09EE28F7397800B310D1 /* YandexMobileMetrica */,
+				E32AC0D628FB182F00081886 /* SnapKit */,
+				E32AC0D928FB184100081886 /* KeychainAccess */,
 			);
 			productName = "FINDAPET-App";
 			productReference = E3D74F4C28A69BD2004C5172 /* FINDAPET-App.app */;
@@ -612,9 +635,8 @@
 			);
 			mainGroup = E3D74F4328A69BD2004C5172;
 			packageReferences = (
-				E34ABC5528A7D40900A7D2C8 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				E3BC6C9F28ABF91800CDA167 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				E35E09ED28F7397700B310D1 /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */,
+				E32AC0D528FB182F00081886 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				E32AC0D828FB184100081886 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = E3D74F4D28A69BD2004C5172 /* Products */;
 			projectDirPath = "";
@@ -638,6 +660,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		301DBAF7028152F2437322FD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FINDAPET-App-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AA60A278DBCBC2A0853462C4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FINDAPET-App/Pods-FINDAPET-App-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FINDAPET-App/Pods-FINDAPET-App-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FINDAPET-App/Pods-FINDAPET-App-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E3D74F4828A69BD2004C5172 /* Sources */ = {
@@ -802,7 +866,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -857,7 +921,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -869,6 +933,7 @@
 		};
 		E3D74F6428A69BD4004C5172 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F32DA49C3BE27040F85CC0F2 /* Pods-FINDAPET-App.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -902,6 +967,7 @@
 		};
 		E3D74F6528A69BD4004C5172 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A34AB937FF41F437F5C3B26F /* Pods-FINDAPET-App.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -957,23 +1023,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E34ABC5528A7D40900A7D2C8 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		E35E09ED28F7397700B310D1 /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/yandexmobile/metrica-sdk-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.0;
-			};
-		};
-		E3BC6C9F28ABF91800CDA167 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		E32AC0D528FB182F00081886 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
 			requirement = {
@@ -981,23 +1031,26 @@
 				kind = branch;
 			};
 		};
+		E32AC0D828FB184100081886 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E34ABC5628A7D40900A7D2C8 /* KeychainAccess */ = {
+		E32AC0D628FB182F00081886 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E34ABC5528A7D40900A7D2C8 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
-		};
-		E35E09EE28F7397800B310D1 /* YandexMobileMetrica */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E35E09ED28F7397700B310D1 /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */;
-			productName = YandexMobileMetrica;
-		};
-		E3BC6CA028ABF91800CDA167 /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E3BC6C9F28ABF91800CDA167 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = E32AC0D528FB182F00081886 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		E32AC0D928FB184100081886 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E32AC0D828FB184100081886 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
 
