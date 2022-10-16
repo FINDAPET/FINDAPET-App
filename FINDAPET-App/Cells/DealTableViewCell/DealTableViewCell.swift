@@ -67,6 +67,8 @@ class DealTableViewCell: UITableViewCell {
     
     private func setupViews() {
         self.backgroundColor = .clear
+        
+        
     }
 
 }

@@ -56,7 +56,11 @@
 		E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */; };
 		E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F328F70CD000C67387 /* PurchaseManager.swift */; };
 		E3A173F628F70E1A00C67387 /* ProductsID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F528F70E1A00C67387 /* ProductsID.swift */; };
-		E3C52DA628FB4576002D6FC5 /* YandexMobileMetrica in Frameworks */ = {isa = PBXBuildFile; productRef = E3C52DA528FB4576002D6FC5 /* YandexMobileMetrica */; };
+		E3B7B08428FC67340089762E /* YandexMobileMetrica in Frameworks */ = {isa = PBXBuildFile; productRef = E3B7B08328FC67340089762E /* YandexMobileMetrica */; };
+		E3B7B08628FC68A10089762E /* InformationTabelViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7B08528FC68A10089762E /* InformationTabelViewCell.swift */; };
+		E3B7B08928FC70D60089762E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7B08828FC70D50089762E /* UIView.swift */; };
+		E3B7B08B28FC71CA0089762E /* HamburgerViewSides.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7B08A28FC71CA0089762E /* HamburgerViewSides.swift */; };
+		E3B7B09328FC73540089762E /* HamburgerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7B09228FC73540089762E /* HamburgerView.swift */; };
 		E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */; };
 		E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67828ABD3BA00468ED2 /* UIColor.swift */; };
 		E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */; };
@@ -138,6 +142,10 @@
 		E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealTableViewCell.swift; sourceTree = "<group>"; };
 		E3A173F328F70CD000C67387 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		E3A173F528F70E1A00C67387 /* ProductsID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsID.swift; sourceTree = "<group>"; };
+		E3B7B08528FC68A10089762E /* InformationTabelViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationTabelViewCell.swift; sourceTree = "<group>"; };
+		E3B7B08828FC70D50089762E /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		E3B7B08A28FC71CA0089762E /* HamburgerViewSides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerViewSides.swift; sourceTree = "<group>"; };
+		E3B7B09228FC73540089762E /* HamburgerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerView.swift; sourceTree = "<group>"; };
 		E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
 		E3CEE67828ABD3BA00468ED2 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		E3CEE67A28ABD5E300468ED2 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
@@ -178,7 +186,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3C52DA628FB4576002D6FC5 /* YandexMobileMetrica in Frameworks */,
+				E3B7B08428FC67340089762E /* YandexMobileMetrica in Frameworks */,
 				E32AC0D728FB182F00081886 /* SnapKit in Frameworks */,
 				E32AC0DA28FB184100081886 /* KeychainAccess in Frameworks */,
 			);
@@ -305,6 +313,7 @@
 				E34ABC4B28A7CEC100A7D2C8 /* String.swift */,
 				E3CEE67828ABD3BA00468ED2 /* UIColor.swift */,
 				E313B89F28AD01A500E33975 /* UIViewController.swift */,
+				E3B7B08828FC70D50089762E /* UIView.swift */,
 			);
 			path = TypeExtensions;
 			sourceTree = "<group>";
@@ -383,6 +392,7 @@
 		E37AC6A428F82CD4003AC7D3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				E3B7B08728FC68F10089762E /* InformationTabelViewCell */,
 				E37AC6A728F82D00003AC7D3 /* DealTableViewCell */,
 				E35BBA9528BE6C190048F525 /* ProfileTableViewCell */,
 			);
@@ -411,6 +421,38 @@
 				E334DFC728A81D9F000A2316 /* FINDAPET-App.entitlements */,
 			);
 			path = Entitlements;
+			sourceTree = "<group>";
+		};
+		E3B7B08728FC68F10089762E /* InformationTabelViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				E3B7B08528FC68A10089762E /* InformationTabelViewCell.swift */,
+			);
+			path = InformationTabelViewCell;
+			sourceTree = "<group>";
+		};
+		E3B7B08C28FC71D80089762E /* HamburgerViewSides */ = {
+			isa = PBXGroup;
+			children = (
+				E3B7B08A28FC71CA0089762E /* HamburgerViewSides.swift */,
+			);
+			path = HamburgerViewSides;
+			sourceTree = "<group>";
+		};
+		E3B7B09028FC73160089762E /* HamburgerView */ = {
+			isa = PBXGroup;
+			children = (
+				E3B7B09228FC73540089762E /* HamburgerView.swift */,
+			);
+			path = HamburgerView;
+			sourceTree = "<group>";
+		};
+		E3B7B09428FC74CE0089762E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E3B7B09028FC73160089762E /* HamburgerView */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		E3CEE67528ABD2E200468ED2 /* Navigation */ = {
@@ -456,6 +498,8 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E3B7B09428FC74CE0089762E /* Views */,
+				E3B7B08C28FC71D80089762E /* HamburgerViewSides */,
 				E36F622628F9EBA8007C7623 /* Modules */,
 				E37AC6A428F82CD4003AC7D3 /* Cells */,
 				E337A3F028F7143700FA6417 /* StoreProducts */,
@@ -580,7 +624,7 @@
 			packageProductDependencies = (
 				E32AC0D628FB182F00081886 /* SnapKit */,
 				E32AC0D928FB184100081886 /* KeychainAccess */,
-				E3C52DA528FB4576002D6FC5 /* YandexMobileMetrica */,
+				E3B7B08328FC67340089762E /* YandexMobileMetrica */,
 			);
 			productName = "FINDAPET-App";
 			productReference = E3D74F4C28A69BD2004C5172 /* FINDAPET-App.app */;
@@ -614,7 +658,7 @@
 			packageReferences = (
 				E32AC0D528FB182F00081886 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				E32AC0D828FB184100081886 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				E3C52DA428FB4576002D6FC5 /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */,
+				E3B7B08228FC67340089762E /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */,
 			);
 			productRefGroup = E3D74F4D28A69BD2004C5172 /* Products */;
 			projectDirPath = "";
@@ -648,6 +692,7 @@
 				E3CEE68528ABE77B00468ED2 /* RegistrationMode.swift in Sources */,
 				E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */,
 				E325351D28F58C6500878A7F /* Message.swift in Sources */,
+				E3B7B08928FC70D60089762E /* UIView.swift in Sources */,
 				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
 				E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */,
 				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
@@ -665,11 +710,13 @@
 				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
 				E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */,
 				E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */,
+				E3B7B08628FC68A10089762E /* InformationTabelViewCell.swift in Sources */,
 				E35EC91F28FB02DE00868C0A /* ApplicationRequestErrors.swift in Sources */,
 				E3CEE68228ABE4DC00468ED2 /* RegistrationCoordinator.swift in Sources */,
 				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
 				E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */,
 				E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */,
+				E3B7B08B28FC71CA0089762E /* HamburgerViewSides.swift in Sources */,
 				E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */,
 				E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */,
 				E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */,
@@ -696,6 +743,7 @@
 				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
 				E36F622528F9E5F1007C7623 /* ExchangeConvert.swift in Sources */,
 				E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */,
+				E3B7B09328FC73540089762E /* HamburgerView.swift in Sources */,
 				E3D9570328AFD63500CCF566 /* EditProfileRouter.swift in Sources */,
 				E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */,
 				E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */,
@@ -973,7 +1021,7 @@
 				kind = branch;
 			};
 		};
-		E3C52DA428FB4576002D6FC5 /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */ = {
+		E3B7B08228FC67340089762E /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/yandexmobile/metrica-sdk-ios";
 			requirement = {
@@ -994,9 +1042,9 @@
 			package = E32AC0D828FB184100081886 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
 		};
-		E3C52DA528FB4576002D6FC5 /* YandexMobileMetrica */ = {
+		E3B7B08328FC67340089762E /* YandexMobileMetrica */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E3C52DA428FB4576002D6FC5 /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */;
+			package = E3B7B08228FC67340089762E /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */;
 			productName = YandexMobileMetrica;
 		};
 /* End XCSwiftPackageProductDependency section */
