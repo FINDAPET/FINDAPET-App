@@ -1,16 +1,17 @@
 //
-//  MainHamburgerView.swift
+//  ProfileSlideMenuViewController.swift
 //  FINDAPET-App
 //
-//  Created by Artemiy Zuzin on 16.10.2022.
+//  Created by Artemiy Zuzin on 17.10.2022.
 //
 
 import UIKit
 import SnapKit
 
-class HamburgerView: UIView {
+class SlideMenuViewController: UIViewController {
     
     private let hamburgerButtonAction: () -> Void
+    private let hamburgerColor: UIColor
     private let side: HamburgerViewSides
     private let buttonActions: [(title: String, color: UIColor, action: () -> Void)]
     
@@ -21,12 +22,11 @@ class HamburgerView: UIView {
         buttonActions: [(title: String, color: UIColor, action: () -> Void)]
     ) {
         self.hamburgerButtonAction = hamburgerButtonAction
+        self.hamburgerColor = hamburgerColor
         self.side = side
         self.buttonActions = buttonActions
         
-        super.init()
-        
-        self.hamburgerButton.setTitleColor(hamburgerColor, for: .normal)
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -34,53 +34,69 @@ class HamburgerView: UIView {
     }
     
 //    MARK: UI Properties
-    private lazy var hamburgerButton: UIButton = {
-        let view = UIButton()
-        
-        view.setImage(UIImage(systemName: "line.3.horizontal"), for: .normal)
-        view.addTarget(self, action: #selector(self.didTapHamburgerButton), for: .touchUpInside)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
-    
     private lazy var tableView: UITableView = {
         let view = UITableView()
         
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = .clear
+        view.separatorColor = .clear
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
+    private lazy var nameLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = "FINDAPET"
+        view.textColor = self.hamburgerColor
+        view.backgroundColor = .clear
+        view.font = .systemFont(ofSize: 20, weight: .bold)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+
 //    MARK: Life Cycle
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         self.setupViews()
     }
-
+    
 //   MARK: Setup Views
     private func setupViews() {
-        self.addSubview(self.hamburgerButton)
-        self.addSubview(self.tableView)
-        
-        self.hamburgerButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(15)
-            
-            switch self.side {
-            case .left:
-                make.leading.equalToSuperview().inset(15)
-            case .right:
-                make.trailing.equalToSuperview().inset(15)
-            }
+        switch self.side {
+        case .left:
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                image: UIImage(systemName: "list.bullet"),
+                style: .plain,
+                target: self,
+                action: #selector(self.didTapHamburgerButton)
+            )
+            self.navigationItem.leftBarButtonItem?.tintColor = self.hamburgerColor
+        case .right:
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                image: UIImage(systemName: "list.bullet"),
+                style: .plain,
+                target: self,
+                action: #selector(self.didTapHamburgerButton)
+            )
+            self.navigationItem.rightBarButtonItem?.tintColor = self.hamburgerColor
         }
+        
+        self.view.addSubview(self.tableView)
+        self.view.addSubview(self.nameLabel)
         
         self.tableView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview().inset(15)
-            make.top.equalTo(self.hamburgerButton.snp.bottom).inset(-25)
+            make.top.equalTo(self.view.safeAreaLayoutGuide).inset(25)
+        }
+        
+        self.nameLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(25)
+            make.centerX.equalToSuperview()
         }
     }
     
@@ -91,7 +107,7 @@ class HamburgerView: UIView {
     
 }
 
-extension HamburgerView: UITableViewDataSource {
+extension SlideMenuViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.buttonActions.count
@@ -106,7 +122,7 @@ extension HamburgerView: UITableViewDataSource {
         if #available(iOS 14.0, *) {
             var config = cell.defaultContentConfiguration()
             
-            config.textProperties.font = .systemFont(ofSize: 17)
+            config.textProperties.font = .systemFont(ofSize: 20, weight: .semibold)
             config.textProperties.color = self.buttonActions[indexPath.row].color
             
             config.text = self.buttonActions[indexPath.row].title
@@ -115,15 +131,17 @@ extension HamburgerView: UITableViewDataSource {
             
             return cell
         }
-                
+        
         cell.textLabel?.text = self.buttonActions[indexPath.row].title
-                
+        cell.textLabel?.textColor = .white
+        cell.textLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+        
         return cell
     }
     
 }
 
-extension HamburgerView: UITableViewDelegate {
+extension SlideMenuViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
@@ -132,6 +150,7 @@ extension HamburgerView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        self.hamburgerButtonAction()
         self.buttonActions[indexPath.row].action()
     }
     

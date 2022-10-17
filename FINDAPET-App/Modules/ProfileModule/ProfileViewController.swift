@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SideMenu
 
 final class ProfileViewController: UIViewController {
 
@@ -24,8 +25,10 @@ final class ProfileViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    MARK: UI Properties
+//    MARK: Propertiest
+    private var isHamburgerViewClossed = true
     
+//    MARK: UI Properties
     private let activityIndicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .medium)
         
@@ -35,10 +38,72 @@ final class ProfileViewController: UIViewController {
         return view
     }()
     
-    private let tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .clear
+        view.dataSource = self
+        view.delegate = self
+        view.register(ProfileTableViewCell.self, forCellReuseIdentifier: ProfileTableViewCell.id)
+        view.register(DealTableViewCell.self, forCellReuseIdentifier: DealTableViewCell.cellID)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var slideMenuViewController: SlideMenuViewController = {
+        let view = SlideMenuViewController(
+            hamburgerButtonAction: { [ weak self ] in
+                self?.dismiss(animated: true)
+            },
+            hamburgerColor: .white,
+            side: .right,
+            buttonActions: [
+                (title: NSLocalizedString("Profile", comment: ""), color: .white, action: {
+                
+            }),
+                (title: NSLocalizedString("My offers", comment: ""), color: .white, action: {
+                
+            }),
+                (title: NSLocalizedString("Suggested offers", comment: ""), color: .white, action: {
+                
+            }),
+                (title: NSLocalizedString("My ad", comment: ""), color: .white, action: {
+                
+            }),
+                (title: NSLocalizedString("Create deal", comment: ""), color: .white, action: {
+                
+            }),
+                (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: {
+                
+            }),
+                (title: NSLocalizedString("Log Out", comment: ""), color: .white, action: { [ weak self ] in
+                    self?.logOut()
+            })
+            ]
+        )
+        
+        view.view.backgroundColor = .accentColor
+        view.view.layer.cornerRadius = 20
+        
+        return view
+    }()
+    
+    private lazy var sideMenuViewController: SideMenuNavigationController = {
+        let view = SideMenuNavigationController(rootViewController: self.slideMenuViewController)
+        
+        view.presentationStyle = .menuSlideIn
+        view.menuWidth = 200
+        
+        return view
+    }()
+    
+    private let translutionView: UIView = {
+        let view = UIView()
+        
+        view.alpha = .zero
+        view.backgroundColor = .black
+        view.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -59,19 +124,22 @@ final class ProfileViewController: UIViewController {
     }
     
 //    MARK: Setup Views
-    
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = false
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.title = NSLocalizedString("Profile", comment: "")
-        
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.register(ProfileTableViewCell.self, forCellReuseIdentifier: ProfileTableViewCell.id)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "list.bullet"),
+            style: .plain,
+            target: self,
+            action: #selector(self.didTapSlideMenuBarButton)
+        )
         
         self.view.addSubview(self.activityIndicatorView)
         self.view.addSubview(self.tableView)
+        
+        self.view.insertSubview(self.translutionView, at: 10)
         
         self.activityIndicatorView.snp.makeConstraints { make in
             make.center.equalToSuperview()
@@ -80,10 +148,13 @@ final class ProfileViewController: UIViewController {
         self.tableView.snp.makeConstraints { make in
             make.leading.trailing.bottom.top.equalTo(self.view.safeAreaLayoutGuide)
         }
+        
+        self.translutionView.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview()
+        }
     }
     
 //    MARK: Requests
-    
     private func getUser() {
         if self.presenter.userID != nil {
             self.presenter.getSomeUser { [ weak self ] user, error in
@@ -125,90 +196,37 @@ final class ProfileViewController: UIViewController {
             }
         }
     }
+    
+//    MARK: Actions
+    @objc private func didTapSlideMenuBarButton() {
+        self.present(self.sideMenuViewController, animated: true)
+    }
 
 }
 
+//MARK: Extensions
 extension ProfileViewController: UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.presenter.userID != nil ? 9 : self.presenter.user?.deals.count ?? 0 + 1
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        
+        return (self.presenter.user?.deals.count ?? 0) + (self.presenter.user != nil ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        
-        cell.backgroundColor = .backgroundColor
-        
-        if #available(iOS 14.0, *) {
-            var config = cell.defaultContentConfiguration()
-            
-            config.textProperties.font = .systemFont(ofSize: 17)
-            config.textProperties.color = .textColor
-            
-            switch indexPath.row {
-            case 0:
-                guard let newCell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.id) as? ProfileTableViewCell else {
-                    return cell
-                }
-                
-                newCell.user = self.presenter.user
-                
-                return newCell
-            case 1:
-                config.text = NSLocalizedString("Deals", comment: "")
-            case 2:
-                config.text = NSLocalizedString("My offers", comment: "")
-            case 3:
-                config.text = NSLocalizedString("Suggested offers", comment: "")
-            case 4:
-                config.text = NSLocalizedString("My ad", comment: "")
-            case 5:
-                config.text = NSLocalizedString("Create deal", comment: "")
-            case 6:
-                config.text = NSLocalizedString("Create ad", comment: "")
-            case 7:
-                config.text = NSLocalizedString("Edit profile", comment: "")
-            case 8:
-                config.text = NSLocalizedString("Log Out", comment: "")
-                config.textProperties.color = .systemRed
-            default:
-                break
+        if indexPath.row == .zero {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.id) as? ProfileTableViewCell else {
+                return UITableViewCell()
             }
             
-            cell.contentConfiguration = config
+            cell.user = self.presenter.user
             
             return cell
         }
-                
-        switch indexPath.row {
-        case 0:
-            guard let newCell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.id) as? ProfileTableViewCell else {
-                return cell
-            }
-            
-            newCell.user = self.presenter.user
-            
-            return newCell
-        case 1:
-            cell.textLabel?.text = NSLocalizedString("Deals", comment: "")
-        case 2:
-            cell.textLabel?.text = NSLocalizedString("My offers", comment: "")
-        case 3:
-            cell.textLabel?.text = NSLocalizedString("Suggested offers", comment: "")
-        case 4:
-            cell.textLabel?.text = NSLocalizedString("My ad", comment: "")
-        case 5:
-            cell.textLabel?.text = NSLocalizedString("Create deal", comment: "")
-        case 6:
-            cell.textLabel?.text = NSLocalizedString("Create ad", comment: "")
-        case 7:
-            cell.textLabel?.text = NSLocalizedString("Edit profile", comment: "")
-        case 8:
-            cell.textLabel?.text = NSLocalizedString("Log Out", comment: "")
-            cell.textLabel?.textColor = .systemRed
-        default:
-            break
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: DealTableViewCell.cellID) as? DealTableViewCell else {
+            return UITableViewCell()
         }
+        
+        cell.deal = self.presenter.user?.deals[indexPath.row - 1]
                 
         return cell
     }
@@ -220,30 +238,35 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        switch indexPath.row {
-        case 1:
-            self.presenter.goToDeals()
-        case 2:
-            self.presenter.goToOffers()
-        case 3:
-            self.presenter.goToOffers()
-        case 4:
-            self.presenter.goToAds()
-        case 5:
-            self.presenter.goToCreateDeal()
-        case 6:
-            self.presenter.goToCreateAd()
-        case 7:
-            self.presenter.goToEditProfile()
-        case 8:
-            self.logOut()
-        default:
-            break
+        guard indexPath.row != 0 else {
+            return
         }
+        
+        
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
+    }
+    
+}
+
+extension ProfileViewController: SideMenuNavigationControllerDelegate {
+    
+    func sideMenuWillAppear(menu: SideMenuNavigationController, animated: Bool) {
+        self.translutionView.isHidden = false
+        
+        UIView.animate(withDuration: 0.3) { [ weak self ] in
+            self?.translutionView.alpha = 0.5
+        }
+    }
+    
+    func sideMenuWillDisappear(menu: SideMenuNavigationController, animated: Bool) {
+        UIView.animate(withDuration: 0.3) { [ weak self ] in
+            self?.translutionView.alpha = .zero
+        } completion: { [ weak self ] _ in
+            self?.translutionView.isHidden = true
+        }
     }
     
 }

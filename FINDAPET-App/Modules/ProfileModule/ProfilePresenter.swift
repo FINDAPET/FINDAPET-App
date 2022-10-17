@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 final class ProfilePresenter {
     
@@ -82,10 +83,25 @@ final class ProfilePresenter {
         self.interactor.logOut(completionHandler: completionHandler)
     }
     
+//    MARK: Currency Converter
+    
+    func convert(
+        _ first: String,
+        to second: String,
+        value: Int,
+        completionHandler: @escaping (ExchangeConvert.Output?, Error?) -> Void
+    ) {
+        self.interactor.convert(first, to: second, value: value, completionHandler: completionHandler)
+    }
+    
 //    MARK: User Defaults
     
     func getMyID() -> UUID? {
         self.interactor.getMyID()
+    }
+    
+    func getCurrency() -> String {
+        self.interactor.getCurrency() ?? "USD"
     }
     
     func writeIsFirstEditing() {

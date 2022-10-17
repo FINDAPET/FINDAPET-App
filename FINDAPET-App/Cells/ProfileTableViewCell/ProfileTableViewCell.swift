@@ -24,11 +24,14 @@ class ProfileTableViewCell: UITableViewCell {
     
     var user: User.Output? {
         didSet {
-            guard let user = user, let avatarData = user.avatarData else {
+            guard let user = user else {
                 return
             }
             
-            self.avatarImageView.image = UIImage(data: avatarData)
+            if let avatarData = user.avatarData {
+                self.avatarImageView.image = UIImage(data: avatarData)
+            }
+            
             self.nameLabel.text = user.name
             self.descriptionLabel.text = user.description
         }

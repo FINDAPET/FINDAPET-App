@@ -81,7 +81,7 @@ struct Deal {
         var isMale: Bool
         var age: String
         var color: String
-        var price: Double
+        var price: Int
         var currencyName: String
         var cattery: User.Output
         var country: String?

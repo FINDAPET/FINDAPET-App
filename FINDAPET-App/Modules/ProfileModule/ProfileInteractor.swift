@@ -37,10 +37,25 @@ final class ProfileInteractor {
         )
     }
     
+//    MARK: Currency Converter
+    
+    func convert(
+        _ first: String,
+        to second: String,
+        value: Int,
+        completionHandler: @escaping (ExchangeConvert.Output?, Error?) -> Void
+    ) {
+        CurrencyConverter.convert(first, to: second, value: value, completionHandler: completionHandler)
+    }
+    
 //    MARK: User Defaults
     
     func getMyID() -> UUID? {
         UserDefaultsManager.read(key: .id) as? UUID
+    }
+    
+    func getCurrency() -> String? {
+        UserDefaultsManager.read(key: .currency) as? String
     }
     
     func writeIsFirstEditing() {

@@ -9,7 +9,7 @@ import Foundation
 
 final class RegistrationRouter: RegistrationCoordinatable {
     
-    var coordinatorDelegate: RegistrationCoordinator?
+    weak var coordinatorDelegate: RegistrationCoordinator?
     
     func goToEditProfile(user: User.Input) {
         self.coordinatorDelegate?.goToEditProfile(user: user)

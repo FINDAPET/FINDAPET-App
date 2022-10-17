@@ -8,5 +8,5 @@
 import Foundation
 
 enum UserDefaultsKeys: String {
-    case isFirstEditing, deviceToken, id
+    case isFirstEditing, deviceToken, id, currency
 }

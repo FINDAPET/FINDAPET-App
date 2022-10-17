@@ -9,7 +9,7 @@ import Foundation
 
 final class EditProfileRouter: RegistrationCoordinatable {
     
-    var coordinatorDelegate: RegistrationCoordinator?
+    weak var coordinatorDelegate: RegistrationCoordinator?
     
     func goToMainTabBar() {
         self.coordinatorDelegate?.goToMainTabBar()

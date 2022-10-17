@@ -9,7 +9,7 @@ import Foundation
 
 final class ProfileRouter: ProfileCoordinatable {
     
-    var coordinatorDelegate: ProfileCoordinator?
+    weak var coordinatorDelegate: ProfileCoordinator?
     
     func goToOnboarding() {
         self.coordinatorDelegate?.goToOnboarding()
