@@ -29,7 +29,7 @@ class ProfileTableViewCell: UITableViewCell {
             }
             
             if let avatarData = user.avatarData {
-                self.avatarImageView.image = UIImage(data: avatarData)
+                self.avatarImageView.image = UIImage(data: avatarData) ?? UIImage(named: "empty avatar")
             }
             
             self.nameLabel.text = user.name

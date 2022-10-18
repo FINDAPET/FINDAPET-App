@@ -59,8 +59,8 @@ final class ProfileViewController: UIViewController {
             hamburgerColor: .white,
             side: .right,
             buttonActions: [
-                (title: NSLocalizedString("Profile", comment: ""), color: .white, action: {
-                
+                (title: NSLocalizedString("Profile", comment: ""), color: .white, action: { [ weak self ] in
+                    self?.didMove(toParent: self)
             }),
                 (title: NSLocalizedString("My offers", comment: ""), color: .white, action: {
                 
@@ -75,6 +75,9 @@ final class ProfileViewController: UIViewController {
                 
             }),
                 (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: {
+                
+            }),
+                (title: NSLocalizedString("Settings", comment: ""), color: .white, action: {
                 
             }),
                 (title: NSLocalizedString("Log Out", comment: ""), color: .white, action: { [ weak self ] in

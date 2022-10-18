@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SlideMenuViewController: UIViewController {
+final class SlideMenuViewController: UIViewController {
     
     private let hamburgerButtonAction: () -> Void
     private let hamburgerColor: UIColor
@@ -90,8 +90,9 @@ class SlideMenuViewController: UIViewController {
         self.view.addSubview(self.nameLabel)
         
         self.tableView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview().inset(15)
+            make.leading.trailing.equalToSuperview().inset(15)
             make.top.equalTo(self.view.safeAreaLayoutGuide).inset(25)
+            make.bottom.equalTo(self.nameLabel.snp.top).inset(-15)
         }
         
         self.nameLabel.snp.makeConstraints { make in
