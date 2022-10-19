@@ -7,8 +7,12 @@
 
 import Foundation
 
-final class MyOffersRouter: ProfileCoordinatable {
+final class OffersRouter: ProfileCoordinatable {
     
     var coordinatorDelegate: ProfileCoordinator?
+    
+    func goToChatRoom(with id: UUID) {
+        
+    }
     
 }

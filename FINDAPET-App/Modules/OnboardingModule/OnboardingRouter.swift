@@ -9,7 +9,7 @@ import Foundation
 
 final class OnboardingRouter: RegistrationCoordinatable {
     
-    weak var coordinatorDelegate: RegistrationCoordinator?
+    var coordinatorDelegate: RegistrationCoordinator?
     
     func goToRegistration(mode: RegistrationMode) {
         self.coordinatorDelegate?.goToRegistration(mode: mode)

@@ -23,7 +23,8 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.goToProfile()
     }
     
-    func goToProfile(userID: UUID? = nil) {
+//    MARK: Profile
+    func getProfile(userID: UUID? = nil) -> ProfileViewController {
         let router = ProfileRouter()
         let interactor = ProfileInteractor()
         let presenter = ProfilePresenter(router: router, interactor: interactor, userID: userID)
@@ -31,19 +32,59 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         
         router.coordinatorDelegate = self
         
-        self.navigationController.pushViewController(viewController, animated: true)
+        return viewController
     }
     
-    func goToDeals(isFindable: Bool) {
-        // push deals
+    func goToProfile(userID: UUID? = nil) {
+        self.navigationController.pushViewController(self.getProfile(userID: userID), animated: true)
     }
     
-    func goToAds() {
-        // push ads
+//    MARK: Offers
+    func getOffers(mode: OffersMode, offers: [Offer.Output] = [Offer.Output](), userID: UUID? = nil) -> OffersViewController {
+        let router = OffersRouter()
+        let interactor = OffersInteractor()
+        
+        router.coordinatorDelegate = self
+        
+        if let userID = userID {
+            let presenter = OffersPresenter(router: router, interactor: interactor, mode: mode, userID: userID)
+            let viewController = OffersViewController(presenter: presenter)
+            
+            return viewController
+        }
+        
+        let presenter = OffersPresenter(router: router, interactor: interactor, mode: mode, offers: offers)
+        let viewController = OffersViewController(presenter: presenter)
+        
+        return viewController
     }
     
-    func goToOffers() {
-        // push offers
+//    MARK: Ads
+    func getAds(userID: UUID? = nil, ads: [Ad.Output] = [Ad.Output]()) -> AdsViewController {
+        let router = AdsRouter()
+        let interactor = AdsInteractor()
+        
+        router.coordinatorDelegate = self
+        
+        if let userID = userID {
+            let presenter = AdsPresenter(userID: userID, router: router, interactor: interactor)
+            let viewController = AdsViewController(presenter: presenter)
+            
+            return viewController
+        }
+        
+        let presenter = AdsPresenter(ads: ads, router: router, interactor: interactor)
+        let viewController = AdsViewController(presenter: presenter)
+        
+        return viewController
+    }
+    
+    func goToAds(userID: UUID? = nil, ads: [Ad.Output] = [Ad.Output]()) {
+        self.navigationController.pushViewController(self.getAds(userID: userID, ads: ads), animated: true)
+    }
+    
+    func goToOffers(mode: OffersMode, offers: [Offer.Output] = [Offer.Output](), userID: UUID? = nil) {
+        self.navigationController.pushViewController(self.getOffers(mode: mode, offers: offers, userID: userID), animated: true)
     }
     
     func goToCreateDeal() {

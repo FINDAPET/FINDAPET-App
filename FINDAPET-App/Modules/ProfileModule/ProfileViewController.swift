@@ -59,26 +59,23 @@ final class ProfileViewController: UIViewController {
             hamburgerColor: .white,
             side: .right,
             buttonActions: [
-                (title: NSLocalizedString("Profile", comment: ""), color: .white, action: { [ weak self ] in
-                    self?.didMove(toParent: self)
+                (title: NSLocalizedString("My offers", comment: ""), color: .white, action: { [ weak self ] in
+                    self?.presenter.goToMyOffers()
             }),
-                (title: NSLocalizedString("My offers", comment: ""), color: .white, action: {
-                
+                (title: NSLocalizedString("Suggested offers", comment: ""), color: .white, action: { [ weak self ] in
+                    self?.presenter.goToOffers()
             }),
-                (title: NSLocalizedString("Suggested offers", comment: ""), color: .white, action: {
-                
-            }),
-                (title: NSLocalizedString("My ad", comment: ""), color: .white, action: {
-                
+                (title: NSLocalizedString("My ad", comment: ""), color: .white, action: { [ weak self ] in
+                    self?.presenter.goToAds()
             }),
                 (title: NSLocalizedString("Create deal", comment: ""), color: .white, action: {
-                
+                    
             }),
                 (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: {
-                
+                    
             }),
                 (title: NSLocalizedString("Settings", comment: ""), color: .white, action: {
-                
+                    
             }),
                 (title: NSLocalizedString("Log Out", comment: ""), color: .white, action: { [ weak self ] in
                     self?.logOut()

@@ -33,16 +33,16 @@ final class ProfilePresenter {
         self.router.goToOnboarding()
     }
     
-    func goToDeals() {
-        self.router.goToDeals(isFindable: false)
+    func goToOffers() {
+        self.router.goToOffers(mode: .offers, offers: self.user?.offers ?? [Offer.Output]())
     }
     
-    func goToOffers() {
-        self.router.goToOffers()
+    func goToMyOffers() {
+        self.router.goToOffers(mode: .myOffers, offers: self.user?.myOffers ?? [Offer.Output]())
     }
     
     func goToAds() {
-        self.router.goToAds()
+        self.router.goToAds(ads: self.user?.ads ?? [Ad.Output]())
     }
     
     func goToCreateDeal() {
@@ -58,7 +58,7 @@ final class ProfilePresenter {
     }
     
     func goToEditProfile() {
-        self.router.gotoEditProfile(user: User.Input(
+        self.router.goToEditProfile(user: User.Input(
             id: self.user?.id,
             name: self.user?.name ?? "",
             avatarData: self.user?.avatarData,

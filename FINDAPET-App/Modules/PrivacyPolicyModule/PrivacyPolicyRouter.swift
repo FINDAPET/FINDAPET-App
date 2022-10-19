@@ -9,6 +9,6 @@ import Foundation
 
 final class PrivacyPolicyRouter: RegistrationCoordinatable {
     
-    weak var coordinatorDelegate: RegistrationCoordinator?
+    var coordinatorDelegate: RegistrationCoordinator?
     
 }

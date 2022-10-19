@@ -9,22 +9,18 @@ import Foundation
 
 final class ProfileRouter: ProfileCoordinatable {
     
-    weak var coordinatorDelegate: ProfileCoordinator?
+    var coordinatorDelegate: ProfileCoordinator?
     
     func goToOnboarding() {
         self.coordinatorDelegate?.goToOnboarding()
     }
     
-    func goToDeals(isFindable: Bool) {
-        self.coordinatorDelegate?.goToDeals(isFindable: isFindable)
+    func goToOffers(mode: OffersMode, offers: [Offer.Output]) {
+        self.coordinatorDelegate?.goToOffers(mode: mode, offers: offers)
     }
     
-    func goToOffers() {
-        self.coordinatorDelegate?.goToOffers()
-    }
-    
-    func goToAds() {
-        self.coordinatorDelegate?.goToAds()
+    func goToAds(ads: [Ad.Output]) {
+        self.coordinatorDelegate?.goToAds(ads: ads)
     }
     
     func goToCreateDeal() {
@@ -39,7 +35,7 @@ final class ProfileRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.goToInfo()
     }
     
-    func gotoEditProfile(user: User.Input) {
+    func goToEditProfile(user: User.Input) {
         self.coordinatorDelegate?.goToEditProfile(user: user)
     }
     
