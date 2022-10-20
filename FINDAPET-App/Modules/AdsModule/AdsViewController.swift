@@ -26,10 +26,11 @@ final class AdsViewController: UIViewController {
     
 //    MARK: UI Properties
     private lazy var tableView: UITableView = {
-        let view = UITableView()
+        let view = UITableView(frame: .zero, style: .insetGrouped)
         
         view.delegate = self
         view.dataSource = self
+        view.backgroundColor = .clear
         view.register(AdTableViewCell.self, forCellReuseIdentifier: AdTableViewCell.cellID)
         view.translatesAutoresizingMaskIntoConstraints = false
         

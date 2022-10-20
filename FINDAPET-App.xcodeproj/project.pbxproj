@@ -26,6 +26,7 @@
 		E32AC0D728FB182F00081886 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E32AC0D628FB182F00081886 /* SnapKit */; };
 		E32AC0DA28FB184100081886 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E32AC0D928FB184100081886 /* KeychainAccess */; };
 		E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334DFCC28A82687000A2316 /* NotificationManager.swift */; };
+		E347A5482901B3690089271F /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E347A5472901B3690089271F /* UIView.swift */; };
 		E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */; };
 		E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */; };
 		E34ABC3428A7906500A7D2C8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3328A7906500A7D2C8 /* User.swift */; };
@@ -123,6 +124,7 @@
 		E334DFC728A81D9F000A2316 /* FINDAPET-App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "FINDAPET-App.entitlements"; sourceTree = "<group>"; };
 		E334DFCC28A82687000A2316 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E337A3EF28F7132700FA6417 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		E347A5472901B3690089271F /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
 		E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
 		E34ABC3328A7906500A7D2C8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 				E34ABC4B28A7CEC100A7D2C8 /* String.swift */,
 				E3CEE67828ABD3BA00468ED2 /* UIColor.swift */,
 				E313B89F28AD01A500E33975 /* UIViewController.swift */,
+				E347A5472901B3690089271F /* UIView.swift */,
 			);
 			path = TypeExtensions;
 			sourceTree = "<group>";
@@ -750,6 +753,7 @@
 				E3CEE68528ABE77B00468ED2 /* RegistrationMode.swift in Sources */,
 				E3E1EB4E28FFEB0000F536F4 /* OffersMode.swift in Sources */,
 				E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */,
+				E347A5482901B3690089271F /* UIView.swift in Sources */,
 				E325351D28F58C6500878A7F /* Message.swift in Sources */,
 				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
 				E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */,

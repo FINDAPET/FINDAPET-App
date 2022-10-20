@@ -195,7 +195,7 @@ final class EditProfileViewController: UIViewController {
             self.navigationController?.navigationBar.isHidden = true
         }
         
-        let basicTextFields = self.createTextFieldsView(
+        let basicTextFields = self.view.createTextFieldsView(
             title: NSLocalizedString("Main", comment: ""),
             fields: [
                 (

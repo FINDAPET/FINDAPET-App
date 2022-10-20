@@ -38,7 +38,7 @@ class AdTableViewCell: UITableViewCell {
                 self.nameLabel.snp.removeConstraints()
                 self.nameLabel.snp.makeConstraints { make in
                     make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
-                    make.top.trailing.equalToSuperview().inset(15)
+                    make.centerY.equalTo(self.avatarImageView)
                 }
             } else {
                 self.avatarImageView.isHidden = true
@@ -55,7 +55,7 @@ class AdTableViewCell: UITableViewCell {
     private let avatarImageView: UIImageView = {
         let view = UIImageView()
         
-        view.layer.cornerRadius = 50
+        view.layer.cornerRadius = 25
         view.layer.masksToBounds = true
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -84,20 +84,21 @@ class AdTableViewCell: UITableViewCell {
     
 //    MARK: Setup Views
     private func setupViews() {
-        self.backgroundColor = .clear
+        self.backgroundColor = .backgroundColor
         
         self.addSubview(self.contentImageView)
         self.addSubview(self.nameLabel)
         self.addSubview(self.avatarImageView)
         
         self.avatarImageView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(15)
-            make.width.height.equalTo(100)
+            make.leading.top.equalToSuperview().inset(15)
+            make.width.height.equalTo(50)
         }
         
         self.nameLabel.snp.makeConstraints { make in
             make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
-            make.top.trailing.equalToSuperview().inset(15)
+            make.trailing.equalToSuperview().inset(15)
+            make.centerY.equalTo(self.avatarImageView)
         }
         
         self.contentImageView.snp.makeConstraints { make in

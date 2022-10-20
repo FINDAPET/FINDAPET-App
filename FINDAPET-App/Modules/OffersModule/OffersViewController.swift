@@ -88,6 +88,7 @@ final class OffersViewController: UIViewController {
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         self.title = self.presenter.mode == .myOffers ? NSLocalizedString("My offers", comment: "") : NSLocalizedString("Suggested offers", comment: "")
         
