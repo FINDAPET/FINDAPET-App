@@ -76,4 +76,8 @@ final class OffersPresenter {
         self.router.goToChatRoom(with: id)
     }
     
+    func goToProfile(userID: UUID? = nil) {
+        self.router.goToProfile(userID: userID)
+    }
+    
 }

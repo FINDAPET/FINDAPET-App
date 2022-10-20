@@ -79,6 +79,15 @@ class ProfileTableViewCell: UITableViewCell {
         return view
     }()
     
+    private let checkmarkImageView: UIImageView = {
+        let view = UIImageView(image: UIImage(systemName: "checkmark"))
+        
+        view.tintColor = .accentColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
 //    MARK: Life Cycle
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -94,6 +103,8 @@ class ProfileTableViewCell: UITableViewCell {
         self.addSubview(self.avatarImageView)
         self.addSubview(self.nameLabel)
         self.addSubview(self.descriptionLabel)
+        
+        self.avatarImageView.addSubview(self.checkmarkImageView)
         
         self.avatarImageView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().inset(15)
@@ -118,6 +129,11 @@ class ProfileTableViewCell: UITableViewCell {
             if self.descriptionLabel.frame.maxY > self.avatarImageView.frame.maxY {
                 make.bottom.equalToSuperview().inset(15)
             }
+        }
+        
+        self.checkmarkImageView.snp.makeConstraints { make in
+            make.bottom.leading.equalToSuperview()
+            make.width.height.equalTo(15)
         }
     }
     
