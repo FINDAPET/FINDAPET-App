@@ -38,12 +38,23 @@ final class ProfileViewController: UIViewController {
         return view
     }()
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let view = UIRefreshControl()
+        
+        view.addTarget(self, action: #selector(self.onRegresh), for: .valueChanged)
+        view.tintColor = .white
+        view.backgroundColor = .accentColor
+        
+        return view
+    }()
+    
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         
         view.backgroundColor = .clear
         view.dataSource = self
         view.delegate = self
+        view.refreshControl = self.refreshControl
         view.register(ProfileTableViewCell.self, forCellReuseIdentifier: ProfileTableViewCell.id)
         view.register(DealTableViewCell.self, forCellReuseIdentifier: DealTableViewCell.cellID)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -74,8 +85,8 @@ final class ProfileViewController: UIViewController {
                 (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: {
                     
             }),
-                (title: NSLocalizedString("Settings", comment: ""), color: .white, action: {
-                    
+                (title: NSLocalizedString("Settings", comment: ""), color: .white, action: { [ weak self ] in
+                    self?.presenter.goToSettings()
             }),
                 (title: NSLocalizedString("Log Out", comment: ""), color: .white, action: { [ weak self ] in
                     self?.logOut()
@@ -127,6 +138,7 @@ final class ProfileViewController: UIViewController {
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.title = NSLocalizedString("Profile", comment: "")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -155,32 +167,40 @@ final class ProfileViewController: UIViewController {
     }
     
 //    MARK: Requests
-    private func getUser() {
+    private func getUser(isRefreshing: Bool = false) {
         if self.presenter.userID != nil {
             self.presenter.getSomeUser { [ weak self ] user, error in
                 self?.error(error) {
+                    self?.activityIndicatorView.isHidden = true
+                    self?.tableView.isHidden = false
+                    self?.refreshControl.endRefreshing()
+                    
                     guard let user = user, let self = self else {
-                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
+                        if isRefreshing {
+                            self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
+                        }
                         
                         return
                     }
                    
-                    self.activityIndicatorView.isHidden = true
-                    self.tableView.isHidden = false
                     self.presenter.user = user
                 }
             }
         } else {
             self.presenter.getUser { [ weak self ] user, error in
                 self?.error(error) {
+                    self?.activityIndicatorView.isHidden = true
+                    self?.tableView.isHidden = false
+                    self?.refreshControl.endRefreshing()
+                    
                     guard let user = user, let self = self else {
-                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
+                        if isRefreshing {
+                            self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
+                        }
                         
                         return
                     }
                     
-                    self.activityIndicatorView.isHidden = true
-                    self.tableView.isHidden = false
                     self.presenter.user = user
                 }
             }
@@ -201,18 +221,42 @@ final class ProfileViewController: UIViewController {
     @objc private func didTapSlideMenuBarButton() {
         self.present(self.sideMenuViewController, animated: true)
     }
+    
+    @objc private func onRegresh() {
+        self.getUser()
+    }
 
 }
 
 //MARK: Extensions
 extension ProfileViewController: UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        
-        return (self.presenter.user?.deals.count ?? 0) + (self.presenter.user != nil ? 1 : 0)
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        var number = 1
+        
+        if !(self.presenter.user?.deals.isEmpty ?? true) {
+            number += 1
+        }
+        
+        if !(self.presenter.user?.boughtDeals.isEmpty ?? true) {
+            number += 1
+        }
+        
+        return number
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == .zero {
+            return self.presenter.user != nil ? 1 : 0
+        } else if section == 1 {
+            return self.presenter.user?.deals.count ?? 0
+        }
+        
+        return self.presenter.user?.boughtDeals.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == .zero {
+        if indexPath.section == .zero {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.id) as? ProfileTableViewCell else {
                 return UITableViewCell()
             }
@@ -226,7 +270,11 @@ extension ProfileViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.deal = self.presenter.user?.deals[indexPath.row - 1]
+        if indexPath.section == 1 {
+            cell.deal = self.presenter.user?.deals[indexPath.row - 1]
+        } else {
+            cell.deal = self.presenter.user?.boughtDeals[indexPath.row - 1]
+        }
                 
         return cell
     }
@@ -235,10 +283,20 @@ extension ProfileViewController: UITableViewDataSource {
 
 extension ProfileViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 1 {
+            return NSLocalizedString("Deals", comment: "") + ":"
+        } else if section == 2 {
+            return NSLocalizedString("Bought Deals", comment: "") + ":"
+        }
+        
+        return nil
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard indexPath.row != 0 else {
+        guard indexPath.section != 0 else {
             return
         }
         

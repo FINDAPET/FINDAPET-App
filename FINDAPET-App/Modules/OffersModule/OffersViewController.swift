@@ -25,12 +25,33 @@ final class OffersViewController: UIViewController {
     }
     
 //    MARK: UI Properties
+    private lazy var refreshControl: UIRefreshControl = {
+        let view = UIRefreshControl()
+        
+        view.backgroundColor = .accentColor
+        view.tintColor = .white
+        view.addTarget(self, action: #selector(self.onRefresh), for: .valueChanged)
+        
+        return view
+    }()
+    
+    private let activityIndicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        
+        view.startAnimating()
+        view.isHidden = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var tableView: UITableView = {
         let view = UITableView ()
         
         view.backgroundColor = .clear
         view.delegate = self
         view.dataSource = self
+        view.refreshControl = self.refreshControl
         view.register(OfferTableViewCell.self, forCellReuseIdentifier: OfferTableViewCell.cellID)
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -48,40 +69,9 @@ final class OffersViewController: UIViewController {
         super.viewDidLoad()
         
         if self.presenter.userID != nil && self.presenter.offers.isEmpty {
-            switch self.presenter.mode {
-            case .myOffers:
-                self.presenter.getUserMyOffers { [ weak self ] offers, error in
-                    self?.error(error) {
-                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
-                        
-                        return
-                    }
-                    
-                    guard let offers = offers else {
-                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
-                        
-                        return
-                    }
-                    
-                    self?.presenter.offers = offers
-                }
-            case .offers:
-                self.presenter.getUserOffers { [ weak self ] offers, error in
-                    self?.error(error) {
-                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
-                        
-                        return
-                    }
-                    
-                    guard let offers = offers else {
-                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
-                        
-                        return
-                    }
-                    
-                    self?.presenter.offers = offers
-                }
-            }
+            self.activityIndicatorView.isHidden = false
+            self.tableView.isHidden = true
+            self.getOffers()
         }
     }
     
@@ -92,11 +82,75 @@ final class OffersViewController: UIViewController {
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         self.title = self.presenter.mode == .myOffers ? NSLocalizedString("My offers", comment: "") : NSLocalizedString("Suggested offers", comment: "")
         
+        self.view.addSubview(self.activityIndicatorView)
         self.view.addSubview(self.tableView)
+        
+        self.activityIndicatorView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
         
         self.tableView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
+    }
+    
+//    MARK: Requests
+    private func getOffers(isRefreshing: Bool = false) {
+        switch self.presenter.mode {
+        case .myOffers:
+            self.presenter.getUserMyOffers { [ weak self ] offers, error in
+                self?.activityIndicatorView.isHidden = true
+                self?.tableView.isHidden = false
+                self?.refreshControl.endRefreshing()
+                
+                self?.error(error) {
+                    if isRefreshing {
+                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
+                    }
+                    
+                    return
+                }
+                
+                guard let offers = offers else {
+                    if isRefreshing {
+                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
+                    }
+                    
+                    return
+                }
+                
+                self?.presenter.offers = offers
+            }
+        case .offers:
+            self.presenter.getUserOffers { [ weak self ] offers, error in
+                self?.activityIndicatorView.isHidden = true
+                self?.tableView.isHidden = false
+                self?.refreshControl.endRefreshing()
+                
+                self?.error(error) {
+                    if isRefreshing {
+                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
+                    }
+                    
+                    return
+                }
+                
+                guard let offers = offers else {
+                    if isRefreshing {
+                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
+                    }
+                    
+                    return
+                }
+                
+                self?.presenter.offers = offers
+            }
+        }
+    }
+    
+//    MARK: Actions
+    @objc private func onRefresh() {
+        self.getOffers()
     }
     
 }

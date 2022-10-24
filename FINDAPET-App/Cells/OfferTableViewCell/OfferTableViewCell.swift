@@ -111,6 +111,8 @@ final class OfferTableViewCell: UITableViewCell {
         view.layer.cornerRadius = 12.5
         view.layer.masksToBounds = true
         view.clipsToBounds = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapBuyerAvatarImageView)))
+        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view

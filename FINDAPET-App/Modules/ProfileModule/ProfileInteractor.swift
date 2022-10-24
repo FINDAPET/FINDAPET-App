@@ -23,6 +23,7 @@ final class ProfileInteractor {
     func getSomeUser(userID: UUID, completionHandler: @escaping (User.Output?, Error?) -> Void) {
         RequestManager.request(
             method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? ""),
             url: URLConstructor.defaultHTTP.someUser(userID: userID),
             completionHandler: completionHandler
         )

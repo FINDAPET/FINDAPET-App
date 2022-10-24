@@ -87,6 +87,15 @@
 		E3DBD03928FF216F0063DC35 /* OffersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DBD03828FF216F0063DC35 /* OffersPresenter.swift */; };
 		E3DBD03B28FF21800063DC35 /* OffersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DBD03A28FF21800063DC35 /* OffersViewController.swift */; };
 		E3DBD03E28FF32C10063DC35 /* OfferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DBD03D28FF32C10063DC35 /* OfferTableViewCell.swift */; };
+		E3E1D178290310840069EE46 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D177290310840069EE46 /* Currency.swift */; };
+		E3E1D180290313AE0069EE46 /* SettingsBlockRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D17F290313AE0069EE46 /* SettingsBlockRouter.swift */; };
+		E3E1D182290313BC0069EE46 /* SettingsBlockInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D181290313BC0069EE46 /* SettingsBlockInteractor.swift */; };
+		E3E1D184290313CC0069EE46 /* SettingsBlockPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D183290313CC0069EE46 /* SettingsBlockPresenter.swift */; };
+		E3E1D186290313D80069EE46 /* SettingsBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D185290313D80069EE46 /* SettingsBlockView.swift */; };
+		E3E1D189290326870069EE46 /* SettingsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D188290326870069EE46 /* SettingsRouter.swift */; };
+		E3E1D18B290326AD0069EE46 /* SettingsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D18A290326AD0069EE46 /* SettingsInteractor.swift */; };
+		E3E1D18D290326B80069EE46 /* SettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D18C290326B80069EE46 /* SettingsPresenter.swift */; };
+		E3E1D18F290326DE0069EE46 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D18E290326DE0069EE46 /* SettingsViewController.swift */; };
 		E3E1EB4E28FFEB0000F536F4 /* OffersMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1EB4D28FFEB0000F536F4 /* OffersMode.swift */; };
 		E3E1EB51290063C600F536F4 /* AdsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1EB50290063C600F536F4 /* AdsRouter.swift */; };
 		E3E1EB53290063D200F536F4 /* AdsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1EB52290063D200F536F4 /* AdsInteractor.swift */; };
@@ -188,6 +197,15 @@
 		E3DBD03828FF216F0063DC35 /* OffersPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffersPresenter.swift; sourceTree = "<group>"; };
 		E3DBD03A28FF21800063DC35 /* OffersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffersViewController.swift; sourceTree = "<group>"; };
 		E3DBD03D28FF32C10063DC35 /* OfferTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferTableViewCell.swift; sourceTree = "<group>"; };
+		E3E1D177290310840069EE46 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		E3E1D17F290313AE0069EE46 /* SettingsBlockRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBlockRouter.swift; sourceTree = "<group>"; };
+		E3E1D181290313BC0069EE46 /* SettingsBlockInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBlockInteractor.swift; sourceTree = "<group>"; };
+		E3E1D183290313CC0069EE46 /* SettingsBlockPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBlockPresenter.swift; sourceTree = "<group>"; };
+		E3E1D185290313D80069EE46 /* SettingsBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBlockView.swift; sourceTree = "<group>"; };
+		E3E1D188290326870069EE46 /* SettingsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRouter.swift; sourceTree = "<group>"; };
+		E3E1D18A290326AD0069EE46 /* SettingsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInteractor.swift; sourceTree = "<group>"; };
+		E3E1D18C290326B80069EE46 /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
+		E3E1D18E290326DE0069EE46 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		E3E1EB4D28FFEB0000F536F4 /* OffersMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffersMode.swift; sourceTree = "<group>"; };
 		E3E1EB50290063C600F536F4 /* AdsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsRouter.swift; sourceTree = "<group>"; };
 		E3E1EB52290063D200F536F4 /* AdsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsInteractor.swift; sourceTree = "<group>"; };
@@ -405,6 +423,8 @@
 		E36F622628F9EBA8007C7623 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				E3E1D187290326710069EE46 /* SettingsModule */,
+				E3E1D17E2903138B0069EE46 /* SettingsBlockModule */,
 				E3E1EB4F290063B600F536F4 /* AdsModule */,
 				E3DBD03128FF20A50063DC35 /* OffersModule */,
 				E3CEE68328ABE72D00468ED2 /* RegistrationModule */,
@@ -494,6 +514,7 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E3E1D176290310720069EE46 /* Enums */,
 				E3F4B04828FD7EF90083815E /* SideMenuSides */,
 				E3F4B04528FD7D340083815E /* ViewControllers */,
 				E36F622628F9EBA8007C7623 /* Modules */,
@@ -608,6 +629,36 @@
 				E3DBD03D28FF32C10063DC35 /* OfferTableViewCell.swift */,
 			);
 			path = OfferTableViewCell;
+			sourceTree = "<group>";
+		};
+		E3E1D176290310720069EE46 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				E3E1D177290310840069EE46 /* Currency.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		E3E1D17E2903138B0069EE46 /* SettingsBlockModule */ = {
+			isa = PBXGroup;
+			children = (
+				E3E1D17F290313AE0069EE46 /* SettingsBlockRouter.swift */,
+				E3E1D181290313BC0069EE46 /* SettingsBlockInteractor.swift */,
+				E3E1D183290313CC0069EE46 /* SettingsBlockPresenter.swift */,
+				E3E1D185290313D80069EE46 /* SettingsBlockView.swift */,
+			);
+			path = SettingsBlockModule;
+			sourceTree = "<group>";
+		};
+		E3E1D187290326710069EE46 /* SettingsModule */ = {
+			isa = PBXGroup;
+			children = (
+				E3E1D188290326870069EE46 /* SettingsRouter.swift */,
+				E3E1D18A290326AD0069EE46 /* SettingsInteractor.swift */,
+				E3E1D18C290326B80069EE46 /* SettingsPresenter.swift */,
+				E3E1D18E290326DE0069EE46 /* SettingsViewController.swift */,
+			);
+			path = SettingsModule;
 			sourceTree = "<group>";
 		};
 		E3E1EB4F290063B600F536F4 /* AdsModule */ = {
@@ -750,6 +801,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3A173F628F70E1A00C67387 /* ProductsID.swift in Sources */,
+				E3E1D184290313CC0069EE46 /* SettingsBlockPresenter.swift in Sources */,
 				E3CEE68528ABE77B00468ED2 /* RegistrationMode.swift in Sources */,
 				E3E1EB4E28FFEB0000F536F4 /* OffersMode.swift in Sources */,
 				E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */,
@@ -777,6 +829,8 @@
 				E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */,
 				E35EC91F28FB02DE00868C0A /* ApplicationRequestErrors.swift in Sources */,
 				E3CEE68228ABE4DC00468ED2 /* RegistrationCoordinator.swift in Sources */,
+				E3E1D180290313AE0069EE46 /* SettingsBlockRouter.swift in Sources */,
+				E3E1D178290310840069EE46 /* Currency.swift in Sources */,
 				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
 				E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */,
 				E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */,
@@ -788,6 +842,7 @@
 				E3E1EB51290063C600F536F4 /* AdsRouter.swift in Sources */,
 				E313B89A28ACE37B00E33975 /* RegistrationInteractor.swift in Sources */,
 				E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */,
+				E3E1D189290326870069EE46 /* SettingsRouter.swift in Sources */,
 				E3D9570728AFD65000CCF566 /* EditProfilePresenter.swift in Sources */,
 				E312608028BE39CB0097D040 /* ProfileInteractor.swift in Sources */,
 				E34ABC4328A7C59B00A7D2C8 /* RequestErrors.swift in Sources */,
@@ -814,10 +869,13 @@
 				E36F622528F9E5F1007C7623 /* ExchangeConvert.swift in Sources */,
 				E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */,
 				E3D9570328AFD63500CCF566 /* EditProfileRouter.swift in Sources */,
+				E3E1D182290313BC0069EE46 /* SettingsBlockInteractor.swift in Sources */,
 				E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */,
+				E3E1D18F290326DE0069EE46 /* SettingsViewController.swift in Sources */,
 				E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */,
 				E3D9570528AFD64200CCF566 /* EditProfileInteractor.swift in Sources */,
 				E34ABC3C28A7BD4300A7D2C8 /* HTTPMethods.swift in Sources */,
+				E3E1D186290313D80069EE46 /* SettingsBlockView.swift in Sources */,
 				E3E1EB53290063D200F536F4 /* AdsInteractor.swift in Sources */,
 				E313B89E28ACE39800E33975 /* RegistrationViewController.swift in Sources */,
 				E35E09F428F73A9000B310D1 /* YandexMobileMetricaErrors.swift in Sources */,
@@ -827,6 +885,7 @@
 				E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */,
 				E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */,
 				E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */,
+				E3E1D18D290326B80069EE46 /* SettingsPresenter.swift in Sources */,
 				E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */,
 				E35E09F628F73B9D00B310D1 /* YandexMobileMetrica.swift in Sources */,
 				E34ABC3428A7906500A7D2C8 /* User.swift in Sources */,
@@ -836,6 +895,7 @@
 				E305EC7528ACCC6800A3AAD3 /* OnboardingInteractor.swift in Sources */,
 				E3E4D6A428B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift in Sources */,
 				E3E1EB57290063F000F536F4 /* AdsViewController.swift in Sources */,
+				E3E1D18B290326AD0069EE46 /* SettingsInteractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

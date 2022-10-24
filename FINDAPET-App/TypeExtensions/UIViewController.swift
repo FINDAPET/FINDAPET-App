@@ -34,6 +34,31 @@ extension UIViewController {
         self.present(controller, animated: true)
     }
     
+//    MARK: Action Sheets
+    func presentActionsSheet(title: String, message: String? = nil, contents: [String], action: @escaping (UIAlertAction) -> Void) {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        for content in contents {
+            controller.addAction(UIAlertAction(title: content, style: .default, handler: action))
+        }
+        
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Back", comment: String()), style: .cancel))
+        
+        self.present(controller, animated: true)
+    }
+    
+    func presentActionsSheet(title: String, message: String? = nil, contents: [(title: String, action: (UIAlertAction) -> Void)]) {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        for content in contents {
+            controller.addAction(UIAlertAction(title: content.title, style: .default, handler: content.action))
+        }
+        
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Back", comment: String()), style: .cancel))
+        
+        self.present(controller, animated: true)
+    }
+    
 //    MARK: Errors
     
     func error(_ error: Error?, completionHandler: @escaping () -> Void) {

@@ -95,6 +95,13 @@ final class URLConstructor {
             .appendingPathComponent(Paths.change.rawValue)
     }
     
+    func changeUser(baseCurrencyName: String) -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.users.rawValue)
+            .appendingPathComponent(Paths.change.rawValue)
+            .appendingPathExtension(baseCurrencyName)
+    }
+    
     func user() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.users.rawValue)

@@ -25,12 +25,33 @@ final class AdsViewController: UIViewController {
     }
     
 //    MARK: UI Properties
+    private lazy var refreshControl: UIRefreshControl = {
+        let view = UIRefreshControl()
+        
+        view.addTarget(self, action: #selector(self.onRefresh), for: .valueChanged)
+        view.backgroundColor = .accentColor
+        view.tintColor = .white
+        
+        return view
+    }()
+    
+    private let activityIndicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        
+        view.startAnimating()
+        view.isHidden = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .insetGrouped)
         
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = .clear
+        view.refreshControl = self.refreshControl
         view.register(AdTableViewCell.self, forCellReuseIdentifier: AdTableViewCell.cellID)
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -48,25 +69,51 @@ final class AdsViewController: UIViewController {
         super.viewDidLoad()
         
         if self.presenter.userID != nil {
-            self.presenter.getAds { [ weak self ] _, error in
-                self?.error(error) {
-                    self?.presentAlert(title: NSLocalizedString("Not Found", comment: String()))
-                }
-            }
+            self.activityIndicatorView.isHidden = false
+            self.tableView.isHidden = true
+            self.getAds()
         }
     }
     
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
         self.title = NSLocalizedString("My ad", comment: String())
         
         self.view.addSubview(self.tableView)
+        self.view.addSubview(self.activityIndicatorView)
+        
+        self.activityIndicatorView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
         
         self.tableView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
+    }
+    
+//    MARK: Requests
+    func getAds(isRefreshing: Bool = false) {
+        self.presenter.getAds { [ weak self ] _, error in
+            self?.refreshControl.endRefreshing()
+            
+            self?.error(error) {
+                self?.activityIndicatorView.isHidden = true
+                self?.tableView.isHidden = false
+                self?.refreshControl.endRefreshing()
+                
+                if isRefreshing {
+                    self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
+                }
+            }
+        }
+    }
+    
+//    MARK: Acitons
+    @objc private func onRefresh() {
+        self.getAds()
     }
 
 }

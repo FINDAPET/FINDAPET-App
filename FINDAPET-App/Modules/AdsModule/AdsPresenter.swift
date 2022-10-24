@@ -44,6 +44,8 @@ final class AdsPresenter {
         }
         
         guard let userID = userID else {
+            completionHandler(nil, nil)
+            
             return
         }
         

@@ -28,8 +28,9 @@ extension User {
         var isCatteryWaitVerify: Bool
         var chatRoomsID: [UUID]
         var countryCode: String?
+        var basicCurrencyName: String
         
-        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, deviceToken: String? = nil, chatRoomsID: [UUID] = [UUID](), countryCode: String? = nil) {
+        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, deviceToken: String? = nil, chatRoomsID: [UUID] = [UUID](), countryCode: String? = nil, basicCurrencyName: String = Currency.USD.rawValue) {
             self.id = id
             self.name = name
             self.avatarData = avatarData
@@ -39,6 +40,7 @@ extension User {
             self.deviceToken = deviceToken
             self.chatRoomsID = chatRoomsID
             self.countryCode = countryCode
+            self.basicCurrencyName = basicCurrencyName
         }
     }
 }

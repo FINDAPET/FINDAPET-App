@@ -15,6 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.registerForPushNotifications()
         
+        if #available(iOS 16, *) {
+            self.setCurrency(Locale.current.currency?.identifier ?? Currency.USD.rawValue)
+        } else {
+            self.setCurrency(Locale.current.currencyCode ?? Currency.USD.rawValue)
+        }
+        
         do {
             try YandexMobileMetricaManager.start(with: ymmYnadexMetricaAPIKey)
         } catch {
@@ -87,6 +93,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register: \(error)")
+    }
+    
+    private func setCurrency(_ value: String) {
+        UserDefaultsManager.write(data: value, key: .currency)
     }
     
 }

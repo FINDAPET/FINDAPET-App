@@ -23,6 +23,10 @@ final class ProfileRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.goToAds(ads: ads)
     }
     
+    func goToSettings() {
+        self.coordinatorDelegate?.goToSettings()
+    }
+    
     func goToCreateDeal() {
         self.coordinatorDelegate?.goToCreateDeal()
     }

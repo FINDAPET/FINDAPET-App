@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 final class ProfilePresenter {
     
@@ -20,7 +21,7 @@ final class ProfilePresenter {
         self.userID = userID
     }
     
-    var user: User.Output? {
+    var user: User.Output? = User.Output(name: "Test", avatarData: UIImage(systemName: "globe")?.pngData(), deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output(contentData: UIImage(systemName: "globe")?.pngData() ?? Data())], myOffers: [Offer.Output(buyer: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()), deal: Deal.Output(title: "Deal", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data()], tags: [String](), isPremiumDeal: true, isActive: true, viewsCount: .zero, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: .zero, currencyName: String(), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()), offers: [Offer.Output](), score: .zero), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()))], offers: [Offer.Output(buyer: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()), deal: Deal.Output(title: "Deal", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data()], tags: [String](), isPremiumDeal: true, isActive: true, viewsCount: .zero, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: .zero, currencyName: String(), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()), offers: [Offer.Output](), score: .zero), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()))], chatRooms: [ChatRoom.Output]()) {
         didSet {
             self.callBack?()
         }
@@ -54,6 +55,10 @@ final class ProfilePresenter {
     
     func goToInfo() {
         self.router.goToInfo()
+    }
+    
+    func goToSettings() {
+        self.router.goToSettings()
     }
     
     func goToEditProfile() {
