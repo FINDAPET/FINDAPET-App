@@ -121,22 +121,6 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getSettings(), animated: true)
     }
     
-//    MARK: Subscription
-    func getSubscription() -> SubscriptionViewController {
-        let router = SubscriptionRouter()
-        let interactor = SubscriptionInteractor()
-        let presenter = SubscriptionPresenter(router: router, interactor: interactor)
-        let viewController = SubscriptionViewController(presenter: presenter)
-        
-        router.coordinatorDelegate = self
-        
-        return viewController
-    }
-    
-    func goToSubscription() {
-        self.navigationController.pushViewController(self.getSubscription(), animated: true)
-    }
-    
 //    MARK: Create Ad
     func getCreateAd(user: User.Output? = nil) -> CreateAdViewController {
         let router = CreateAdRouter()
@@ -158,16 +142,22 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.coordinatorDelegate?.coordinatorDelegate?.goToEditProfile(user: user)
     }
     
-    func goToCreateDeal() {
-        // push create deal
-    }
-    
     func goToCreateOffer() {
         // push create offer
     }
     
+//    MARK: Info
+    func getInfo() -> InfoViewController {
+        let router = InfoRouter()
+        let interactor = InfoInteractor()
+        let presenter = InfoPresenter(router: router, interactor: interactor)
+        let viewController = InfoViewController(presenter: presenter)
+        
+        return viewController
+    }
+    
     func goToInfo() {
-        // push info
+        self.navigationController.pushViewController(self.getInfo(), animated: true)
     }
     
 //    MARK: Onboarding

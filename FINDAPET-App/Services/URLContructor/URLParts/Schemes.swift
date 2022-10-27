@@ -8,5 +8,5 @@
 import Foundation
 
 enum Schemes: String {
-    case http, https, ws, wss
+    case http, https, ws, wss, mailto
 }

@@ -21,6 +21,14 @@ final class URLConstructor {
         self.baseURL = urlComponents.url ?? URL(fileURLWithPath: "")
     }
     
+    init(mailTo: String) {
+        self.baseURL = URL(string: "\(Schemes.mailto.rawValue):\(mailTo)") ?? URL(fileURLWithPath: String())
+    }
+    
+    init(string: String) {
+        self.baseURL = URL(string: string) ?? URL(fileURLWithPath: String())
+    }
+    
     static let localhostHTTP = URLConstructor(scheme: .http, host: .localhost, port: .localhost)
     static let localhostWS = URLConstructor(scheme: .ws, host: .localhost, port: .localhost)
     static let defaultHTTP = URLConstructor(scheme: .http, host: .localhost, port: .localhost)
@@ -410,6 +418,11 @@ final class URLConstructor {
     func convert() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.convert.rawValue)
+    }
+    
+//    MARK: Mail
+    func mailTo() -> URL {
+        self.baseURL
     }
     
 }

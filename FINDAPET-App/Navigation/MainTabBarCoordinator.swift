@@ -36,15 +36,26 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
         return coordinator
     }()
     
+    private lazy var subscriptionCoordinator: SubscriptionCoordinator = {
+        let coordinator = SubscriptionCoordinator()
+        
+        coordinator.coordinatorDelegate = self
+        coordinator.start()
+        
+        return coordinator
+    }()
+    
     func start() {
         self.setupViews()
     }
     
+//    MARK: Setup Views
     private func setupViews() {
         self.tabBar.navigationController?.navigationBar.isHidden = true
         self.tabBar.viewControllers = [
             self.feedCoordinator.navigationController,
-            self.profileCoordinator.navigationController
+            self.profileCoordinator.navigationController,
+            self.subscriptionCoordinator.navigationController
         ]
     }
     

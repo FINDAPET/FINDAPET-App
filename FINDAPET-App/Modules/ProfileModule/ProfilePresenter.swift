@@ -45,10 +45,6 @@ final class ProfilePresenter {
         self.router.goToAds(ads: self.user?.ads ?? [Ad.Output]())
     }
     
-    func goToCreateDeal() {
-        self.router.goToCreateDeal()
-    }
-    
     func goToCreateAd() {
         self.router.goToCreateAd(user: self.user)
     }
@@ -59,10 +55,6 @@ final class ProfilePresenter {
     
     func goToSettings() {
         self.router.goToSettings()
-    }
-    
-    func goToSubscription() {
-        self.router.goToSubscription()
     }
     
     func goToEditProfile() {

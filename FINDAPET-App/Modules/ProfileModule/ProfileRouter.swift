@@ -31,14 +31,6 @@ final class ProfileRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.goToSettings()
     }
     
-    func goToSubscription() {
-        self.coordinatorDelegate?.goToSubscription()
-    }
-    
-    func goToCreateDeal() {
-        self.coordinatorDelegate?.goToCreateDeal()
-    }
-    
     func goToCreateAd(user: User.Output? = nil) {
         self.coordinatorDelegate?.goToCreateAd(user: user)
     }

@@ -1,0 +1,42 @@
+/* 
+  Localizable.strings
+  FINDAPET-App
+
+  Created by Artemiy Zuzin on 12.08.2022.
+  
+*/
+
+"Check the app" = "Проверьте приложение";
+"Profile" = "Профиль";
+"Feed" = "Лента";
+"Log In" = "Войти";
+"Sign In" = "Зарегестрироваться";
+"FINDAPET is a convenient app for buying and selling purebred animals from catteries all over the world." = "FINDAPET - удобное приложение для покупки и продажи породистых животных из питомников со всего мира.";
+"Error" = "Ошибка";
+"Not Found" = "Не найдено";
+"Not Autorized" = "Пользователь не авторизирован";
+"Server Error" = "Ошибка сервера";
+"Incorrect Data" = "Неверные данные";
+"Failed to make a request" = "Не удалось произвести запрос";
+"Email isn't valid" = "Некорректный email";
+"Password is too short" = "Пароль слишком короткий";
+"Password must be 8 charecters long." = "Пароль должен иметь 8 символов.";
+"Back" = "Назад";
+"Password" = "Пароль";
+"Save" = "Сохранить";
+"Main" = "Основные";
+"Your name or your cattery name" = "Ваше имя или название вашего питомника";
+"Description(optional)" = "Описание(необязательно)";
+"Register as a cattery(optional)" = "Зарегестрироваться как питомник(необязательно)";
+"Cattery documents" = "Документы питомника(необязательно)";
+"Name field is empty" = "Поле имени пустое";
+"Cattery document image is empty" = "Фотография документа питомника отсутствует";
+"Fill in all required fields" = "Заполните все обязательные поля";
+"Your cattery is confirmed" = "Ваш питомник подтвержден";
+"When your kennel is verified we will send you a notification" = "Когда ваш питомник будет подтвежден мы отправим вам уведомление";
+"You bought a pet" = "Вы купили питомца";
+"Privacy Policy Text" = "Политика конфеденциальности";
+"Privacy policy" = "Политика конфеденциальности";
+"Do you agree with privacy policy?" = "Вы согласны с политикой конфеденциальности?";
+"You don't agree with the privacy policy" = "Вы не согласны с политикой конфиденциальности";
+"Verified catteries are always marked for the buyer" = "Верифицированные питомники всегда помечаются для покупателя и отображаются выше в списке";

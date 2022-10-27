@@ -7,8 +7,8 @@
 
 import Foundation
 
-final class SubscriptionRouter: ProfileCoordinatable {
+final class SubscriptionRouter: SubscriptionCoordinatable {
     
-    var coordinatorDelegate: ProfileCoordinator?
+    var coordinatorDelegate: SubscriptionCoordinator?
     
 }

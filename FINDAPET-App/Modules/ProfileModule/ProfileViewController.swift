@@ -82,17 +82,14 @@ final class ProfileViewController: UIViewController {
                 (title: NSLocalizedString("Edit profile", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToEditProfile()
             }),
-                (title: NSLocalizedString("Create deal", comment: ""), color: .white, action: {
-                    
-            }),
                 (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToCreateAd()
             }),
-                (title: NSLocalizedString("Subscription", comment: ""), color: .white, action: { [ weak self ] in
-                    self?.presenter.goToSubscription()
-            }),
                 (title: NSLocalizedString("Settings", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToSettings()
+            }),
+                (title: NSLocalizedString("Info", comment: ""), color: .white, action: { [ weak self ] in
+                    self?.presenter.goToInfo()
             }),
                 (title: NSLocalizedString("Log Out", comment: ""), color: .white, action: { [ weak self ] in
                     self?.logOut()
