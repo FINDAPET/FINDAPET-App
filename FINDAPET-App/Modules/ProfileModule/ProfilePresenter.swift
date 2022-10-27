@@ -21,7 +21,7 @@ final class ProfilePresenter {
         self.userID = userID
     }
     
-    var user: User.Output? = User.Output(name: "Test", avatarData: UIImage(systemName: "globe")?.pngData(), deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output(contentData: UIImage(systemName: "globe")?.pngData() ?? Data())], myOffers: [Offer.Output(buyer: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()), deal: Deal.Output(title: "Deal", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data()], tags: [String](), isPremiumDeal: true, isActive: true, viewsCount: .zero, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: .zero, currencyName: String(), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()), offers: [Offer.Output](), score: .zero), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()))], offers: [Offer.Output(buyer: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()), deal: Deal.Output(title: "Deal", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data()], tags: [String](), isPremiumDeal: true, isActive: true, viewsCount: .zero, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: .zero, currencyName: String(), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()), offers: [Offer.Output](), score: .zero), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output]()))], chatRooms: [ChatRoom.Output]()) {
+    var user: User.Output? = User.Output(name: "Test", avatarData: UIImage(systemName: "globe")?.pngData(), deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output(contentData: UIImage(systemName: "globe")?.pngData() ?? Data())], myOffers: [Offer.Output(buyer: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), deal: Deal.Output(title: "Deal", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data()], tags: [String](), isPremiumDeal: true, isActive: true, viewsCount: .zero, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: .zero, currencyName: String(), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), offers: [Offer.Output](), score: .zero), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true))], offers: [Offer.Output(buyer: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), deal: Deal.Output(title: "Deal", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data()], tags: [String](), isPremiumDeal: true, isActive: true, viewsCount: .zero, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: .zero, currencyName: String(), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), offers: [Offer.Output](), score: .zero), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true))], chatRooms: [ChatRoom.Output](), isPremiumUser: true) {
         didSet {
             self.callBack?()
         }
@@ -50,7 +50,7 @@ final class ProfilePresenter {
     }
     
     func goToCreateAd() {
-        self.router.goToCreateAd()
+        self.router.goToCreateAd(user: self.user)
     }
     
     func goToInfo() {
@@ -61,13 +61,18 @@ final class ProfilePresenter {
         self.router.goToSettings()
     }
     
+    func goToSubscription() {
+        self.router.goToSubscription()
+    }
+    
     func goToEditProfile() {
         self.router.goToEditProfile(user: User.Input(
             id: self.user?.id,
-            name: self.user?.name ?? "",
+            name: self.user?.name ?? String(),
             avatarData: self.user?.avatarData,
             documentData: self.user?.documentData,
-            description: self.user?.description ?? ""
+            description: self.user?.description,
+            chatRoomsID: self.user?.chatRooms.map { $0.id ?? UUID() } ?? [UUID]()
         ))
     }
     

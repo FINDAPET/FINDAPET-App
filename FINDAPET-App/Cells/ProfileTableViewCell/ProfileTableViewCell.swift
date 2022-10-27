@@ -79,7 +79,7 @@ class ProfileTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let checkmarkImageView: UIImageView = {
+    private lazy var checkmarkImageView: UIImageView = {
         let view = UIImageView(image: UIImage(systemName: "checkmark"))
         
         view.tintColor = .accentColor

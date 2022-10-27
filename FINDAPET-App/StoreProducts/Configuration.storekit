@@ -90,12 +90,12 @@
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "",
+              "description" : "3 Months",
               "displayName" : "3 Months Premium Subscription",
               "locale" : "en_US"
             },
             {
-              "description" : "",
+              "description" : "3 Месяца",
               "displayName" : "3 Месяца премиум подписки",
               "locale" : "ru"
             }
@@ -120,12 +120,12 @@
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "",
+              "description" : "6 Months",
               "displayName" : "6 Months Premium Subscription",
               "locale" : "en_US"
             },
             {
-              "description" : "",
+              "description" : "6 Месяцев",
               "displayName" : "6 Месяцев премиум подписки",
               "locale" : "ru"
             }
@@ -150,12 +150,12 @@
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "",
+              "description" : "1 Year",
               "displayName" : "1 Year Premium Subscription",
               "locale" : "en_US"
             },
             {
-              "description" : "",
+              "description" : "1 Год",
               "displayName" : "1 Год премиум подписки",
               "locale" : "ru"
             }
@@ -180,12 +180,12 @@
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "",
+              "description" : "1 Month",
               "displayName" : "1 Month Premium Subscription",
               "locale" : "en_US"
             },
             {
-              "description" : "",
+              "description" : "1 Месяц",
               "displayName" : "1 Месяц премиум подписки",
               "locale" : "ru"
             }

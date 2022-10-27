@@ -121,6 +121,43 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getSettings(), animated: true)
     }
     
+//    MARK: Subscription
+    func getSubscription() -> SubscriptionViewController {
+        let router = SubscriptionRouter()
+        let interactor = SubscriptionInteractor()
+        let presenter = SubscriptionPresenter(router: router, interactor: interactor)
+        let viewController = SubscriptionViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        return viewController
+    }
+    
+    func goToSubscription() {
+        self.navigationController.pushViewController(self.getSubscription(), animated: true)
+    }
+    
+//    MARK: Create Ad
+    func getCreateAd(user: User.Output? = nil) -> CreateAdViewController {
+        let router = CreateAdRouter()
+        let interactor = CreateAdInteractor()
+        let presenter = CreateAdPresenter(user: user, router: router, interactor: interactor)
+        let viewController = CreateAdViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        return viewController
+    }
+    
+    func goToCreateAd(user: User.Output? = nil) {
+        self.navigationController.pushViewController(self.getCreateAd(user: user), animated: true)
+    }
+    
+//    MARK: Edit Profile
+    func goToEditProfile(user: User.Input) {
+        self.coordinatorDelegate?.coordinatorDelegate?.goToEditProfile(user: user)
+    }
+    
     func goToCreateDeal() {
         // push create deal
     }
@@ -129,20 +166,8 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         // push create offer
     }
     
-    func goToCreateAd() {
-        // push create ad
-    }
-    
     func goToInfo() {
         // push info
-    }
-    
-//    MARK: Edit Profile
-    func goToEditProfile(user: User.Input) {
-        self.navigationController.pushViewController(
-            RegistrationCoordinator().getEditProfile(user: user),
-            animated: true
-        )
     }
     
 //    MARK: Onboarding
@@ -151,7 +176,7 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         
         registrationCoordinator.start()
         
-        self.navigationController.pushViewController(registrationCoordinator.navigationController, animated: true)
+        self.coordinatorDelegate?.coordinatorDelegate?.start()
     }
     
 //    MARK: Setup Views

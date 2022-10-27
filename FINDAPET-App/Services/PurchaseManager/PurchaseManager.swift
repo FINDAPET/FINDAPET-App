@@ -8,70 +8,76 @@
 import Foundation
 import StoreKit
 
-final class PurchaseManager {
+final class PurchaseManager: NSObject {
     
-    static func getProducts(_ productsID: ProductsID..., callBack: @escaping ([SKProduct]) -> Void) {
-        let productsRequestManager = ProductsRequestDelegate(callBack: callBack)
+//    MARK: Properties
+    static let shared = PurchaseManager()
+    
+    private var firstCallBack: (([SKProduct]) -> Void)?
+    private var secondCallBack: ((Error?) -> Void)?
+    
+//    MARK: Methods
+    func getProducts(_ productsID: [ProductsID], callBack: @escaping ([SKProduct]) -> Void) {
+        self.firstCallBack = callBack
+        
         let request = SKProductsRequest(productIdentifiers: Set(productsID.map { $0.rawValue }))
         
-        request.delegate = productsRequestManager
+        request.delegate = self
         request.start()
     }
     
-    static func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
+    func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
+        self.secondCallBack = callBack
+        
         SKPaymentQueue.default().add(SKPayment(product: product))
-        SKPaymentQueue.default().add(PaymentTransactionObserver(callBack: callBack))
+        SKPaymentQueue.default().add(self)
     }
     
-    private final class ProductsRequestDelegate: NSObject, SKProductsRequestDelegate {
-        
-        private let callBack: ([SKProduct]) -> Void
-        
-        init(callBack: @escaping ([SKProduct]) -> Void) {
-            self.callBack = callBack
+}
+
+//MARK: Extensions
+
+extension PurchaseManager: SKProductsRequestDelegate {
+    
+    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+        DispatchQueue.main.async { [ weak self ] in
+            self?.firstCallBack?(response.products)
         }
-        
-        func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-            self.callBack(response.products)
-        }
-        
     }
     
-    private final class PaymentTransactionObserver: NSObject, SKPaymentTransactionObserver {
-        
-        private let callBack: (Error?) -> Void
-        
-        init(callBack: @escaping (Error?) -> Void) {
-            self.callBack = callBack
-        }
-        
-        func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-            for transaction in transactions {
-                switch transaction.transactionState {
-                case .purchased:
-                    print("✅ Transaction purchased.")
-                    
-                    self.callBack(nil)
-                    
-                    SKPaymentQueue.default().finishTransaction(transaction)
-                case .failed:
-                    print("❌ Error: Transaction purchase failed.")
-                    
-                    self.callBack(PurchaseErrors.purchaseFailed)
-                    
-                    SKPaymentQueue.default().finishTransaction(transaction)
-                case .purchasing:
-                    print("Transaction purchasing...")
-                case .restored:
-                    print("Transaction restored.")
-                case .deferred:
-                    print("Transaction deferred.")
-                @unknown default:
-                    break
+}
+
+extension PurchaseManager: SKPaymentTransactionObserver {
+    
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        for transaction in transactions {
+            switch transaction.transactionState {
+            case .purchased:
+                print("✅ Transaction purchased.")
+                
+                DispatchQueue.main.async { [ weak self ] in
+                    self?.secondCallBack?(nil)
                 }
+                
+                SKPaymentQueue.default().finishTransaction(transaction)
+            case .failed:
+                print("❌ Error: Transaction purchase failed.")
+                
+                DispatchQueue.main.async { [ weak self ] in
+                    self?.secondCallBack?(PurchaseErrors.purchaseFailed)
+                }
+                
+                SKPaymentQueue.default().finishTransaction(transaction)
+            case .purchasing:
+                print("Transaction purchasing...")
+            case .restored:
+                print("Transaction restored.")
+            case .deferred:
+                print("Transaction deferred.")
+            @unknown default:
+                break
             }
         }
-        
     }
     
 }

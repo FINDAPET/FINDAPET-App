@@ -79,11 +79,17 @@ final class ProfileViewController: UIViewController {
                 (title: NSLocalizedString("My ad", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToAds()
             }),
+                (title: NSLocalizedString("Edit profile", comment: ""), color: .white, action: { [ weak self ] in
+                    self?.presenter.goToEditProfile()
+            }),
                 (title: NSLocalizedString("Create deal", comment: ""), color: .white, action: {
                     
             }),
-                (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: {
-                    
+                (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: { [ weak self ] in
+                    self?.presenter.goToCreateAd()
+            }),
+                (title: NSLocalizedString("Subscription", comment: ""), color: .white, action: { [ weak self ] in
+                    self?.presenter.goToSubscription()
             }),
                 (title: NSLocalizedString("Settings", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToSettings()
@@ -95,7 +101,7 @@ final class ProfileViewController: UIViewController {
         )
         
         view.view.backgroundColor = .accentColor
-        view.view.layer.cornerRadius = 20
+        view.view.layer.cornerRadius = 25
         
         return view
     }()

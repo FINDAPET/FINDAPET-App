@@ -23,24 +23,28 @@ final class ProfileRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.goToAds(ads: ads)
     }
     
+    func goToEditProfile(user: User.Input) {
+        self.coordinatorDelegate?.goToEditProfile(user: user)
+    }
+    
     func goToSettings() {
         self.coordinatorDelegate?.goToSettings()
+    }
+    
+    func goToSubscription() {
+        self.coordinatorDelegate?.goToSubscription()
     }
     
     func goToCreateDeal() {
         self.coordinatorDelegate?.goToCreateDeal()
     }
     
-    func goToCreateAd() {
-        self.coordinatorDelegate?.goToCreateAd()
+    func goToCreateAd(user: User.Output? = nil) {
+        self.coordinatorDelegate?.goToCreateAd(user: user)
     }
     
     func goToInfo() {
         self.coordinatorDelegate?.goToInfo()
-    }
-    
-    func goToEditProfile(user: User.Input) {
-        self.coordinatorDelegate?.goToEditProfile(user: user)
     }
     
 }

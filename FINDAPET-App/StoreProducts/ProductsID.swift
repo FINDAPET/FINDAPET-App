@@ -15,4 +15,12 @@ enum ProductsID: String, CaseIterable {
     case adOneWeek = "com.FINDAPET.ad.one.week"
     case adOneMonth = "com.FINDAPET.ad.one.month"
     case premiumDeal = "com.FINDAPET.premium.deal"
+    
+    static func getSubscriptions() -> [ProductsID] {
+        [.premiumSubscriptionOneMonth, .premiumSubscriptionThreeMonth, .premiumSubscriptionSixMonth, .premiumSubscriptionOneYear]
+    }
+    
+    static func getAd() -> [ProductsID] {
+        [.adOneWeek, .adOneMonth]
+    }
 }

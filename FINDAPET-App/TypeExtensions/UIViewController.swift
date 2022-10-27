@@ -61,7 +61,7 @@ extension UIViewController {
     
 //    MARK: Errors
     
-    func error(_ error: Error?, completionHandler: @escaping () -> Void) {
+    func error(_ error: Error?, completionHandler: @escaping () -> Void = { }) {
         if let error = error as? RegistrationErrors {
             switch error {
             case .emailIsNotValid:
@@ -90,7 +90,7 @@ extension UIViewController {
             default:
                 self.presentAlert(title: NSLocalizedString("Failed to make a request", comment: ""))
             }
-        } else {
+        } else if error == nil {
             completionHandler()
         }
     }

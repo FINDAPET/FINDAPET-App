@@ -34,7 +34,7 @@ class SettingsViewController: UIViewController {
             )
         }
         
-        view?.layer.cornerRadius = 10
+        view?.layer.cornerRadius = 25
         view?.translatesAutoresizingMaskIntoConstraints = false
         
         return view

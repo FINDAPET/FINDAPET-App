@@ -55,6 +55,15 @@
 		E35EC92228FB02EC00868C0A /* ApplicationRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35EC92128FB02EC00868C0A /* ApplicationRequestManager.swift */; };
 		E36F622528F9E5F1007C7623 /* ExchangeConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36F622428F9E5F1007C7623 /* ExchangeConvert.swift */; };
 		E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */; };
+		E3993F53290716BE000C218C /* SubscriptionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F52290716BE000C218C /* SubscriptionRouter.swift */; };
+		E3993F55290716D2000C218C /* SubscriptionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F54290716D2000C218C /* SubscriptionInteractor.swift */; };
+		E3993F57290716DF000C218C /* SubscriptionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F56290716DF000C218C /* SubscriptionPresenter.swift */; };
+		E3993F59290716EF000C218C /* SubscriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F58290716EF000C218C /* SubscriptionViewController.swift */; };
+		E3993F5C2907EB73000C218C /* SubscriptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F5B2907EB73000C218C /* SubscriptionCollectionViewCell.swift */; };
+		E3993F5F2909B62F000C218C /* CreateAdRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F5E2909B62F000C218C /* CreateAdRouter.swift */; };
+		E3993F612909B643000C218C /* CreateAdInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F602909B643000C218C /* CreateAdInteractor.swift */; };
+		E3993F632909B658000C218C /* CreateAdPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F622909B658000C218C /* CreateAdPresenter.swift */; };
+		E3993F652909B66E000C218C /* CreateAdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F642909B66E000C218C /* CreateAdViewController.swift */; };
 		E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F328F70CD000C67387 /* PurchaseManager.swift */; };
 		E3A173F628F70E1A00C67387 /* ProductsID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A173F528F70E1A00C67387 /* ProductsID.swift */; };
 		E3B7B08428FC67340089762E /* YandexMobileMetrica in Frameworks */ = {isa = PBXBuildFile; productRef = E3B7B08328FC67340089762E /* YandexMobileMetrica */; };
@@ -162,6 +171,15 @@
 		E35EC92128FB02EC00868C0A /* ApplicationRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationRequestManager.swift; sourceTree = "<group>"; };
 		E36F622428F9E5F1007C7623 /* ExchangeConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeConvert.swift; sourceTree = "<group>"; };
 		E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealTableViewCell.swift; sourceTree = "<group>"; };
+		E3993F52290716BE000C218C /* SubscriptionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionRouter.swift; sourceTree = "<group>"; };
+		E3993F54290716D2000C218C /* SubscriptionInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionInteractor.swift; sourceTree = "<group>"; };
+		E3993F56290716DF000C218C /* SubscriptionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPresenter.swift; sourceTree = "<group>"; };
+		E3993F58290716EF000C218C /* SubscriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionViewController.swift; sourceTree = "<group>"; };
+		E3993F5B2907EB73000C218C /* SubscriptionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionCollectionViewCell.swift; sourceTree = "<group>"; };
+		E3993F5E2909B62F000C218C /* CreateAdRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAdRouter.swift; sourceTree = "<group>"; };
+		E3993F602909B643000C218C /* CreateAdInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAdInteractor.swift; sourceTree = "<group>"; };
+		E3993F622909B658000C218C /* CreateAdPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAdPresenter.swift; sourceTree = "<group>"; };
+		E3993F642909B66E000C218C /* CreateAdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAdViewController.swift; sourceTree = "<group>"; };
 		E3A173F328F70CD000C67387 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		E3A173F528F70E1A00C67387 /* ProductsID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsID.swift; sourceTree = "<group>"; };
 		E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
@@ -423,6 +441,8 @@
 		E36F622628F9EBA8007C7623 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				E3993F5D2909B613000C218C /* CreateAdModule */,
+				E3993F51290716A2000C218C /* SubscriptionModule */,
 				E3E1D187290326710069EE46 /* SettingsModule */,
 				E3E1D17E2903138B0069EE46 /* SettingsBlockModule */,
 				E3E1EB4F290063B600F536F4 /* AdsModule */,
@@ -439,6 +459,7 @@
 		E37AC6A428F82CD4003AC7D3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				E3993F5A2907EB2E000C218C /* SubscriptionTableViewCell */,
 				E3E1EB5829006B0B00F536F4 /* AdTableViewCell */,
 				E3DBD03C28FF32980063DC35 /* OfferTableViewCell */,
 				E37AC6A728F82D00003AC7D3 /* DealTableViewCell */,
@@ -453,6 +474,36 @@
 				E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */,
 			);
 			path = DealTableViewCell;
+			sourceTree = "<group>";
+		};
+		E3993F51290716A2000C218C /* SubscriptionModule */ = {
+			isa = PBXGroup;
+			children = (
+				E3993F52290716BE000C218C /* SubscriptionRouter.swift */,
+				E3993F54290716D2000C218C /* SubscriptionInteractor.swift */,
+				E3993F56290716DF000C218C /* SubscriptionPresenter.swift */,
+				E3993F58290716EF000C218C /* SubscriptionViewController.swift */,
+			);
+			path = SubscriptionModule;
+			sourceTree = "<group>";
+		};
+		E3993F5A2907EB2E000C218C /* SubscriptionTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				E3993F5B2907EB73000C218C /* SubscriptionCollectionViewCell.swift */,
+			);
+			path = SubscriptionTableViewCell;
+			sourceTree = "<group>";
+		};
+		E3993F5D2909B613000C218C /* CreateAdModule */ = {
+			isa = PBXGroup;
+			children = (
+				E3993F5E2909B62F000C218C /* CreateAdRouter.swift */,
+				E3993F602909B643000C218C /* CreateAdInteractor.swift */,
+				E3993F622909B658000C218C /* CreateAdPresenter.swift */,
+				E3993F642909B66E000C218C /* CreateAdViewController.swift */,
+			);
+			path = CreateAdModule;
 			sourceTree = "<group>";
 		};
 		E3A173F228F70CB600C67387 /* PurchaseManager */ = {
@@ -614,11 +665,11 @@
 		E3DBD03128FF20A50063DC35 /* OffersModule */ = {
 			isa = PBXGroup;
 			children = (
+				E3E1EB4D28FFEB0000F536F4 /* OffersMode.swift */,
 				E3DBD03628FF21630063DC35 /* OffersRouter.swift */,
 				E3DBD03228FF213F0063DC35 /* OffersInteractor.swift */,
 				E3DBD03828FF216F0063DC35 /* OffersPresenter.swift */,
 				E3DBD03A28FF21800063DC35 /* OffersViewController.swift */,
-				E3E1EB4D28FFEB0000F536F4 /* OffersMode.swift */,
 			);
 			path = OffersModule;
 			sourceTree = "<group>";
@@ -834,18 +885,23 @@
 				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
 				E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */,
 				E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */,
+				E3993F53290716BE000C218C /* SubscriptionRouter.swift in Sources */,
 				E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */,
 				E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */,
 				E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */,
 				E35E09F228F739F200B310D1 /* YandexMobileMetricaManager.swift in Sources */,
+				E3993F57290716DF000C218C /* SubscriptionPresenter.swift in Sources */,
 				E3E4D6A028B92BE3002B0BE6 /* PrivacyPolicyRouter.swift in Sources */,
 				E3E1EB51290063C600F536F4 /* AdsRouter.swift in Sources */,
 				E313B89A28ACE37B00E33975 /* RegistrationInteractor.swift in Sources */,
 				E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */,
 				E3E1D189290326870069EE46 /* SettingsRouter.swift in Sources */,
 				E3D9570728AFD65000CCF566 /* EditProfilePresenter.swift in Sources */,
+				E3993F59290716EF000C218C /* SubscriptionViewController.swift in Sources */,
 				E312608028BE39CB0097D040 /* ProfileInteractor.swift in Sources */,
 				E34ABC4328A7C59B00A7D2C8 /* RequestErrors.swift in Sources */,
+				E3993F5F2909B62F000C218C /* CreateAdRouter.swift in Sources */,
+				E3993F55290716D2000C218C /* SubscriptionInteractor.swift in Sources */,
 				E34ABC4928A7CE9F00A7D2C8 /* RegistrationManager.swift in Sources */,
 				E313B89C28ACE38D00E33975 /* RegistrationPresenter.swift in Sources */,
 				E3DBD03928FF216F0063DC35 /* OffersPresenter.swift in Sources */,
@@ -863,10 +919,12 @@
 				E3DBD03328FF213F0063DC35 /* OffersInteractor.swift in Sources */,
 				E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */,
 				E305EC7B28ACD78200A3AAD3 /* OnboardingRouter.swift in Sources */,
+				E3993F612909B643000C218C /* CreateAdInteractor.swift in Sources */,
 				E3CEE67F28ABD88800468ED2 /* Coordinator.swift in Sources */,
 				E3DBD03E28FF32C10063DC35 /* OfferTableViewCell.swift in Sources */,
 				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
 				E36F622528F9E5F1007C7623 /* ExchangeConvert.swift in Sources */,
+				E3993F652909B66E000C218C /* CreateAdViewController.swift in Sources */,
 				E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */,
 				E3D9570328AFD63500CCF566 /* EditProfileRouter.swift in Sources */,
 				E3E1D182290313BC0069EE46 /* SettingsBlockInteractor.swift in Sources */,
@@ -893,7 +951,9 @@
 				E3D9570928AFD65900CCF566 /* EditProfileViewController.swift in Sources */,
 				E3E1EB55290063DD00F536F4 /* AdsPresenter.swift in Sources */,
 				E305EC7528ACCC6800A3AAD3 /* OnboardingInteractor.swift in Sources */,
+				E3993F632909B658000C218C /* CreateAdPresenter.swift in Sources */,
 				E3E4D6A428B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift in Sources */,
+				E3993F5C2907EB73000C218C /* SubscriptionCollectionViewCell.swift in Sources */,
 				E3E1EB57290063F000F536F4 /* AdsViewController.swift in Sources */,
 				E3E1D18B290326AD0069EE46 /* SettingsInteractor.swift in Sources */,
 			);

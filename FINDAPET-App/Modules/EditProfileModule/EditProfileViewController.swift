@@ -191,6 +191,10 @@ final class EditProfileViewController: UIViewController {
 //    MARK: Setup Views
     
     private func setupViews() {
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
+        self.title = NSLocalizedString("Edit profile", comment: String())
+        
         if self.presenter.readUserDefaultsIsFirstEdititng() {
             self.navigationController?.navigationBar.isHidden = true
         }
