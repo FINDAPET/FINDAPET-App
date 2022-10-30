@@ -19,6 +19,10 @@ final class ProfileViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.presenter.callBack = { [ weak self ] in self?.tableView.reloadData() }
+        
+        if self.presenter.userID == nil {
+            NotificationCenterManager.addObserver(self, name: .reloadProfileScreen, action: #selector(self.refreshScreen))
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -41,7 +45,7 @@ final class ProfileViewController: UIViewController {
     private lazy var refreshControl: UIRefreshControl = {
         let view = UIRefreshControl()
         
-        view.addTarget(self, action: #selector(self.onRegresh), for: .valueChanged)
+        view.addTarget(self, action: #selector(self.onRefresh), for: .valueChanged)
         view.tintColor = .white
         view.backgroundColor = .accentColor
         
@@ -225,7 +229,11 @@ final class ProfileViewController: UIViewController {
         self.present(self.sideMenuViewController, animated: true)
     }
     
-    @objc private func onRegresh() {
+    @objc private func onRefresh() {
+        self.getUser()
+    }
+    
+    @objc private func refreshScreen() {
         self.getUser()
     }
 
@@ -234,7 +242,7 @@ final class ProfileViewController: UIViewController {
 //MARK: Extensions
 extension ProfileViewController: UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         var number = 1
         
         if !(self.presenter.user?.deals.isEmpty ?? true) {
@@ -244,7 +252,7 @@ extension ProfileViewController: UITableViewDataSource {
         if !(self.presenter.user?.boughtDeals.isEmpty ?? true) {
             number += 1
         }
-        
+                
         return number
     }
     
@@ -274,9 +282,9 @@ extension ProfileViewController: UITableViewDataSource {
         }
         
         if indexPath.section == 1 {
-            cell.deal = self.presenter.user?.deals[indexPath.row - 1]
+            cell.deal = self.presenter.user?.deals[indexPath.row]
         } else {
-            cell.deal = self.presenter.user?.boughtDeals[indexPath.row - 1]
+            cell.deal = self.presenter.user?.boughtDeals[indexPath.row]
         }
                 
         return cell

@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E30560ED290EB8F000E0881C /* NotificationCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30560EC290EB8F000E0881C /* NotificationCenterManager.swift */; };
+		E30560EF290EBE6800E0881C /* NotificationCenterManagerKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30560EE290EBE6800E0881C /* NotificationCenterManagerKeys.swift */; };
 		E305EC7528ACCC6800A3AAD3 /* OnboardingInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E305EC7428ACCC6800A3AAD3 /* OnboardingInteractor.swift */; };
 		E305EC7728ACCC7600A3AAD3 /* OnboardingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E305EC7628ACCC7600A3AAD3 /* OnboardingPresenter.swift */; };
 		E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E305EC7828ACCC8100A3AAD3 /* OnboardingViewController.swift */; };
 		E305EC7B28ACD78200A3AAD3 /* OnboardingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E305EC7A28ACD78200A3AAD3 /* OnboardingRouter.swift */; };
+		E30BEC27290DB61300188B5D /* SubscriptionHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30BEC26290DB61300188B5D /* SubscriptionHeaderCollectionReusableView.swift */; };
 		E312607E28BE39BC0097D040 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E312607D28BE39BC0097D040 /* ProfileRouter.swift */; };
 		E312608028BE39CB0097D040 /* ProfileInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E312607F28BE39CB0097D040 /* ProfileInteractor.swift */; };
 		E312608228BE39E10097D040 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E312608128BE39E10097D040 /* ProfilePresenter.swift */; };
@@ -129,10 +132,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E30560EC290EB8F000E0881C /* NotificationCenterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterManager.swift; sourceTree = "<group>"; };
+		E30560EE290EBE6800E0881C /* NotificationCenterManagerKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterManagerKeys.swift; sourceTree = "<group>"; };
 		E305EC7428ACCC6800A3AAD3 /* OnboardingInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingInteractor.swift; sourceTree = "<group>"; };
 		E305EC7628ACCC7600A3AAD3 /* OnboardingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPresenter.swift; sourceTree = "<group>"; };
 		E305EC7828ACCC8100A3AAD3 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		E305EC7A28ACD78200A3AAD3 /* OnboardingRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRouter.swift; sourceTree = "<group>"; };
+		E30BEC26290DB61300188B5D /* SubscriptionHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		E312607D28BE39BC0097D040 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
 		E312607F28BE39CB0097D040 /* ProfileInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInteractor.swift; sourceTree = "<group>"; };
 		E312608128BE39E10097D040 /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
@@ -267,6 +273,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E30560EA290EB8B500E0881C /* NotificationCenterManager */ = {
+			isa = PBXGroup;
+			children = (
+				E30560EC290EB8F000E0881C /* NotificationCenterManager.swift */,
+				E30560EE290EBE6800E0881C /* NotificationCenterManagerKeys.swift */,
+			);
+			path = NotificationCenterManager;
+			sourceTree = "<group>";
+		};
+		E30560F0290ECC5400E0881C /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		E305EC7128ACCC3D00A3AAD3 /* OnboardingModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -276,6 +298,14 @@
 				E305EC7828ACCC8100A3AAD3 /* OnboardingViewController.swift */,
 			);
 			path = OnboardingModule;
+			sourceTree = "<group>";
+		};
+		E30BEC25290DB5BB00188B5D /* CollectionReusableViews */ = {
+			isa = PBXGroup;
+			children = (
+				E30BEC26290DB61300188B5D /* SubscriptionHeaderCollectionReusableView.swift */,
+			);
+			path = CollectionReusableViews;
 			sourceTree = "<group>";
 		};
 		E312607C28BE39810097D040 /* ProfileModule */ = {
@@ -318,6 +348,7 @@
 		E34ABC2D28A771A600A7D2C8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E30560EA290EB8B500E0881C /* NotificationCenterManager */,
 				E3F4B04D28FDC5640083815E /* CurrencyConverter */,
 				E35EC92028FB02EC00868C0A /* ApplicationRequestManager */,
 				E35E09F028F739CC00B310D1 /* YandexMobileMetricaManager */,
@@ -453,6 +484,7 @@
 		E36F622628F9EBA8007C7623 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				E30560F0290ECC5400E0881C /* New Group */,
 				E3993F66290AF874000C218C /* InfoModule */,
 				E3993F5D2909B613000C218C /* CreateAdModule */,
 				E3993F51290716A2000C218C /* SubscriptionModule */,
@@ -598,6 +630,7 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
+				E30BEC25290DB5BB00188B5D /* CollectionReusableViews */,
 				E3E1D176290310720069EE46 /* Enums */,
 				E3F4B04828FD7EF90083815E /* SideMenuSides */,
 				E3F4B04528FD7D340083815E /* ViewControllers */,
@@ -894,6 +927,7 @@
 				E347A5482901B3690089271F /* UIView.swift in Sources */,
 				E3993F73290B14F9000C218C /* SubscriptionCoordinator.swift in Sources */,
 				E325351D28F58C6500878A7F /* Message.swift in Sources */,
+				E30560EF290EBE6800E0881C /* NotificationCenterManagerKeys.swift in Sources */,
 				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
 				E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */,
 				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
@@ -918,6 +952,7 @@
 				E3CEE68228ABE4DC00468ED2 /* RegistrationCoordinator.swift in Sources */,
 				E3E1D180290313AE0069EE46 /* SettingsBlockRouter.swift in Sources */,
 				E3E1D178290310840069EE46 /* Currency.swift in Sources */,
+				E30BEC27290DB61300188B5D /* SubscriptionHeaderCollectionReusableView.swift in Sources */,
 				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
 				E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */,
 				E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */,
@@ -952,6 +987,7 @@
 				E35EC92228FB02EC00868C0A /* ApplicationRequestManager.swift in Sources */,
 				E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */,
 				E34ABC5128A7D30E00A7D2C8 /* UserDefaultsKeys.swift in Sources */,
+				E30560ED290EB8F000E0881C /* NotificationCenterManager.swift in Sources */,
 				E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */,
 				E3F4B04728FD7D510083815E /* SlideMenuViewController.swift in Sources */,
 				E3DBD03B28FF21800063DC35 /* OffersViewController.swift in Sources */,

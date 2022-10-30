@@ -20,20 +20,23 @@ final class SubscriptionCoordinator: MainTabBarCoordinatable, Coordinator {
     
     func start() {
         self.setupViews()
+        self.goToSubscription()
     }
     
 //    MARK: Subscription
-    func getSubscritpion() -> SubscriptionViewController {
+    func getSubscription() -> SubscriptionViewController {
         let router = SubscriptionRouter()
         let interactor = SubscriptionInteractor()
         let presenter = SubscriptionPresenter(router: router, interactor: interactor)
         let viewController = SubscriptionViewController(presenter: presenter)
         
+        router.coordinatorDelegate = self
+        
         return viewController
     }
     
     func goToSubscription() {
-        self.navigationController.pushViewController(self.getSubscritpion(), animated: true)
+        self.navigationController.pushViewController(self.getSubscription(), animated: true)
     }
     
 //    MARK: Setup Views
@@ -43,7 +46,6 @@ final class SubscriptionCoordinator: MainTabBarCoordinatable, Coordinator {
             image: UIImage(systemName: "crown"),
             selectedImage: UIImage(systemName: "crown")
         )
-        self.navigationController.navigationBar.isHidden = true
     }
     
 }

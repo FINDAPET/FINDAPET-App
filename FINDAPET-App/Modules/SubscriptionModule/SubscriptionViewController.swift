@@ -25,27 +25,6 @@ final class SubscriptionViewController: UIViewController {
     }
     
 //    MARK: UI Propeties
-    private let scrollView: UIScrollView = {
-        let view = UIScrollView()
-        
-        view.showsVerticalScrollIndicator = false
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
-    
-    private let infoLabel: UILabel = {
-        let view = UILabel()
-        
-        view.text = NSLocalizedString("Premium subscriptions increase the views of each of your deals. Premium subscriptions are available for 1, 3, 6 months and 1 year and can be automatically renewed.", comment: String())
-        view.textColor = .textColor
-        view.font = .systemFont(ofSize: 24)
-        view.numberOfLines = .zero
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
-    
     private lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         
@@ -53,7 +32,11 @@ final class SubscriptionViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.register(SubscriptionCollectionViewCell.self, forCellWithReuseIdentifier: SubscriptionCollectionViewCell.cellID)
-        view.isScrollEnabled = false
+        view.register(
+            SubscriptionHeaderCollectionReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SubscriptionHeaderCollectionReusableView.id
+        )
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -78,24 +61,11 @@ final class SubscriptionViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         self.title = NSLocalizedString("Subscription", comment: String())
-        
-        self.view.addSubview(self.scrollView)
-        
-        self.scrollView.addSubview(self.collectionView)
-        self.scrollView.addSubview(self.infoLabel)
-        
-        self.scrollView.snp.makeConstraints { make in
-            make.leading.trailing.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
-        }
-        
-        self.infoLabel.snp.makeConstraints { make in
-            make.leading.trailing.top.equalToSuperview().inset(15)
-        }
+                
+        self.view.addSubview(self.collectionView)
         
         self.collectionView.snp.makeConstraints { make in
-            make.top.equalTo(self.infoLabel.snp.bottom).inset(-15)
-            make.leading.trailing.equalToSuperview().inset(15)
-            make.bottom.equalToSuperview()
+            make.top.bottom.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
 
@@ -147,9 +117,21 @@ extension SubscriptionViewController: UICollectionViewDelegate {
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        collectionView.dequeueReusableSupplementaryView(
+            ofKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SubscriptionHeaderCollectionReusableView.id,
+            for: indexPath
+        )
+    }
+        
 }
 
 extension SubscriptionViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        CGSize(width: collectionView.frame.width, height: 202)
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: (collectionView.contentSize.width - 25) / 2, height: (collectionView.contentSize.width - 25) / 2)
