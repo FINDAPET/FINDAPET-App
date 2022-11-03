@@ -39,4 +39,8 @@ final class ProfileRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.goToInfo()
     }
     
+    func goToDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) {
+        self.coordinatorDelegate?.goToDeal(dealID: dealID, deal: deal)
+    }
+    
 }

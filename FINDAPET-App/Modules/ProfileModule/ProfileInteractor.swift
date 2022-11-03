@@ -63,6 +63,10 @@ final class ProfileInteractor {
         UserDefaultsManager.write(data: true, key: .isFirstEditing)
     }
     
+    func setUserDefaults(_ value: Any?, with key: UserDefaultsKeys) {
+        UserDefaultsManager.write(data: value, key: key)
+    }
+    
 //    MARK: Keychain
     
     func deleteKeychainData() {

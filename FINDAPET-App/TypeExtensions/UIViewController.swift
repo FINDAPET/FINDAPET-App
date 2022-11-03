@@ -92,6 +92,8 @@ extension UIViewController {
             }
         } else if error == nil {
             completionHandler()
+        } else {
+            self.presentAlert(title: NSLocalizedString("Error", comment: String()))
         }
     }
     

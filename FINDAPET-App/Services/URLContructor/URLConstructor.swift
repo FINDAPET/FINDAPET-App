@@ -217,16 +217,16 @@ final class URLConstructor {
             .appendingPathComponent(Paths.all.rawValue)
     }
     
-    func someDeal(userID: UUID) -> URL {
+    func someDeal(dealID: UUID) -> URL {
         self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
-            .appendingPathComponent(userID.uuidString)
+            .appendingPathComponent(dealID.uuidString)
     }
     
-    func someDealOffers(userID: UUID) -> URL {
+    func someDealOffers(dealID: UUID) -> URL {
         self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
-            .appendingPathComponent(userID.uuidString)
+            .appendingPathComponent(dealID.uuidString)
             .appendingPathComponent(Paths.offers.rawValue)
     }
     

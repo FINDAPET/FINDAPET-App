@@ -45,7 +45,7 @@ final class OfferTableViewCell: UITableViewCell {
             }
             
             self.titleLabel.text = offer.deal.title
-            self.priceLabel.text = "\(offer.deal.price) \(offer.deal.currencyName)"
+            self.priceLabel.text = "\(offer.price) \(offer.currencyName)"
             self.nameLabel.text = offer.buyer.name
         }
     }

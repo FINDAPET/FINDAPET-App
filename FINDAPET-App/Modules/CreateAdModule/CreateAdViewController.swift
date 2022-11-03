@@ -163,6 +163,19 @@ final class CreateAdViewController: UIViewController {
                 }
             }
         }
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.keyboadWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
     }
     
 //    MARK: Setup Views
@@ -262,6 +275,24 @@ final class CreateAdViewController: UIViewController {
                 self?.presenter.goToProfile()
             }
         }
+    }
+    
+    @objc private func keyboadWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.scrollView.contentInset.bottom = keyboardSize.height
+            self.scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(
+                top: 0,
+                left: 0,
+                bottom: keyboardSize.height,
+                right: 0
+            )
+            self.scrollView.setContentOffset(CGPoint(x: 0, y: max(self.scrollView.contentSize.height - self.scrollView.bounds.size.height, 0) ), animated: true)
+        }
+    }
+    
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        self.scrollView.contentInset.bottom = .zero
+        self.scrollView.verticalScrollIndicatorInsets = .zero
     }
     
 }

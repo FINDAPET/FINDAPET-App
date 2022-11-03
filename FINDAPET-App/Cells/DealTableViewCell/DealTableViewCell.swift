@@ -42,6 +42,9 @@ class DealTableViewCell: UITableViewCell {
     private let photoImageView: UIImageView = {
         let view = UIImageView()
         
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 25
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -80,7 +83,7 @@ class DealTableViewCell: UITableViewCell {
         self.addSubview(self.priceLabel)
         
         self.photoImageView.snp.makeConstraints { make in
-            make.leading.trailing.top.equalToSuperview()
+            make.leading.trailing.top.equalToSuperview().inset(15)
             make.height.equalTo(self.photoImageView.snp.width)
         }
         

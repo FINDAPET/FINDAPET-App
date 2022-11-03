@@ -85,4 +85,59 @@ extension UIView {
         return mainStackView
     }
     
+//    MARK: Contain View
+    func containView() -> UIView {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        let view = UIView()
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(self)
+        
+        self.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview().inset(15)
+        }
+        
+        return view
+    }
+    
+//    MARK: Create Key Value Stack View
+    func createKeyValueStackView(key: String, value: String) -> UIStackView {
+        let keyLabel: UILabel = {
+            let view = UILabel()
+            
+            view.text = "\(key):"
+            view.textColor = .textColor
+            view.font = .systemFont(ofSize: 24, weight: .semibold)
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }()
+        
+        let valueLabel: UILabel = {
+            let view = UILabel()
+            
+            view.text = value
+            view.textColor = .textColor
+            view.font = .systemFont(ofSize: 24)
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }()
+        
+        let stackView: UIStackView = {
+            let view = UIStackView()
+            
+            view.axis = .horizontal
+            view.spacing = 10
+            view.addArrangedSubviews(keyLabel, valueLabel)
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }()
+        
+        return stackView
+    }
+    
 }

@@ -137,9 +137,49 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getCreateAd(user: user), animated: true)
     }
     
+//     MARK: Create Offer
+    func getCreateOffer(deal: Deal.Output) -> CreateOfferViewController {
+        let router = CreateOfferRouter()
+        let interactor = CreateOfferInteractor()
+        let presenter = CreateOfferPresenter(deal: deal, router: router, interactor: interactor)
+        let viewController = CreateOfferViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        return viewController
+    }
+    
+    func goToCreateOffer(deal: Deal.Output) {
+        self.navigationController.pushViewController(self.getCreateOffer(deal: deal), animated: true)
+    }
+    
 //    MARK: Edit Profile
     func goToEditProfile(user: User.Input) {
         self.coordinatorDelegate?.coordinatorDelegate?.goToEditProfile(user: user)
+    }
+    
+//    MARK: Deal
+    func getDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) -> DealViewController {
+        let router = DealRouter()
+        let interactor = DealInteractor()
+        
+        router.coordinatorDelegate = self
+        
+        if let deal = deal {
+            let presenter = DealPresenter(deal: deal, router: router, interactor: interactor)
+            let viewController = DealViewController(presenter: presenter)
+            
+            return viewController
+        }
+        
+        let presenter = DealPresenter(dealID: dealID, router: router, interactor: interactor)
+        let viewController = DealViewController(presenter: presenter)
+        
+        return viewController
+    }
+    
+    func goToDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) {
+        self.navigationController.pushViewController(self.getDeal(dealID: dealID, deal: deal), animated: true)
     }
     
     func goToCreateOffer() {
