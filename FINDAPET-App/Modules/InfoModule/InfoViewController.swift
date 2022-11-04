@@ -124,6 +124,7 @@ class InfoViewController: UIViewController {
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         
         self.view.addSubview(self.scrollView)

@@ -54,6 +54,7 @@ class SettingsViewController: UIViewController {
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.title = NSLocalizedString("Settings", comment: "")
         self.navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor : UIColor.white]
+        self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.navigationBar.prefersLargeTitles = true
         
         guard let settigsBlockView = self.settigsBlockView else {

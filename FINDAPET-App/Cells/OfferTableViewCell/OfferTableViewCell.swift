@@ -51,6 +51,18 @@ final class OfferTableViewCell: UITableViewCell {
     }
     
 //    MARK: UI Properties
+    private let containerView: UIView = {
+        let view = UIView()
+        
+        view.backgroundColor = .textFieldColor
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 25
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private let dealImageView: UIImageView = {
         let view = UIImageView()
         
@@ -169,19 +181,25 @@ final class OfferTableViewCell: UITableViewCell {
     private func setupViews() {
         self.backgroundColor = .clear
         
-        self.addSubview(self.dealImageView)
-        self.addSubview(self.titleLabel)
-        self.addSubview(self.priceLabel)
-        self.addSubview(self.stackView)
-        self.addSubview(self.avatarImageView)
-        self.addSubview(self.nameLabel)
-        self.addSubview(self.nameKeyLabel)
-        self.addSubview(self.priceKeyLabel)
+        self.addSubview(self.containerView)
+        
+        self.containerView.addSubview(self.dealImageView)
+        self.containerView.addSubview(self.titleLabel)
+        self.containerView.addSubview(self.priceLabel)
+        self.containerView.addSubview(self.stackView)
+        self.containerView.addSubview(self.avatarImageView)
+        self.containerView.addSubview(self.nameLabel)
+        self.containerView.addSubview(self.nameKeyLabel)
+        self.containerView.addSubview(self.priceKeyLabel)
         
         self.stackView.addArrangedSubview(self.messageButton)
         
         if self.acceptButtonAction != nil {
             self.stackView.addArrangedSubview(self.acceptButton)
+        }
+        
+        self.containerView.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview().inset(15)
         }
         
         self.dealImageView.snp.makeConstraints { make in

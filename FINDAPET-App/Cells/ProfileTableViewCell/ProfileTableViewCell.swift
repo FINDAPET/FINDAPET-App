@@ -38,6 +38,17 @@ class ProfileTableViewCell: UITableViewCell {
     }
     
 //    MARK: UI Properties
+    private let containerView: UIView = {
+        let view = UIView()
+        
+        view.backgroundColor = .textFieldColor
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 25
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
     
     private let avatarImageView: UIImageView = {
         let view = UIImageView()
@@ -98,11 +109,13 @@ class ProfileTableViewCell: UITableViewCell {
 //    MARK: Setup Views
     
     private func setupViews() {
-        self.backgroundColor = .backgroundColor
+        self.backgroundColor = .clear
         
-        self.addSubview(self.avatarImageView)
-        self.addSubview(self.nameLabel)
-        self.addSubview(self.descriptionLabel)
+        self.addSubview(self.containerView)
+        
+        self.containerView.addSubview(self.avatarImageView)
+        self.containerView.addSubview(self.nameLabel)
+        self.containerView.addSubview(self.descriptionLabel)
         
         self.avatarImageView.addSubview(self.checkmarkImageView)
         
@@ -113,6 +126,11 @@ class ProfileTableViewCell: UITableViewCell {
             if self.descriptionLabel.frame.maxY <= self.avatarImageView.frame.maxY {
                 make.bottom.equalToSuperview().inset(15)
             }
+        }
+        
+        self.containerView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview().inset(15)
+            make.bottom.equalToSuperview().inset(7.5)
         }
         
         self.nameLabel.snp.makeConstraints { make in

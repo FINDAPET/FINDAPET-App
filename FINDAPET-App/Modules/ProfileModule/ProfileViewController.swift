@@ -33,11 +33,16 @@ final class ProfileViewController: UIViewController {
     private var isHamburgerViewClossed = true
     
 //    MARK: UI Properties
-    private let activityIndicatorView: UIActivityIndicatorView = {
+    private lazy var activityIndicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .medium)
         
         view.startAnimating()
+        view.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
+        
+        if self.presenter.user == nil {
+            view.isHidden = false
+        }
         
         return view
     }()
@@ -61,7 +66,12 @@ final class ProfileViewController: UIViewController {
         view.refreshControl = self.refreshControl
         view.register(ProfileTableViewCell.self, forCellReuseIdentifier: ProfileTableViewCell.id)
         view.register(DealTableViewCell.self, forCellReuseIdentifier: DealTableViewCell.cellID)
+        view.separatorColor = .clear
         view.translatesAutoresizingMaskIntoConstraints = false
+        
+        if self.presenter.user == nil {
+            view.isHidden = true
+        }
         
         return view
     }()
@@ -111,7 +121,7 @@ final class ProfileViewController: UIViewController {
         let view = SideMenuNavigationController(rootViewController: self.slideMenuViewController)
         
         view.presentationStyle = .menuSlideIn
-        view.menuWidth = 200
+        view.menuWidth = 220
         
         return view
     }()
@@ -144,8 +154,10 @@ final class ProfileViewController: UIViewController {
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
+        self.tabBarController?.tabBar.isHidden = false
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.title = NSLocalizedString("Profile", comment: "")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(

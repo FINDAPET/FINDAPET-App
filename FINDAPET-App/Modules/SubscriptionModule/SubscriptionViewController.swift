@@ -59,6 +59,7 @@ final class SubscriptionViewController: UIViewController {
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         self.title = NSLocalizedString("Subscription", comment: String())
                 

@@ -91,7 +91,8 @@ final class OnboardingViewController: UIViewController {
     
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
-        
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
+
         self.view.addSubview(self.scrollView)
         
         self.scrollView.addSubview(self.logoImageView)

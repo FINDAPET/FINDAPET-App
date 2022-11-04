@@ -52,6 +52,18 @@ class AdTableViewCell: UITableViewCell {
     }
     
 //    MARK: UI Properties
+    private let containerView: UIView = {
+        let view = UIView()
+        
+        view.backgroundColor = .textFieldColor
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 25
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private let avatarImageView: UIImageView = {
         let view = UIImageView()
         
@@ -77,6 +89,9 @@ class AdTableViewCell: UITableViewCell {
     private let contentImageView: UIImageView = {
         let view = UIImageView()
         
+        view.layer.cornerRadius = 25
+        view.layer.masksToBounds = true
+        view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -86,12 +101,18 @@ class AdTableViewCell: UITableViewCell {
     private func setupViews() {
         self.backgroundColor = .backgroundColor
         
-        self.addSubview(self.contentImageView)
-        self.addSubview(self.nameLabel)
-        self.addSubview(self.avatarImageView)
+        self.addSubview(self.containerView)
+        
+        self.containerView.addSubview(self.contentImageView)
+        self.containerView.addSubview(self.nameLabel)
+        self.containerView.addSubview(self.avatarImageView)
+        
+        self.containerView.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview().inset(15)
+        }
         
         self.avatarImageView.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().inset(15)
+            make.leading.top.trailing.equalToSuperview().inset(15)
             make.width.height.equalTo(50)
         }
         

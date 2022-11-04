@@ -192,6 +192,7 @@ final class EditProfileViewController: UIViewController {
     
     private func setupViews() {
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         self.title = NSLocalizedString("Edit profile", comment: String())
         

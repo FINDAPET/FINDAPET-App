@@ -39,6 +39,18 @@ class DealTableViewCell: UITableViewCell {
     }
 
 //    MARK: UIProperties
+    private let containerView: UIView = {
+        let view = UIView()
+        
+        view.backgroundColor = .textFieldColor
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 25
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private let photoImageView: UIImageView = {
         let view = UIImageView()
         
@@ -76,11 +88,18 @@ class DealTableViewCell: UITableViewCell {
 //    MARK: Setup Views
     
     private func setupViews() {
-        self.backgroundColor = .backgroundColor
+        self.backgroundColor = .clear
         
-        self.addSubview(self.photoImageView)
-        self.addSubview(self.titleLabel)
-        self.addSubview(self.priceLabel)
+        self.addSubview(self.containerView)
+        
+        self.containerView.addSubview(self.photoImageView)
+        self.containerView.addSubview(self.titleLabel)
+        self.containerView.addSubview(self.priceLabel)
+        
+        self.containerView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(15)
+            make.top.bottom.equalToSuperview().inset(7.5)
+        }
         
         self.photoImageView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview().inset(15)

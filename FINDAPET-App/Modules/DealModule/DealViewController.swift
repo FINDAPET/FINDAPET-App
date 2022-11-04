@@ -206,8 +206,23 @@ final class DealViewController: UIViewController {
     
 //    MARK: Setup Views
     private func setupViews() {
+        let scrollEdgeAppearance = UINavigationBarAppearance()
+        let tabBarAppearance = UITabBarAppearance()
+        
+        tabBarAppearance.backgroundColor = .backgroundColor
+        scrollEdgeAppearance.backgroundColor = .backgroundColor
+        
         self.view.backgroundColor = .backgroundColor
+        self.navigationController?.navigationBar.scrollEdgeAppearance = scrollEdgeAppearance
+        self.navigationController?.navigationBar.standardAppearance = scrollEdgeAppearance
+        self.navigationController?.navigationBar.prefersLargeTitles = false
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
+        self.tabBarController?.tabBar.standardAppearance = tabBarAppearance
         self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
+        
+        if #available(iOS 15.0, *) {
+            self.tabBarController?.tabBar.scrollEdgeAppearance = tabBarAppearance
+        }
         
         self.view.addSubview(self.scrollView)
         self.view.addSubview(self.translutionView)
@@ -231,9 +246,12 @@ final class DealViewController: UIViewController {
             )
             self.navigationItem.rightBarButtonItem?.tintColor = .accentColor
             
+            self.createOfferButton.isHidden = true
+            self.chatButton.isHidden = true
+            
             self.dealDescriptionView.snp.makeConstraints { make in
                 make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-                make.top.equalTo(self.createOfferButton.snp.bottom).inset(-15)
+                make.top.equalTo(self.titleLabel.snp.bottom).inset(-15)
             }
         } else {
             self.scrollView.addSubview(self.chatButton)
@@ -253,7 +271,7 @@ final class DealViewController: UIViewController {
             
             self.dealDescriptionView.snp.makeConstraints { make in
                 make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-                make.top.equalTo(self.titleLabel.snp.bottom).inset(-15)
+                make.top.equalTo(self.createOfferButton.snp.bottom).inset(-15)
             }
         }
         

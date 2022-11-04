@@ -182,8 +182,9 @@ final class CreateAdViewController: UIViewController {
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
-        self.title = NSLocalizedString("Create Ad", comment: String())
+        self.title = NSLocalizedString("Create ad", comment: String())
         
         
         self.view.addSubview(self.scrollView)
@@ -217,7 +218,7 @@ final class CreateAdViewController: UIViewController {
         }
         
         self.contentImageView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.top.equalTo(self.avatarImageView.snp.bottom).inset(-15)
             make.height.equalTo(self.contentImageView.snp.width)
         }
@@ -231,6 +232,7 @@ final class CreateAdViewController: UIViewController {
         self.saveButton.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.top.equalTo(self.linkTextField.snp.bottom).inset(-25)
+            make.height.equalTo(50)
             make.bottom.equalToSuperview().inset(15)
         }
     }

@@ -70,6 +70,7 @@ final class PrivacyPolicyViewController: UIViewController {
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         
         self.view.addSubview(self.scrollView)
