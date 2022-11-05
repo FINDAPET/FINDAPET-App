@@ -66,7 +66,8 @@ final class SubscriptionViewController: UIViewController {
         self.view.addSubview(self.collectionView)
         
         self.collectionView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+            make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
         }
     }
 
