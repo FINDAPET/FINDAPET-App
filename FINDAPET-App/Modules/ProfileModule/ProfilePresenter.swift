@@ -21,7 +21,8 @@ final class ProfilePresenter {
         self.userID = userID
     }
     
-    var user: User.Output? = User.Output(name: "Test", avatarData: UIImage(systemName: "globe")?.pngData(), deals: [Deal.Output(title: "Test", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data(), UIImage(systemName: "globe")?.pngData() ?? Data()], tags: ["Test 1", "Test 1"], isPremiumDeal: true, isActive: true, viewsCount: 200, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: 5000, currencyName: Currency.USD.rawValue, cattery: User.Output(name: "Test", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), description: "Test", offers: [Offer.Output](), score: .zero), Deal.Output(title: "Test", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data(), UIImage(systemName: "globe")?.pngData() ?? Data()], tags: ["Test 1", "Test 1"], isPremiumDeal: true, isActive: true, viewsCount: 200, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: 5000, currencyName: Currency.USD.rawValue, cattery: User.Output(name: "Test", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), description: "Test", offers: [Offer.Output](), score: .zero)], boughtDeals: [Deal.Output(title: "Test", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data(), UIImage(systemName: "globe")?.pngData() ?? Data()], tags: ["Test 1", "Test 1"], isPremiumDeal: true, isActive: true, viewsCount: 200, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: 5000, currencyName: Currency.USD.rawValue, cattery: User.Output(name: String(), deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), offers: [Offer.Output](), score: .zero)], ads: [Ad.Output(contentData: UIImage(systemName: "globe")?.pngData() ?? Data())], myOffers: [Offer.Output(price: .zero, currencyName: Currency.USD.rawValue, buyer: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), deal: Deal.Output(title: "Deal", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data()], tags: [String](), isPremiumDeal: true, isActive: true, viewsCount: .zero, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: .zero, currencyName: String(), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), offers: [Offer.Output](), score: .zero), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true))], offers: [Offer.Output(price: .zero, currencyName: Currency.USD.rawValue, buyer: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), deal: Deal.Output(title: "Deal", photoDatas: [UIImage(systemName: "globe")?.pngData() ?? Data()], tags: [String](), isPremiumDeal: true, isActive: true, viewsCount: .zero, mode: String(), petType: String(), petBreed: String(), showClass: String(), isMale: true, age: String(), color: String(), price: .zero, currencyName: String(), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), offers: [Offer.Output](), score: .zero), cattery: User.Output(name: "Buyer", deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true))], chatRooms: [ChatRoom.Output](), isPremiumUser: true) {
+//    MARK: Properties
+    var user: User.Output? {
         didSet {
             self.saveDealsID()
             self.callBack?()
@@ -29,7 +30,6 @@ final class ProfilePresenter {
     }
         
 //    MARK: Routing
-    
     func goToOnboarding() {
         self.router.goToOnboarding()
     }
@@ -119,7 +119,10 @@ final class ProfilePresenter {
             return
         }
         
-        self.interactor.setUserDefaults(user.boughtDeals + user.deals, with: .dealsID)
+        self.interactor.setUserDefaults(
+            user.boughtDeals.map { $0.id?.uuidString }.filter { $0 != nil } + user.deals.map { $0.id?.uuidString }.filter { $0 != nil },
+            with: .dealsID
+        )
     }
     
 //    MARK: Keychain

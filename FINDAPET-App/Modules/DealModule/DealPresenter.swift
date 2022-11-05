@@ -66,7 +66,11 @@ final class DealPresenter {
     
 //    MARK: User Defaults
     func getUserID() -> UUID? {
-        self.interactor.getUserDefaults(.id) as? UUID
+        guard let string = self.interactor.getUserDefaults(.id) as? String else {
+            return nil
+        }
+        
+        return UUID(uuidString: string)
     }
     
 //    MARK: Notification Center

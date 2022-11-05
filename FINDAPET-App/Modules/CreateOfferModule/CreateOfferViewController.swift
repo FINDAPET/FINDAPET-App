@@ -70,7 +70,9 @@ final class CreateOfferViewController: UIViewController {
     private lazy var currencyButton: UIButton = {
         let view = UIButton()
         
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .textFieldColor
+        view.layer.borderWidth = 0.5
+        view.layer.borderColor = UIColor.lightGray.cgColor
         view.setTitle(self.presenter.getUserDefautlsCurrency(), for: .normal)
         view.setTitleColor(.accentColor, for: .normal)
         view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]

@@ -29,7 +29,7 @@ final class SettingsPresenter {
         self.router.getSettingsBlock(goToAction: goToAction, currencyValueTextFieldTapAction: currencyValueTextFieldTapAction)
     }
     
-//    MARK: User Defaults
+//    MARK: Currency
     func getAllCurrencies() -> [Currency] {
         self.interator.getAllCurrencies()
     }

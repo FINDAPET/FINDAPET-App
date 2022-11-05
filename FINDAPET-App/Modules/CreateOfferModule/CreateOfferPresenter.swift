@@ -25,7 +25,11 @@ final class CreateOfferPresenter {
     }
     
     private func getUserDefautlsUserID() -> UUID? {
-        self.interactor.getUserDefaults(key: .id) as? UUID
+        guard let string = self.interactor.getUserDefaults(key: .id) as? String else {
+            return nil
+        }
+        
+        return UUID(uuidString: string)
     }
     
 //    MARK: Requests

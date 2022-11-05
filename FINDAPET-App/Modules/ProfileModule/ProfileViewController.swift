@@ -284,6 +284,7 @@ extension ProfileViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             
+            cell.selectionStyle = .none
             cell.user = self.presenter.user
             
             return cell
@@ -298,7 +299,9 @@ extension ProfileViewController: UITableViewDataSource {
         } else {
             cell.deal = self.presenter.user?.boughtDeals[indexPath.row]
         }
-                
+        
+        cell.selectionStyle = .none
+        
         return cell
     }
     

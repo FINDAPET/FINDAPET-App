@@ -14,11 +14,11 @@ extension UIColor {
     static let borderColor = UIColor.createColor(lightMode: .black, darkMode: .systemGray)
     static let secondaryTextColor = UIColor.createColor(lightMode: .systemGray, darkMode: .white)
     static let backgroundColor = UIColor.createColor(
-        lightMode: .white,
+        lightMode: .systemGray6,
         darkMode: UIColor(red: 30/255, green: 29/255,  blue: 42/255, alpha: 1)
     )
     static let textFieldColor = UIColor.createColor(
-        lightMode: .systemGray6,
+        lightMode: .white,
         darkMode: UIColor(red: 39/255, green: 38/255, blue: 51/255, alpha: 1)
     )
     static let accentColor = UIColor(red: 0.384, green: 0.212, blue: 1, alpha: 1)

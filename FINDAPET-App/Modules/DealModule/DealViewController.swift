@@ -206,23 +206,12 @@ final class DealViewController: UIViewController {
     
 //    MARK: Setup Views
     private func setupViews() {
-        let scrollEdgeAppearance = UINavigationBarAppearance()
-        let tabBarAppearance = UITabBarAppearance()
-        
-        tabBarAppearance.backgroundColor = .backgroundColor
-        scrollEdgeAppearance.backgroundColor = .backgroundColor
-        
         self.view.backgroundColor = .backgroundColor
-        self.navigationController?.navigationBar.scrollEdgeAppearance = scrollEdgeAppearance
-        self.navigationController?.navigationBar.standardAppearance = scrollEdgeAppearance
+        self.navigationController?.navigationBar.standardAppearance.backgroundColor = .clear
         self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
-        self.tabBarController?.tabBar.standardAppearance = tabBarAppearance
+        self.tabBarController?.tabBar.standardAppearance.backgroundColor = .clear
         self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
-        
-        if #available(iOS 15.0, *) {
-            self.tabBarController?.tabBar.scrollEdgeAppearance = tabBarAppearance
-        }
         
         self.view.addSubview(self.scrollView)
         self.view.addSubview(self.translutionView)
@@ -336,6 +325,8 @@ final class DealViewController: UIViewController {
         UIView.animate(withDuration: 0.2) { [ weak self ] in
             self?.createOfferViewController?.view.alpha = .zero
             self?.translutionView.alpha = .zero
+            self?.navigationController?.navigationBar.layer.zPosition = .zero
+            self?.tabBarController?.tabBar.layer.zPosition = .zero
         } completion: { [ weak self ] isComplete in
             if isComplete {
                 self?.translutionView.isHidden = true
@@ -359,6 +350,8 @@ final class DealViewController: UIViewController {
         UIView.animate(withDuration: 0.2) { [ weak self ] in
             self?.createOfferViewController?.view.alpha = 1
             self?.translutionView.alpha = 0.5
+            self?.navigationController?.navigationBar.layer.zPosition = -1
+            self?.tabBarController?.tabBar.layer.zPosition = -1
         }
     }
     

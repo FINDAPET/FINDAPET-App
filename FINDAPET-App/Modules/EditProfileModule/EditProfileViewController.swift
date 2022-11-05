@@ -88,7 +88,7 @@ final class EditProfileViewController: UIViewController {
         view.image = self.presenter.user.avatarData == nil ? UIImage(systemName: "plus") : UIImage(data: self.presenter.user.documentData ?? Data())
         view.backgroundColor = .textFieldColor
         view.tintColor = .lightGray
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 25
         view.layer.borderWidth = 0.5
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.clipsToBounds = true
@@ -240,7 +240,7 @@ final class EditProfileViewController: UIViewController {
         self.avatarImageView.snp.makeConstraints { make in
             make.centerX.equalTo(self.view)
             make.top.equalToSuperview().inset(15)
-            make.width.height.equalTo(100)
+            make.width.height.equalTo(150)
         }
         
         basicTextFields.snp.makeConstraints { make in
@@ -278,9 +278,14 @@ final class EditProfileViewController: UIViewController {
         
         self.saveButton.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.top.equalTo(self.checkmarkLabel.snp.bottom).inset(-25)
             make.bottom.equalToSuperview().inset(15)
             make.height.equalTo(50)
+            
+            if self.presenter.user.avatarData == nil {
+                make.top.equalTo(self.checkmarkLabel.snp.bottom).inset(-25)
+            } else {
+                make.top.equalTo(self.infoLabel.snp.bottom).inset(-25)
+            }
         }
                 
     }

@@ -64,7 +64,7 @@ final class RegistrationPresenter {
 //    MARK: User Defaults
     
     func writeUserID(id: UUID?) {
-        self.interactor.write(key: .id, data: id as Any)
+        self.interactor.write(key: .id, data: id?.uuidString as Any)
     }
     
 //    MARK: Keychain

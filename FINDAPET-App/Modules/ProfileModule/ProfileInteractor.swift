@@ -52,7 +52,11 @@ final class ProfileInteractor {
 //    MARK: User Defaults
     
     func getMyID() -> UUID? {
-        UserDefaultsManager.read(key: .id) as? UUID
+        guard let string = UserDefaultsManager.read(key: .id) as? String else {
+            return nil
+        }
+        
+        return UUID(uuidString: string)
     }
     
     func getCurrency() -> String? {
