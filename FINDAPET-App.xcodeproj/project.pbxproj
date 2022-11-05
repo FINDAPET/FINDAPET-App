@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E30065062916900500FAB319 /* ChatRoomCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30065052916900500FAB319 /* ChatRoomCoordinator.swift */; };
+		E30065092916933600FAB319 /* ChatRoomsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30065082916933600FAB319 /* ChatRoomsRouter.swift */; };
+		E300650B2916934400FAB319 /* ChatRoomsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E300650A2916934400FAB319 /* ChatRoomsInteractor.swift */; };
+		E300650D2916935000FAB319 /* ChatRoomsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E300650C2916935000FAB319 /* ChatRoomsPresenter.swift */; };
+		E300650F2916935B00FAB319 /* ChatRoomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E300650E2916935B00FAB319 /* ChatRoomsViewController.swift */; };
+		E30065122916998700FAB319 /* ChatRoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30065112916998700FAB319 /* ChatRoomTableViewCell.swift */; };
 		E30560ED290EB8F000E0881C /* NotificationCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30560EC290EB8F000E0881C /* NotificationCenterManager.swift */; };
 		E30560EF290EBE6800E0881C /* NotificationCenterManagerKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30560EE290EBE6800E0881C /* NotificationCenterManagerKeys.swift */; };
 		E30560F2290ECE6000E0881C /* DealPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30560F1290ECE6000E0881C /* DealPresenter.swift */; };
@@ -144,6 +150,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E30065052916900500FAB319 /* ChatRoomCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomCoordinator.swift; sourceTree = "<group>"; };
+		E30065082916933600FAB319 /* ChatRoomsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomsRouter.swift; sourceTree = "<group>"; };
+		E300650A2916934400FAB319 /* ChatRoomsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomsInteractor.swift; sourceTree = "<group>"; };
+		E300650C2916935000FAB319 /* ChatRoomsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomsPresenter.swift; sourceTree = "<group>"; };
+		E300650E2916935B00FAB319 /* ChatRoomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomsViewController.swift; sourceTree = "<group>"; };
+		E30065112916998700FAB319 /* ChatRoomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomTableViewCell.swift; sourceTree = "<group>"; };
 		E30560EC290EB8F000E0881C /* NotificationCenterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterManager.swift; sourceTree = "<group>"; };
 		E30560EE290EBE6800E0881C /* NotificationCenterManagerKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterManagerKeys.swift; sourceTree = "<group>"; };
 		E30560F1290ECE6000E0881C /* DealPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealPresenter.swift; sourceTree = "<group>"; };
@@ -297,6 +309,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E30065072916912900FAB319 /* ChatRoomsModule */ = {
+			isa = PBXGroup;
+			children = (
+				E30065082916933600FAB319 /* ChatRoomsRouter.swift */,
+				E300650A2916934400FAB319 /* ChatRoomsInteractor.swift */,
+				E300650C2916935000FAB319 /* ChatRoomsPresenter.swift */,
+				E300650E2916935B00FAB319 /* ChatRoomsViewController.swift */,
+			);
+			path = ChatRoomsModule;
+			sourceTree = "<group>";
+		};
+		E30065102916996800FAB319 /* ChatRoomTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				E30065112916998700FAB319 /* ChatRoomTableViewCell.swift */,
+			);
+			path = ChatRoomTableViewCell;
+			sourceTree = "<group>";
+		};
 		E30560EA290EB8B500E0881C /* NotificationCenterManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -550,6 +581,7 @@
 		E36F622628F9EBA8007C7623 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				E30065072916912900FAB319 /* ChatRoomsModule */,
 				E30561062912E6C200E0881C /* CreateOfferModule */,
 				E30560F0290ECC5400E0881C /* DealModule */,
 				E3993F66290AF874000C218C /* InfoModule */,
@@ -571,6 +603,7 @@
 		E37AC6A428F82CD4003AC7D3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				E30065102916996800FAB319 /* ChatRoomTableViewCell */,
 				E30560F9290EF9B300E0881C /* PhotoCollectionViewCell */,
 				E3993F5A2907EB2E000C218C /* SubscriptionTableViewCell */,
 				E3E1EB5829006B0B00F536F4 /* AdTableViewCell */,
@@ -662,6 +695,7 @@
 				E3CEE67C28ABD6D400468ED2 /* ProfileCoordinator.swift */,
 				E3CEE68128ABE4DC00468ED2 /* RegistrationCoordinator.swift */,
 				E3993F72290B14F9000C218C /* SubscriptionCoordinator.swift */,
+				E30065052916900500FAB319 /* ChatRoomCoordinator.swift */,
 				E3CEE67E28ABD88800468ED2 /* Coordinator.swift */,
 			);
 			path = Navigation;
@@ -992,6 +1026,7 @@
 				E3E1EB4E28FFEB0000F536F4 /* OffersMode.swift in Sources */,
 				E30560FB290EF9DE00E0881C /* PhotoCollectionViewCell.swift in Sources */,
 				E3993F68290AF889000C218C /* InfoRouter.swift in Sources */,
+				E30065062916900500FAB319 /* ChatRoomCoordinator.swift in Sources */,
 				E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */,
 				E347A5482901B3690089271F /* UIView.swift in Sources */,
 				E3993F73290B14F9000C218C /* SubscriptionCoordinator.swift in Sources */,
@@ -1001,6 +1036,7 @@
 				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
 				E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */,
 				E30560F2290ECE6000E0881C /* DealPresenter.swift in Sources */,
+				E300650D2916935000FAB319 /* ChatRoomsPresenter.swift in Sources */,
 				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
 				E34ABC4028A7BDD500A7D2C8 /* Headers.swift in Sources */,
 				E3F4B04A28FD7F430083815E /* SideMenuSides.swift in Sources */,
@@ -1015,6 +1051,7 @@
 				E3E4D6A628B92C07002B0BE6 /* PrivacyPolicyViewController.swift in Sources */,
 				E312608428BE39E90097D040 /* ProfileViewController.swift in Sources */,
 				E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */,
+				E300650B2916934400FAB319 /* ChatRoomsInteractor.swift in Sources */,
 				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
 				E3DBD03728FF21630063DC35 /* OffersRouter.swift in Sources */,
 				E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */,
@@ -1028,6 +1065,7 @@
 				E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */,
 				E34ABC5428A7D39200A7D2C8 /* KeychainManager.swift in Sources */,
 				E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */,
+				E300650F2916935B00FAB319 /* ChatRoomsViewController.swift in Sources */,
 				E3993F53290716BE000C218C /* SubscriptionRouter.swift in Sources */,
 				E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */,
 				E305610129104E3900E0881C /* UIStackView.swift in Sources */,
@@ -1076,11 +1114,13 @@
 				E30560FF29104C3100E0881C /* DealDescriptionView.swift in Sources */,
 				E3CEE67F28ABD88800468ED2 /* Coordinator.swift in Sources */,
 				E3DBD03E28FF32C10063DC35 /* OfferTableViewCell.swift in Sources */,
+				E30065122916998700FAB319 /* ChatRoomTableViewCell.swift in Sources */,
 				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
 				E36F622528F9E5F1007C7623 /* ExchangeConvert.swift in Sources */,
 				E3993F652909B66E000C218C /* CreateAdViewController.swift in Sources */,
 				E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */,
 				E3D9570328AFD63500CCF566 /* EditProfileRouter.swift in Sources */,
+				E30065092916933600FAB319 /* ChatRoomsRouter.swift in Sources */,
 				E3E1D182290313BC0069EE46 /* SettingsBlockInteractor.swift in Sources */,
 				E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */,
 				E3E1D18F290326DE0069EE46 /* SettingsViewController.swift in Sources */,

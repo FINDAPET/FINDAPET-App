@@ -27,6 +27,15 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
         return coordinator
     }()
     
+    private lazy var chatRoomCoordinator: ChatRoomCoordinator = {
+        let coordinator = ChatRoomCoordinator()
+        
+        coordinator.coordinatorDelegate = self
+        coordinator.start()
+        
+        return coordinator
+    }()
+    
     private lazy var profileCoordinator: ProfileCoordinator = {
         let coordinator = ProfileCoordinator()
         
@@ -54,6 +63,7 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
         self.tabBar.navigationController?.navigationBar.isHidden = true
         self.tabBar.viewControllers = [
             self.feedCoordinator.navigationController,
+            self.chatRoomCoordinator.navigationController,
             self.profileCoordinator.navigationController,
             self.subscriptionCoordinator.navigationController
         ]
