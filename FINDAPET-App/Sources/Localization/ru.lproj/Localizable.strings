@@ -1,0 +1,85 @@
+/* 
+  Localizable.strings
+  FINDAPET-App
+
+  Created by Artemiy Zuzin on 12.08.2022.
+  
+*/
+
+"Check the app" = "Проверьте приложение";
+"Profile" = "Профиль";
+"Feed" = "Лента";
+"Log In" = "Войти";
+"Sign In" = "Зарегестрироваться";
+"FINDAPET is a convenient app for buying and selling purebred animals from catteries all over the world." = "FINDAPET - удобное приложение для покупки и продажи породистых животных из питомников со всего мира.";
+"Error" = "Ошибка";
+"Not Found" = "Не найдено";
+"Not Autorized" = "Пользователь не авторизирован";
+"Server Error" = "Ошибка сервера";
+"Incorrect Data" = "Неверные данные";
+"Failed to make a request" = "Не удалось произвести запрос";
+"Email isn't valid" = "Некорректный email";
+"Password is too short" = "Пароль слишком короткий";
+"Password must be 8 charecters long." = "Пароль должен иметь 8 символов.";
+"Back" = "Назад";
+"Password" = "Пароль";
+"Save" = "Сохранить";
+"Main" = "Основные";
+"Your name or your cattery name" = "Ваше имя или название вашего питомника";
+"Description(optional)" = "Описание(необязательно)";
+"Register as a cattery(optional)" = "Зарегестрироваться как питомник(необязательно)";
+"Cattery documents" = "Документ питомника(необязательно)";
+"Name field is empty" = "Поле имени пустое";
+"Cattery document image is empty" = "Фотография документа питомника отсутствует";
+"Fill in all required fields" = "Заполните все обязательные поля";
+"Your cattery is confirmed" = "Ваш питомник подтвержден";
+"When your kennel is verified we will send you a notification" = "Когда ваш питомник будет подтвежден мы отправим вам уведомление";
+"You bought a pet" = "Вы купили питомца";
+"Privacy Policy Text" = "Политика конфеденциальности";
+"Privacy policy" = "Политика конфеденциальности";
+"Do you agree with privacy policy?" = "Вы согласны с политикой конфеденциальности?";
+"You don't agree with the privacy policy" = "Вы не согласны с политикой конфиденциальности";
+"Verified catteries are always marked for the buyer" = "Прикрепите фото сертификата о регистрайии питомника. Верифицированные питомники всегда помечаются для покупателя и отображаются выше в списке. Не волнуйтесь эту фотографию увидет только наш сотрудник, который занимается проверкой сертификатов.";
+"My offers" = "Мои предложения";
+"Suggested offers" = "Предложения";
+"My ad" = "Моя реклама";
+"Create deal" = "Создать обьявление";
+"Create ad" = "Создать рекламу";
+"Edit profile" = "Редактировать профиль";
+"Log Out" = "Выйти";
+"Settings" = "Настройки";
+"Message" = "Сообщения";
+"Accept" = "Accept";
+"Your offer is rejected" = "Ваше предложение отклонено";
+"Buyer" = "Покупатель";
+"Price" = "Цена";
+"Deals" = "Обьявления";
+"Bought Deals" = "Купленные обьявления";
+"Currency" = "Валюта";
+"Country" = "Страна";
+"City" = "Город";
+"Subscription" = "Подписка";
+"Premium subscriptions increase the views of each of your deals. Premium subscriptions are available for 1, 3, 6 months and 1 year and can be automatically renewed." = "Премиум подписка увеличивает просмотры каждого вашего объявления. Премиум подписка доступна на 1, 3, 6 месяцев и 1 год и может автоматически продлятся.";
+"Name" = "Имя";
+"Link(optional)" = "Ссылка(необязательно)";
+"Info" = "Информация";
+"Contact Info" = "Контактная информация";
+"Supporting Team" = "Комманда поддержки";
+"Advertising Team" = "Рекламная команда";
+"Make Offer" = "Отправить предложение";
+"Description" = "Описание";
+"Sex" = "Пол";
+"Female" = "Муж.";
+"Male" = "Жен.";
+"Mode" = "Режим";
+"Breed" = "Порода";
+"Show Class" = "Шоу класс";
+"Age" = "Возраст";
+"Color" = "Окрас";
+"Closed Deals" = "Закрытых обьявлений";
+"Views" = "просмотров";
+"Send" = "Отправить";
+"The price field shouldn't be empty" = "Поле \"Цена\" не должно быть пустым";
+"You definitely want to delete this deal?" = "Вы точно хотите удалить это обьявление?";
+"Delete" = "Удалить";
+"No" = "Нет";

@@ -9,4 +9,5 @@ import Foundation
 
 enum Hosts: String {
     case localhost = "127.0.0.1"
+    case exchange = "api.exchangerate.host"
 }

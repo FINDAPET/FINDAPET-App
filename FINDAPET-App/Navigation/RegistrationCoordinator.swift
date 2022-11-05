@@ -17,15 +17,13 @@ final class RegistrationCoordinator: Coordinator {
     let navigationController = UINavigationController()
     
     func start() {
-//        self.setupViews()
-//
-//        if KeychainManager.shared.read(key: .token) != nil, !(UserDefaultsManager.read(key: .isFirstEditing) as? Bool ?? true) {
-//            self.goToMainTabBar()
-//        } else {
-//            self.goToOnboarding()
-//        }
-        
-        self.goToEditProfile(user: User.Input(name: "", isCatteryWaitVerify: false))
+        self.setupViews()
+
+        if KeychainManager.shared.read(key: .token) != nil, !(UserDefaultsManager.read(key: .isFirstEditing) as? Bool ?? true) {
+            self.goToMainTabBar()
+        } else {
+            self.goToOnboarding()
+        }
     }
     
     func goToOnboarding() {
@@ -61,6 +59,14 @@ final class RegistrationCoordinator: Coordinator {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
+    func getEditProfile(user: User.Input) -> EditProfileViewController {
+        let router = EditProfileRouter()
+        let interactor = EditProfileInteractor()
+        let presenter = EditProfilePresenter(router: router, interactor: interactor, user: user)
+        
+        return EditProfileViewController(presenter: presenter)
+    }
+    
     func goToPrivacyPolicy() {
         let router = PrivacyPolicyRouter()
         let interactor = PrivacyPolicyInteractor()
@@ -77,8 +83,10 @@ final class RegistrationCoordinator: Coordinator {
         
         coordinator.coordinatorDelegate = self
         coordinator.start()
-        
+                
         self.navigationController.pushViewController(coordinator.tabBar, animated: true)
+        
+        UserDefaultsManager.write(data: false, key: .isFirstEditing)
     }
     
     private func setupViews() {

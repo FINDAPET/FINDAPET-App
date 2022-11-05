@@ -1,0 +1,85 @@
+/* 
+  Localizable.strings
+  FINDAPET-App
+
+  Created by Artemiy Zuzin on 12.08.2022.
+  
+*/
+
+"Check the app" = "Check the app";
+"Profile" = "Profile";
+"Feed" = "Feed";
+"Log In" = "Log In";
+"Sign In" = "Sign In";
+"FINDAPET is a convenient app for buying and selling purebred animals from catteries all over the world." = "FINDAPET is a convenient app for buying and selling purebred animals from catteries all over the world.";
+"Error" = "Error";
+"Not Found" = "Not Found";
+"Not Autorized" = "User doesn't autorized";
+"Server Error" = "Server Error";
+"Incorrect Data" = "Incorrect Data";
+"Failed to make a request" = "Failed to make a request";
+"Email isn't valid" = "Email isn't valid";
+"Password is too short" = "Password is too short";
+"Password must be 8 charecters long." = "Password must be 8 charecters long.";
+"Back" = "Back";
+"Password" = "Password";
+"Save" = "Save";
+"Main" = "Main";
+"Your name or your cattery name" = "Your name or your cattery name";
+"Description(optional)" = "Description(optional)";
+"Register as a cattery(optional)" = "Register as a cattery(optional)";
+"Cattery documents" = "Cattery document(optional)";
+"Name field is empty" = "Name field is empty";
+"Cattery document image is empty" = "Cattery document image is empty";
+"Fill in all required fields" = "Fill in all required fields";
+"Your cattery is confirmed" = "Your cattery is confirmed";
+"When your kennel is verified we will send you a notification" = "When your kennel is verified we will send you a notification";
+"You bought a pet" = "You bought a pet";
+"Privacy Policy Text" = "Privacy Policy";
+"Privacy policy" = "Privacy policy";
+"Do you agree with privacy policy?" = "Do you agree with privacy policy?";
+"You don't agree with the privacy policy" = "You don't agree with the privacy policy";
+"Verified catteries are always marked for the buyer" = "Upload cattery registration certificate photo. Verified catteries are always marked for the buyer and are displayed above in the list. Don't worry this picture will only be seen by our verification officer.";
+"My offers" = "My Offers";
+"Suggested offers" = "Offers";
+"My ad" = "My Ad";
+"Create deal" = "Create Deal";
+"Create ad" = "Create Ad";
+"Edit profile" = "Edit Profile";
+"Log Out" = "Log Out";
+"Settings" = "Settings";
+"Message" = "Message";
+"Accept" = "Подтвердить";
+"Your offer is rejected" = "Your offer is rejected";
+"Buyer" = "Buyer";
+"Price" = "Price";
+"Deals" = "Deals";
+"Bought Deals" = "Bought Deals";
+"Currency" = "Currency";
+"Country" = "Country";
+"City" = "City";
+"Subscription" = "Subscription";
+"Premium subscriptions increase the views of each of your deals. Premium subscriptions are available for 1, 3, 6 months and 1 year and can be automatically renewed." = "Premium subscriptions increase the views of each of your deals. Premium subscriptions are available for 1, 3, 6 months and 1 year and can be automatically renewed.";
+"Name" = "Name";
+"Link(optional)" = "Link(optional)";
+"Info" = "Information";
+"Contact Info" = "Contact Information";
+"Supporting Team" = "Supporting Team";
+"Advertising Team" = "Advertising Team";
+"Make Offer" = "Send Offer";
+"Description" = "Description";
+"Sex" = "Sex";
+"Female" = "Female";
+"Male" = "Male";
+"Mode" = "Mode";
+"Breed" = "Breed";
+"Show Class" = "Show Class";
+"Age" = "Age";
+"Color" = "Color";
+"Closed Deals" = "Closed Deals";
+"Views" = "views";
+"Send" = "Send";
+"The price field shouldn't be empty" = "The price field shouldn't be empty";
+"You definitely want to delete this deal?" = "You definitely want to delete this deal?";
+"Delete" = "Delete";
+"No" = "No";

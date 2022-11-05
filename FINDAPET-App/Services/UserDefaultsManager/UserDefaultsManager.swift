@@ -9,7 +9,7 @@ import Foundation
 
 final class UserDefaultsManager {
     
-    static func write(data: Any, key: UserDefaultsKeys) {
+    static func write(data: Any?, key: UserDefaultsKeys) {
         UserDefaults().set(data, forKey: key.rawValue)
     }
     

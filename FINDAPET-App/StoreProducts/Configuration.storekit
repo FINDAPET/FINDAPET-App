@@ -1,0 +1,206 @@
+{
+  "identifier" : "952A426D",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "99.99",
+      "familyShareable" : false,
+      "internalID" : "F7B03DF3",
+      "localizations" : [
+        {
+          "description" : "Advertising your kennel.",
+          "displayName" : "1 Week",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "Реклама вашего питомника.",
+          "displayName" : "1 Неделя",
+          "locale" : "ar"
+        }
+      ],
+      "productID" : "com.FINDAPET.ad.one.week",
+      "referenceName" : "One week Ad",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "349.99",
+      "familyShareable" : false,
+      "internalID" : "1A5DB71F",
+      "localizations" : [
+        {
+          "description" : "Advertising your kennel.",
+          "displayName" : "1 Month",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "Реклама вашего питомника.",
+          "displayName" : "1 Месяц",
+          "locale" : "ru"
+        }
+      ],
+      "productID" : "com.FINDAPET.ad.one.month",
+      "referenceName" : "One month Ad",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "2BF71709",
+      "localizations" : [
+        {
+          "description" : "Make this deal more viewable.",
+          "displayName" : "Premium Deal",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "Делает это обьявление более просматриваемым.",
+          "displayName" : "Премиум обьявление",
+          "locale" : "ru"
+        }
+      ],
+      "productID" : "com.FINDAPET.premium.deal",
+      "referenceName" : "Premium Deal",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "20D48456",
+      "localizations" : [
+
+      ],
+      "name" : "Premium Subscription",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "318B30C9",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "3 Months",
+              "displayName" : "3 Months Premium Subscription",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "3 Месяца",
+              "displayName" : "3 Месяца премиум подписки",
+              "locale" : "ru"
+            }
+          ],
+          "productID" : "com.FINDAPET.premium.subscription.three.months",
+          "recurringSubscriptionPeriod" : "P3M",
+          "referenceName" : "Three Month Premium Subscription",
+          "subscriptionGroupID" : "20D48456",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "8.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "498C734D",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "6 Months",
+              "displayName" : "6 Months Premium Subscription",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "6 Месяцев",
+              "displayName" : "6 Месяцев премиум подписки",
+              "locale" : "ru"
+            }
+          ],
+          "productID" : "com.FINDAPET.premium.subscription.six.months",
+          "recurringSubscriptionPeriod" : "P6M",
+          "referenceName" : "Six Month Premium Subscription",
+          "subscriptionGroupID" : "20D48456",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "16.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "2DD3F77D",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "1 Year",
+              "displayName" : "1 Year Premium Subscription",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "1 Год",
+              "displayName" : "1 Год премиум подписки",
+              "locale" : "ru"
+            }
+          ],
+          "productID" : "com.FINDAPET.premium.subscription.one.year",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "One Year Premium Subscription",
+          "subscriptionGroupID" : "20D48456",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "2.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "128DD4BA",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "1 Month",
+              "displayName" : "1 Month Premium Subscription",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "1 Месяц",
+              "displayName" : "1 Месяц премиум подписки",
+              "locale" : "ru"
+            }
+          ],
+          "productID" : "com.FINDAPET.premium.subscription.one.month",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "One Month Premium Subscription",
+          "subscriptionGroupID" : "20D48456",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

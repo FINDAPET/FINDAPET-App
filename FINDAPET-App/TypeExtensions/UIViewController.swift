@@ -34,9 +34,34 @@ extension UIViewController {
         self.present(controller, animated: true)
     }
     
+//    MARK: Action Sheets
+    func presentActionsSheet(title: String, message: String? = nil, contents: [String], action: @escaping (UIAlertAction) -> Void) {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        for content in contents {
+            controller.addAction(UIAlertAction(title: content, style: .default, handler: action))
+        }
+        
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Back", comment: String()), style: .cancel))
+        
+        self.present(controller, animated: true)
+    }
+    
+    func presentActionsSheet(title: String, message: String? = nil, contents: [(title: String, action: (UIAlertAction) -> Void)]) {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        for content in contents {
+            controller.addAction(UIAlertAction(title: content.title, style: .default, handler: content.action))
+        }
+        
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Back", comment: String()), style: .cancel))
+        
+        self.present(controller, animated: true)
+    }
+    
 //    MARK: Errors
     
-    func error(_ error: Error?, completionHandler: @escaping () -> Void) {
+    func error(_ error: Error?, completionHandler: @escaping () -> Void = { }) {
         if let error = error as? RegistrationErrors {
             switch error {
             case .emailIsNotValid:
@@ -65,85 +90,11 @@ extension UIViewController {
             default:
                 self.presentAlert(title: NSLocalizedString("Failed to make a request", comment: ""))
             }
-        } else {
+        } else if error == nil {
             completionHandler()
+        } else {
+            self.presentAlert(title: NSLocalizedString("Error", comment: String()))
         }
-    }
-    
-//    MARK: TextFields Factory
-    
-    func createTextFieldsView(title: String, fields: [(placeholder: String, text: String?, action: (UITextField) -> Void)]) -> UIStackView {
-        let label: UILabel = {
-            let view = UILabel()
-            
-            view.text = title
-            view.textColor = .textColor
-            view.font = .systemFont(ofSize: 20, weight: .bold)
-            view.translatesAutoresizingMaskIntoConstraints = false
-            
-            return view
-        }()
-        
-        let stackView: UIStackView = {
-            let view = UIStackView()
-            
-            view.axis = .vertical
-            view.spacing = -0.5
-            view.layer.cornerRadius = 10
-            view.translatesAutoresizingMaskIntoConstraints = false
-            
-            return view
-        }()
-        
-        let mainStackView: UIStackView = {
-            let view = UIStackView()
-            
-            view.axis = .vertical
-            view.spacing = 15
-            view.layer.cornerRadius = 10
-            view.addArrangedSubview(label)
-            view.addArrangedSubview(stackView)
-            view.translatesAutoresizingMaskIntoConstraints = false
-            
-            return view
-        }()
-        
-        for i in 0 ..< fields.count {
-            let textField: CustomTextField = {
-                let view = CustomTextField(action: fields[i].action)
-                
-                view.placeholder = fields[i].placeholder
-                view.text = fields[i].text
-                view.textColor = .textColor
-                view.backgroundColor = .textFieldColor
-                view.layer.borderColor = UIColor.lightGray.cgColor
-                view.layer.borderWidth = 0.5
-                view.tintColor = .accentColor
-                view.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-                view.leftViewMode = .always
-                view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-                view.rightViewMode = .always
-                view.translatesAutoresizingMaskIntoConstraints = false
-                
-                if i == 0 {
-                    view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-                    view.layer.cornerRadius = 10
-                } else if i == fields.count - 1 {
-                    view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-                    view.layer.cornerRadius = 10
-                }
-                
-                return view
-            }()
-            
-            textField.snp.makeConstraints { make in
-                make.height.equalTo(50)
-            }
-            
-            stackView.addArrangedSubview(textField)
-        }
-        
-        return mainStackView
     }
     
 }
