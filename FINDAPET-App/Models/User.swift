@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MessageKit
 
 struct User: Decodable {
     var id: UUID?
@@ -68,4 +69,11 @@ extension User {
         var email: String
         var password: String
     }
+}
+
+extension User.Output: SenderType {
+    
+    var senderId: String { self.id?.uuidString ?? String() }
+    var displayName: String { self.name }
+    
 }

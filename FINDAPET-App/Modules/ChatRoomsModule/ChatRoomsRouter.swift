@@ -12,7 +12,7 @@ final class ChatRoomsRouter: ChatRoomCoordinatable {
     var coordinatorDelegate: ChatRoomCoordinator?
     
     func goToChatRoom(_ chatRoom: ChatRoom.Output) {
-        
+        self.coordinatorDelegate?.goToChatRoom(chatRoom: chatRoom)
     }
     
 }

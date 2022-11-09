@@ -19,6 +19,15 @@ final class ChatRoomsInteractor {
         )
     }
     
+//    MARK: Web Sockets
+    func updateUserChats(completionHandler: @escaping (String?, Error?) -> Void) {
+        _ = WebSocketManager.webSocket(
+            url: URLConstructor.defaultWS.userUpdate(),
+            authMode: .bearer(value: self.getBearrerToken() ?? String()),
+            completionHandler: completionHandler
+        )
+    }
+    
 //    MARK: Keychain
     func getBearrerToken() -> String? {
         KeychainManager.shared.read(key: .token)

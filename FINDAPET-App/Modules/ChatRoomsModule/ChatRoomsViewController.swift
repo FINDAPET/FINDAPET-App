@@ -29,6 +29,7 @@ final class ChatRoomsViewController: UIViewController {
         let view = UIActivityIndicatorView(style: .medium)
         
         view.startAnimating()
+        view.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -41,7 +42,7 @@ final class ChatRoomsViewController: UIViewController {
         view.backgroundColor = .clear
         view.delegate = self
         view.dataSource = self
-        view.isHidden = true
+        view.isHidden = false
         view.register(ChatRoomTableViewCell.self, forCellReuseIdentifier: ChatRoomTableViewCell.id)
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -58,6 +59,7 @@ final class ChatRoomsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.presenter.updateUserChats()
         self.presenter.getAllChatRooms { [ weak self ] _, error in
             self?.error(error) { [ weak self ] in
                 self?.activityIndicatorView.isHidden = true

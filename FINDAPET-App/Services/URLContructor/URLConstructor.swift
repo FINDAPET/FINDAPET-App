@@ -359,6 +359,14 @@ final class URLConstructor {
             .appendingPathComponent(Paths.change.rawValue)
     }
     
+    func chatRoomWithUser(userID: UUID) -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.chat.rawValue)
+            .appendingPathComponent(Paths.chats.rawValue)
+            .appendingPathComponent(Paths.with.rawValue)
+            .appendingPathComponent(userID.uuidString)
+    }
+    
     func chatRoomWith(userID: UUID) -> URL {
         self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)

@@ -35,7 +35,7 @@ final class ChatRoomTableViewCell: UITableViewCell {
                 self.nameLabel.text = user.name
             }
             
-            
+            self.lastMessageLabel.text = self.chatRoom?.messages.sorted { $0.sentDate < $1.sentDate }.first?.text
         }
     }
     

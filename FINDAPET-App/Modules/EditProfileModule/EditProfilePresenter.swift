@@ -44,6 +44,10 @@ final class EditProfilePresenter {
         self.interactor.readUserDefaultsProperty(with: .deviceToken) as? String
     }
     
+    func writeUserDefaultsUserName() {
+        self.interactor.writeUserDefaultsProperty(self.user.name, with: .userName)
+    }
+    
 //    MARK: Notifications
     
     func createNotification(title: String) {

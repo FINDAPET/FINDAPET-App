@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MessageKit
 
 struct Message {
     struct Input: Encodable {
@@ -32,4 +33,13 @@ struct Message {
         var createdAt: Date?
         var chatRoom: ChatRoom.Output
     }
+}
+
+extension Message.Output: MessageType {
+    
+    var sender: MessageKit.SenderType { self.user }
+    var messageId: String { self.id?.uuidString ?? String() }
+    var sentDate: Date { self.createdAt ?? Date() }
+    var kind: MessageKit.MessageKind { .text(self.text) }
+    
 }
