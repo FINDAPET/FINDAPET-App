@@ -20,7 +20,7 @@ final class ChatRoomsPresenter {
     }
     
 //    MARK: Properties
-    private(set) var chatRooms = [ChatRoom.Output(users: [User.Output(id: UUID(uuidString: "514BA760-F705-4FF2-9997-B723BA117185"), name: "Me", avatarData: UIImage(systemName: "globe")?.pngData(), deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), User.Output(id: UUID(), name: "Not Me", avatarData: UIImage(named: "empty avatar")?.pngData(), deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true)], messages: [Message.Output(text: "It's me!", user: User.Output(id: UUID(uuidString: "514BA760-F705-4FF2-9997-B723BA117185"), name: "Me", avatarData: UIImage(systemName: "globe")?.pngData(), deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), createdAt: Date(), chatRoom: ChatRoom.Output(users: [User.Output](), messages: [Message.Output]())), Message.Output(text: "It's not me!", user: User.Output(id: UUID(), name: "Not Me", avatarData: UIImage(systemName: "globe")?.pngData(), deals: [Deal.Output](), boughtDeals: [Deal.Output](), ads: [Ad.Output](), myOffers: [Offer.Output](), offers: [Offer.Output](), chatRooms: [ChatRoom.Output](), isPremiumUser: true), createdAt: Date(), chatRoom: ChatRoom.Output(users: [User.Output](), messages: [Message.Output]()))])] {
+    private(set) var chatRooms = [ChatRoom.Output]() {
         didSet {
             self.callBack?()
         }

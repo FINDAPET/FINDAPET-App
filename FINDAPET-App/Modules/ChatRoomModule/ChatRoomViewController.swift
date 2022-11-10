@@ -10,7 +10,7 @@ import SnapKit
 import MessageKit
 import InputBarAccessoryView
 
-final class ChatRoomViewController: UIViewController {
+final class ChatRoomViewController: MessagesViewController {
 
     private let preseter: ChatRoomPresenter
     
@@ -34,30 +34,6 @@ final class ChatRoomViewController: UIViewController {
     }
     
 //    MARK: UI Properties
-    private lazy var messagesCollectionView: MessagesCollectionView = {
-        let view = MessagesCollectionView()
-        
-        view.backgroundColor = .clear
-        view.messagesDataSource = self
-        view.messagesLayoutDelegate = self
-        view.messagesDisplayDelegate = self
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
-    
-    private lazy var messageInputBar: InputBarAccessoryView = {
-        let view = InputBarAccessoryView()
-        
-        view.delegate = self
-        view.backgroundColor = .clear
-        view.inputTextView.backgroundColor = .textFieldColor
-        view.sendButton.backgroundColor = .accentColor
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
-    
     private let activityIndicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .medium)
         
@@ -107,12 +83,9 @@ final class ChatRoomViewController: UIViewController {
                     self?.activityIndicatorView.isHidden = true
                 }
             }
-        } else {
-            self.preseter.callBack?()
         }
         
         self.preseter.chatRoom()
-        self.preseter.callBack?()
     }
     
 //    MARK: Setup Views
@@ -120,16 +93,22 @@ final class ChatRoomViewController: UIViewController {
         self.view.backgroundColor = .backgroundColor
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.navigationBar.isHidden = true
+                
+        self.configureMessagesCollectionView()
+        self.configureMessageInputBar()
         
         self.view.addSubview(self.statusBarView)
         self.view.addSubview(self.chatRoomHeaderView)
-        self.view.addSubview(self.messagesCollectionView)
-        self.view.addSubview(self.messageInputBar)
         self.view.addSubview(self.activityIndicatorView)
+                
+        for constraint in self.view.constraints {
+            self.view.removeConstraint(constraint)
+        }
         
         self.statusBarView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.height.equalTo(50)
         }
         
         self.chatRoomHeaderView.snp.makeConstraints { make in
@@ -138,20 +117,42 @@ final class ChatRoomViewController: UIViewController {
         }
         
         self.messagesCollectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview()
             make.top.equalTo(self.chatRoomHeaderView.snp.bottom)
-            make.bottom.equalTo(self.messageInputBar.snp.top)
         }
         
         self.messageInputBar.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.bottom.equalTo(self.view)
         }
         
         self.activityIndicatorView.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
-        
+    }
+    
+//    MARK: Configure Messages Collection View
+    private func configureMessagesCollectionView() {
+        self.messagesCollectionView.backgroundColor = .clear
+        self.messagesCollectionView.messagesDataSource = self
+        self.messagesCollectionView.messagesLayoutDelegate = self
+        self.messagesCollectionView.messagesDisplayDelegate = self
+        self.messagesCollectionView.scrollToLastItem()
         self.preseter.callBack?()
+    }
+    
+//    MARK: Configure Message Input Bar
+    private func configureMessageInputBar() {
+        self.messageInputBar.delegate = self
+        self.messageInputBar.backgroundColor = .textFieldColor
+        self.messageInputBar.inputTextView.backgroundColor = .textFieldColor
+        self.messageInputBar.sendButton.setImage(.init(systemName: "arrow.up"), for: .normal)
+        self.messageInputBar.sendButton.setTitle(nil, for: .normal)
+        self.messageInputBar.sendButton.backgroundColor = .textFieldColor
+        self.messageInputBar.sendButton.tintColor = .accentColor
+        self.messageInputBar.inputTextView.tintColor = .accentColor
+        self.messageInputBar.sendButton.imageView?.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview()
+        }
     }
     
 }
@@ -174,7 +175,7 @@ extension ChatRoomViewController: MessagesDataSource {
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) -> MessageKit.MessageType {
-        self.preseter.chatRoom?.messages.sorted { $0.sentDate > $1.sentDate }[indexPath.row] ?? Message.Output(
+        self.preseter.chatRoom?.messages.sorted { $0.sentDate < $1.sentDate }[indexPath.section] ?? Message.Output(
             text: String(),
             user: User.Output(
                 id: self.preseter.getUserID(),
@@ -232,4 +233,10 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
     
 }
 
-extension ChatRoomViewController: MessagesLayoutDelegate { }
+extension ChatRoomViewController: MessagesLayoutDelegate {
+    
+    func avatarSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize? {
+        .zero
+    }
+    
+}

@@ -158,14 +158,18 @@ final class ProfileViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
-        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
         self.title = NSLocalizedString("Profile", comment: "")
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "list.bullet"),
-            style: .plain,
-            target: self,
-            action: #selector(self.didTapSlideMenuBarButton)
-        )
+        
+        if self.presenter.userID == nil {
+            self.navigationItem.setHidesBackButton(true, animated: false)
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                image: UIImage(systemName: "list.bullet"),
+                style: .plain,
+                target: self,
+                action: #selector(self.didTapSlideMenuBarButton)
+            )
+        }
         
         self.view.addSubview(self.activityIndicatorView)
         self.view.addSubview(self.tableView)

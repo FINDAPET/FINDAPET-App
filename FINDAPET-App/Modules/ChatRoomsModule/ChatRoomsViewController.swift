@@ -73,6 +73,8 @@ final class ChatRoomsViewController: UIViewController {
         self.view.backgroundColor = .backgroundColor
         self.title = NSLocalizedString("Chats", comment: String())
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.navigationBar.isHidden = false
         
         self.view.addSubview(self.activityIndicatorView)
         self.view.addSubview(self.tableView)

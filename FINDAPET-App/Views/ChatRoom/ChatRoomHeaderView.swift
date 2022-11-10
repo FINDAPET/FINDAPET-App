@@ -46,6 +46,7 @@ class ChatRoomHeaderView: UIView {
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 25
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapAvatarImageView)))
+        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
