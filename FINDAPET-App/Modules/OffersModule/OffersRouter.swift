@@ -15,8 +15,8 @@ final class OffersRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.goToProfile(userID: userID)
     }
     
-    func goToChatRoom(with id: UUID) {
-        
+    func goToChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) {
+        self.coordinatorDelegate?.goToChatRoom(chatRoom: chatRoom, userID: userID)
     }
     
 }

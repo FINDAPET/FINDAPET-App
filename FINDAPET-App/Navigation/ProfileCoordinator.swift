@@ -182,8 +182,17 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getDeal(dealID: dealID, deal: deal), animated: true)
     }
     
-    func goToCreateOffer() {
-        // push create offer
+//    MARK: Chat Room
+    func getChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) -> ChatRoomViewController {
+        let coordinator = ChatRoomCoordinator()
+        
+        coordinator.start()
+        
+        return coordinator.getChatRoom(chatRoom: chatRoom, userID: userID)
+    }
+    
+    func goToChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) {
+        self.navigationController.pushViewController(self.getChatRoom(chatRoom: chatRoom, userID: userID), animated: true)
     }
     
 //    MARK: Info

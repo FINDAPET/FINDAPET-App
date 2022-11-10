@@ -172,8 +172,8 @@ extension OffersViewController: UITableViewDataSource {
         cell.buyerAvatarImageViewAction = { [ weak self ] id in
             self?.presenter.goToProfile(userID: id)
         }
-        cell.messageButtonAction = {// [ weak self ] in
-//            self?.presenter.goToChatRoom(with: <#T##UUID#>)
+        cell.messageButtonAction = { [ weak self ] in
+            self?.presenter.goToChatRoom(userID: self?.presenter.offers[indexPath.row].buyer.id)
         }
         
         if self.presenter.mode == .offers {

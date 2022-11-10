@@ -318,7 +318,7 @@ final class DealViewController: UIViewController {
     
 //    MARK: Actions
     @objc private func didTapChatButton() {
-//        self.presenter.goToChatRoom(with: <#T##UUID#>)
+        self.presenter.goToChatRoom()
     }
     
     @objc private func didTapTranslutionView() {

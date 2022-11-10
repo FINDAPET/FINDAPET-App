@@ -72,8 +72,8 @@ final class OffersPresenter {
     }
     
 //    MARK: Routing
-    func goToChatRoom(with id: UUID) {
-        self.router.goToChatRoom(with: id)
+    func goToChatRoom(userID: UUID? = nil) {
+        self.router.goToChatRoom(userID: userID)
     }
     
     func goToProfile(userID: UUID? = nil) {

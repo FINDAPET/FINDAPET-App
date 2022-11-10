@@ -83,8 +83,8 @@ final class DealPresenter {
         self.router.goToProfile(with: self.deal?.cattery.id)
     }
     
-    func goToChatRoom(with id: UUID) {
-        self.router.goToChatRoom(with: id)
+    func goToChatRoom() {
+        self.router.goToChatRoom(userID: self.deal?.cattery.id)
     }
     
     func getCreateOffer() -> CreateOfferViewController?{
