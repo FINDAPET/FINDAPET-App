@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ProductsID: String, CaseIterable {
+enum ProductsID: String, CaseIterable, Encodable {
     case premiumSubscriptionOneMonth = "com.FINDAPET.premium.subscription.one.month"
     case premiumSubscriptionThreeMonth = "com.FINDAPET.premium.subscription.three.months"
     case premiumSubscriptionSixMonth = "com.FINDAPET.premium.subscription.six.months"
@@ -22,5 +22,15 @@ enum ProductsID: String, CaseIterable {
     
     static func getAd() -> [ProductsID] {
         [.adOneWeek, .adOneMonth]
+    }
+    
+    static func getProductID(rawValue: String) -> ProductsID? {
+        for productID in ProductsID.allCases {
+            if productID.rawValue == rawValue {
+                return productID
+            }
+        }
+        
+        return nil
     }
 }

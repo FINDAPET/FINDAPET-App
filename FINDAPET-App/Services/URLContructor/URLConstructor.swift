@@ -189,6 +189,19 @@ final class URLConstructor {
             .appendingPathComponent(Paths.admin.rawValue)
     }
     
+    func makeUserPremium() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.users.rawValue)
+            .appendingPathExtension(Paths.premium.rawValue)
+    }
+    
+    func makeUserNotPremium() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.users.rawValue)
+            .appendingPathExtension(Paths.not.rawValue)
+            .appendingPathExtension(Paths.premium.rawValue)
+    }
+    
 //    MARK: Offer
     func deleteOffer(offerID: UUID) -> URL {
         self.baseURL

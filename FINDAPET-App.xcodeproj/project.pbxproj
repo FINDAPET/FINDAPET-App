@@ -130,6 +130,15 @@
 		E3DBD03928FF216F0063DC35 /* OffersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DBD03828FF216F0063DC35 /* OffersPresenter.swift */; };
 		E3DBD03B28FF21800063DC35 /* OffersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DBD03A28FF21800063DC35 /* OffersViewController.swift */; };
 		E3DBD03E28FF32C10063DC35 /* OfferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DBD03D28FF32C10063DC35 /* OfferTableViewCell.swift */; };
+		E3E05CFA291EA64300605F49 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05CF9291EA64300605F49 /* Subscription.swift */; };
+		E3E05CFD291EB44800605F49 /* FeedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05CFC291EB44800605F49 /* FeedRouter.swift */; };
+		E3E05CFF291EB45700605F49 /* FeedInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05CFE291EB45700605F49 /* FeedInteractor.swift */; };
+		E3E05D01291EB46300605F49 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D00291EB46300605F49 /* FeedPresenter.swift */; };
+		E3E05D03291EB47B00605F49 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D02291EB47B00605F49 /* FeedViewController.swift */; };
+		E3E05D05291EB55400605F49 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D04291EB55400605F49 /* Filter.swift */; };
+		E3E05D08291F8B4F00605F49 /* NotFoundTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D07291F8B4F00605F49 /* NotFoundTableViewCell.swift */; };
+		E3E05D0B291F9B9D00605F49 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D0A291F9B9D00605F49 /* SearchView.swift */; };
+		E3E05D0D291FAF6C00605F49 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D0C291FAF6C00605F49 /* UIButton.swift */; };
 		E3E1D178290310840069EE46 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D177290310840069EE46 /* Currency.swift */; };
 		E3E1D180290313AE0069EE46 /* SettingsBlockRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D17F290313AE0069EE46 /* SettingsBlockRouter.swift */; };
 		E3E1D182290313BC0069EE46 /* SettingsBlockInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D181290313BC0069EE46 /* SettingsBlockInteractor.swift */; };
@@ -282,6 +291,15 @@
 		E3DBD03828FF216F0063DC35 /* OffersPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffersPresenter.swift; sourceTree = "<group>"; };
 		E3DBD03A28FF21800063DC35 /* OffersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffersViewController.swift; sourceTree = "<group>"; };
 		E3DBD03D28FF32C10063DC35 /* OfferTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferTableViewCell.swift; sourceTree = "<group>"; };
+		E3E05CF9291EA64300605F49 /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
+		E3E05CFC291EB44800605F49 /* FeedRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRouter.swift; sourceTree = "<group>"; };
+		E3E05CFE291EB45700605F49 /* FeedInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedInteractor.swift; sourceTree = "<group>"; };
+		E3E05D00291EB46300605F49 /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
+		E3E05D02291EB47B00605F49 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		E3E05D04291EB55400605F49 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		E3E05D07291F8B4F00605F49 /* NotFoundTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotFoundTableViewCell.swift; sourceTree = "<group>"; };
+		E3E05D0A291F9B9D00605F49 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		E3E05D0C291FAF6C00605F49 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		E3E1D177290310840069EE46 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		E3E1D17F290313AE0069EE46 /* SettingsBlockRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBlockRouter.swift; sourceTree = "<group>"; };
 		E3E1D181290313BC0069EE46 /* SettingsBlockInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBlockInteractor.swift; sourceTree = "<group>"; };
@@ -373,6 +391,7 @@
 		E30560FC290FEE5C00E0881C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E3E05D09291F9B5A00605F49 /* SearchView */,
 				E3CE7301291BF56700577206 /* ChatRoom */,
 				E30560FD29104C0500E0881C /* Deal */,
 				E30BEC25290DB5BB00188B5D /* CollectionReusableViews */,
@@ -487,6 +506,8 @@
 				E325351C28F58C6500878A7F /* Message.swift */,
 				E325351E28F58CE600878A7F /* ChatRoom.swift */,
 				E36F622428F9E5F1007C7623 /* ExchangeConvert.swift */,
+				E3E05CF9291EA64300605F49 /* Subscription.swift */,
+				E3E05D04291EB55400605F49 /* Filter.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -530,6 +551,7 @@
 				E313B89F28AD01A500E33975 /* UIViewController.swift */,
 				E347A5472901B3690089271F /* UIView.swift */,
 				E305610029104E3900E0881C /* UIStackView.swift */,
+				E3E05D0C291FAF6C00605F49 /* UIButton.swift */,
 			);
 			path = TypeExtensions;
 			sourceTree = "<group>";
@@ -597,6 +619,7 @@
 		E36F622628F9EBA8007C7623 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				E3E05CFB291EB42400605F49 /* FeedModule */,
 				E3ADF55D2916E65A00E46FFD /* ChatRoomModule */,
 				E30065072916912900FAB319 /* ChatRoomsModule */,
 				E30561062912E6C200E0881C /* CreateOfferModule */,
@@ -620,6 +643,7 @@
 		E37AC6A428F82CD4003AC7D3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				E3E05D06291F8B2500605F49 /* NotFoundTableViewCell */,
 				E30065102916996800FAB319 /* ChatRoomTableViewCell */,
 				E30560F9290EF9B300E0881C /* PhotoCollectionViewCell */,
 				E3993F5A2907EB2E000C218C /* SubscriptionTableViewCell */,
@@ -887,6 +911,33 @@
 			path = OfferTableViewCell;
 			sourceTree = "<group>";
 		};
+		E3E05CFB291EB42400605F49 /* FeedModule */ = {
+			isa = PBXGroup;
+			children = (
+				E3E05CFC291EB44800605F49 /* FeedRouter.swift */,
+				E3E05CFE291EB45700605F49 /* FeedInteractor.swift */,
+				E3E05D00291EB46300605F49 /* FeedPresenter.swift */,
+				E3E05D02291EB47B00605F49 /* FeedViewController.swift */,
+			);
+			path = FeedModule;
+			sourceTree = "<group>";
+		};
+		E3E05D06291F8B2500605F49 /* NotFoundTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				E3E05D07291F8B4F00605F49 /* NotFoundTableViewCell.swift */,
+			);
+			path = NotFoundTableViewCell;
+			sourceTree = "<group>";
+		};
+		E3E05D09291F9B5A00605F49 /* SearchView */ = {
+			isa = PBXGroup;
+			children = (
+				E3E05D0A291F9B9D00605F49 /* SearchView.swift */,
+			);
+			path = SearchView;
+			sourceTree = "<group>";
+		};
 		E3E1D176290310720069EE46 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
@@ -1068,6 +1119,7 @@
 				E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */,
 				E347A5482901B3690089271F /* UIView.swift in Sources */,
 				E3993F73290B14F9000C218C /* SubscriptionCoordinator.swift in Sources */,
+				E3E05D08291F8B4F00605F49 /* NotFoundTableViewCell.swift in Sources */,
 				E325351D28F58C6500878A7F /* Message.swift in Sources */,
 				E30560EF290EBE6800E0881C /* NotificationCenterManagerKeys.swift in Sources */,
 				E30560F8290ECE9600E0881C /* DealViewController.swift in Sources */,
@@ -1091,6 +1143,7 @@
 				E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */,
 				E300650B2916934400FAB319 /* ChatRoomsInteractor.swift in Sources */,
 				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
+				E3E05D0B291F9B9D00605F49 /* SearchView.swift in Sources */,
 				E3DBD03728FF21630063DC35 /* OffersRouter.swift in Sources */,
 				E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */,
 				E3F4B04C28FDC55C0083815E /* CurrencyConverter.swift in Sources */,
@@ -1110,6 +1163,7 @@
 				E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */,
 				E3D74F5A28A69BD2004C5172 /* FINDAPET_App.xcdatamodeld in Sources */,
 				E35E09F228F739F200B310D1 /* YandexMobileMetricaManager.swift in Sources */,
+				E3E05CFD291EB44800605F49 /* FeedRouter.swift in Sources */,
 				E3CE7300291BB4F300577206 /* ChatRoomHeaderView.swift in Sources */,
 				E305610C2912E72600E0881C /* CreateOfferPresenter.swift in Sources */,
 				E3993F57290716DF000C218C /* SubscriptionPresenter.swift in Sources */,
@@ -1118,6 +1172,7 @@
 				E3E1EB51290063C600F536F4 /* AdsRouter.swift in Sources */,
 				E3993F6E290AF8B4000C218C /* InfoViewController.swift in Sources */,
 				E313B89A28ACE37B00E33975 /* RegistrationInteractor.swift in Sources */,
+				E3E05D05291EB55400605F49 /* Filter.swift in Sources */,
 				E30560F4290ECE6F00E0881C /* DealRouter.swift in Sources */,
 				E3D74F5028A69BD2004C5172 /* AppDelegate.swift in Sources */,
 				E3E1D189290326870069EE46 /* SettingsRouter.swift in Sources */,
@@ -1137,6 +1192,7 @@
 				E3E1EB5A29006B2E00F536F4 /* AdTableViewCell.swift in Sources */,
 				E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */,
 				E3D74F7B28A6AA91004C5172 /* Schemes.swift in Sources */,
+				E3E05D01291EB46300605F49 /* FeedPresenter.swift in Sources */,
 				E3E4D6A228B92BF4002B0BE6 /* PrivacyPolicyInteractor.swift in Sources */,
 				E34ABC5928A7D48300A7D2C8 /* KeychainKeys.swift in Sources */,
 				E35EC92228FB02EC00868C0A /* ApplicationRequestManager.swift in Sources */,
@@ -1149,6 +1205,7 @@
 				E3DBD03B28FF21800063DC35 /* OffersViewController.swift in Sources */,
 				E3DBD03328FF213F0063DC35 /* OffersInteractor.swift in Sources */,
 				E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */,
+				E3E05CFA291EA64300605F49 /* Subscription.swift in Sources */,
 				E305EC7B28ACD78200A3AAD3 /* OnboardingRouter.swift in Sources */,
 				E3993F612909B643000C218C /* CreateAdInteractor.swift in Sources */,
 				E30560FF29104C3100E0881C /* DealDescriptionView.swift in Sources */,
@@ -1166,7 +1223,9 @@
 				E3E1D18F290326DE0069EE46 /* SettingsViewController.swift in Sources */,
 				E3993F6A290AF898000C218C /* InfoInteractor.swift in Sources */,
 				E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */,
+				E3E05CFF291EB45700605F49 /* FeedInteractor.swift in Sources */,
 				E3D9570528AFD64200CCF566 /* EditProfileInteractor.swift in Sources */,
+				E3E05D0D291FAF6C00605F49 /* UIButton.swift in Sources */,
 				E34ABC3C28A7BD4300A7D2C8 /* HTTPMethods.swift in Sources */,
 				E3E1D186290313D80069EE46 /* SettingsBlockView.swift in Sources */,
 				E3E1EB53290063D200F536F4 /* AdsInteractor.swift in Sources */,
@@ -1182,6 +1241,7 @@
 				E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */,
 				E30560F6290ECE8300E0881C /* DealInteractor.swift in Sources */,
 				E3E1D18D290326B80069EE46 /* SettingsPresenter.swift in Sources */,
+				E3E05D03291EB47B00605F49 /* FeedViewController.swift in Sources */,
 				E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */,
 				E35E09F628F73B9D00B310D1 /* YandexMobileMetrica.swift in Sources */,
 				E34ABC3428A7906500A7D2C8 /* User.swift in Sources */,

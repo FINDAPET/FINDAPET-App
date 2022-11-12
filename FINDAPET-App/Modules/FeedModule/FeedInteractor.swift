@@ -1,0 +1,28 @@
+//
+//  FeedInteractor.swift
+//  FINDAPET-App
+//
+//  Created by Artemiy Zuzin on 11.11.2022.
+//
+
+import Foundation
+
+final class FeedInteractor {
+    
+//    MARK: Requests
+    func getDeals(_ filter: Filter, completionHandler: @escaping ([Deal.Output]?, Error?) -> Void) {
+        RequestManager.request(
+            sendModel: filter,
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.allDeals(),
+            completionHandler: completionHandler
+        )
+    }
+    
+//    MARK: Keychain
+    private func getBearrerToken() -> String? {
+        KeychainManager.shared.read(key: .token)
+    }
+    
+}

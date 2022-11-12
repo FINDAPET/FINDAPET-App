@@ -6,8 +6,18 @@
 //
 
 import Foundation
+import StoreKit
 
 final class DealInteractor {
+    
+//    MARK: Purchase
+    func getProducts(with productsID: [ProductsID], callBack: @escaping ([SKProduct]) -> Void) {
+        PurchaseManager.shared.getProducts(productsID, callBack: callBack)
+    }
+    
+    func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
+        PurchaseManager.shared.makePayment(product, callBack: callBack)
+    }
     
 //    MARK: Requests
     func getDeal(dealID: UUID, completionHandler: @escaping (Deal.Output?, Error?) -> Void) {
@@ -15,6 +25,16 @@ final class DealInteractor {
             method: .GET,
             authMode: .bearer(value: self.getBearrerToken() ?? String()),
             url: URLConstructor.defaultHTTP.someDeal(dealID: dealID),
+            completionHandler: completionHandler
+        )
+    }
+    
+    func changeDeal(deal: Deal.Input, completionHandler: @escaping (Error?) -> Void) {
+        RequestManager.request(
+            model: deal,
+            method: .PUT,
+            authMode: .bearer(value: self.getBearrerToken() ?? String()),
+            url: URLConstructor.defaultHTTP.changeDeal(),
             completionHandler: completionHandler
         )
     }
