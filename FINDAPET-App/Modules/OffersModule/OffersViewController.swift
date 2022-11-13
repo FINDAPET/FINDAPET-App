@@ -24,6 +24,9 @@ final class OffersViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+//    MARK: Properties
+    private var isEmptyTableView = true
+    
 //    MARK: UI Properties
     private lazy var refreshControl: UIRefreshControl = {
         let view = UIRefreshControl()
@@ -52,6 +55,8 @@ final class OffersViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.refreshControl = self.refreshControl
+        view.separatorColor = .clear
+        view.register(NotFoundTableViewCell.self, forCellReuseIdentifier: NotFoundTableViewCell.id)
         view.register(OfferTableViewCell.self, forCellReuseIdentifier: OfferTableViewCell.cellID)
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -159,10 +164,22 @@ final class OffersViewController: UIViewController {
 extension OffersViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.presenter.offers.count
+        if self.presenter.offers.isEmpty {
+            self.isEmptyTableView = true
+            
+            return 1
+        }
+        
+        self.isEmptyTableView = false
+        
+        return self.presenter.offers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if self.isEmptyTableView {
+            return tableView.dequeueReusableCell(withIdentifier: NotFoundTableViewCell.id, for: indexPath)
+        }
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: OfferTableViewCell.cellID) as? OfferTableViewCell else {
             return UITableViewCell()
         }

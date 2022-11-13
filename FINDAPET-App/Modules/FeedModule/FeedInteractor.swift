@@ -20,6 +20,15 @@ final class FeedInteractor {
         )
     }
     
+    func getRandomAd(completionHandler: @escaping (Ad.Output?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.randomAd(),
+            completionHandler: completionHandler
+        )
+    }
+    
 //    MARK: Keychain
     private func getBearrerToken() -> String? {
         KeychainManager.shared.read(key: .token)

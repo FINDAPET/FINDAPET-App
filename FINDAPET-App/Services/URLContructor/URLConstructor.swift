@@ -292,6 +292,12 @@ final class URLConstructor {
             .appendingPathComponent(Paths.all.rawValue)
     }
     
+    func randomAd() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.ads.rawValue)
+            .appendingPathComponent(Paths.random.rawValue)
+    }
+    
     func newAd() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.ads.rawValue)

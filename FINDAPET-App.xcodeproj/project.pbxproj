@@ -391,7 +391,7 @@
 		E30560FC290FEE5C00E0881C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E3E05D09291F9B5A00605F49 /* SearchView */,
+				E3E05D0E29210F5300605F49 /* Feed */,
 				E3CE7301291BF56700577206 /* ChatRoom */,
 				E30560FD29104C0500E0881C /* Deal */,
 				E30BEC25290DB5BB00188B5D /* CollectionReusableViews */,
@@ -936,6 +936,14 @@
 				E3E05D0A291F9B9D00605F49 /* SearchView.swift */,
 			);
 			path = SearchView;
+			sourceTree = "<group>";
+		};
+		E3E05D0E29210F5300605F49 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				E3E05D09291F9B5A00605F49 /* SearchView */,
+			);
+			path = Feed;
 			sourceTree = "<group>";
 		};
 		E3E1D176290310720069EE46 /* Enums */ = {

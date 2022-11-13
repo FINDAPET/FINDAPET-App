@@ -52,6 +52,7 @@ final class FeedViewController: UIViewController {
         view.delegate = self
         view.register(NotFoundTableViewCell.self, forCellReuseIdentifier: NotFoundTableViewCell.id)
         view.register(DealTableViewCell.self, forCellReuseIdentifier: DealTableViewCell.cellID)
+        view.register(AdTableViewCell.self, forCellReuseIdentifier: AdTableViewCell.cellID)
         view.separatorColor = .clear
         view.isHidden = true
         view.backgroundColor = .backgroundColor
@@ -120,7 +121,7 @@ final class FeedViewController: UIViewController {
         
         self.tableView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(self.view.safeAreaLayoutGuide)
-            make.top.equalTo(self.searchView.snp.bottom)
+            make.top.equalTo(self.searchView.snp.bottom).inset(-7.5)
         }
     }
     
@@ -145,12 +146,23 @@ extension FeedViewController: UITableViewDataSource {
         
         self.isEmptyTableView = false
         
-        return self.presenter.deals.count
+        return self.presenter.deals.count + (self.presenter.ad != nil ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.isEmptyTableView {
             return tableView.dequeueReusableCell(withIdentifier: NotFoundTableViewCell.id, for: indexPath)
+        }
+        
+        if indexPath.row == .zero,
+           let ad = self.presenter.ad,
+           let cell = tableView.dequeueReusableCell(
+            withIdentifier: AdTableViewCell.cellID,
+            for: indexPath
+        ) as? AdTableViewCell {
+            cell.ad = ad
+            
+            return cell
         }
         
         guard let cell = tableView.dequeueReusableCell(
@@ -160,7 +172,8 @@ extension FeedViewController: UITableViewDataSource {
             return .init()
         }
         
-        cell.deal = self.presenter.deals[indexPath.row]
+        cell.selectionStyle = .none
+        cell.deal = self.presenter.deals[indexPath.row - (self.presenter.ad != nil ? 1 : 0)]
         
         return cell
     }
@@ -170,6 +183,10 @@ extension FeedViewController: UITableViewDataSource {
 extension FeedViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         UITableView.automaticDimension
     }
     
@@ -188,8 +205,12 @@ extension FeedViewController: SearchViewDelegate {
     }
     
     func searchView(_ searchView: SearchView, didTapSearchButton button: UIButton) {
-        self.presenter.getDeals { [ weak self ] _, error in
-            self?.error(error)
+        self.presenter.getRandomAd { [ weak self ] _, error in
+            self?.error(error) {
+                self?.presenter.getDeals { _, error in
+                    self?.error(error)
+                }
+            }
         }
     }
     

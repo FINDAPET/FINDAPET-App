@@ -60,7 +60,9 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
     
 //    MARK: Setup Views
     private func setupViews() {
-        self.tabBar.navigationController?.navigationBar.isHidden = true
+        self.tabBar.tabBar.clipsToBounds = true
+        self.tabBar.tabBar.layer.masksToBounds = true
+        self.tabBar.tabBar.layer.cornerRadius = 25
         self.tabBar.viewControllers = [
             self.feedCoordinator.navigationController,
             self.chatRoomCoordinator.navigationController,

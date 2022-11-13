@@ -24,6 +24,9 @@ final class ChatRoomsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+//    MARK: Properties
+    private var isEmptyTableView = true
+    
 //    MARK: UI Properties
     private let activityIndicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .medium)
@@ -31,6 +34,16 @@ final class ChatRoomsViewController: UIViewController {
         view.startAnimating()
         view.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var refreshControl: UIRefreshControl = {
+        let view = UIRefreshControl()
+        
+        view.addTarget(self, action: #selector(self.onRefresh), for: .valueChanged)
+        view.tintColor = .white
+        view.backgroundColor = .accentColor
         
         return view
     }()
@@ -43,6 +56,8 @@ final class ChatRoomsViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.isHidden = false
+        view.refreshControl = self.refreshControl
+        view.register(NotFoundTableViewCell.self, forCellReuseIdentifier: NotFoundTableViewCell.id)
         view.register(ChatRoomTableViewCell.self, forCellReuseIdentifier: ChatRoomTableViewCell.id)
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -61,10 +76,10 @@ final class ChatRoomsViewController: UIViewController {
         
         self.presenter.updateUserChats()
         self.presenter.getAllChatRooms { [ weak self ] _, error in
-            self?.error(error) { [ weak self ] in
-                self?.activityIndicatorView.isHidden = true
-                self?.tableView.isHidden = false
-            }
+            self?.activityIndicatorView.isHidden = true
+            self?.tableView.isHidden = false
+            
+            self?.error(error)
         }
     }
     
@@ -88,16 +103,35 @@ final class ChatRoomsViewController: UIViewController {
         }
     }
     
+//    MARK: Actions
+    @objc private func onRefresh() {
+        self.presenter.getAllChatRooms { [ weak self ] _, error in
+            self?.error(error)
+        }
+    }
+    
 }
 
 //MARK: Extensions
 extension ChatRoomsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.presenter.chatRooms.count
+        if self.presenter.chatRooms.isEmpty {
+            self.isEmptyTableView = true
+            
+            return 1
+        }
+        
+        self.isEmptyTableView = false
+        
+        return self.presenter.chatRooms.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if self.isEmptyTableView {
+            return tableView.dequeueReusableCell(withIdentifier: NotFoundTableViewCell.id, for: indexPath)
+        }
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRoomTableViewCell.id) as? ChatRoomTableViewCell else {
             return UITableViewCell()
         }

@@ -224,6 +224,7 @@ final class DealViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.tabBarController?.tabBar.standardAppearance.backgroundColor = .clear
+        self.navigationController?.navigationBar.isHidden = false
         self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
         
         self.view.addSubview(self.scrollView)

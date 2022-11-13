@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 final class FeedPresenter {
     
@@ -21,6 +22,11 @@ final class FeedPresenter {
 //    MARK: Properties
     private var filter = Filter()
     private(set) var deals = [Deal.Output]() {
+        didSet {
+            self.callBack?()
+        }
+    }
+    private(set) var ad: Ad.Output? {
         didSet {
             self.callBack?()
         }
@@ -51,6 +57,20 @@ final class FeedPresenter {
         }
         
         self.interactor.getDeals(self.filter, completionHandler: newCompletionHandler)
+    }
+    
+    func getRandomAd(completionHandler: @escaping (Ad.Output?, Error?) -> Void) {
+        let newCompletionHandler: (Ad.Output?, Error?) -> Void = { [ weak self ] ad, error in
+            completionHandler(ad, error)
+            
+            guard error == nil else {
+                return
+            }
+            
+            self?.ad = ad
+        }
+        
+        self.interactor.getRandomAd(completionHandler: newCompletionHandler)
     }
     
 //    MARK: Routing
