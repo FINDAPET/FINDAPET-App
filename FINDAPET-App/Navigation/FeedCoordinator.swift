@@ -20,14 +20,36 @@ final class FeedCoordinator: MainTabBarCoordinatable, Coordinator {
     
     func start() {
         self.setupViews()
+        self.goToFeed()
     }
     
-    func goToDeals() {
-        // push deals
+//    MARK: Feed
+    func getFeed() -> FeedViewController {
+        let router = FeedRouter()
+        let interactor = FeedInteractor()
+        let presenter = FeedPresenter(router: router, interactor: interactor)
+        let viewController = FeedViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        return viewController
     }
     
-    func goToOffers() {
-        // push offers
+    func goToFeed() {
+        self.navigationController.pushViewController(self.getFeed(), animated: true)
+    }
+    
+//    MARK: Deal
+    func getDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) -> DealViewController {
+        let coordinator = ProfileCoordinator()
+        
+        coordinator.start()
+        
+        return coordinator.getDeal(dealID: dealID, deal: deal)
+    }
+    
+    func goToDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) {
+        self.navigationController.pushViewController(self.getDeal(dealID: dealID, deal: deal), animated: true)
     }
     
     private func setupViews() {
@@ -37,6 +59,19 @@ final class FeedCoordinator: MainTabBarCoordinatable, Coordinator {
             selectedImage: UIImage(systemName: "house")
         )
         self.navigationController.navigationBar.isHidden = true
+    }
+    
+//    MARK: Profile
+    func getProfile(userID: UUID? = nil) -> ProfileViewController {
+        let coordinator = ProfileCoordinator()
+        
+        coordinator.start()
+        
+        return coordinator.getProfile(userID: userID)
+    }
+    
+    func goToProfile(userID: UUID? = nil) {
+        self.navigationController.pushViewController(self.getProfile(userID: userID), animated: true)
     }
     
 }

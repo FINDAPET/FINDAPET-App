@@ -307,6 +307,7 @@ final class EditProfileViewController: UIViewController {
         self.presenter.editUser { error in
             self.error(error) { [ weak self ] in
                 self?.presenter.writeUserDefaultsIsFirstEdititng()
+                self?.presenter.writeUserDefaultsUserName()
                 self?.presenter.goToMainTabBar()
                 
                 if self?.presenter.readUserDefaultsDeviceToken() != nil {

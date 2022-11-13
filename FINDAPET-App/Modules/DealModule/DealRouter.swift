@@ -15,8 +15,8 @@ final class DealRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.goToProfile(userID: id)
     }
     
-    func goToChatRoom(with id: UUID) {
-        
+    func goToChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) {
+        self.coordinatorDelegate?.goToChatRoom(chatRoom: chatRoom, userID: userID)
     }
     
     func getCreateOffer(deal: Deal.Output) -> CreateOfferViewController? {

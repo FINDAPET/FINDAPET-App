@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StoreKit
 
 final class DealPresenter {
     
@@ -31,6 +32,20 @@ final class DealPresenter {
         self.interactor = interactor
     }
     
+//    MARK: Editing
+    func makeDealPremium() {
+        self.deal?.isPremiumDeal = true
+    }
+    
+//    MARK: Purchase
+    func getPremiumDealProduct(callBack: @escaping ([SKProduct]) -> Void = { _ in }) {
+        self.interactor.getProducts(with: [.premiumDeal], callBack: callBack)
+    }
+    
+    func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
+        self.interactor.makePayment(product, callBack: callBack)
+    }
+    
 //    MARK: Requests
     func getDeal(completionHandler: @escaping (Deal.Output?, Error?) -> Void) {
         guard let dealID = self.dealID else {
@@ -50,6 +65,48 @@ final class DealPresenter {
         }
         
         self.interactor.getDeal(dealID: dealID, completionHandler: newCompletionHandler)
+    }
+    
+    func changeDeal(completionHandler: @escaping (Error?) -> Void) {
+        guard let deal = self.deal else {
+            print("❌ Error: deal is equal to nil.")
+            
+            completionHandler(RequestErrors.statusCodeError(statusCode: 404))
+            
+            return
+        }
+        
+        self.interactor.changeDeal(
+            deal: Deal.Input(
+                id: deal.id,
+                title: deal.title,
+                photoDatas: deal.photoDatas,
+                tags: deal.tags,
+                isPremiumDeal: deal.isPremiumDeal,
+                isActive: deal.isActive,
+                mode: DealMode.getDealMode(deal.mode) ?? .everywhere,
+                petType: PetType.getPetType(deal.petType) ?? .cat,
+                petBreed: PetBreed.getPetBreed(deal.petBreed) ?? .other,
+                showClass: ShowClass.getShowClass(deal.showClass) ?? .allClass,
+                isMale: deal.isActive,
+                age: deal.age,
+                color: deal.color,
+                price: Double(deal.price),
+                currencyName: Currency.getCurrency(wtih: deal.currencyName) ?? .USD,
+                catteryID: deal.cattery.id ?? UUID(),
+                country: deal.country,
+                city: deal.city,
+                description: deal.description,
+                whatsappNumber: deal.whatsappNumber,
+                telegramUsername: deal.telegramUsername,
+                instagramUsername: deal.instagramUsername,
+                facebookUsername: deal.facebookUsername,
+                vkUsername: deal.vkUsername,
+                mail: deal.mail,
+                buyerID: deal.buyer?.id
+            ),
+            completionHandler: completionHandler
+        )
     }
     
     func deleteDeal(completionHandler: @escaping (Error?) -> Void) {
@@ -83,8 +140,8 @@ final class DealPresenter {
         self.router.goToProfile(with: self.deal?.cattery.id)
     }
     
-    func goToChatRoom(with id: UUID) {
-        self.router.goToChatRoom(with: id)
+    func goToChatRoom() {
+        self.router.goToChatRoom(userID: self.deal?.cattery.id)
     }
     
     func getCreateOffer() -> CreateOfferViewController?{

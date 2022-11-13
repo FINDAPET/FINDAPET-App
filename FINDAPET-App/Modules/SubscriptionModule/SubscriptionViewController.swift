@@ -114,7 +114,21 @@ extension SubscriptionViewController: UICollectionViewDelegate {
                     return
                 }
                 
-                self.presenter.makePayment(self.presenter.products[indexPath.item]) { self.error($0) }
+                self.presenter.makePayment(self.presenter.products[indexPath.item]) {
+                    self.error($0) {
+                        guard let id = ProductsID.getProductID(rawValue: self.presenter.products[indexPath.item].productIdentifier) else {
+                            print("❌ Error: product is equal to nil.")
+                            
+                            self.presentAlert(title: NSLocalizedString("Error", comment: String()))
+                            
+                            return
+                        }
+                        
+                        self.presenter.makeUserPremium(Subscription(productID: id)) { error in
+                            self.error(error)
+                        }
+                    }
+                }
             }
         }
     }

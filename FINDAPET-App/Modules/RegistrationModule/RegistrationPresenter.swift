@@ -18,9 +18,7 @@ final class RegistrationPresenter {
         self.interactor = interactor
         self.mode = mode
     }
-    
-    var isAgreeWithPrivacyPolicy = false
-    
+        
 //    MARK: Routing
     
     func goToEditProfile(user: User.Input) {

@@ -24,6 +24,9 @@ final class AdsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+//    MARK: Properties
+    private var isEmptyTableView = true
+    
 //    MARK: UI Properties
     private lazy var refreshControl: UIRefreshControl = {
         let view = UIRefreshControl()
@@ -52,6 +55,8 @@ final class AdsViewController: UIViewController {
         view.dataSource = self
         view.backgroundColor = .clear
         view.refreshControl = self.refreshControl
+        view.separatorColor = .clear
+        view.register(NotFoundTableViewCell.self, forCellReuseIdentifier: NotFoundTableViewCell.id)
         view.register(AdTableViewCell.self, forCellReuseIdentifier: AdTableViewCell.cellID)
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -122,10 +127,22 @@ final class AdsViewController: UIViewController {
 extension AdsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.presenter.ads.count
+        if self.presenter.ads.isEmpty {
+            self.isEmptyTableView = true
+            
+            return 1
+        }
+        
+        self.isEmptyTableView = false
+        
+        return self.presenter.ads.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if self.isEmptyTableView {
+            return tableView.dequeueReusableCell(withIdentifier: NotFoundTableViewCell.id, for: indexPath)
+        }
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AdTableViewCell.cellID) as? AdTableViewCell else {
             return UITableViewCell()
         }

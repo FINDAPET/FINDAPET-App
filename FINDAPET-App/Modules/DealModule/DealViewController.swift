@@ -113,6 +113,19 @@ final class DealViewController: UIViewController {
         return view
     }()
     
+    private lazy var makePremiumButton: UIButton = {
+        let view = UIButton()
+        
+        view.addTarget(self, action: #selector(self.didTapMakePremiumButton), for: .touchUpInside)
+        view.setTitle(NSLocalizedString("Make Premium", comment: String()), for: .normal)
+        view.setTitleColor(.white, for: .normal)
+        view.layer.cornerRadius = 25
+        view.backgroundColor = .systemOrange
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var dealDescriptionView: UIView = {
         guard let deal = self.presenter.deal else {
             return .init()
@@ -211,6 +224,7 @@ final class DealViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.tabBarController?.tabBar.standardAppearance.backgroundColor = .clear
+        self.navigationController?.navigationBar.isHidden = false
         self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
         
         self.view.addSubview(self.scrollView)
@@ -227,22 +241,6 @@ final class DealViewController: UIViewController {
         self.scrollView.insertSubview(self.collectionViewItemNumberLabel, at: 8)
         
         if self.presenter.deal?.cattery.id ?? UUID() == self.presenter.getUserID() ?? UUID() {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                image: .init(systemName: "trash"),
-                style: .plain,
-                target: self,
-                action: #selector(self.didTapDeleteNavigationBarButton)
-            )
-            self.navigationItem.rightBarButtonItem?.tintColor = .accentColor
-            
-            self.createOfferButton.isHidden = true
-            self.chatButton.isHidden = true
-            
-            self.dealDescriptionView.snp.makeConstraints { make in
-                make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-                make.top.equalTo(self.titleLabel.snp.bottom).inset(-15)
-            }
-        } else {
             self.scrollView.addSubview(self.chatButton)
             self.scrollView.addSubview(self.createOfferButton)
             
@@ -258,9 +256,43 @@ final class DealViewController: UIViewController {
                 make.height.equalTo(50)
             }
             
+            if !(self.presenter.deal?.isPremiumDeal ?? false) {
+                self.scrollView.addSubview(self.makePremiumButton)
+                
+                self.makePremiumButton.snp.makeConstraints { make in
+                    make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+                    make.top.equalTo(self.createOfferButton.snp.bottom).inset(-15)
+                    make.height.equalTo(50)
+                }
+                
+                self.dealDescriptionView.snp.makeConstraints { make in
+                    make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+                    make.top.equalTo(self.makePremiumButton.snp.bottom).inset(-15)
+                }
+            } else {
+                self.makePremiumButton.isHidden = true
+                
+                self.dealDescriptionView.snp.makeConstraints { make in
+                    make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+                    make.top.equalTo(self.createOfferButton.snp.bottom).inset(-15)
+                }
+            }
+        } else {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                image: .init(systemName: "trash"),
+                style: .plain,
+                target: self,
+                action: #selector(self.didTapDeleteNavigationBarButton)
+            )
+            self.navigationItem.rightBarButtonItem?.tintColor = .accentColor
+            
+            self.createOfferButton.isHidden = true
+            self.chatButton.isHidden = true
+            self.makePremiumButton.isHidden = true
+            
             self.dealDescriptionView.snp.makeConstraints { make in
                 make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-                make.top.equalTo(self.createOfferButton.snp.bottom).inset(-15)
+                make.top.equalTo(self.titleLabel.snp.bottom).inset(-15)
             }
         }
         
@@ -318,7 +350,28 @@ final class DealViewController: UIViewController {
     
 //    MARK: Actions
     @objc private func didTapChatButton() {
-//        self.presenter.goToChatRoom(with: <#T##UUID#>)
+        self.presenter.goToChatRoom()
+    }
+    
+    @objc private func didTapMakePremiumButton() {
+        self.presenter.getPremiumDealProduct { [ weak self ] products in
+            guard let product = products.first else {
+                print("❌ Error: not found.")
+                
+                self?.presentAlert(title: NSLocalizedString("Not Found", comment: String()))
+                
+                return
+            }
+            
+            self?.presenter.makePayment(product) { error in
+                self?.error(error) {
+                    self?.presenter.makeDealPremium()
+                    self?.presenter.changeDeal { error in
+                        self?.error(error)
+                    }
+                }
+            }
+        }
     }
     
     @objc private func didTapTranslutionView() {

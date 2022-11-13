@@ -189,6 +189,19 @@ final class URLConstructor {
             .appendingPathComponent(Paths.admin.rawValue)
     }
     
+    func makeUserPremium() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.users.rawValue)
+            .appendingPathExtension(Paths.premium.rawValue)
+    }
+    
+    func makeUserNotPremium() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.users.rawValue)
+            .appendingPathExtension(Paths.not.rawValue)
+            .appendingPathExtension(Paths.premium.rawValue)
+    }
+    
 //    MARK: Offer
     func deleteOffer(offerID: UUID) -> URL {
         self.baseURL
@@ -279,6 +292,12 @@ final class URLConstructor {
             .appendingPathComponent(Paths.all.rawValue)
     }
     
+    func randomAd() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.ads.rawValue)
+            .appendingPathComponent(Paths.random.rawValue)
+    }
+    
     func newAd() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.ads.rawValue)
@@ -357,6 +376,14 @@ final class URLConstructor {
         self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)
             .appendingPathComponent(Paths.change.rawValue)
+    }
+    
+    func chatRoomWithUser(userID: UUID) -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.chat.rawValue)
+            .appendingPathComponent(Paths.chats.rawValue)
+            .appendingPathComponent(Paths.with.rawValue)
+            .appendingPathComponent(userID.uuidString)
     }
     
     func chatRoomWith(userID: UUID) -> URL {

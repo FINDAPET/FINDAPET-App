@@ -27,6 +27,15 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
         return coordinator
     }()
     
+    private lazy var chatRoomCoordinator: ChatRoomCoordinator = {
+        let coordinator = ChatRoomCoordinator()
+        
+        coordinator.coordinatorDelegate = self
+        coordinator.start()
+        
+        return coordinator
+    }()
+    
     private lazy var profileCoordinator: ProfileCoordinator = {
         let coordinator = ProfileCoordinator()
         
@@ -51,9 +60,12 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
     
 //    MARK: Setup Views
     private func setupViews() {
-        self.tabBar.navigationController?.navigationBar.isHidden = true
+        self.tabBar.tabBar.clipsToBounds = true
+        self.tabBar.tabBar.layer.masksToBounds = true
+        self.tabBar.tabBar.layer.cornerRadius = 25
         self.tabBar.viewControllers = [
             self.feedCoordinator.navigationController,
+            self.chatRoomCoordinator.navigationController,
             self.profileCoordinator.navigationController,
             self.subscriptionCoordinator.navigationController
         ]
