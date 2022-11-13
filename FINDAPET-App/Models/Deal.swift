@@ -15,15 +15,15 @@ struct Deal {
         var tags: [String]
         var isPremiumDeal: Bool
         var isActive: Bool
-        var mode: String
-        var petType: String
-        var petBreed: String
-        var showClass: String
+        var mode: DealMode
+        var petType: PetType
+        var petBreed: PetBreed
+        var showClass: ShowClass
         var isMale: Bool
         var age: String
         var color: String
         var price: Double
-        var currencyName: String
+        var currencyName: Currency
         var catteryID: UUID
         var country: String?
         var city: String?
@@ -36,7 +36,7 @@ struct Deal {
         var mail: String?
         var buyerID: UUID?
         
-        init(id: UUID? = nil, title: String, photoDatas: [Data], tags: [String] = [String](), isPremiumDeal: Bool = false, isActive: Bool = true, mode: String, petType: String, petBreed: String, showClass: String, isMale: Bool, age: String, color: String, price: Double, currencyName: String, catteryID: UUID, country: String? = nil, city: String? = nil, description: String? = nil, whatsappNumber: String? = nil, telegramUsername: String? = nil, instagramUsername: String? = nil, facebookUsername: String? = nil, vkUsername: String? = nil, mail: String? = nil, buyerID: UUID?) {
+        init(id: UUID? = nil, title: String, photoDatas: [Data], tags: [String] = [String](), isPremiumDeal: Bool = false, isActive: Bool = true, mode: DealMode, petType: PetType, petBreed: PetBreed, showClass: ShowClass, isMale: Bool, age: String, color: String, price: Double, currencyName: Currency, catteryID: UUID, country: String? = nil, city: String? = nil, description: String? = nil, whatsappNumber: String? = nil, telegramUsername: String? = nil, instagramUsername: String? = nil, facebookUsername: String? = nil, vkUsername: String? = nil, mail: String? = nil, buyerID: UUID?) {
             self.id = id
             self.title = title
             self.photoDatas = photoDatas

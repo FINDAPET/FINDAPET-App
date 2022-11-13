@@ -48,7 +48,7 @@ final class CreateOfferPresenter {
                 dealID: dealID,
                 catteryID: catteryID,
                 price: price,
-                currencyName: currencyName.rawValue
+                currencyName: currencyName
             ),
             completionHandler: completionHandler
         )

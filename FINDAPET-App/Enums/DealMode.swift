@@ -12,4 +12,14 @@ enum DealMode: String, CaseIterable, Encodable {
     case onlyInCountry = "Only in the Country"
     case onlyAbroad = "Only Abroad"
     case everywhere = "Everywhere"
+    
+    static func getDealMode(_ value: String) -> DealMode? {
+        for dealMode in DealMode.allCases {
+            if dealMode.rawValue == value {
+                return dealMode
+            }
+        }
+        
+        return nil
+    }
 }
