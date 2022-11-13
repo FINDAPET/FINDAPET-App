@@ -15,4 +15,8 @@ final class FeedRouter: FeedCoordinatable {
         self.coordinatorDelegate?.goToDeal(dealID: dealID, deal: deal)
     }
     
+    func goToProfile(userID: UUID? = nil) {
+        self.coordinatorDelegate?.goToProfile(userID: userID)
+    }
+    
 }

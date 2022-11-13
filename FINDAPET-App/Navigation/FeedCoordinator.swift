@@ -61,4 +61,17 @@ final class FeedCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.navigationBar.isHidden = true
     }
     
+//    MARK: Profile
+    func getProfile(userID: UUID? = nil) -> ProfileViewController {
+        let coordinator = ProfileCoordinator()
+        
+        coordinator.start()
+        
+        return coordinator.getProfile(userID: userID)
+    }
+    
+    func goToProfile(userID: UUID? = nil) {
+        self.navigationController.pushViewController(self.getProfile(userID: userID), animated: true)
+    }
+    
 }

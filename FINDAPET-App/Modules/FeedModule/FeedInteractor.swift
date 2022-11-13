@@ -29,6 +29,11 @@ final class FeedInteractor {
         )
     }
     
+//    MARK: Aplication Requests
+    func goTo(url: URL) {
+        ApplicationRequestManager.request(url)
+    }
+    
 //    MARK: Keychain
     private func getBearrerToken() -> String? {
         KeychainManager.shared.read(key: .token)

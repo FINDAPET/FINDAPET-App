@@ -193,7 +193,21 @@ extension FeedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        self.presenter.goToDeal(deal: self.presenter.deals[indexPath.row])
+        if self.isEmptyTableView {
+            return
+        }
+        
+        if tableView.cellForRow(at: indexPath) is AdTableViewCell {
+            if self.presenter.ad?.link != nil {
+                self.presenter.goToUrl()
+            } else {
+                self.presenter.goToProfile()
+            }
+            
+            return
+        }
+        
+        self.presenter.goToDeal(deal: self.presenter.deals[indexPath.row - (self.presenter.ad != nil ? 1 : 0)])
     }
     
 }

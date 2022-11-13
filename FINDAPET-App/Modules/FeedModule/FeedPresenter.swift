@@ -73,9 +73,18 @@ final class FeedPresenter {
         self.interactor.getRandomAd(completionHandler: newCompletionHandler)
     }
     
+//    MARK: Aplication Requests
+    func goToUrl() {
+        self.interactor.goTo(url: URL(string: self.ad?.link ?? .init()) ?? .init(fileURLWithPath: .init()))
+    }
+    
 //    MARK: Routing
     func goToDeal(deal: Deal.Output) {
         self.router.goToDeal(deal: deal)
+    }
+    
+    func goToProfile() {
+        self.router.goToProfile(userID: self.ad?.cattery?.id)
     }
     
 }
