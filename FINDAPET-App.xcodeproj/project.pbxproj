@@ -139,6 +139,10 @@
 		E3E05D08291F8B4F00605F49 /* NotFoundTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D07291F8B4F00605F49 /* NotFoundTableViewCell.swift */; };
 		E3E05D0B291F9B9D00605F49 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D0A291F9B9D00605F49 /* SearchView.swift */; };
 		E3E05D0D291FAF6C00605F49 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D0C291FAF6C00605F49 /* UIButton.swift */; };
+		E3E05D132921440300605F49 /* DealMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D122921440300605F49 /* DealMode.swift */; };
+		E3E05D152921445100605F49 /* PetBreed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D142921445100605F49 /* PetBreed.swift */; };
+		E3E05D17292149A500605F49 /* PetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D16292149A500605F49 /* PetType.swift */; };
+		E3E05D19292149E700605F49 /* ShowClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D18292149E700605F49 /* ShowClass.swift */; };
 		E3E1D178290310840069EE46 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D177290310840069EE46 /* Currency.swift */; };
 		E3E1D180290313AE0069EE46 /* SettingsBlockRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D17F290313AE0069EE46 /* SettingsBlockRouter.swift */; };
 		E3E1D182290313BC0069EE46 /* SettingsBlockInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D181290313BC0069EE46 /* SettingsBlockInteractor.swift */; };
@@ -300,6 +304,10 @@
 		E3E05D07291F8B4F00605F49 /* NotFoundTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotFoundTableViewCell.swift; sourceTree = "<group>"; };
 		E3E05D0A291F9B9D00605F49 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		E3E05D0C291FAF6C00605F49 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
+		E3E05D122921440300605F49 /* DealMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealMode.swift; sourceTree = "<group>"; };
+		E3E05D142921445100605F49 /* PetBreed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetBreed.swift; sourceTree = "<group>"; };
+		E3E05D16292149A500605F49 /* PetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetType.swift; sourceTree = "<group>"; };
+		E3E05D18292149E700605F49 /* ShowClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowClass.swift; sourceTree = "<group>"; };
 		E3E1D177290310840069EE46 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		E3E1D17F290313AE0069EE46 /* SettingsBlockRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBlockRouter.swift; sourceTree = "<group>"; };
 		E3E1D181290313BC0069EE46 /* SettingsBlockInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBlockInteractor.swift; sourceTree = "<group>"; };
@@ -950,6 +958,10 @@
 			isa = PBXGroup;
 			children = (
 				E3E1D177290310840069EE46 /* Currency.swift */,
+				E3E05D122921440300605F49 /* DealMode.swift */,
+				E3E05D142921445100605F49 /* PetBreed.swift */,
+				E3E05D16292149A500605F49 /* PetType.swift */,
+				E3E05D18292149E700605F49 /* ShowClass.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -1166,6 +1178,7 @@
 				E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */,
 				E300650F2916935B00FAB319 /* ChatRoomsViewController.swift in Sources */,
 				E3993F53290716BE000C218C /* SubscriptionRouter.swift in Sources */,
+				E3E05D152921445100605F49 /* PetBreed.swift in Sources */,
 				E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */,
 				E305610129104E3900E0881C /* UIStackView.swift in Sources */,
 				E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */,
@@ -1177,6 +1190,7 @@
 				E3993F57290716DF000C218C /* SubscriptionPresenter.swift in Sources */,
 				E3993F71290B0A12000C218C /* ContactEmails.swift in Sources */,
 				E3E4D6A028B92BE3002B0BE6 /* PrivacyPolicyRouter.swift in Sources */,
+				E3E05D17292149A500605F49 /* PetType.swift in Sources */,
 				E3E1EB51290063C600F536F4 /* AdsRouter.swift in Sources */,
 				E3993F6E290AF8B4000C218C /* InfoViewController.swift in Sources */,
 				E313B89A28ACE37B00E33975 /* RegistrationInteractor.swift in Sources */,
@@ -1209,6 +1223,7 @@
 				E34ABC5128A7D30E00A7D2C8 /* UserDefaultsKeys.swift in Sources */,
 				E30560ED290EB8F000E0881C /* NotificationCenterManager.swift in Sources */,
 				E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */,
+				E3E05D132921440300605F49 /* DealMode.swift in Sources */,
 				E3F4B04728FD7D510083815E /* SlideMenuViewController.swift in Sources */,
 				E3DBD03B28FF21800063DC35 /* OffersViewController.swift in Sources */,
 				E3DBD03328FF213F0063DC35 /* OffersInteractor.swift in Sources */,
@@ -1248,6 +1263,7 @@
 				E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */,
 				E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */,
 				E30560F6290ECE8300E0881C /* DealInteractor.swift in Sources */,
+				E3E05D19292149E700605F49 /* ShowClass.swift in Sources */,
 				E3E1D18D290326B80069EE46 /* SettingsPresenter.swift in Sources */,
 				E3E05D03291EB47B00605F49 /* FeedViewController.swift in Sources */,
 				E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */,
