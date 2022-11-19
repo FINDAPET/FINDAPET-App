@@ -74,4 +74,20 @@ final class FeedCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getProfile(userID: userID), animated: true)
     }
     
+//    MARK: Filter
+    func getFilter(filter: Filter, saveAction: @escaping (Filter) -> Void) -> FilterViewController {
+        let router = FilterRouter()
+        let interactor = FilterInteractor()
+        let presenter = FilterPresenter(filter: filter, saveAction: saveAction, rotuer: router, interactor: interactor)
+        let viewController = FilterViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        return viewController
+    }
+    
+    func goToFilter(filter: Filter, saveAction: @escaping (Filter) -> Void) {
+        self.navigationController.pushViewController(self.getFilter(filter: filter, saveAction: saveAction), animated: true)
+    }
+    
 }

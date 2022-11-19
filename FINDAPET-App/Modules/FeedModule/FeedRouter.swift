@@ -19,4 +19,8 @@ final class FeedRouter: FeedCoordinatable {
         self.coordinatorDelegate?.goToProfile(userID: userID)
     }
     
+    func getFilter(filter: Filter, saveAction: @escaping (Filter) -> Void) -> FilterViewController? {
+        self.coordinatorDelegate?.getFilter(filter: filter, saveAction: saveAction)
+    }
+    
 }

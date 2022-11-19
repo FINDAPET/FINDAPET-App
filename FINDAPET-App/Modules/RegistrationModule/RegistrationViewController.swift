@@ -50,7 +50,7 @@ final class RegistrationViewController: UIViewController {
         view.autocapitalizationType = .none
         view.backgroundColor = .textFieldColor
         view.placeholder = "Email"
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 15
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.layer.borderWidth = 0.5
@@ -73,7 +73,7 @@ final class RegistrationViewController: UIViewController {
         view.backgroundColor = .textFieldColor
         view.isSecureTextEntry = true
         view.placeholder = NSLocalizedString("Password", comment: "")
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 15
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.layer.borderWidth = 0.5
