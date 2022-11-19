@@ -109,7 +109,7 @@ enum PetBreed: String, CaseIterable, Encodable {
     case BrazilianTerrier = "Brazilian Terrier"
     case SwedishVallhund = "Swedish Vallhund"
     case FrisianWaterDog = "Frisian Water Dog"
-    case other = "-"
+    case other = "Other"
     
     static let allCatBreeds = [PetBreed.Abyssinian, .Anatoli, .Asian, .Bengal, .Burmese, .Ceylon, .Chartreux, .Chausie, .Kanaani, .Korat, .Lykoy, .Minskin, .Nebelung, .Ocicat, .Persian, .Peterbald, .Ragdoll, .Russian, .Savannah, .Serengeti, .Siamese, .Singapura, .Snowshoe, .Sokoke, .Somali, .Sphynx, .Thai, .Toybob, .Toyger, .York, .Bombay, .Burmilla, .Classicat, .Colourpoint, .Cymric, .Havana, .Mandalay, .Manx, .Tiffanie, .AmericanBobtailSH, .AmericanBobtailLH, .AmericanCurlSH, .AmericanCurlLH, .AmericanShorthair, .AmericanWirehair, .AphroditesGiantSH, .AphroditesGiantLH, .ArabianMau, .AustralianMist, .BrazilianShorthair, .BritishShorthair, .BritishLonghair, .BurmillaLH, .CelticShorthair, .ChineseLiHau, .ColourpointShorthair, .CornishRex, .DevonRex, .DeutschLanghaar, .DonSphynx, .EgyptianMau, .ExoticShorthair, .ForeignWhiteSH, .ForeignWhiteLH, .GermanRex, .HouseholdPet, .HighlandFold, .HighlandStraight, .HighlanderSH, .HighlanderLH, .JapaneseBobtailSH, .JapaneseBobtailLH, .KarelianBobtailSH, .KarelianBobtailLH, .KurilianBobtailSH, .KurilianBobtailLH, .LaPermSH, .LaPermLH, .MaineCoon, .MekongBobtail, .MunchkinSH, .MunchkinLH, .NevaMasquerade, .NorwegianForest, .OjosAzulesSH, .OjosAzulesLH, .OrientalSemiLonghair, .OrientalShorthair, .OriginalLonghair, .PixiebobSH, .PixiebobLH, .RussianBlue, .SacredBirman, .ScottishFold, .ScottishStraight, .SelkirkRexSH, .SelkirkRexLH, .SiberianCat, .TonkaneseSH, .TonkaneseLH, .TurkishAngora, .TurkishVan, .TurkishVankedisi, .UralRexSH, .UralRexLH, .other]
     

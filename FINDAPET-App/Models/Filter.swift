@@ -9,10 +9,9 @@ import Foundation
 
 struct Filter: Encodable {
     var title: String?
-    var mode: String?
-    var petType: String?
-    var petBreed: String?
-    var showClass: String?
+    var petType: PetType?
+    var petBreed: PetBreed?
+    var petClass: PetClass?
     var isMale: Bool?
     var country: String?
     var city: String?

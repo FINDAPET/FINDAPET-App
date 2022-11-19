@@ -87,7 +87,7 @@ final class DealPresenter {
                 mode: DealMode.getDealMode(deal.mode) ?? .everywhere,
                 petType: PetType.getPetType(deal.petType) ?? .cat,
                 petBreed: PetBreed.getPetBreed(deal.petBreed) ?? .other,
-                showClass: ShowClass.getShowClass(deal.showClass) ?? .allClass,
+                petClass: PetClass.getPetClass(deal.petClass) ?? .allClass,
                 isMale: deal.isActive,
                 age: deal.age,
                 color: deal.color,

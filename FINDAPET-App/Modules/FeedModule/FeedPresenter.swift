@@ -37,11 +37,8 @@ final class FeedPresenter {
         self.filter.title = title
     }
     
-    func setFilter(_ filter: Filter) {
-        let title = self.filter.title
-        
-        self.filter = filter
-        self.filter.title = title
+    func deleteFilter() {
+        self.filter = Filter(title: self.filter.title)
     }
     
 //    MARK: Requests
@@ -59,7 +56,7 @@ final class FeedPresenter {
         self.interactor.getDeals(self.filter, completionHandler: newCompletionHandler)
     }
     
-    func getRandomAd(completionHandler: @escaping (Ad.Output?, Error?) -> Void) {
+    func getRandomAd(completionHandler: @escaping (Ad.Output?, Error?) -> Void = { _, _ in }) {
         let newCompletionHandler: (Ad.Output?, Error?) -> Void = { [ weak self ] ad, error in
             completionHandler(ad, error)
             
@@ -85,6 +82,15 @@ final class FeedPresenter {
     
     func goToProfile() {
         self.router.goToProfile(userID: self.ad?.cattery?.id)
+    }
+    
+    func getFilter(completionHandler: @escaping ([Deal.Output]?, Error?) -> Void) -> FilterViewController? {
+        self.router.getFilter(filter: self.filter) { filter in
+            self.filter = filter
+            
+            self.getDeals(completionHandler: completionHandler)
+            self.getRandomAd()
+        }
     }
     
 }

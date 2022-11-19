@@ -65,8 +65,8 @@ final class DealDescriptionView: UIView {
         ),
         self.createKeyValueStackView(key: NSLocalizedString("Mode", comment: String()), value: self.deal.mode),
         self.createKeyValueStackView(key: NSLocalizedString("Breed", comment: String()), value: self.deal.petBreed),
-        self.createKeyValueStackView(key: NSLocalizedString("Show Class", comment: String()), value: self.deal.showClass),
-        self.createKeyValueStackView(key: NSLocalizedString("Show Class", comment: String()), value: self.deal.showClass),
+        self.createKeyValueStackView(key: NSLocalizedString("Show Class", comment: String()), value: self.deal.petClass),
+        self.createKeyValueStackView(key: NSLocalizedString("Show Class", comment: String()), value: self.deal.petClass),
         self.createKeyValueStackView(key: NSLocalizedString("Age", comment: String()), value: self.deal.age),
         self.createKeyValueStackView(key: NSLocalizedString("Color", comment: String()), value: self.deal.color)
     ]

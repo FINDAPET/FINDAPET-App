@@ -126,13 +126,12 @@ final class FeedViewController: UIViewController {
     }
     
 //    MARK: Actions
-   
     @objc private func onRefresh() {
         self.presenter.getDeals { [ weak self ] _, error in
             self?.error(error)
         }
     }
-    
+        
 }
 
 extension FeedViewController: UITableViewDataSource {
@@ -219,17 +218,21 @@ extension FeedViewController: SearchViewDelegate {
     }
     
     func searchView(_ searchView: SearchView, didTapSearchButton button: UIButton) {
-        self.presenter.getRandomAd { [ weak self ] _, error in
-            self?.error(error) {
-                self?.presenter.getDeals { _, error in
-                    self?.error(error)
-                }
-            }
+        self.presenter.deleteFilter()
+        self.presenter.getRandomAd()
+        self.presenter.getDeals { [ weak self ] _, error in
+            self?.error(error)
         }
     }
     
     func searchView(_ searchView: SearchView, didTapFilterButton button: UIButton) {
-//        present filter view controller
+        guard let viewController = self.presenter.getFilter(completionHandler: { [ weak self ] _, error in
+            self?.error(error)
+        }) else {
+            return
+        }
+        
+        self.present(viewController, animated: true)
     }
     
 }
