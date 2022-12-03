@@ -46,11 +46,6 @@
 		E325351F28F58CE600878A7F /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E325351E28F58CE600878A7F /* ChatRoom.swift */; };
 		E32AC0D728FB182F00081886 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E32AC0D628FB182F00081886 /* SnapKit */; };
 		E32AC0DA28FB184100081886 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E32AC0D928FB184100081886 /* KeychainAccess */; };
-		E33130A1292A82F0009C26A1 /* EditDealCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130A0292A82F0009C26A1 /* EditDealCoordinator.swift */; };
-		E33130AE293243E7009C26A1 /* EditDealRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130AD293243E7009C26A1 /* EditDealRouter.swift */; };
-		E33130B0293243F8009C26A1 /* EditDealInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130AF293243F8009C26A1 /* EditDealInteractor.swift */; };
-		E33130B229324407009C26A1 /* EditDealPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130B129324407009C26A1 /* EditDealPresenter.swift */; };
-		E33130B42932441F009C26A1 /* EditDealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130B32932441F009C26A1 /* EditDealViewController.swift */; };
 		E334BAF22916E714009AAB91 /* ChatRoomRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334BAF12916E714009AAB91 /* ChatRoomRouter.swift */; };
 		E334BAF42916E729009AAB91 /* ChatRoomInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334BAF32916E729009AAB91 /* ChatRoomInteractor.swift */; };
 		E334BAF62916E738009AAB91 /* ChatRoomPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334BAF52916E738009AAB91 /* ChatRoomPresenter.swift */; };
@@ -218,11 +213,6 @@
 		E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePayManager.swift; sourceTree = "<group>"; };
 		E325351C28F58C6500878A7F /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		E325351E28F58CE600878A7F /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
-		E33130A0292A82F0009C26A1 /* EditDealCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDealCoordinator.swift; sourceTree = "<group>"; };
-		E33130AD293243E7009C26A1 /* EditDealRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDealRouter.swift; sourceTree = "<group>"; };
-		E33130AF293243F8009C26A1 /* EditDealInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDealInteractor.swift; sourceTree = "<group>"; };
-		E33130B129324407009C26A1 /* EditDealPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDealPresenter.swift; sourceTree = "<group>"; };
-		E33130B32932441F009C26A1 /* EditDealViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDealViewController.swift; sourceTree = "<group>"; };
 		E334BAF12916E714009AAB91 /* ChatRoomRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomRouter.swift; sourceTree = "<group>"; };
 		E334BAF32916E729009AAB91 /* ChatRoomInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomInteractor.swift; sourceTree = "<group>"; };
 		E334BAF52916E738009AAB91 /* ChatRoomPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomPresenter.swift; sourceTree = "<group>"; };
@@ -349,7 +339,7 @@
 		E3E4D6A128B92BF4002B0BE6 /* PrivacyPolicyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyInteractor.swift; sourceTree = "<group>"; };
 		E3E4D6A328B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyPresenter.swift; sourceTree = "<group>"; };
 		E3E4D6A528B92C07002B0BE6 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
-		E3F4B04628FD7D510083815E /* SlideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SlideMenuViewController.swift; path = "../New Group/SlideMenuViewController.swift"; sourceTree = "<group>"; };
+		E3F4B04628FD7D510083815E /* SlideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideMenuViewController.swift; sourceTree = "<group>"; };
 		E3F4B04928FD7F430083815E /* SideMenuSides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuSides.swift; sourceTree = "<group>"; };
 		E3F4B04B28FDC55C0083815E /* CurrencyConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverter.swift; sourceTree = "<group>"; };
 		E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
@@ -485,25 +475,6 @@
 				E31BEE4928A96A6A00E29A1C /* ApplePayManager.swift */,
 			);
 			path = ApplePayManager;
-			sourceTree = "<group>";
-		};
-		E33130A6292A9D1E009C26A1 /* SideMenu */ = {
-			isa = PBXGroup;
-			children = (
-				E3F4B04628FD7D510083815E /* SlideMenuViewController.swift */,
-			);
-			path = SideMenu;
-			sourceTree = "<group>";
-		};
-		E33130AC293243BD009C26A1 /* EditDealModule */ = {
-			isa = PBXGroup;
-			children = (
-				E33130AD293243E7009C26A1 /* EditDealRouter.swift */,
-				E33130AF293243F8009C26A1 /* EditDealInteractor.swift */,
-				E33130B129324407009C26A1 /* EditDealPresenter.swift */,
-				E33130B32932441F009C26A1 /* EditDealViewController.swift */,
-			);
-			path = EditDealModule;
 			sourceTree = "<group>";
 		};
 		E334DFCB28A8265B000A2316 /* NotificationManager */ = {
@@ -667,8 +638,7 @@
 		E36F622628F9EBA8007C7623 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				E33130AC293243BD009C26A1 /* EditDealModule */,
-				E374379E292248DC0077FA28 /* FilterModule */,
+				E374379E292248DC0077FA28 /* Filter */,
 				E3E05CFB291EB42400605F49 /* FeedModule */,
 				E3ADF55D2916E65A00E46FFD /* ChatRoomModule */,
 				E30065072916912900FAB319 /* ChatRoomsModule */,
@@ -690,7 +660,7 @@
 			path = Modules;
 			sourceTree = "<group>";
 		};
-		E374379E292248DC0077FA28 /* FilterModule */ = {
+		E374379E292248DC0077FA28 /* Filter */ = {
 			isa = PBXGroup;
 			children = (
 				E374379F292248F70077FA28 /* FilterRouter.swift */,
@@ -698,7 +668,7 @@
 				E37437A3292249400077FA28 /* FilterPresenter.swift */,
 				E37437A5292249590077FA28 /* FilterViewController.swift */,
 			);
-			path = FilterModule;
+			path = Filter;
 			sourceTree = "<group>";
 		};
 		E37437A9292255910077FA28 /* PetTypeCollectionViewCell */ = {
@@ -835,7 +805,6 @@
 				E3CEE68128ABE4DC00468ED2 /* RegistrationCoordinator.swift */,
 				E3993F72290B14F9000C218C /* SubscriptionCoordinator.swift */,
 				E30065052916900500FAB319 /* ChatRoomCoordinator.swift */,
-				E33130A0292A82F0009C26A1 /* EditDealCoordinator.swift */,
 				E3CEE67E28ABD88800468ED2 /* Coordinator.swift */,
 			);
 			path = Navigation;
@@ -1094,7 +1063,7 @@
 		E3F4B04528FD7D340083815E /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				E33130A6292A9D1E009C26A1 /* SideMenu */,
+				E3F4B04628FD7D510083815E /* SlideMenuViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1240,7 +1209,6 @@
 				E3A9FA4B29291C5A00B13B96 /* SexCollectionViewCell.swift in Sources */,
 				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
 				E3E05D0B291F9B9D00605F49 /* SearchView.swift in Sources */,
-				E33130B42932441F009C26A1 /* EditDealViewController.swift in Sources */,
 				E3DBD03728FF21630063DC35 /* OffersRouter.swift in Sources */,
 				E34ABC3A28A796EA00A7D2C8 /* Ad.swift in Sources */,
 				E3F4B04C28FDC55C0083815E /* CurrencyConverter.swift in Sources */,
@@ -1315,7 +1283,6 @@
 				E3CEE67F28ABD88800468ED2 /* Coordinator.swift in Sources */,
 				E3DBD03E28FF32C10063DC35 /* OfferTableViewCell.swift in Sources */,
 				E30065122916998700FAB319 /* ChatRoomTableViewCell.swift in Sources */,
-				E33130AE293243E7009C26A1 /* EditDealRouter.swift in Sources */,
 				E3D74F7D28A6AB26004C5172 /* Hosts.swift in Sources */,
 				E36F622528F9E5F1007C7623 /* ExchangeConvert.swift in Sources */,
 				E3993F652909B66E000C218C /* CreateAdViewController.swift in Sources */,
@@ -1325,7 +1292,6 @@
 				E3E1D182290313BC0069EE46 /* SettingsBlockInteractor.swift in Sources */,
 				E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */,
 				E3E1D18F290326DE0069EE46 /* SettingsViewController.swift in Sources */,
-				E33130B0293243F8009C26A1 /* EditDealInteractor.swift in Sources */,
 				E3993F6A290AF898000C218C /* InfoInteractor.swift in Sources */,
 				E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */,
 				E3E05CFF291EB45700605F49 /* FeedInteractor.swift in Sources */,
@@ -1333,7 +1299,6 @@
 				E3E05D0D291FAF6C00605F49 /* UIButton.swift in Sources */,
 				E34ABC3C28A7BD4300A7D2C8 /* HTTPMethods.swift in Sources */,
 				E3E1D186290313D80069EE46 /* SettingsBlockView.swift in Sources */,
-				E33130A1292A82F0009C26A1 /* EditDealCoordinator.swift in Sources */,
 				E3E1EB53290063D200F536F4 /* AdsInteractor.swift in Sources */,
 				E313B89E28ACE39800E33975 /* RegistrationViewController.swift in Sources */,
 				E35E09F428F73A9000B310D1 /* YandexMobileMetricaErrors.swift in Sources */,
@@ -1362,7 +1327,6 @@
 				E3E4D6A428B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift in Sources */,
 				E3993F5C2907EB73000C218C /* SubscriptionCollectionViewCell.swift in Sources */,
 				E3E1EB57290063F000F536F4 /* AdsViewController.swift in Sources */,
-				E33130B229324407009C26A1 /* EditDealPresenter.swift in Sources */,
 				E3E1D18B290326AD0069EE46 /* SettingsInteractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
