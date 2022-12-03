@@ -305,17 +305,13 @@ extension CreateAdViewController: UINavigationControllerDelegate { }
 extension CreateAdViewController: UIImagePickerControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: true)
-        
-        guard let image = info[.editedImage] as? UIImage else {
-            return
-        }
-        
         if picker == self.avatarImagePickerController {
-            self.avatarImageView.image = image
+            
         } else {
-            self.contentImageView.image = image
+            
         }
+        
+        picker.dismiss(animated: true)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

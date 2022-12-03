@@ -14,7 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.registerForPushNotifications()
-        self.checkSusbscription()
         
         if #available(iOS 16, *) {
             self.setCurrency(Locale.current.currency?.identifier ?? Currency.USD.rawValue)
@@ -98,15 +97,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func setCurrency(_ value: String) {
         UserDefaultsManager.write(data: value, key: .currency)
-    }
-    
-    private func checkSusbscription() {
-        guard let date = UserDefaultsManager.read(key: .premiumUserDate) as? Date, date >= .init() else {
-            UserDefaultsManager.write(data: nil, key: .premiumUserDate)
-            UserDefaultsManager.write(data: nil, key: .subscription)
-            
-            return
-        }
     }
     
 }
