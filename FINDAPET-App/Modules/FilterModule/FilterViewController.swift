@@ -403,7 +403,6 @@ final class FilterViewController: UIViewController {
             self?.petClassValueLabel.text = alertAction.title
             self?.presenter.setPetClass(alertAction.title)
         }
-        
     }
     
     @objc private func editingCountryTextField(_ sender: UITextField) {
@@ -499,6 +498,7 @@ extension FilterViewController: UICollectionViewDelegate {
                 self.selectedIsMale = nil
             } else {
                 self.presenter.setIsMale(cell.isMale)
+                self.selectedIsMale = cell.isMale
             }
         }
     }
@@ -508,7 +508,10 @@ extension FilterViewController: UICollectionViewDelegate {
 extension FilterViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        .init(width: (self.view.bounds.width - 45) / 2, height: collectionView == self.petTypeCollectionView ? (self.view.bounds.width - 45) / 2 : 50)
+        .init(
+            width: (self.view.bounds.width - 45) / 2,
+            height: collectionView == self.petTypeCollectionView ? (self.view.bounds.width - 45) / 2 : 50
+        )
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
