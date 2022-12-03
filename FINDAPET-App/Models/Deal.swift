@@ -15,14 +15,14 @@ struct Deal {
         var tags: [String]
         var isPremiumDeal: Bool
         var isActive: Bool
-        var mode: DealMode?
-        var petType: PetType?
-        var petBreed: PetBreed?
-        var petClass: PetClass?
-        var isMale: Bool?
-        var age: String?
-        var color: String?
-        var price: Double?
+        var mode: DealMode
+        var petType: PetType
+        var petBreed: PetBreed
+        var petClass: PetClass
+        var isMale: Bool
+        var age: String
+        var color: String
+        var price: Double
         var currencyName: Currency
         var catteryID: UUID
         var country: String?
@@ -36,7 +36,7 @@ struct Deal {
         var mail: String?
         var buyerID: UUID?
         
-        init(id: UUID? = nil, title: String, photoDatas: [Data], tags: [String] = [String](), isPremiumDeal: Bool = false, isActive: Bool = true, mode: DealMode? = nil, petType: PetType? = nil, petBreed: PetBreed? = nil, petClass: PetClass? = nil, isMale: Bool? = nil, age: String? = nil, color: String? = nil, price: Double? = nil, currencyName: Currency = .USD, catteryID: UUID, country: String? = nil, city: String? = nil, description: String? = nil, whatsappNumber: String? = nil, telegramUsername: String? = nil, instagramUsername: String? = nil, facebookUsername: String? = nil, vkUsername: String? = nil, mail: String? = nil, buyerID: UUID? = nil) {
+        init(id: UUID? = nil, title: String, photoDatas: [Data], tags: [String] = [String](), isPremiumDeal: Bool = false, isActive: Bool = true, mode: DealMode, petType: PetType, petBreed: PetBreed, petClass: PetClass, isMale: Bool, age: String, color: String, price: Double, currencyName: Currency, catteryID: UUID, country: String? = nil, city: String? = nil, description: String? = nil, whatsappNumber: String? = nil, telegramUsername: String? = nil, instagramUsername: String? = nil, facebookUsername: String? = nil, vkUsername: String? = nil, mail: String? = nil, buyerID: UUID?) {
             self.id = id
             self.title = title
             self.photoDatas = photoDatas

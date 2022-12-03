@@ -186,10 +186,9 @@ final class CreateOfferViewController: UIViewController {
     @objc private func didTapCurrencyButton() {
         self.presentActionsSheet(
             title: NSLocalizedString("Currency", comment: String()),
-            contents: Currency.allCases.map { $0.rawValue }
-        ) { [ weak self ] alertAction in
-            self?.currencyButton.setTitle(alertAction.title, for: .normal)
-        }
+            contents: Currency.allCases.map { $0.rawValue }) { [ weak self ] alertAction in
+                self?.currencyButton.setTitle(alertAction.title, for: .normal)
+            }
     }
     
 }

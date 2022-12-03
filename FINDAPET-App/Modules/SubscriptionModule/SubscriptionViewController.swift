@@ -125,36 +125,7 @@ extension SubscriptionViewController: UICollectionViewDelegate {
                         }
                         
                         self.presenter.makeUserPremium(Subscription(productID: id)) { error in
-                            self.error(error) {
-                                switch id {
-                                case .premiumSubscriptionOneMonth:
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(month: 1),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                case .premiumSubscriptionThreeMonth:
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(month: 3),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                case .premiumSubscriptionSixMonth:
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(month: 6),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                case .premiumSubscriptionOneYear:
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(year: 1),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                default:
-                                    self.presentAlert(title: NSLocalizedString("Error", comment: .init()))
-                                }
-                            }
+                            self.error(error)
                         }
                     }
                 }
