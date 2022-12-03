@@ -30,7 +30,7 @@ final class PhotoCollectionViewCell: UICollectionViewCell {
     }
     
 //    MARK: UI Properties
-    let imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let view = UIImageView()
         
         view.clipsToBounds = true

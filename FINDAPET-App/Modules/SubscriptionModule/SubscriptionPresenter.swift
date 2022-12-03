@@ -47,8 +47,8 @@ final class SubscriptionPresenter {
     }
     
 //    MARK: User Defaults
-    func setSubscription(_ value: String) {
-        self.interactor.set(value, to: .subscription)
+    func setPremiumUserDate(_ value: Date) {
+        self.interactor.set(value, to: .premiumUserDate)
     }
     
     func getSubscription() -> String? {
