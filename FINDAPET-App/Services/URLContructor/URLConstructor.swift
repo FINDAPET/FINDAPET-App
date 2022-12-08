@@ -35,19 +35,19 @@ final class URLConstructor {
     static let defaultWS = URLConstructor(scheme: .ws, host: .localhost, port: .localhost)
     static let exchange = URLConstructor(scheme: .http, host: .exchange)
     
-//    MARK: Auth
+    //    MARK: Auth
     func auth() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.auth.rawValue)
     }
     
-//    MARK: Log Out
+    //    MARK: Log Out
     func logOut() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.logOut.rawValue)
     }
     
-//    MARK: User
+    //    MARK: User
     func newUser() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
@@ -202,7 +202,7 @@ final class URLConstructor {
             .appendingPathExtension(Paths.premium.rawValue)
     }
     
-//    MARK: Offer
+    //    MARK: Offer
     func deleteOffer(offerID: UUID) -> URL {
         self.baseURL
             .appendingPathComponent(Paths.offers.rawValue)
@@ -223,7 +223,7 @@ final class URLConstructor {
             .appendingPathComponent(Paths.new.rawValue)
     }
     
-//    MARK: Deal
+    //    MARK: Deal
     func allDeals() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
@@ -253,6 +253,13 @@ final class URLConstructor {
         self.baseURL
             .appendingPathComponent(Paths.deals.rawValue)
             .appendingPathComponent(Paths.change.rawValue)
+    }
+    
+    func viewDeal(dealID: UUID) -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.deals.rawValue)
+            .appendingPathExtension(dealID.uuidString)
+            .appendingPathExtension(Paths.view.rawValue)
     }
     
     func deactiveteDeal(dealID: UUID) -> URL {
@@ -439,6 +446,75 @@ final class URLConstructor {
             .appendingPathComponent(Paths.messages.rawValue)
             .appendingPathComponent(Paths.delete.rawValue)
             .appendingPathComponent(messageID.uuidString)
+    }
+    
+//    MARK: Complaint
+    func allCompaints() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.complaints.rawValue)
+            .appendingPathExtension(Paths.all.rawValue)
+    }
+    
+    func complaint(complaintID: UUID) -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.complaints.rawValue)
+            .appendingPathExtension(complaintID.uuidString)
+    }
+    
+    func newCompaint() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.complaints.rawValue)
+            .appendingPathExtension(Paths.new.rawValue)
+    }
+    
+    func changeCompaint() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.complaints.rawValue)
+            .appendingPathExtension(Paths.change.rawValue)
+    }
+    
+    func deleteComplaint(complaintID: UUID) -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.complaints.rawValue)
+            .appendingPathExtension(complaintID.uuidString)
+            .appendingPathExtension(Paths.delete.rawValue)
+    }
+    
+//    MARK: Notification Screen
+    func allNotificationScreens() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.notification.rawValue)
+            .appendingPathExtension(Paths.screens.rawValue)
+            .appendingPathExtension(Paths.all.rawValue)
+    }
+    
+    func notificationScreen(notificationScreenID: UUID) -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.notification.rawValue)
+            .appendingPathExtension(Paths.screens.rawValue)
+            .appendingPathExtension(notificationScreenID.uuidString)
+    }
+    
+    func newNotificationScreen() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.notification.rawValue)
+            .appendingPathExtension(Paths.screens.rawValue)
+            .appendingPathExtension(Paths.new.rawValue)
+    }
+    
+    func changeNotificationScreen() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.notification.rawValue)
+            .appendingPathExtension(Paths.screens.rawValue)
+            .appendingPathExtension(Paths.change.rawValue)
+    }
+    
+    func deleteNotificationScreen(notificationScreenID: UUID) -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.notification.rawValue)
+            .appendingPathExtension(Paths.screens.rawValue)
+            .appendingPathExtension(notificationScreenID.uuidString)
+            .appendingPathExtension(Paths.delete.rawValue)
     }
     
 //    MARK: Exchange

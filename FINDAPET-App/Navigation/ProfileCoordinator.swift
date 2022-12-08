@@ -209,6 +209,26 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getInfo(), animated: true)
     }
     
+//    MARK: Complaint
+    func getComplaint(_ complaint: Complaint.Input) -> ComplaintViewController {
+        let router = ComplaintRouter()
+        let interactor = ComplaintInteractor()
+        let presenter = ComplaintPresenter(complaint: complaint, router: router, interactor: interactor)
+        let viewController = ComplaintViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        return viewController
+    }
+    
+    func goToComlaint(_ complaint: Complaint.Input, didTapSendButtonCallBack: (() -> Void)? = nil) {
+        let viewController = self.getComplaint(complaint)
+        
+        viewController.didTapSendButtonCallBack = didTapSendButtonCallBack
+        
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
 //    MARK: Onboarding
     func goToOnboarding() {
         let registrationCoordinator = RegistrationCoordinator()

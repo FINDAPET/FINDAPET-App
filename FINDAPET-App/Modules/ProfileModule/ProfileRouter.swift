@@ -43,4 +43,8 @@ final class ProfileRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.goToDeal(dealID: dealID, deal: deal)
     }
     
+    func getComplaint(_ complaint: Complaint.Input) -> ComplaintViewController? {
+        self.coordinatorDelegate?.getComplaint(complaint)
+    }
+    
 }

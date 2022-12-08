@@ -58,6 +58,12 @@
 		E334BAFA2917D0F0009AAB91 /* WebSocketSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334BAF92917D0F0009AAB91 /* WebSocketSender.swift */; };
 		E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334DFCC28A82687000A2316 /* NotificationManager.swift */; };
 		E347A5482901B3690089271F /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E347A5472901B3690089271F /* UIView.swift */; };
+		E34A3AD5293E08C00038625F /* ComplaintRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3AD4293E08C00038625F /* ComplaintRouter.swift */; };
+		E34A3AD7293E08D70038625F /* ComplaintInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3AD6293E08D70038625F /* ComplaintInteractor.swift */; };
+		E34A3AD9293E08EB0038625F /* ComplaintPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3AD8293E08EB0038625F /* ComplaintPresenter.swift */; };
+		E34A3ADB293E08F40038625F /* ComplaintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3ADA293E08F40038625F /* ComplaintViewController.swift */; };
+		E34A3ADD293E0A790038625F /* Complaint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3ADC293E0A790038625F /* Complaint.swift */; };
+		E34A3ADF293E0ADA0038625F /* NotificationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3ADE293E0ADA0038625F /* NotificationScreen.swift */; };
 		E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */; };
 		E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */; };
 		E34ABC3428A7906500A7D2C8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3328A7906500A7D2C8 /* User.swift */; };
@@ -232,6 +238,12 @@
 		E334DFCC28A82687000A2316 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E337A3EF28F7132700FA6417 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		E347A5472901B3690089271F /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		E34A3AD4293E08C00038625F /* ComplaintRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplaintRouter.swift; sourceTree = "<group>"; };
+		E34A3AD6293E08D70038625F /* ComplaintInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplaintInteractor.swift; sourceTree = "<group>"; };
+		E34A3AD8293E08EB0038625F /* ComplaintPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplaintPresenter.swift; sourceTree = "<group>"; };
+		E34A3ADA293E08F40038625F /* ComplaintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplaintViewController.swift; sourceTree = "<group>"; };
+		E34A3ADC293E0A790038625F /* Complaint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Complaint.swift; sourceTree = "<group>"; };
+		E34A3ADE293E0ADA0038625F /* NotificationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScreen.swift; sourceTree = "<group>"; };
 		E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
 		E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
 		E34ABC3328A7906500A7D2C8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -523,6 +535,17 @@
 			path = StoreProducts;
 			sourceTree = "<group>";
 		};
+		E34A3AD3293E088C0038625F /* ComplaintModule */ = {
+			isa = PBXGroup;
+			children = (
+				E34A3AD4293E08C00038625F /* ComplaintRouter.swift */,
+				E34A3AD6293E08D70038625F /* ComplaintInteractor.swift */,
+				E34A3AD8293E08EB0038625F /* ComplaintPresenter.swift */,
+				E34A3ADA293E08F40038625F /* ComplaintViewController.swift */,
+			);
+			path = ComplaintModule;
+			sourceTree = "<group>";
+		};
 		E34ABC2D28A771A600A7D2C8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -556,6 +579,8 @@
 				E36F622428F9E5F1007C7623 /* ExchangeConvert.swift */,
 				E3E05CF9291EA64300605F49 /* Subscription.swift */,
 				E3E05D04291EB55400605F49 /* Filter.swift */,
+				E34A3ADC293E0A790038625F /* Complaint.swift */,
+				E34A3ADE293E0ADA0038625F /* NotificationScreen.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -667,6 +692,7 @@
 		E36F622628F9EBA8007C7623 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				E34A3AD3293E088C0038625F /* ComplaintModule */,
 				E33130AC293243BD009C26A1 /* EditDealModule */,
 				E374379E292248DC0077FA28 /* FilterModule */,
 				E3E05CFB291EB42400605F49 /* FeedModule */,
@@ -1212,6 +1238,7 @@
 				E30065062916900500FAB319 /* ChatRoomCoordinator.swift in Sources */,
 				E3A173F428F70CD000C67387 /* PurchaseManager.swift in Sources */,
 				E347A5482901B3690089271F /* UIView.swift in Sources */,
+				E34A3ADF293E0ADA0038625F /* NotificationScreen.swift in Sources */,
 				E3993F73290B14F9000C218C /* SubscriptionCoordinator.swift in Sources */,
 				E3E05D08291F8B4F00605F49 /* NotFoundTableViewCell.swift in Sources */,
 				E325351D28F58C6500878A7F /* Message.swift in Sources */,
@@ -1235,10 +1262,12 @@
 				E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */,
 				E3E4D6A628B92C07002B0BE6 /* PrivacyPolicyViewController.swift in Sources */,
 				E312608428BE39E90097D040 /* ProfileViewController.swift in Sources */,
+				E34A3AD5293E08C00038625F /* ComplaintRouter.swift in Sources */,
 				E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */,
 				E300650B2916934400FAB319 /* ChatRoomsInteractor.swift in Sources */,
 				E3A9FA4B29291C5A00B13B96 /* SexCollectionViewCell.swift in Sources */,
 				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
+				E34A3AD9293E08EB0038625F /* ComplaintPresenter.swift in Sources */,
 				E3E05D0B291F9B9D00605F49 /* SearchView.swift in Sources */,
 				E33130B42932441F009C26A1 /* EditDealViewController.swift in Sources */,
 				E3DBD03728FF21630063DC35 /* OffersRouter.swift in Sources */,
@@ -1246,6 +1275,7 @@
 				E3F4B04C28FDC55C0083815E /* CurrencyConverter.swift in Sources */,
 				E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */,
 				E35EC91F28FB02DE00868C0A /* ApplicationRequestErrors.swift in Sources */,
+				E34A3ADD293E0A790038625F /* Complaint.swift in Sources */,
 				E3CEE68228ABE4DC00468ED2 /* RegistrationCoordinator.swift in Sources */,
 				E3E1D180290313AE0069EE46 /* SettingsBlockRouter.swift in Sources */,
 				E3E1D178290310840069EE46 /* Currency.swift in Sources */,
@@ -1299,6 +1329,7 @@
 				E35EC92228FB02EC00868C0A /* ApplicationRequestManager.swift in Sources */,
 				E30561052911842100E0881C /* DealProfileView.swift in Sources */,
 				E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */,
+				E34A3AD7293E08D70038625F /* ComplaintInteractor.swift in Sources */,
 				E34ABC5128A7D30E00A7D2C8 /* UserDefaultsKeys.swift in Sources */,
 				E30560ED290EB8F000E0881C /* NotificationCenterManager.swift in Sources */,
 				E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */,
@@ -1347,6 +1378,7 @@
 				E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */,
 				E30560F6290ECE8300E0881C /* DealInteractor.swift in Sources */,
 				E3E05D19292149E700605F49 /* PetClass.swift in Sources */,
+				E34A3ADB293E08F40038625F /* ComplaintViewController.swift in Sources */,
 				E3E1D18D290326B80069EE46 /* SettingsPresenter.swift in Sources */,
 				E3E05D03291EB47B00605F49 /* FeedViewController.swift in Sources */,
 				E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */,

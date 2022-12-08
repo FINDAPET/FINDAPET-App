@@ -121,6 +121,18 @@ final class DealPresenter {
         self.interactor.deleteDeal(with: dealID, competionHandler: completionHandler)
     }
     
+    func viewDeal(completionHandler: @escaping (Error?) -> Void = { _ in }) {
+        guard let id = self.deal?.id else {
+            print("❌ Error: deal id is equal to nil.")
+            
+            completionHandler(RequestErrors.statusCodeError(statusCode: 404))
+            
+            return
+        }
+        
+        self.interactor.viewDeal(with: id, completionHandler: completionHandler)
+    }
+    
 //    MARK: User Defaults
     func getUserID() -> UUID? {
         guard let string = self.interactor.getUserDefaults(.id) as? String else {
@@ -144,12 +156,20 @@ final class DealPresenter {
         self.router.goToChatRoom(userID: self.deal?.cattery.id)
     }
     
-    func getCreateOffer() -> CreateOfferViewController?{
+    func getCreateOffer() -> CreateOfferViewController? {
         guard let deal = self.deal else {
             return nil
         }
         
         return self.router.getCreateOffer(deal: deal)
+    }
+    
+    func getComplaint() -> ComplaintViewController? {
+        guard let id = self.getUserID() else {
+            return nil
+        }
+        
+        return self.router.getComplaint(.init(text: .init(), senderID: id, dealID: self.deal?.id))
     }
     
 }

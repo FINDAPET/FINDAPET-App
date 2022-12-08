@@ -48,6 +48,15 @@ final class DealInteractor {
         )
     }
     
+    func viewDeal(with id: UUID, completionHandler: @escaping (Error?) -> Void) {
+        RequestManager.request(
+            method: .PUT,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.viewDeal(dealID: id),
+            completionHandler: completionHandler
+        )
+    }
+    
 //    MARK: User Defaults
     func getUserDefaults(_ key: UserDefaultsKeys) -> Any? {
         UserDefaultsManager.read(key: key)

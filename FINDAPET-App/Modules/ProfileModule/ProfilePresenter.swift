@@ -73,6 +73,14 @@ final class ProfilePresenter {
         self.router.goToDeal(deal: deal)
     }
     
+    func getComplaint() -> ComplaintViewController? {
+        guard let id = self.getMyID() else {
+            return nil
+        }
+        
+        return self.router.getComplaint(.init(text: .init(), senderID: id))
+    }
+    
 //    MARK: Requests
     
     func getUser(completionHandler: @escaping (User.Output?, Error?) -> Void) {

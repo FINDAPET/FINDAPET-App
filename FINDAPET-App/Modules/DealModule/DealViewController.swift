@@ -196,6 +196,29 @@ final class DealViewController: UIViewController {
         return viewController
     }()
     
+    private lazy var complaintViewController: ComplaintViewController? = {
+        let viewController = self.presenter.getComplaint()
+        
+        viewController?.view.clipsToBounds = true
+        viewController?.view.layer.masksToBounds = true
+        viewController?.view.layer.cornerRadius = 25
+        viewController?.view.alpha = .zero
+        viewController?.didTapSendButtonCallBack = { [ weak self ] in
+            UIView.animate(withDuration: 0.2) {
+                viewController?.view.alpha = .zero
+                self?.translutionView.alpha = .zero
+            } completion: { isComplete in
+                if isComplete {
+                    self?.translutionView.isHidden = true
+                    viewController?.view.removeFromSuperview()
+                }
+            }
+        }
+        viewController?.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return viewController
+    }()
+    
 //    MARK: Life Cycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -213,6 +236,7 @@ final class DealViewController: UIViewController {
                 }
             }
         } else {
+            self.presenter.viewDeal()
             self.setupValues()
         }
     }
@@ -241,6 +265,14 @@ final class DealViewController: UIViewController {
         self.scrollView.insertSubview(self.collectionViewItemNumberLabel, at: 8)
         
         if self.presenter.deal?.cattery.id ?? UUID() == self.presenter.getUserID() ?? UUID() {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                image: .init(systemName: "exclamationmark.triangle"),
+                style: .plain,
+                target: self,
+                action: #selector(self.didTapComplaintNavigationBarButton)
+            )
+            self.navigationItem.rightBarButtonItem?.tintColor = .accentColor
+            
             self.scrollView.addSubview(self.chatButton)
             self.scrollView.addSubview(self.createOfferButton)
             
@@ -377,6 +409,7 @@ final class DealViewController: UIViewController {
     @objc private func didTapTranslutionView() {
         UIView.animate(withDuration: 0.2) { [ weak self ] in
             self?.createOfferViewController?.view.alpha = .zero
+            self?.complaintViewController?.view.alpha = .zero
             self?.translutionView.alpha = .zero
             self?.navigationController?.navigationBar.layer.zPosition = .zero
             self?.tabBarController?.tabBar.layer.zPosition = .zero
@@ -384,6 +417,7 @@ final class DealViewController: UIViewController {
             if isComplete {
                 self?.translutionView.isHidden = true
                 self?.createOfferViewController?.view.removeFromSuperview()
+                self?.complaintViewController?.view.removeFromSuperview()
             }
         }
     }
@@ -402,6 +436,30 @@ final class DealViewController: UIViewController {
         
         UIView.animate(withDuration: 0.2) { [ weak self ] in
             self?.createOfferViewController?.view.alpha = 1
+            self?.translutionView.alpha = 0.5
+            self?.navigationController?.navigationBar.layer.zPosition = -1
+            self?.tabBarController?.tabBar.layer.zPosition = -1
+        }
+    }
+    
+    @objc private func didTapComplaintNavigationBarButton() {
+        guard let complaintViewController  = self.complaintViewController else {
+            return
+        }
+        
+        self.addChild(complaintViewController)
+        self.view.addSubview(complaintViewController.view)
+        self.view.insertSubview(complaintViewController.view, at: 10)
+        
+        complaintViewController.view.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(25)
+        }
+        
+        self.translutionView.isHidden = false
+        
+        UIView.animate(withDuration: 0.2) { [ weak self ] in
+            self?.complaintViewController?.view.alpha = 1
             self?.translutionView.alpha = 0.5
             self?.navigationController?.navigationBar.layer.zPosition = -1
             self?.tabBarController?.tabBar.layer.zPosition = -1

@@ -126,16 +126,66 @@ final class ProfileViewController: UIViewController {
         return view
     }()
     
-    private let translutionView: UIView = {
+    private lazy var complaintViewController: ComplaintViewController? = {
+        let viewController = self.presenter.getComplaint()
+        
+        viewController?.view.clipsToBounds = true
+        viewController?.view.layer.masksToBounds = true
+        viewController?.view.layer.cornerRadius = 25
+        viewController?.view.alpha = .zero
+        viewController?.didTapSendButtonCallBack = { [ weak self ] in
+            UIView.animate(withDuration: 0.2) {
+                viewController?.view.alpha = .zero
+                self?.translutionView.alpha = .zero
+            } completion: { isComplete in
+                if isComplete {
+                    self?.translutionView.isHidden = true
+                    viewController?.view.removeFromSuperview()
+                    viewController?.removeFromParent()
+                }
+            }
+        }
+        viewController?.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return viewController
+    }()
+    
+    private lazy var translutionView: UIView = {
         let view = UIView()
         
         view.alpha = .zero
         view.backgroundColor = .black
         view.isHidden = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapTranslutionView)))
+        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
+    
+    @objc private func didTapComplaintNavigationBarButton() {
+        guard let complaintViewController  = self.complaintViewController else {
+            return
+        }
+        
+        self.addChild(complaintViewController)
+        self.view.addSubview(complaintViewController.view)
+        self.view.insertSubview(complaintViewController.view, at: 10)
+        
+        complaintViewController.view.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(25)
+        }
+        
+        self.translutionView.isHidden = false
+        
+        UIView.animate(withDuration: 0.2) { [ weak self ] in
+            self?.complaintViewController?.view.alpha = 1
+            self?.translutionView.alpha = 0.5
+            self?.navigationController?.navigationBar.layer.zPosition = -1
+            self?.tabBarController?.tabBar.layer.zPosition = -1
+        }
+    }
     
 //    MARK: Life Cycle
     
@@ -251,6 +301,25 @@ final class ProfileViewController: UIViewController {
     
     @objc private func refreshScreen() {
         self.getUser()
+    }
+    
+    @objc private func didTapTranslutionView() {
+        guard let viewController = self.complaintViewController,
+              viewController.parent != nil,
+              viewController.view.superview != nil else {
+            return
+        }
+        
+        UIView.animate(withDuration: 0.2) { [ weak self ] in
+            viewController.view.alpha = .zero
+            self?.translutionView.alpha = .zero
+        } completion: { [ weak self ] isComplete in
+            if isComplete {
+                self?.translutionView.isHidden = true
+                viewController.view.removeFromSuperview()
+                viewController.removeFromParent()
+            }
+        }
     }
 
 }
