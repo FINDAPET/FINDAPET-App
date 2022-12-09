@@ -65,6 +65,73 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
     
     func start() {
         self.setupViews()
+        
+        self.getNotificationScreens { notificationScreens, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard let IDs = self.getUserDefaultsNotificationScreensID(),
+                  let notificationScreen = (notificationScreens ?? .init())
+                .filter({ !IDs.contains($0.id?.uuidString ?? .init()) }).first else {
+                print("❌ Error: not found.")
+                
+                return
+            }
+            
+            self.tabBarController.present(self.getNotificationScreen(notificationScreen), animated: true)
+        }
+    }
+    
+//    MARK: Notification Screen
+    func getNotificationScreen(_ notificationScreen: NotificationScreen.Output) -> NotificationScreenViewController {
+        let router = NotificationScreenRouter()
+        let interactor = NotificationScreenInteractor()
+        let presenter = NotificationScreenPresenter(
+            notificationScreen: notificationScreen,
+            router: router,
+            interactor: interactor
+        )
+        let viewController = NotificationScreenViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        return viewController
+    }
+    
+//    MARK: Requests
+    private func getNotificationScreens(_ completionHandler: @escaping ([NotificationScreen.Output]?, Error?) -> Void) {
+        if #available(iOS 16, *), let countryCode = Locale.current.region?.identifier {
+            RequestManager.request(
+                method: .GET,
+                authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+                url: URLConstructor.defaultHTTP.allNotificationScreens(countryCode: countryCode),
+                completionHandler: completionHandler
+            )
+        } else if let countryCode = Locale.current.regionCode {
+            RequestManager.request(
+                method: .GET,
+                authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+                url: URLConstructor.defaultHTTP.allNotificationScreens(countryCode: countryCode),
+                completionHandler: completionHandler
+            )
+        } else {
+            completionHandler(nil, RequestErrors.statusCodeError(statusCode: 500))
+            
+            return
+        }
+    }
+    
+//    MARK: Keychain
+    private func getBearrerToken() -> String? {
+        KeychainManager.shared.read(key: .token)
+    }
+    
+//    MARK: User Defaults
+    private func getUserDefaultsNotificationScreensID() -> [String]? {
+        UserDefaultsManager.read(key: .notificationScreensID) as? [String]
     }
     
 //    MARK: Setup Views

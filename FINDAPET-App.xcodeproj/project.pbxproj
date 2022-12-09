@@ -64,6 +64,10 @@
 		E34A3ADB293E08F40038625F /* ComplaintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3ADA293E08F40038625F /* ComplaintViewController.swift */; };
 		E34A3ADD293E0A790038625F /* Complaint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3ADC293E0A790038625F /* Complaint.swift */; };
 		E34A3ADF293E0ADA0038625F /* NotificationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3ADE293E0ADA0038625F /* NotificationScreen.swift */; };
+		E34A3AE2294366330038625F /* NotificationScreenRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3AE1294366330038625F /* NotificationScreenRouter.swift */; };
+		E34A3AE4294366460038625F /* NotificationScreenInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3AE3294366460038625F /* NotificationScreenInteractor.swift */; };
+		E34A3AE6294366940038625F /* NotificationScreenPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3AE5294366940038625F /* NotificationScreenPresenter.swift */; };
+		E34A3AE82943669F0038625F /* NotificationScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3AE72943669F0038625F /* NotificationScreenViewController.swift */; };
 		E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */; };
 		E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */; };
 		E34ABC3428A7906500A7D2C8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC3328A7906500A7D2C8 /* User.swift */; };
@@ -244,6 +248,10 @@
 		E34A3ADA293E08F40038625F /* ComplaintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplaintViewController.swift; sourceTree = "<group>"; };
 		E34A3ADC293E0A790038625F /* Complaint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Complaint.swift; sourceTree = "<group>"; };
 		E34A3ADE293E0ADA0038625F /* NotificationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScreen.swift; sourceTree = "<group>"; };
+		E34A3AE1294366330038625F /* NotificationScreenRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScreenRouter.swift; sourceTree = "<group>"; };
+		E34A3AE3294366460038625F /* NotificationScreenInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScreenInteractor.swift; sourceTree = "<group>"; };
+		E34A3AE5294366940038625F /* NotificationScreenPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScreenPresenter.swift; sourceTree = "<group>"; };
+		E34A3AE72943669F0038625F /* NotificationScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScreenViewController.swift; sourceTree = "<group>"; };
 		E34ABC2E28A771C200A7D2C8 /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
 		E34ABC3128A78F1F00A7D2C8 /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
 		E34ABC3328A7906500A7D2C8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -546,6 +554,17 @@
 			path = ComplaintModule;
 			sourceTree = "<group>";
 		};
+		E34A3AE0294365B50038625F /* NotificationScreenModule */ = {
+			isa = PBXGroup;
+			children = (
+				E34A3AE1294366330038625F /* NotificationScreenRouter.swift */,
+				E34A3AE3294366460038625F /* NotificationScreenInteractor.swift */,
+				E34A3AE5294366940038625F /* NotificationScreenPresenter.swift */,
+				E34A3AE72943669F0038625F /* NotificationScreenViewController.swift */,
+			);
+			path = NotificationScreenModule;
+			sourceTree = "<group>";
+		};
 		E34ABC2D28A771A600A7D2C8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -692,6 +711,7 @@
 		E36F622628F9EBA8007C7623 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				E34A3AE0294365B50038625F /* NotificationScreenModule */,
 				E34A3AD3293E088C0038625F /* ComplaintModule */,
 				E33130AC293243BD009C26A1 /* EditDealModule */,
 				E374379E292248DC0077FA28 /* FilterModule */,
@@ -1319,6 +1339,7 @@
 				E3993F55290716D2000C218C /* SubscriptionInteractor.swift in Sources */,
 				E34ABC4928A7CE9F00A7D2C8 /* RegistrationManager.swift in Sources */,
 				E313B89C28ACE38D00E33975 /* RegistrationPresenter.swift in Sources */,
+				E34A3AE82943669F0038625F /* NotificationScreenViewController.swift in Sources */,
 				E3DBD03928FF216F0063DC35 /* OffersPresenter.swift in Sources */,
 				E3E1EB5A29006B2E00F536F4 /* AdTableViewCell.swift in Sources */,
 				E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */,
@@ -1338,6 +1359,7 @@
 				E3F4B04728FD7D510083815E /* SlideMenuViewController.swift in Sources */,
 				E3DBD03B28FF21800063DC35 /* OffersViewController.swift in Sources */,
 				E3DBD03328FF213F0063DC35 /* OffersInteractor.swift in Sources */,
+				E34A3AE2294366330038625F /* NotificationScreenRouter.swift in Sources */,
 				E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */,
 				E3E05CFA291EA64300605F49 /* Subscription.swift in Sources */,
 				E305EC7B28ACD78200A3AAD3 /* OnboardingRouter.swift in Sources */,
@@ -1394,8 +1416,10 @@
 				E3E4D6A428B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift in Sources */,
 				E3993F5C2907EB73000C218C /* SubscriptionCollectionViewCell.swift in Sources */,
 				E3E1EB57290063F000F536F4 /* AdsViewController.swift in Sources */,
+				E34A3AE4294366460038625F /* NotificationScreenInteractor.swift in Sources */,
 				E33130B229324407009C26A1 /* EditDealPresenter.swift in Sources */,
 				E3E1D18B290326AD0069EE46 /* SettingsInteractor.swift in Sources */,
+				E34A3AE6294366940038625F /* NotificationScreenPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

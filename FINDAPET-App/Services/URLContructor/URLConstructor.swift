@@ -481,11 +481,12 @@ final class URLConstructor {
     }
     
 //    MARK: Notification Screen
-    func allNotificationScreens() -> URL {
+    func allNotificationScreens(countryCode: String) -> URL {
         self.baseURL
             .appendingPathExtension(Paths.notification.rawValue)
             .appendingPathExtension(Paths.screens.rawValue)
             .appendingPathExtension(Paths.all.rawValue)
+            .appendingPathExtension(countryCode)
     }
     
     func notificationScreen(notificationScreenID: UUID) -> URL {
