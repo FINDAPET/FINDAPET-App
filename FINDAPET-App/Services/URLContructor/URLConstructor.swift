@@ -518,6 +518,61 @@ final class URLConstructor {
             .appendingPathExtension(Paths.delete.rawValue)
     }
     
+//    MARK: Currency
+    func getAllCurrencies() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.currencies.rawValue)
+            .appendingPathExtension(Paths.all.rawValue)
+    }
+    
+//    MARK: Deal Modes
+    func getAllDealModes() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.deal.rawValue)
+            .appendingPathExtension(Paths.modes.rawValue)
+            .appendingPathExtension(Paths.all.rawValue)
+    }
+    
+//    MARK: Pet Breeds
+    func getAllPetBreeds() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.pet.rawValue)
+            .appendingPathExtension(Paths.breeds.rawValue)
+            .appendingPathExtension(Paths.all.rawValue)
+    }
+    
+    func getAllCatBreeds() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.pet.rawValue)
+            .appendingPathExtension(Paths.breeds.rawValue)
+            .appendingPathExtension(Paths.all.rawValue)
+            .appendingPathExtension(Paths.cats.rawValue)
+    }
+    
+    func getAllDogBreeds() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.pet.rawValue)
+            .appendingPathExtension(Paths.breeds.rawValue)
+            .appendingPathExtension(Paths.all.rawValue)
+            .appendingPathExtension(Paths.dogs.rawValue)
+    }
+    
+//    MARK: Pet Class
+    func getAllPetClasses() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.pet.rawValue)
+            .appendingPathExtension(Paths.classes.rawValue)
+            .appendingPathExtension(Paths.all.rawValue)
+    }
+    
+//    MARK: Pet Type
+    func getAllPetTypes() -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.pet.rawValue)
+            .appendingPathExtension(Paths.types.rawValue)
+            .appendingPathExtension(Paths.all.rawValue)
+    }
+    
 //    MARK: Exchange
     func convert() -> URL {
         self.baseURL

@@ -55,4 +55,33 @@ final class FilterPresenter {
         self.saveAction(self.filter)
     }
     
+//    MARK: User Defaults
+    func getDealModes() -> [String]? {
+        self.interactor.getUserDefaults(.dealModes) as? [String]
+    }
+    
+    func getPetClasses() -> [String]? {
+        self.interactor.getUserDefaults(.petClasses) as? [String]
+    }
+    
+    func getTypesClasses() -> [String]? {
+        self.interactor.getUserDefaults(.petTypes) as? [String]
+    }
+    
+    func getPetBreeds() -> [String]? {
+        self.interactor.getUserDefaults(.petBreeds) as? [String]
+    }
+    
+    func getCatBreeds() -> [String]? {
+        self.interactor.getUserDefaults(.catBreeds) as? [String]
+    }
+    
+    func getDogBreeds() -> [String]? {
+        self.interactor.getUserDefaults(.dogBreeds) as? [String]
+    }
+    
+    func getPetType() -> [String]? {
+        self.interactor.getUserDefaults(.petTypes) as? [String]
+    }
+    
 }

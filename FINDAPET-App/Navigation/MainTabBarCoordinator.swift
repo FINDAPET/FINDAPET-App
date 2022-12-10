@@ -83,6 +83,118 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
             
             self.tabBarController.present(self.getNotificationScreen(notificationScreen), animated: true)
         }
+        
+        self.getCurrencies { currencies, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard let currencies = currencies else {
+                print("❌ Error: not found.")
+                
+                return
+            }
+            
+            UserDefaultsManager.write(data: currencies, key: .currencies)
+        }
+        
+        self.getBreeds { breeds, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard let breeds = breeds else {
+                print("❌ Error: not found.")
+                
+                return
+            }
+            
+            UserDefaultsManager.write(data: breeds, key: .petBreeds)
+        }
+        
+        self.getCatBreeds { breeds, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard let breeds = breeds else {
+                print("❌ Error: not found.")
+                
+                return
+            }
+            
+            UserDefaultsManager.write(data: breeds, key: .catBreeds)
+        }
+        
+        self.getDogBreeds { breeds, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard let breeds = breeds else {
+                print("❌ Error: not found.")
+                
+                return
+            }
+            
+            UserDefaultsManager.write(data: breeds, key: .dogBreeds)
+        }
+        
+        self.getPetClasses { classes, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard let classes = classes else {
+                print("❌ Error: not found.")
+                
+                return
+            }
+            
+            UserDefaultsManager.write(data: classes, key: .petClasses)
+        }
+        
+        self.getPetTypes { types, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard let types = types else {
+                print("❌ Error: not found.")
+                
+                return
+            }
+            
+            UserDefaultsManager.write(data: types, key: .petTypes)
+        }
+        
+        self.getDealModes { modes, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard let modes = modes else {
+                print("❌ Error: not found.")
+                
+                return
+            }
+            
+            UserDefaultsManager.write(data: modes, key: .dealModes)
+        }
     }
     
 //    MARK: Notification Screen
@@ -122,6 +234,69 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
             
             return
         }
+    }
+    
+    private func getCurrencies(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.getAllCurrencies(),
+            completionHandler: completionHandler
+        )
+    }
+    
+    private func getBreeds(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.getAllPetBreeds(),
+            completionHandler: completionHandler
+        )
+    }
+    
+    private func getDogBreeds(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.getAllDogBreeds(),
+            completionHandler: completionHandler
+        )
+    }
+    
+    private func getCatBreeds(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.getAllCatBreeds(),
+            completionHandler: completionHandler
+        )
+    }
+    
+    private func getPetClasses(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.getAllPetClasses(),
+            completionHandler: completionHandler
+        )
+    }
+    
+    private func getPetTypes(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.getAllPetTypes(),
+            completionHandler: completionHandler
+        )
+    }
+    
+    private func getDealModes(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.getAllDealModes(),
+            completionHandler: completionHandler
+        )
     }
     
 //    MARK: Keychain

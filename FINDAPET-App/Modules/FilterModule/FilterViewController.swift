@@ -379,11 +379,11 @@ final class FilterViewController: UIViewController {
         
         switch self.selectedPetType {
         case .cat:
-            breedList = PetBreed.allCatBreeds.map { $0.rawValue }.sorted(by: <)
+            breedList = (self.presenter.getCatBreeds() ?? PetBreed.allCatBreeds.map { $0.rawValue }).sorted(by: <)
         case .dog:
-            breedList = PetBreed.allDogBreeds.map { $0.rawValue }.sorted(by: <)
+            breedList = (self.presenter.getDogBreeds() ?? PetBreed.allDogBreeds.map { $0.rawValue }).sorted(by: <)
         default:
-            breedList = PetBreed.allCases.map { $0.rawValue }.sorted(by: <)
+            breedList = (self.presenter.getDogBreeds() ?? PetBreed.allCases.map { $0.rawValue }).sorted(by: <)
         }
         
         self.presentActionsSheet(
@@ -398,7 +398,7 @@ final class FilterViewController: UIViewController {
     @objc private func didTapPetClassValueLabel() {
         self.presentActionsSheet(
             title: NSLocalizedString("Pet Class", comment: .init()),
-            contents: PetClass.allCases.map { $0.rawValue }.sorted(by: <)
+            contents: (self.presenter.getPetClasses() ?? PetClass.allCases.map { $0.rawValue }).sorted(by: <)
         ) { [ weak self ] alertAction in
             self?.petClassValueLabel.text = alertAction.title
             self?.presenter.setPetClass(alertAction.title)
@@ -424,7 +424,7 @@ final class FilterViewController: UIViewController {
 extension FilterViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        collectionView == self.petTypeCollectionView ? PetType.allCases.count : 2
+        collectionView == self.petTypeCollectionView ? self.presenter.getPetType()?.count ?? PetType.allCases.count : 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -436,7 +436,7 @@ extension FilterViewController: UICollectionViewDataSource {
                 return .init()
             }
                     
-            cell.petType = PetType.allCases[indexPath.row]
+            cell.petType = .getPetType(self.presenter.getPetType()?[indexPath.row] ?? .init()) ?? .allCases[indexPath.row]
             
             if self.presenter.filter.petType == cell.petType {
                 cell.isSelected = true

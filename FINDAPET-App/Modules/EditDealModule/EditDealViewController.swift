@@ -874,11 +874,11 @@ final class EditDealViewController: UIViewController {
         
         switch self.selectedPetType {
         case .cat:
-            breedList = PetBreed.allCatBreeds.map { $0.rawValue }.sorted(by: <)
+            breedList = (self.presenter.getCatBreeds() ?? PetBreed.allCatBreeds.map { $0.rawValue }).sorted(by: <)
         case .dog:
-            breedList = PetBreed.allDogBreeds.map { $0.rawValue }.sorted(by: <)
+            breedList = (self.presenter.getDogBreeds() ?? PetBreed.allDogBreeds.map { $0.rawValue }).sorted(by: <)
         default:
-            breedList = PetBreed.allCases.map { $0.rawValue }.sorted(by: <)
+            breedList = (self.presenter.getDogBreeds() ?? PetBreed.allCases.map { $0.rawValue }).sorted(by: <)
         }
         
         self.presentActionsSheet(
@@ -893,7 +893,7 @@ final class EditDealViewController: UIViewController {
     @objc private func didTapPetClassValueLabel() {
         self.presentActionsSheet(
             title: NSLocalizedString("Pet Class", comment: .init()),
-            contents: PetClass.allCases.map { $0.rawValue }.sorted(by: <)
+            contents: (self.presenter.getPetClasses() ?? PetClass.allCases.map { $0.rawValue }).sorted(by: <)
         ) { [ weak self ] alertAction in
             self?.petClassValueLabel.text = alertAction.title
             self?.presenter.deal.petClass = .getPetClass(alertAction.title ?? .init()) ?? .allClass
@@ -951,7 +951,7 @@ final class EditDealViewController: UIViewController {
     @objc private func didTapCurrencyButton() {
         self.presentActionsSheet(
             title: NSLocalizedString("Currency", comment: .init()),
-            contents: Currency.allCases.map { $0.rawValue }
+            contents: self.presenter.getAllCurrencies() ?? Currency.allCases.map { $0.rawValue }
         ) { [ weak self ] alertAction in
             self?.presenter.deal.currencyName = .getCurrency(wtih: alertAction.title ?? .init()) ?? .USD
             self?.currencyButton.setTitle(alertAction.title, for: .normal)
@@ -1010,7 +1010,7 @@ extension EditDealViewController: UICollectionViewDataSource {
         if collectionView == self.photosCollectionView {
             return self.presenter.deal.photoDatas.count
         } else if collectionView == self.petTypeCollectionView {
-            return PetType.allCases.count
+            return self.presenter.getPetClasses()?.count ?? PetType.allCases.count
         }
         
         return 2
@@ -1033,7 +1033,7 @@ extension EditDealViewController: UICollectionViewDataSource {
                 return .init()
             }
                     
-            cell.petType = PetType.allCases[indexPath.row]
+            cell.petType = .getPetType(self.presenter.getPetType()?[indexPath.row] ?? .init()) ?? .allCases[indexPath.row]
             
             if self.presenter.deal.petType == cell.petType {
                 cell.isSelected = true

@@ -8,5 +8,5 @@
 import Foundation
 
 enum UserDefaultsKeys: String {
-    case isFirstEditing, deviceToken, id, currency, country, city, subscription, dealsID, userName, nextDealIsPremium, premiumUserDate, notificationScreensID
+    case isFirstEditing, deviceToken, id, currency, country, city, subscription, dealsID, userName, nextDealIsPremium, premiumUserDate, notificationScreensID, currencies, dealModes, petBreeds, petClasses, petTypes, catBreeds, dogBreeds
 }
