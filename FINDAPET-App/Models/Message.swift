@@ -12,13 +12,22 @@ struct Message {
     struct Input: Encodable {
         var id: UUID?
         var text: String
+        var isViewed: Bool
         var bodyData: Data?
         var userID: UUID
         var chatRoomID: UUID?
         
-        init(id: UUID? = nil, text: String, bodyData: Data? = nil, userID: UUID, chatRoomID: UUID? = nil) {
+        init(
+            id: UUID? = nil,
+            text: String,
+            isViewed: Bool = false,
+            bodyData: Data? = nil,
+            userID: UUID,
+            chatRoomID: UUID? = nil
+        ) {
             self.id = id
             self.text = text
+            self.isViewed = isViewed
             self.bodyData = bodyData
             self.userID = userID
             self.chatRoomID = chatRoomID
@@ -28,6 +37,7 @@ struct Message {
     struct Output: Decodable {
         var id: UUID?
         var text: String
+        var isViewed: Bool
         var bodyData: Data?
         var user: User.Output
         var createdAt: Date?

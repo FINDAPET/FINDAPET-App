@@ -14,6 +14,7 @@ final class ChatRoomTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.setupViews()
+        self.setupActions()
     }
     
     required init?(coder: NSCoder) {
@@ -35,7 +36,16 @@ final class ChatRoomTableViewCell: UITableViewCell {
                 self.nameLabel.text = user.name
             }
             
+            let count = chatRoom.messages.filter { [ weak self ] message in
+                message.user.id != self?.getUserID() && !message.isViewed
+            }.count
+            
             self.lastMessageLabel.text = self.chatRoom?.messages.sorted { $0.sentDate < $1.sentDate }.first?.text
+            self.notViewedMessagesCountLabel.text = " \(count) "
+            
+            if count != .zero {
+                self.notViewedMessagesCountLabel.isHidden = false
+            }
         }
     }
     
@@ -71,6 +81,23 @@ final class ChatRoomTableViewCell: UITableViewCell {
         return view
     }()
     
+    private let notViewedMessagesCountLabel: UILabel = {
+        let view = UILabel()
+        
+        view.textColor = .white
+        view.font = .systemFont(ofSize: 17)
+        view.backgroundColor = .accentColor
+        view.textAlignment = .center
+        view.numberOfLines = .zero
+        view.isHidden = true
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
 //    MARK: Setup Views
     private func setupViews() {
         self.backgroundColor = .clear
@@ -78,6 +105,7 @@ final class ChatRoomTableViewCell: UITableViewCell {
         self.addSubview(self.avatarImageView)
         self.addSubview(self.nameLabel)
         self.addSubview(self.lastMessageLabel)
+        self.addSubview(self.notViewedMessagesCountLabel)
         
         self.avatarImageView.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview().inset(15)
@@ -92,8 +120,25 @@ final class ChatRoomTableViewCell: UITableViewCell {
         self.lastMessageLabel.snp.makeConstraints { make in
             make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
             make.top.equalTo(self.nameLabel.snp.bottom).inset(-10)
-            make.trailing.equalToSuperview().inset(15)
+            make.trailing.equalTo(self.notViewedMessagesCountLabel.snp.leading).inset(-10)
         }
+        
+        self.notViewedMessagesCountLabel.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(15)
+            make.centerY.equalTo(self.lastMessageLabel)
+            make.height.equalTo(20)
+            make.width.greaterThanOrEqualTo(20)
+        }
+    }
+    
+//    MARK: Setup Actions
+    private func setupActions() {
+        NotificationCenterManager.addObserver(
+            self,
+            name: .hideNotViewedMessagesCountLabelInChatRoomWithID,
+            additional: self.chatRoom?.id?.uuidString,
+            action: #selector(self.hideNotViewedMessagesCountLabelAction)
+        )
     }
     
 //    MARK: User Defautls
@@ -102,7 +147,12 @@ final class ChatRoomTableViewCell: UITableViewCell {
             return nil
         }
         
-        return UUID(uuidString: string)
+        return .init(uuidString: string)
+    }
+    
+//    MARK: Actions
+    @objc private func hideNotViewedMessagesCountLabelAction() {
+        self.notViewedMessagesCountLabel.isHidden = true
     }
 
 }

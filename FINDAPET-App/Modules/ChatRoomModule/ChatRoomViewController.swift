@@ -81,6 +81,11 @@ final class ChatRoomViewController: MessagesViewController {
                 self?.error(error) { [ weak self ] in
                     self?.messagesCollectionView.scrollToLastItem()
                     self?.activityIndicatorView.isHidden = true
+                    
+                    if self?.preseter.chatRoom?.messages.filter({ $0.id != self?.preseter.getUserID() && !$0.isViewed }).count ?? .zero != .zero {
+                        self?.preseter.viewAllMessages()
+                        self?.preseter.notificationCenterManagerHideNotViewedMessagesCountLabel()
+                    }
                 }
             }
         }
@@ -177,6 +182,7 @@ extension ChatRoomViewController: MessagesDataSource {
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) -> MessageKit.MessageType {
         self.preseter.chatRoom?.messages.sorted { $0.sentDate < $1.sentDate }[indexPath.section] ?? Message.Output(
             text: String(),
+            isViewed: .random(),
             user: User.Output(
                 id: self.preseter.getUserID(),
                 name: self.preseter.getUserName() ?? String(),

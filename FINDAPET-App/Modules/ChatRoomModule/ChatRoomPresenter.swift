@@ -63,6 +63,18 @@ final class ChatRoomPresenter {
         self.interactor.getChatRoom(userID: id, completionHandler: newCompletionHandler)
     }
     
+    func viewAllMessages(completionHandler: @escaping (Error?) -> Void = { _ in }) {
+        guard let id = chatRoom?.id else {
+            print("❌ Error: id is equal to nil.")
+            
+            completionHandler(RequestErrors.statusCodeError(statusCode: 404))
+            
+            return
+        }
+        
+        self.interactor.viewAllMessages(with: id, completionHandler: completionHandler)
+    }
+    
 //    MARK: Web Sockets
     func chatRoom(completionHandler: @escaping (Message.Output?, Error?) -> Void = { _, _ in }) {
         guard let id = self.userID else {
@@ -88,7 +100,13 @@ final class ChatRoomPresenter {
     
     func sendMessage(_ message: Message.Input, completionHandler: @escaping (Error?) -> Void = { _ in }) {
         if let chatRoom = self.chatRoom, let user = chatRoom.users.filter({ $0.id == message.userID }).first {
-            self.chatRoom?.messages.append(Message.Output(text: message.text, user: user, createdAt: .init(), chatRoom: chatRoom))
+            self.chatRoom?.messages.append(Message.Output(
+                text: message.text,
+                isViewed: message.isViewed,
+                user: user,
+                createdAt: .init(),
+                chatRoom: chatRoom
+            ))
         }
         
         self.interactor.sendMessage(message: message, completionHander: completionHandler)
@@ -109,6 +127,14 @@ final class ChatRoomPresenter {
     
     func getUserName() -> String? {
         self.interactor.getUserDefautls(.userName) as? String
+    }
+    
+//    MARK: Notification Center
+    func notificationCenterManagerHideNotViewedMessagesCountLabel() {
+        self.interactor.notificationCenterManagerPost(
+            .hideNotViewedMessagesCountLabelInChatRoomWithID,
+            additional: self.chatRoom?.id?.uuidString
+        )
     }
     
 //    MARK: Routing

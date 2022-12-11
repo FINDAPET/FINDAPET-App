@@ -373,6 +373,14 @@ final class URLConstructor {
             .appendingPathComponent(chatRoomID.uuidString)
     }
     
+    func viewAllMessages(in chatRoomID: UUID) -> URL {
+        self.baseURL
+            .appendingPathExtension(Paths.chat.rawValue)
+            .appendingPathExtension(chatRoomID.uuidString)
+            .appendingPathExtension(Paths.messages.rawValue)
+            .appendingPathExtension(Paths.view.rawValue)
+    }
+    
     func newChatRoom() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)
