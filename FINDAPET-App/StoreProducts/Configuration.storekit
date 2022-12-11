@@ -83,10 +83,40 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "4.99",
+          "displayPrice" : "1.99",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "318B30C9",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "1 Months",
+              "displayName" : "1 Months Premium Subscription",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "1 Месяца",
+              "displayName" : "1 Месяца премиум подписки",
+              "locale" : "ru"
+            }
+          ],
+          "productID" : "com.FINDAPET.premium.subscription.one.month",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "One Month Premium Subscription",
+          "subscriptionGroupID" : "20D48456",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "498C734D",
           "introductoryOffer" : null,
           "localizations" : [
             {
@@ -95,14 +125,14 @@
               "locale" : "en_US"
             },
             {
-              "description" : "3 Месяца",
-              "displayName" : "3 Месяца премиум подписки",
+              "description" : "3 Месяцев",
+              "displayName" : "3 Месяцев премиум подписки",
               "locale" : "ru"
             }
           ],
           "productID" : "com.FINDAPET.premium.subscription.three.months",
           "recurringSubscriptionPeriod" : "P3M",
-          "referenceName" : "Three Month Premium Subscription",
+          "referenceName" : "Three Months Premium Subscription",
           "subscriptionGroupID" : "20D48456",
           "type" : "RecurringSubscription"
         },
@@ -116,7 +146,7 @@
           "displayPrice" : "8.99",
           "familyShareable" : false,
           "groupNumber" : 1,
-          "internalID" : "498C734D",
+          "internalID" : "2DD3F77D",
           "introductoryOffer" : null,
           "localizations" : [
             {
@@ -132,37 +162,7 @@
           ],
           "productID" : "com.FINDAPET.premium.subscription.six.months",
           "recurringSubscriptionPeriod" : "P6M",
-          "referenceName" : "Six Month Premium Subscription",
-          "subscriptionGroupID" : "20D48456",
-          "type" : "RecurringSubscription"
-        },
-        {
-          "adHocOffers" : [
-
-          ],
-          "codeOffers" : [
-
-          ],
-          "displayPrice" : "16.99",
-          "familyShareable" : false,
-          "groupNumber" : 1,
-          "internalID" : "2DD3F77D",
-          "introductoryOffer" : null,
-          "localizations" : [
-            {
-              "description" : "1 Year",
-              "displayName" : "1 Year Premium Subscription",
-              "locale" : "en_US"
-            },
-            {
-              "description" : "1 Год",
-              "displayName" : "1 Год премиум подписки",
-              "locale" : "ru"
-            }
-          ],
-          "productID" : "com.FINDAPET.premium.subscription.one.year",
-          "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "One Year Premium Subscription",
+          "referenceName" : "Six Months Premium Subscription",
           "subscriptionGroupID" : "20D48456",
           "type" : "RecurringSubscription"
         },
@@ -180,8 +180,8 @@
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "1 Month",
-              "displayName" : "1 Month Premium Subscription",
+              "description" : "1 Year",
+              "displayName" : "1 Year Premium Subscription",
               "locale" : "en_US"
             },
             {
@@ -190,9 +190,9 @@
               "locale" : "ru"
             }
           ],
-          "productID" : "com.FINDAPET.premium.subscription.one.month",
-          "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "One Month Premium Subscription",
+          "productID" : "com.FINDAPET.premium.subscription.one.year",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "One Year Premium Subscription",
           "subscriptionGroupID" : "20D48456",
           "type" : "RecurringSubscription"
         }

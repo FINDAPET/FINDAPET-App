@@ -22,6 +22,8 @@ final class PurchaseManager: NSObject {
         
         let request = SKProductsRequest(productIdentifiers: Set(productsID.map { $0.rawValue }))
         
+        print(productsID.count)
+        
         request.delegate = self
         request.start()
     }
@@ -41,6 +43,8 @@ extension PurchaseManager: SKProductsRequestDelegate {
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         DispatchQueue.main.async { [ weak self ] in
+            print(response.products.count)
+            
             self?.firstCallBack?(response.products)
         }
     }

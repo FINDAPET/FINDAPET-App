@@ -76,7 +76,9 @@ final class SubscriptionViewController: UIViewController {
 extension SubscriptionViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.presenter.products.count
+        print(self.presenter.products.count)
+        
+        return self.presenter.products.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -111,6 +113,8 @@ extension SubscriptionViewController: UICollectionViewDelegate {
         if self.presenter.products[indexPath.item].productIdentifier != self.presenter.getSubscription() {
             self.presenter.makePayment(self.presenter.products[indexPath.item]) { [ weak self ] error in
                 guard let self = self, error == nil else {
+                    collectionView.deselectItem(at: indexPath, animated: true)
+                    
                     return
                 }
                 
@@ -119,6 +123,7 @@ extension SubscriptionViewController: UICollectionViewDelegate {
                         guard let id = ProductsID.getProductID(rawValue: self.presenter.products[indexPath.item].productIdentifier) else {
                             print("❌ Error: product is equal to nil.")
                             
+                            collectionView.deselectItem(at: indexPath, animated: true)
                             self.presentAlert(title: NSLocalizedString("Error", comment: String()))
                             
                             return
@@ -128,30 +133,35 @@ extension SubscriptionViewController: UICollectionViewDelegate {
                             self.error(error) {
                                 switch id {
                                 case .premiumSubscriptionOneMonth:
+                                    self.presenter.setSubscription(id)
                                     self.presenter.setPremiumUserDate(Calendar.current.nextDate(
                                         after: .init(),
                                         matching: .init(month: 1),
                                         matchingPolicy: .previousTimePreservingSmallerComponents
                                     ) ?? .init())
                                 case .premiumSubscriptionThreeMonth:
+                                    self.presenter.setSubscription(id)
                                     self.presenter.setPremiumUserDate(Calendar.current.nextDate(
                                         after: .init(),
                                         matching: .init(month: 3),
                                         matchingPolicy: .previousTimePreservingSmallerComponents
                                     ) ?? .init())
                                 case .premiumSubscriptionSixMonth:
+                                    self.presenter.setSubscription(id)
                                     self.presenter.setPremiumUserDate(Calendar.current.nextDate(
                                         after: .init(),
                                         matching: .init(month: 6),
                                         matchingPolicy: .previousTimePreservingSmallerComponents
                                     ) ?? .init())
                                 case .premiumSubscriptionOneYear:
+                                    self.presenter.setSubscription(id)
                                     self.presenter.setPremiumUserDate(Calendar.current.nextDate(
                                         after: .init(),
                                         matching: .init(year: 1),
                                         matchingPolicy: .previousTimePreservingSmallerComponents
                                     ) ?? .init())
                                 default:
+                                    collectionView.deselectItem(at: indexPath, animated: true)
                                     self.presentAlert(title: NSLocalizedString("Error", comment: .init()))
                                 }
                             }

@@ -51,6 +51,10 @@ final class SubscriptionPresenter {
         self.interactor.set(value, to: .premiumUserDate)
     }
     
+    func setSubscription(_ value: ProductsID) {
+        self.interactor.set(value.rawValue, to: .subscription)
+    }
+    
     func getSubscription() -> String? {
         self.interactor.get(.subscription) as? String
     }

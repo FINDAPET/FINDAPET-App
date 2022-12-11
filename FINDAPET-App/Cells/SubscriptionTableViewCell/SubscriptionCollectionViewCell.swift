@@ -30,12 +30,10 @@ class SubscriptionCollectionViewCell: UICollectionViewCell {
                 self.backgroundColor = .accentColor
                 self.nameLabel.textColor = .white
                 self.priceLabel.textColor = .white
-                self.layer.borderWidth = .zero
             } else {
-                self.backgroundColor = .backgroundColor
+                self.backgroundColor = .textFieldColor
                 self.nameLabel.textColor = .textColor
                 self.priceLabel.textColor = .textColor
-                self.layer.borderWidth = 1
             }
         }
     }
@@ -73,10 +71,10 @@ class SubscriptionCollectionViewCell: UICollectionViewCell {
     
 //    MARK: Setup Views
     private func setupViews() {
-        self.backgroundColor = .backgroundColor
+        self.backgroundColor = .textFieldColor
+        self.clipsToBounds = true
+        self.layer.masksToBounds = true
         self.layer.cornerRadius = 25
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.textColor.cgColor
         
         self.addSubview(self.nameLabel)
         self.addSubview(self.priceLabel)

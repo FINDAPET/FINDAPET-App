@@ -29,7 +29,7 @@ final class SubscriptionHeaderCollectionReusableView: UICollectionReusableView {
         
         view.text = NSLocalizedString("Premium subscriptions increase the views of each of your deals. Premium subscriptions are available for 1, 3, 6 months and 1 year and can be automatically renewed.", comment: String())
         view.textColor = .textColor
-        view.font = .systemFont(ofSize: 24)
+        view.font = .systemFont(ofSize: 20)
         view.numberOfLines = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -40,10 +40,18 @@ final class SubscriptionHeaderCollectionReusableView: UICollectionReusableView {
     private func setupViews() {
         self.backgroundColor = .clear
         
-        self.addSubview(self.infoLabel)
+        let view = self.infoLabel.containView()
         
-        self.infoLabel.snp.makeConstraints { make in
-            make.leading.trailing.bottom.top.equalToSuperview().inset(15)
+        view.backgroundColor = .textFieldColor
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 25
+        
+        self.addSubview(view)
+        
+        view.snp.makeConstraints { make in
+            make.bottom.top.equalToSuperview().inset(15)
+            make.leading.trailing.equalToSuperview()
         }
     }
     
