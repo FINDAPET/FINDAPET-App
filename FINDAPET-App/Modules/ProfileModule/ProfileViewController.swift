@@ -163,30 +163,6 @@ final class ProfileViewController: UIViewController {
         return view
     }()
     
-    @objc private func didTapComplaintNavigationBarButton() {
-        guard let complaintViewController  = self.complaintViewController else {
-            return
-        }
-        
-        self.addChild(complaintViewController)
-        self.view.addSubview(complaintViewController.view)
-        self.view.insertSubview(complaintViewController.view, at: 10)
-        
-        complaintViewController.view.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(25)
-        }
-        
-        self.translutionView.isHidden = false
-        
-        UIView.animate(withDuration: 0.2) { [ weak self ] in
-            self?.complaintViewController?.view.alpha = 1
-            self?.translutionView.alpha = 0.5
-            self?.navigationController?.navigationBar.layer.zPosition = -1
-            self?.tabBarController?.tabBar.layer.zPosition = -1
-        }
-    }
-    
 //    MARK: Life Cycle
     
     override func viewDidLoad() {
@@ -218,6 +194,13 @@ final class ProfileViewController: UIViewController {
                 style: .plain,
                 target: self,
                 action: #selector(self.didTapSlideMenuBarButton)
+            )
+        } else {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                image: UIImage(systemName: "exclamationmark.triangle"),
+                style: .plain,
+                target: self,
+                action: #selector(self.didTapComplaintNavigationBarButton)
             )
         }
         
@@ -319,6 +302,30 @@ final class ProfileViewController: UIViewController {
                 viewController.view.removeFromSuperview()
                 viewController.removeFromParent()
             }
+        }
+    }
+    
+    @objc private func didTapComplaintNavigationBarButton() {
+        guard let complaintViewController  = self.complaintViewController else {
+            return
+        }
+        
+        self.addChild(complaintViewController)
+        self.view.addSubview(complaintViewController.view)
+        self.view.insertSubview(complaintViewController.view, at: 10)
+        
+        complaintViewController.view.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(25)
+        }
+        
+        self.translutionView.isHidden = false
+        
+        UIView.animate(withDuration: 0.2) { [ weak self ] in
+            self?.complaintViewController?.view.alpha = 1
+            self?.translutionView.alpha = 0.5
+            self?.navigationController?.navigationBar.layer.zPosition = -1
+            self?.tabBarController?.tabBar.layer.zPosition = -1
         }
     }
 
