@@ -9,7 +9,8 @@ import UIKit
 import SnapKit
 
 final class DealDescriptionView: UIView {
-
+    
+    var didTapBuyerAvatarImageViewAction: ((UUID) -> Void)?
     private let deal: Deal.Output
     
     init(deal: Deal.Output) {
@@ -39,6 +40,51 @@ final class DealDescriptionView: UIView {
         
         view.axis = .vertical
         view.spacing = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private let buyerStackView: UIStackView = {
+        let view = UIStackView()
+        
+        view.axis = .vertical
+        view.spacing = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private let buyerKeyLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = NSLocalizedString("Buyer", comment: .init())
+        view.textColor = .textColor
+        view.font = .systemFont(ofSize: 24, weight: .semibold)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var buyerAvastarImageView: UIImageView = {
+        let view = UIImageView(image: .init(data: self.deal.buyer?.avatarData ?? .init()))
+        
+        view.clipsToBounds = true
+        view.layer.masksToBounds = false
+        view.layer.cornerRadius = 8.5
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapBuyerAvatarImageView)))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var buyerNameValueLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = self.deal.buyer?.name
+        view.textColor = .textColor
+        view.font = .systemFont(ofSize: 24)
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -87,7 +133,10 @@ final class DealDescriptionView: UIView {
         
         self.addSubview(self.titleLabel)
         self.addSubview(self.descriptionStackView)
+        self.addSubview(self.buyerStackView)
         self.addSubview(self.descriptionLabel)
+        
+        self.buyerStackView.addArrangedSubviews(self.buyerKeyLabel, self.buyerAvastarImageView, self.buyerNameValueLabel)
                 
         self.descriptionStackView.addArrangedSubviews(self.keyValueStackViews)
 
@@ -100,11 +149,30 @@ final class DealDescriptionView: UIView {
             make.trailing.lessThanOrEqualToSuperview().inset(15)
             make.top.equalTo(self.titleLabel.snp.bottom).inset(-15)
         }
+        
+        self.buyerStackView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(15)
+            make.trailing.lessThanOrEqualToSuperview().inset(15)
+            make.top.equalTo(self.descriptionStackView.snp.bottom).inset(-10)
+        }
+        
+        self.buyerAvastarImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(17)
+        }
 
         self.descriptionLabel.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview().inset(15)
-            make.top.equalTo(self.descriptionStackView.snp.bottom).inset(-15)
+            make.top.equalTo(self.buyerStackView.snp.bottom).inset(-15)
         }
+    }
+    
+//    MARK: Actions
+    @objc private func didTapBuyerAvatarImageView() {
+        guard let id = self.deal.buyer?.id else {
+            return
+        }
+        
+        self.didTapBuyerAvatarImageViewAction?(id)
     }
     
 }

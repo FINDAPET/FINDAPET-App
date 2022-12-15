@@ -148,8 +148,8 @@ final class DealPresenter {
     }
     
 //    MARK: Routing
-    func goToProfile() {
-        self.router.goToProfile(with: self.deal?.cattery.id)
+    func goToProfile(with id: UUID? = nil) {
+        self.router.goToProfile(with: id ?? self.deal?.cattery.id)
     }
     
     func goToChatRoom() {

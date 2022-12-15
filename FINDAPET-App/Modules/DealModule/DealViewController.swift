@@ -108,6 +108,7 @@ final class DealViewController: UIViewController {
         view.setTitleColor(.white, for: .normal)
         view.layer.cornerRadius = 25
         view.backgroundColor = .systemGreen
+        view.isEnabled = self.presenter.deal?.buyer == nil
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -121,6 +122,7 @@ final class DealViewController: UIViewController {
         view.setTitleColor(.white, for: .normal)
         view.layer.cornerRadius = 25
         view.backgroundColor = .systemOrange
+        view.isEnabled = self.presenter.deal?.buyer == nil
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -133,6 +135,9 @@ final class DealViewController: UIViewController {
         
         let view = DealDescriptionView(deal: deal)
         
+        view.didTapBuyerAvatarImageViewAction = { [ weak self ] id in
+            self?.presenter.goToProfile(with: id)
+        }
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -143,7 +148,7 @@ final class DealViewController: UIViewController {
             return .init()
         }
         
-        let view = DealProfileView(user: user, avatarImageTapAction: self.presenter.goToProfile)
+        let view = DealProfileView(user: user) { [ weak self ] in self?.presenter.goToProfile() }
         
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -288,7 +293,7 @@ final class DealViewController: UIViewController {
                 make.height.equalTo(50)
             }
             
-            if !(self.presenter.deal?.isPremiumDeal ?? false) {
+            if !(self.presenter.deal?.isPremiumDeal ?? false) && self.presenter.deal?.cattery.id == self.presenter.getUserID() {
                 self.scrollView.addSubview(self.makePremiumButton)
                 
                 self.makePremiumButton.snp.makeConstraints { make in
