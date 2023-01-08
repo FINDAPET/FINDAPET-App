@@ -23,7 +23,6 @@ final class EditProfileViewController: UIViewController {
     }
     
 //    MARK: UI Properties
-    
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
         
@@ -70,7 +69,7 @@ final class EditProfileViewController: UIViewController {
         view.image = self.presenter.user.avatarData == nil ? UIImage(systemName: "plus") : UIImage(data: self.presenter.user.avatarData ?? Data())
         view.backgroundColor = .textFieldColor
         view.tintColor = .lightGray
-        view.layer.cornerRadius = 48
+        view.layer.cornerRadius = 75
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.clipsToBounds = true
@@ -85,7 +84,7 @@ final class EditProfileViewController: UIViewController {
     private lazy var documentImageView: UIImageView = {
         let view = UIImageView()
         
-        view.image = self.presenter.user.avatarData == nil ? UIImage(systemName: "plus") : UIImage(data: self.presenter.user.documentData ?? Data())
+        view.image = self.presenter.user.documentData == nil ? UIImage(systemName: "plus") : UIImage(data: self.presenter.user.documentData ?? Data())
         view.backgroundColor = .textFieldColor
         view.tintColor = .lightGray
         view.layer.cornerRadius = 25
@@ -153,14 +152,61 @@ final class EditProfileViewController: UIViewController {
         return view
     }()
     
+    private lazy var nameTextFieldAndTitle = self.view.createTextFieldsView(
+        title: NSLocalizedString("Main", comment: ""),
+        fields: [
+            (
+                placeholder: NSLocalizedString("Your name or your cattery name", comment: ""),
+                text: self.presenter.user.name,
+                action: { [ weak self ] textField in
+                    self?.presenter.user.name = textField.text ?? "" }
+            )
+        ]
+    )
+    
+    private let descriptionTitleLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = NSLocalizedString("Description(optional)", comment: .init())
+        view.textColor = .textColor
+        view.font = .systemFont(ofSize: 20, weight: .bold)
+        view.numberOfLines = .zero
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var descriptionTextView: UITextView = {
+        let view = UITextView()
+        
+        view.text = self.presenter.user.description
+        view.font = .systemFont(ofSize: 17)
+        view.isScrollEnabled = false
+        view.sizeToFit()
+        view.textColor = .textColor
+        view.tintColor = .accentColor
+        view.backgroundColor = .textFieldColor
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 25
+        view.layer.borderWidth = 0.5
+        view.layer.borderColor = UIColor.lightGray.cgColor
+        view.delegate = self
+        view.textContainerInset = .init(top: 15, left: 15, bottom: 15, right: 15)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var avatarImagePickerControllerDelegate = AvatarImagePickerControllerDelegate { [ weak self ] image in
         self?.avatarImageView.image = image
-        self?.presenter.user.avatarData = image.pngData() ?? (UIImage(named: "empty avatar")?.pngData() ?? Data())
+        self?.presenter.user.avatarData = image.jpegData(compressionQuality: 0.7) ?? (UIImage(named: "empty avatar")?.pngData() ?? Data())
         
     }
+    
     private lazy var documentImagePickerControllerDelegate = DocumentImagePickerControllerDelegate { [ weak self ] image in
         self?.documentImageView.image = image
-        self?.presenter.user.documentData = image.pngData()
+        self?.presenter.user.documentData = image.jpegData(compressionQuality: 0.7)
     }
     
 //    MARK: Life Cycle
@@ -188,6 +234,12 @@ final class EditProfileViewController: UIViewController {
         self.setupViews()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.navigationController?.navigationBar.isHidden = true
+    }
+    
 //    MARK: Setup Views
     
     private func setupViews() {
@@ -198,24 +250,9 @@ final class EditProfileViewController: UIViewController {
         
         if self.presenter.readUserDefaultsIsFirstEdititng() {
             self.navigationController?.navigationBar.isHidden = true
+        } else {
+            self.navigationController?.navigationBar.isHidden = false
         }
-        
-        let basicTextFields = self.view.createTextFieldsView(
-            title: NSLocalizedString("Main", comment: ""),
-            fields: [
-                (
-                    placeholder: NSLocalizedString("Your name or your cattery name", comment: ""),
-                    text: self.presenter.user.name,
-                    action: { [ weak self ] textField in
-                        self?.presenter.user.name = textField.text ?? "" }
-                ),
-                (
-                    placeholder: NSLocalizedString("Description(optional)", comment: ""),
-                    text: self.presenter.user.description,
-                    action: { [ weak self ] textField in self?.presenter.user.description = textField.text }
-                )
-            ]
-        )
         
         self.view.backgroundColor = .backgroundColor
         
@@ -225,7 +262,9 @@ final class EditProfileViewController: UIViewController {
         self.view.addSubview(self.scrollView)
         
         self.scrollView.addSubview(self.avatarImageView)
-        self.scrollView.addSubview(basicTextFields)
+        self.scrollView.addSubview(self.nameTextFieldAndTitle)
+        self.scrollView.addSubview(self.descriptionTitleLabel)
+        self.scrollView.addSubview(self.descriptionTextView)
         self.scrollView.addSubview(self.checkmarkImageView)
         self.scrollView.addSubview(self.checkmarkLabel)
         self.scrollView.addSubview(self.catteryDocumentLabel)
@@ -243,14 +282,25 @@ final class EditProfileViewController: UIViewController {
             make.width.height.equalTo(150)
         }
         
-        basicTextFields.snp.makeConstraints { make in
+        self.nameTextFieldAndTitle.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view).inset(15)
             make.top.equalTo(self.avatarImageView.snp.bottom).inset(-15)
         }
         
+        self.descriptionTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.nameTextFieldAndTitle.snp.bottom).inset(-15)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+        }
+        
+        self.descriptionTextView.snp.makeConstraints { make in
+            make.top.equalTo(self.descriptionTitleLabel.snp.bottom).inset(-10)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+            make.height.greaterThanOrEqualTo(50)
+        }
+        
         self.checkmarkImageView.snp.makeConstraints { make in
             make.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.top.equalTo(basicTextFields.snp.bottom).inset(-15)
+            make.top.equalTo(self.descriptionTextView.snp.bottom).inset(-15)
             make.width.height.equalTo(50)
         }
         
@@ -302,6 +352,17 @@ final class EditProfileViewController: UIViewController {
             return
         }
         
+        if self.presenter.user.isCatteryWaitVerify {
+            guard self.presenter.user.documentData != nil else {
+                self.presentAlert(
+                    title: NSLocalizedString("Document photo is empty", comment: .init()),
+                    message: NSLocalizedString("Attach a photo of the document or uncheck the box", comment: .init())
+                )
+                
+                return
+            }
+        }
+        
         self.presenter.user.deviceToken = self.presenter.readUserDefaultsDeviceToken()
         
         self.presenter.editUser { error in
@@ -326,7 +387,7 @@ final class EditProfileViewController: UIViewController {
     }
     
     @objc private func didTapCheckmarkImageView() {
-        if !self.presenter.user.isCatteryWaitVerify && self.presenter.readUserDefaultsIsFirstEdititng() {
+        if !self.presenter.user.isCatteryWaitVerify {
             self.presenter.user.isCatteryWaitVerify = true
             self.catteryDocumentLabel.isHidden = false
             self.documentImageView.isHidden = false
@@ -365,7 +426,7 @@ final class EditProfileViewController: UIViewController {
                     self.infoLabel.alpha = 1
                 }
             }
-        } else if self.presenter.readUserDefaultsIsFirstEdititng() {
+        } else {
             self.presenter.user.isCatteryWaitVerify = false
             self.checkmarkImageView.image = UIImage(systemName: "square")
             self.checkmarkImageView.image?.withTintColor(.accentColor)
@@ -433,7 +494,7 @@ final class EditProfileViewController: UIViewController {
     
 //    MARK: Classes
     
-    class AvatarImagePickerControllerDelegate: NSObject {
+    fileprivate class AvatarImagePickerControllerDelegate: NSObject {
         private let callBack: (UIImage) -> Void
         
         init(callBack: @escaping (UIImage) -> Void) {
@@ -443,7 +504,7 @@ final class EditProfileViewController: UIViewController {
         }
     }
     
-    class DocumentImagePickerControllerDelegate: NSObject {
+    fileprivate class DocumentImagePickerControllerDelegate: NSObject {
         private let callBack: (UIImage) -> Void
         
         init(callBack: @escaping (UIImage) -> Void) {
@@ -487,6 +548,14 @@ extension EditProfileViewController.DocumentImagePickerControllerDelegate: UIIma
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
+    }
+    
+}
+
+extension EditProfileViewController: UITextViewDelegate {
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.presenter.user.description = textView.text.isEmpty ? nil : textView.text
     }
     
 }

@@ -101,6 +101,8 @@
 		E37437A6292249590077FA28 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37437A5292249590077FA28 /* FilterViewController.swift */; };
 		E37437A8292255850077FA28 /* PetTypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37437A7292255850077FA28 /* PetTypeCollectionViewCell.swift */; };
 		E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */; };
+		E39177EA29671CD7008A7F90 /* TagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39177E929671CD7008A7F90 /* TagCollectionViewCell.swift */; };
+		E39177EF296778EB008A7F90 /* CustomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39177EE296778EB008A7F90 /* CustomCollectionView.swift */; };
 		E3993F53290716BE000C218C /* SubscriptionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F52290716BE000C218C /* SubscriptionRouter.swift */; };
 		E3993F55290716D2000C218C /* SubscriptionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F54290716D2000C218C /* SubscriptionInteractor.swift */; };
 		E3993F57290716DF000C218C /* SubscriptionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3993F56290716DF000C218C /* SubscriptionPresenter.swift */; };
@@ -121,6 +123,10 @@
 		E3A9FA4B29291C5A00B13B96 /* SexCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A9FA4A29291C5A00B13B96 /* SexCollectionViewCell.swift */; };
 		E3ADF55C2916E52300E46FFD /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = E3ADF55B2916E52300E46FFD /* MessageKit */; };
 		E3B7B08428FC67340089762E /* YandexMobileMetrica in Frameworks */ = {isa = PBXBuildFile; productRef = E3B7B08328FC67340089762E /* YandexMobileMetrica */; };
+		E3B7DDAD295CA61D00D570F3 /* LaunchScreenRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7DDAC295CA61D00D570F3 /* LaunchScreenRouter.swift */; };
+		E3B7DDAF295CA62E00D570F3 /* LaunchScreenInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7DDAE295CA62E00D570F3 /* LaunchScreenInteractor.swift */; };
+		E3B7DDB1295CA63A00D570F3 /* LaunchScreenPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7DDB0295CA63A00D570F3 /* LaunchScreenPresenter.swift */; };
+		E3B7DDB3295CA64700D570F3 /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7DDB2295CA64700D570F3 /* LaunchScreenViewController.swift */; };
 		E3CE7300291BB4F300577206 /* ChatRoomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CE72FF291BB4F300577206 /* ChatRoomHeaderView.swift */; };
 		E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */; };
 		E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67828ABD3BA00468ED2 /* UIColor.swift */; };
@@ -141,6 +147,8 @@
 		E3D74F7F28A6ABB6004C5172 /* Ports.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F7E28A6ABB6004C5172 /* Ports.swift */; };
 		E3D74F8128A6AC3F004C5172 /* Paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F8028A6AC3F004C5172 /* Paths.swift */; };
 		E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */; };
+		E3D876DF2968588900D67ACD /* ImageWithXmarkCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D876DE2968588900D67ACD /* ImageWithXmarkCollectionViewCell.swift */; };
+		E3D876E52969D3F700D67ACD /* ImageWithXmarkCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D876E42969D3F700D67ACD /* ImageWithXmarkCollectionView.swift */; };
 		E3D9570328AFD63500CCF566 /* EditProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9570228AFD63500CCF566 /* EditProfileRouter.swift */; };
 		E3D9570528AFD64200CCF566 /* EditProfileInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9570428AFD64200CCF566 /* EditProfileInteractor.swift */; };
 		E3D9570728AFD65000CCF566 /* EditProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9570628AFD65000CCF566 /* EditProfilePresenter.swift */; };
@@ -161,8 +169,6 @@
 		E3E05D0B291F9B9D00605F49 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D0A291F9B9D00605F49 /* SearchView.swift */; };
 		E3E05D0D291FAF6C00605F49 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D0C291FAF6C00605F49 /* UIButton.swift */; };
 		E3E05D132921440300605F49 /* DealMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D122921440300605F49 /* DealMode.swift */; };
-		E3E05D152921445100605F49 /* PetBreed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D142921445100605F49 /* PetBreed.swift */; };
-		E3E05D17292149A500605F49 /* PetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D16292149A500605F49 /* PetType.swift */; };
 		E3E05D19292149E700605F49 /* PetClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05D18292149E700605F49 /* PetClass.swift */; };
 		E3E1D178290310840069EE46 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D177290310840069EE46 /* Currency.swift */; };
 		E3E1D180290313AE0069EE46 /* SettingsBlockRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E1D17F290313AE0069EE46 /* SettingsBlockRouter.swift */; };
@@ -187,6 +193,9 @@
 		E3F4B04728FD7D510083815E /* SlideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F4B04628FD7D510083815E /* SlideMenuViewController.swift */; };
 		E3F4B04A28FD7F430083815E /* SideMenuSides.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F4B04928FD7F430083815E /* SideMenuSides.swift */; };
 		E3F4B04C28FDC55C0083815E /* CurrencyConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F4B04B28FDC55C0083815E /* CurrencyConverter.swift */; };
+		E3F82C8C29643CF70049F398 /* PetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F82C8B29643CF70049F398 /* PetType.swift */; };
+		E3F82C8E29643DC90049F398 /* PetBreed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F82C8D29643DC90049F398 /* PetBreed.swift */; };
+		E3F82C91296453220049F398 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F82C90296453220049F398 /* CoreDataManager.swift */; };
 		E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */; };
 /* End PBXBuildFile section */
 
@@ -285,6 +294,8 @@
 		E37437A5292249590077FA28 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		E37437A7292255850077FA28 /* PetTypeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetTypeCollectionViewCell.swift; sourceTree = "<group>"; };
 		E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealTableViewCell.swift; sourceTree = "<group>"; };
+		E39177E929671CD7008A7F90 /* TagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCollectionViewCell.swift; sourceTree = "<group>"; };
+		E39177EE296778EB008A7F90 /* CustomCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionView.swift; sourceTree = "<group>"; };
 		E3993F52290716BE000C218C /* SubscriptionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionRouter.swift; sourceTree = "<group>"; };
 		E3993F54290716D2000C218C /* SubscriptionInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionInteractor.swift; sourceTree = "<group>"; };
 		E3993F56290716DF000C218C /* SubscriptionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPresenter.swift; sourceTree = "<group>"; };
@@ -303,6 +314,10 @@
 		E3A173F328F70CD000C67387 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		E3A173F528F70E1A00C67387 /* ProductsID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsID.swift; sourceTree = "<group>"; };
 		E3A9FA4A29291C5A00B13B96 /* SexCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SexCollectionViewCell.swift; sourceTree = "<group>"; };
+		E3B7DDAC295CA61D00D570F3 /* LaunchScreenRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenRouter.swift; sourceTree = "<group>"; };
+		E3B7DDAE295CA62E00D570F3 /* LaunchScreenInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenInteractor.swift; sourceTree = "<group>"; };
+		E3B7DDB0295CA63A00D570F3 /* LaunchScreenPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenPresenter.swift; sourceTree = "<group>"; };
+		E3B7DDB2295CA64700D570F3 /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		E3CE72FF291BB4F300577206 /* ChatRoomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomHeaderView.swift; sourceTree = "<group>"; };
 		E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
 		E3CEE67828ABD3BA00468ED2 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -327,6 +342,8 @@
 		E3D74F7E28A6ABB6004C5172 /* Ports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ports.swift; sourceTree = "<group>"; };
 		E3D74F8028A6AC3F004C5172 /* Paths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paths.swift; sourceTree = "<group>"; };
 		E3D74F8328A6ADD2004C5172 /* URLConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstructor.swift; sourceTree = "<group>"; };
+		E3D876DE2968588900D67ACD /* ImageWithXmarkCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWithXmarkCollectionViewCell.swift; sourceTree = "<group>"; };
+		E3D876E42969D3F700D67ACD /* ImageWithXmarkCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWithXmarkCollectionView.swift; sourceTree = "<group>"; };
 		E3D9570228AFD63500CCF566 /* EditProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRouter.swift; sourceTree = "<group>"; };
 		E3D9570428AFD64200CCF566 /* EditProfileInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInteractor.swift; sourceTree = "<group>"; };
 		E3D9570628AFD65000CCF566 /* EditProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilePresenter.swift; sourceTree = "<group>"; };
@@ -347,8 +364,6 @@
 		E3E05D0A291F9B9D00605F49 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		E3E05D0C291FAF6C00605F49 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		E3E05D122921440300605F49 /* DealMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealMode.swift; sourceTree = "<group>"; };
-		E3E05D142921445100605F49 /* PetBreed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetBreed.swift; sourceTree = "<group>"; };
-		E3E05D16292149A500605F49 /* PetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetType.swift; sourceTree = "<group>"; };
 		E3E05D18292149E700605F49 /* PetClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetClass.swift; sourceTree = "<group>"; };
 		E3E1D177290310840069EE46 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		E3E1D17F290313AE0069EE46 /* SettingsBlockRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBlockRouter.swift; sourceTree = "<group>"; };
@@ -372,6 +387,9 @@
 		E3F4B04628FD7D510083815E /* SlideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SlideMenuViewController.swift; path = "../New Group/SlideMenuViewController.swift"; sourceTree = "<group>"; };
 		E3F4B04928FD7F430083815E /* SideMenuSides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuSides.swift; sourceTree = "<group>"; };
 		E3F4B04B28FDC55C0083815E /* CurrencyConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverter.swift; sourceTree = "<group>"; };
+		E3F82C8B29643CF70049F398 /* PetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetType.swift; sourceTree = "<group>"; };
+		E3F82C8D29643DC90049F398 /* PetBreed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetBreed.swift; sourceTree = "<group>"; };
+		E3F82C90296453220049F398 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -441,6 +459,9 @@
 		E30560FC290FEE5C00E0881C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E3D876E22969D38D00D67ACD /* ImageWithXmarkCollectionView */,
+				E3D876E12969D35A00D67ACD /* CustomTextField */,
+				E39177ED296778CF008A7F90 /* CustomCollectionView */,
 				E30560FD29104C0500E0881C /* Deal */,
 				E3E05D0E29210F5300605F49 /* Feed */,
 				E3CE7301291BF56700577206 /* ChatRoom */,
@@ -568,6 +589,7 @@
 		E34ABC2D28A771A600A7D2C8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E3D74F6828A6A508004C5172 /* CoreDataManager */,
 				E30560EA290EB8B500E0881C /* NotificationCenterManager */,
 				E3F4B04D28FDC5640083815E /* CurrencyConverter */,
 				E35EC92028FB02EC00868C0A /* ApplicationRequestManager */,
@@ -600,6 +622,8 @@
 				E3E05D04291EB55400605F49 /* Filter.swift */,
 				E34A3ADC293E0A790038625F /* Complaint.swift */,
 				E34A3ADE293E0ADA0038625F /* NotificationScreen.swift */,
+				E3F82C8B29643CF70049F398 /* PetType.swift */,
+				E3F82C8D29643DC90049F398 /* PetBreed.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -711,6 +735,7 @@
 		E36F622628F9EBA8007C7623 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				E3B7DDAB295CA38900D570F3 /* LaunchScreenModule */,
 				E34A3AE0294365B50038625F /* NotificationScreenModule */,
 				E34A3AD3293E088C0038625F /* ComplaintModule */,
 				E33130AC293243BD009C26A1 /* EditDealModule */,
@@ -758,6 +783,8 @@
 		E37AC6A428F82CD4003AC7D3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				E3D876E32969D3A700D67ACD /* ImageWithXmarkCollectionViewCell */,
+				E39177E829671C60008A7F90 /* TagCollectionViewCell */,
 				E3A9FA4929291C4100B13B96 /* SexCollectionViewCell */,
 				E37437A9292255910077FA28 /* PetTypeCollectionViewCell */,
 				E3E05D06291F8B2500605F49 /* NotFoundTableViewCell */,
@@ -778,6 +805,22 @@
 				E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */,
 			);
 			path = DealTableViewCell;
+			sourceTree = "<group>";
+		};
+		E39177E829671C60008A7F90 /* TagCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				E39177E929671CD7008A7F90 /* TagCollectionViewCell.swift */,
+			);
+			path = TagCollectionViewCell;
+			sourceTree = "<group>";
+		};
+		E39177ED296778CF008A7F90 /* CustomCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				E39177EE296778EB008A7F90 /* CustomCollectionView.swift */,
+			);
+			path = CustomCollectionView;
 			sourceTree = "<group>";
 		};
 		E3993F51290716A2000C218C /* SubscriptionModule */ = {
@@ -864,6 +907,25 @@
 			path = ChatRoomModule;
 			sourceTree = "<group>";
 		};
+		E3B7DDAB295CA38900D570F3 /* LaunchScreenModule */ = {
+			isa = PBXGroup;
+			children = (
+				E3B7DDAC295CA61D00D570F3 /* LaunchScreenRouter.swift */,
+				E3B7DDAE295CA62E00D570F3 /* LaunchScreenInteractor.swift */,
+				E3B7DDB0295CA63A00D570F3 /* LaunchScreenPresenter.swift */,
+				E3B7DDB2295CA64700D570F3 /* LaunchScreenViewController.swift */,
+			);
+			path = LaunchScreenModule;
+			sourceTree = "<group>";
+		};
+		E3B7DDB4295CA7B700D570F3 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				E3D74F5B28A69BD4004C5172 /* Assets.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		E3CE7301291BF56700577206 /* ChatRoom */ = {
 			isa = PBXGroup;
 			children = (
@@ -918,10 +980,8 @@
 		E3D74F4E28A69BD2004C5172 /* FINDAPET-App */ = {
 			isa = PBXGroup;
 			children = (
-				E30560FC290FEE5C00E0881C /* Views */,
 				E3E1D176290310720069EE46 /* Enums */,
 				E3F4B04828FD7EF90083815E /* SideMenuSides */,
-				E3F4B04528FD7D340083815E /* ViewControllers */,
 				E36F622628F9EBA8007C7623 /* Modules */,
 				E37AC6A428F82CD4003AC7D3 /* Cells */,
 				E337A3F028F7143700FA6417 /* StoreProducts */,
@@ -932,7 +992,6 @@
 				E34ABC4128A7C31400A7D2C8 /* Errors */,
 				E34ABC3028A7722800A7D2C8 /* Models */,
 				E34ABC2D28A771A600A7D2C8 /* Services */,
-				E3D74F6828A6A508004C5172 /* Core Data */,
 				E3D74F6728A6A4F8004C5172 /* Sources */,
 				E3D74F6628A6A4CD004C5172 /* Supporting Files */,
 			);
@@ -953,20 +1012,21 @@
 		E3D74F6728A6A4F8004C5172 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E3B7DDB4295CA7B700D570F3 /* Assets */,
 				E3D74F6928A6A6D6004C5172 /* Localization */,
 				E3993F6F290B09FB000C218C /* ContactEmails */,
 				E35E09F728F73BDB00B310D1 /* YandexMobileMetrica */,
-				E3D74F5B28A69BD4004C5172 /* Assets.xcassets */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		E3D74F6828A6A508004C5172 /* Core Data */ = {
+		E3D74F6828A6A508004C5172 /* CoreDataManager */ = {
 			isa = PBXGroup;
 			children = (
-				E3D74F5828A69BD2004C5172 /* FINDAPET_App.xcdatamodeld */,
+				E3F82C90296453220049F398 /* CoreDataManager.swift */,
+				E3F82C8F2964530B0049F398 /* CoreData */,
 			);
-			path = "Core Data";
+			path = CoreDataManager;
 			sourceTree = "<group>";
 		};
 		E3D74F6928A6A6D6004C5172 /* Localization */ = {
@@ -998,6 +1058,30 @@
 			path = URLParts;
 			sourceTree = "<group>";
 		};
+		E3D876E12969D35A00D67ACD /* CustomTextField */ = {
+			isa = PBXGroup;
+			children = (
+				E3D9570D28B0129100CCF566 /* CustomTextField.swift */,
+			);
+			path = CustomTextField;
+			sourceTree = "<group>";
+		};
+		E3D876E22969D38D00D67ACD /* ImageWithXmarkCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				E3D876E42969D3F700D67ACD /* ImageWithXmarkCollectionView.swift */,
+			);
+			path = ImageWithXmarkCollectionView;
+			sourceTree = "<group>";
+		};
+		E3D876E32969D3A700D67ACD /* ImageWithXmarkCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				E3D876DE2968588900D67ACD /* ImageWithXmarkCollectionViewCell.swift */,
+			);
+			path = ImageWithXmarkCollectionViewCell;
+			sourceTree = "<group>";
+		};
 		E3D9570128AFD5A400CCF566 /* EditProfileModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -1012,7 +1096,8 @@
 		E3D9570C28B0125B00CCF566 /* CustomUIElements */ = {
 			isa = PBXGroup;
 			children = (
-				E3D9570D28B0129100CCF566 /* CustomTextField.swift */,
+				E30560FC290FEE5C00E0881C /* Views */,
+				E3F4B04528FD7D340083815E /* ViewControllers */,
 			);
 			path = CustomUIElements;
 			sourceTree = "<group>";
@@ -1077,8 +1162,6 @@
 			children = (
 				E3E1D177290310840069EE46 /* Currency.swift */,
 				E3E05D122921440300605F49 /* DealMode.swift */,
-				E3E05D142921445100605F49 /* PetBreed.swift */,
-				E3E05D16292149A500605F49 /* PetType.swift */,
 				E3E05D18292149E700605F49 /* PetClass.swift */,
 				E3FFF11328AAAA0A0046E14A /* CountryCodes.swift */,
 			);
@@ -1159,6 +1242,14 @@
 				E3F4B04B28FDC55C0083815E /* CurrencyConverter.swift */,
 			);
 			path = CurrencyConverter;
+			sourceTree = "<group>";
+		};
+		E3F82C8F2964530B0049F398 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				E3D74F5828A69BD2004C5172 /* FINDAPET_App.xcdatamodeld */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1267,6 +1358,7 @@
 				E34ABC3628A7951600A7D2C8 /* Offer.swift in Sources */,
 				E31BEE4A28A96A6A00E29A1C /* ApplePayManager.swift in Sources */,
 				E30560F2290ECE6000E0881C /* DealPresenter.swift in Sources */,
+				E3B7DDB1295CA63A00D570F3 /* LaunchScreenPresenter.swift in Sources */,
 				E300650D2916935000FAB319 /* ChatRoomsPresenter.swift in Sources */,
 				E3D74F8428A6ADD2004C5172 /* URLConstructor.swift in Sources */,
 				E37437A22922492A0077FA28 /* FilterInteractor.swift in Sources */,
@@ -1283,11 +1375,13 @@
 				E3E4D6A628B92C07002B0BE6 /* PrivacyPolicyViewController.swift in Sources */,
 				E312608428BE39E90097D040 /* ProfileViewController.swift in Sources */,
 				E34A3AD5293E08C00038625F /* ComplaintRouter.swift in Sources */,
+				E3B7DDAD295CA61D00D570F3 /* LaunchScreenRouter.swift in Sources */,
 				E3FFF11428AAAA0A0046E14A /* CountryCodes.swift in Sources */,
 				E300650B2916934400FAB319 /* ChatRoomsInteractor.swift in Sources */,
 				E3A9FA4B29291C5A00B13B96 /* SexCollectionViewCell.swift in Sources */,
 				E34ABC4F28A7D15F00A7D2C8 /* UserDefaultsManager.swift in Sources */,
 				E34A3AD9293E08EB0038625F /* ComplaintPresenter.swift in Sources */,
+				E3B7DDB3295CA64700D570F3 /* LaunchScreenViewController.swift in Sources */,
 				E3E05D0B291F9B9D00605F49 /* SearchView.swift in Sources */,
 				E33130B42932441F009C26A1 /* EditDealViewController.swift in Sources */,
 				E3DBD03728FF21630063DC35 /* OffersRouter.swift in Sources */,
@@ -1305,7 +1399,6 @@
 				E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */,
 				E300650F2916935B00FAB319 /* ChatRoomsViewController.swift in Sources */,
 				E3993F53290716BE000C218C /* SubscriptionRouter.swift in Sources */,
-				E3E05D152921445100605F49 /* PetBreed.swift in Sources */,
 				E34ABC3228A78F1F00A7D2C8 /* UserToken.swift in Sources */,
 				E305610129104E3900E0881C /* UIStackView.swift in Sources */,
 				E37437A6292249590077FA28 /* FilterViewController.swift in Sources */,
@@ -1315,11 +1408,11 @@
 				E3E05CFD291EB44800605F49 /* FeedRouter.swift in Sources */,
 				E3CE7300291BB4F300577206 /* ChatRoomHeaderView.swift in Sources */,
 				E37437A8292255850077FA28 /* PetTypeCollectionViewCell.swift in Sources */,
+				E39177EA29671CD7008A7F90 /* TagCollectionViewCell.swift in Sources */,
 				E305610C2912E72600E0881C /* CreateOfferPresenter.swift in Sources */,
 				E3993F57290716DF000C218C /* SubscriptionPresenter.swift in Sources */,
 				E3993F71290B0A12000C218C /* ContactEmails.swift in Sources */,
 				E3E4D6A028B92BE3002B0BE6 /* PrivacyPolicyRouter.swift in Sources */,
-				E3E05D17292149A500605F49 /* PetType.swift in Sources */,
 				E3E1EB51290063C600F536F4 /* AdsRouter.swift in Sources */,
 				E3993F6E290AF8B4000C218C /* InfoViewController.swift in Sources */,
 				E313B89A28ACE37B00E33975 /* RegistrationInteractor.swift in Sources */,
@@ -1331,17 +1424,21 @@
 				E3D9570728AFD65000CCF566 /* EditProfilePresenter.swift in Sources */,
 				E30561082912E6E000E0881C /* CreateOfferRouter.swift in Sources */,
 				E305610A2912E6F500E0881C /* CreateOfferInteractor.swift in Sources */,
+				E39177EF296778EB008A7F90 /* CustomCollectionView.swift in Sources */,
 				E3993F59290716EF000C218C /* SubscriptionViewController.swift in Sources */,
 				E334BAF82916E762009AAB91 /* ChatRoomViewController.swift in Sources */,
+				E3D876E52969D3F700D67ACD /* ImageWithXmarkCollectionView.swift in Sources */,
 				E312608028BE39CB0097D040 /* ProfileInteractor.swift in Sources */,
 				E34ABC4328A7C59B00A7D2C8 /* RequestErrors.swift in Sources */,
 				E3993F5F2909B62F000C218C /* CreateAdRouter.swift in Sources */,
 				E3993F55290716D2000C218C /* SubscriptionInteractor.swift in Sources */,
 				E34ABC4928A7CE9F00A7D2C8 /* RegistrationManager.swift in Sources */,
 				E313B89C28ACE38D00E33975 /* RegistrationPresenter.swift in Sources */,
+				E3F82C8C29643CF70049F398 /* PetType.swift in Sources */,
 				E34A3AE82943669F0038625F /* NotificationScreenViewController.swift in Sources */,
 				E3DBD03928FF216F0063DC35 /* OffersPresenter.swift in Sources */,
 				E3E1EB5A29006B2E00F536F4 /* AdTableViewCell.swift in Sources */,
+				E3F82C8E29643DC90049F398 /* PetBreed.swift in Sources */,
 				E3D74F5228A69BD2004C5172 /* SceneDelegate.swift in Sources */,
 				E3D74F7B28A6AA91004C5172 /* Schemes.swift in Sources */,
 				E3E05D01291EB46300605F49 /* FeedPresenter.swift in Sources */,
@@ -1389,9 +1486,11 @@
 				E33130A1292A82F0009C26A1 /* EditDealCoordinator.swift in Sources */,
 				E3E1EB53290063D200F536F4 /* AdsInteractor.swift in Sources */,
 				E313B89E28ACE39800E33975 /* RegistrationViewController.swift in Sources */,
+				E3F82C91296453220049F398 /* CoreDataManager.swift in Sources */,
 				E35E09F428F73A9000B310D1 /* YandexMobileMetricaErrors.swift in Sources */,
 				E312607E28BE39BC0097D040 /* ProfileRouter.swift in Sources */,
 				E312608228BE39E10097D040 /* ProfilePresenter.swift in Sources */,
+				E3B7DDAF295CA62E00D570F3 /* LaunchScreenInteractor.swift in Sources */,
 				E34ABC4C28A7CEC100A7D2C8 /* String.swift in Sources */,
 				E334BAF22916E714009AAB91 /* ChatRoomRouter.swift in Sources */,
 				E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */,
@@ -1413,6 +1512,7 @@
 				E334BAFA2917D0F0009AAB91 /* WebSocketSender.swift in Sources */,
 				E305EC7528ACCC6800A3AAD3 /* OnboardingInteractor.swift in Sources */,
 				E3993F632909B658000C218C /* CreateAdPresenter.swift in Sources */,
+				E3D876DF2968588900D67ACD /* ImageWithXmarkCollectionViewCell.swift in Sources */,
 				E3E4D6A428B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift in Sources */,
 				E3993F5C2907EB73000C218C /* SubscriptionCollectionViewCell.swift in Sources */,
 				E3E1EB57290063F000F536F4 /* AdsViewController.swift in Sources */,
@@ -1584,8 +1684,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FINDAPET-App/Supporting Files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = FINDAPET;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
@@ -1617,8 +1718,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FINDAPET-App/Supporting Files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = FINDAPET;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;

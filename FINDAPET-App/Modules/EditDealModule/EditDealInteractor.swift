@@ -49,4 +49,9 @@ final class EditDealInteractor {
         KeychainManager.shared.read(key: .token)
     }
     
+//    MARK: Core Data
+    func getAllPetTypes(_ completionHandler: @escaping ([PetTypeEntity], Error?) -> Void) {
+        CoreDataManager<PetTypeEntity>().all(completionHandler)
+    }
+    
 }

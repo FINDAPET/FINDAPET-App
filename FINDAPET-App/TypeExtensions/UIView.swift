@@ -64,12 +64,16 @@ extension UIView {
                 view.rightViewMode = .always
                 view.translatesAutoresizingMaskIntoConstraints = false
                 
-                if i == 0 {
-                    view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-                    view.layer.cornerRadius = 10
-                } else if i == fields.count - 1 {
-                    view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-                    view.layer.cornerRadius = 10
+                if .zero != fields.count - 1 {
+                    if i == 0 {
+                        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+                        view.layer.cornerRadius = 10
+                    } else if i == fields.count - 1 {
+                        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+                        view.layer.cornerRadius = 10
+                    }
+                } else {
+                    view.layer.cornerRadius = 25
                 }
                 
                 return view
@@ -80,6 +84,10 @@ extension UIView {
             }
             
             stackView.addArrangedSubview(textField)
+        }
+        
+        if stackView.arrangedSubviews.count == 1 {
+            stackView.layer.cornerRadius = 25
         }
         
         return mainStackView

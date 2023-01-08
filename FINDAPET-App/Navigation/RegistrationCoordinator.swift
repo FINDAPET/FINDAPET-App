@@ -18,9 +18,30 @@ final class RegistrationCoordinator: Coordinator {
     
     func start() {
         self.setupViews()
-
-        if KeychainManager.shared.read(key: .token) != nil, !(UserDefaultsManager.read(key: .isFirstEditing) as? Bool ?? true) {
-            self.goToMainTabBar()
+        
+        if let email = self.getEmail(), let password = self.getPassword() {
+            self.goToLaunchScreen()
+            self.logIn(email: email, password: password) { token, error in
+                if error != nil {
+                    self.goToOnboarding()
+                    
+                    return
+                }
+                
+                guard let token = token else {
+                    self.goToOnboarding()
+                    
+                    return
+                }
+                
+                self.setBearrerToken(token.value)
+                
+                if token.user.name.isEmpty {
+                    self.goToEditProfile(user: .init(id: self.getUserID()))
+                } else {
+                    self.goToMainTabBar()
+                }
+            }
         } else {
             self.goToOnboarding()
         }
@@ -89,6 +110,53 @@ final class RegistrationCoordinator: Coordinator {
         UserDefaultsManager.write(data: false, key: .isFirstEditing)
     }
     
+//    MARK: Launch Screen
+    func getLaunchScreen() -> LaunchScreenViewController {
+        let router = LaunchScreenRouter()
+        let interactor = LaunchScreenInteractor()
+        let presenter = LaunchScreenPresenter(router: router, interactor: interactor)
+        let viewController = LaunchScreenViewController(presenter: presenter)
+        
+        return viewController
+    }
+    
+    func goToLaunchScreen() {
+        self.navigationController.pushViewController(self.getLaunchScreen(), animated: true)
+    }
+    
+//    MARK: User Defaults
+    private func getUserID() -> UUID? {
+        guard let string = UserDefaultsManager.read(key: .id) as? String else {
+            return nil
+        }
+        
+        return .init(uuidString: string)
+    }
+    
+//    MARK: Keychain
+    private func getEmail() -> String? {
+        KeychainManager.shared.read(key: .email)
+    }
+    
+    private func getPassword() -> String? {
+        KeychainManager.shared.read(key: .password)
+    }
+    
+    private func setBearrerToken(_ value: String?) {
+        KeychainManager.shared.write(value: value, key: .token)
+    }
+    
+//    MARK: Requests
+    private func logIn(email: String, password: String, completionHandler: @escaping (UserToken.Output?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .base(email: email, password: password),
+            url: URLConstructor.defaultHTTP.auth(),
+            completionHandler: completionHandler
+        )
+    }
+    
+//    MARK: Setup Views
     private func setupViews() {
         self.navigationController.navigationBar.isHidden = true
     }

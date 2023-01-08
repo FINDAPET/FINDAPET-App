@@ -106,3 +106,12 @@
 "Create" = "Создать";
 "Complaint" = "Жалоба";
 "Buyer" = "Покупатель";
+"Attach a photo of the document or uncheck the box" = "Прикрипите фото документа или уберите галочку.";
+"Document photo is empty" = "Вы не прикрепили фото документа";
+"Do you want delete this tag?" = "Ds действительно хотите удалить этот тэг?";
+"Tags" = "Тэги";
+"Add Tag" = "Добавить тэг";
+"Enter text" = "Введите тескст";
+"Cancel" = "Отменить";
+"Add" = "Добавить";
+"Tags as well as the title help find your ad. You can add as many tags as you like. To delete a tag, click on it." = "Тэги также как и название помогают находить ваше объявление. Вы можете добавить любое количество тэгов. Что бы удалить тэг, нажмите на него.";

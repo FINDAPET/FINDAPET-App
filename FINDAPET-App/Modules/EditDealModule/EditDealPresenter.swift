@@ -11,6 +11,7 @@ import StoreKit
 final class EditDealPresenter {
     
     var callBack: (() -> Void)?
+    var secondCallBack: (() -> Void)?
     lazy var deal = Deal.Input(
         title: .init(),
         photoDatas: .init(),
@@ -34,6 +35,27 @@ final class EditDealPresenter {
         }
         
         self.deal = deal
+    }
+    
+//    MARK: Properties
+    private(set) var petTypes = [PetTypeEntity]() {
+        didSet {
+            self.secondCallBack?()
+        }
+    }
+        
+    var allBreeds: [PetBreedEntity] {
+        var petBreeds = [PetBreedEntity]()
+        
+        for petType in self.petTypes {
+            guard let breeds = petType.petBreeds as? Set<PetBreedEntity> else {
+                continue
+            }
+            
+            petBreeds += breeds
+        }
+        
+        return petBreeds
     }
     
 //    MARK: Requests
@@ -106,6 +128,29 @@ final class EditDealPresenter {
     
     func makePayment(_ product: SKProduct, completionHandler: @escaping (Error?) -> Void) {
         PurchaseManager.shared.makePayment(product, callBack: completionHandler)
+    }
+    
+//    MARK: Core Data
+    func getAllPetTypes(_ completionHandler: @escaping ([PetTypeEntity], Error?) -> Void = { _, _ in }) {
+        let newCompletionHandler = { [ weak self ] petTypes, error in
+            completionHandler(petTypes, error)
+            
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard !petTypes.isEmpty else {
+                print("❌ Error: pet types is empty.")
+                
+                return
+            }
+            
+            self?.petTypes = petTypes
+        }
+        
+        self.interactor.getAllPetTypes(newCompletionHandler)
     }
     
 }

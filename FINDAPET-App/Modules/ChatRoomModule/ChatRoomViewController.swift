@@ -32,8 +32,18 @@ final class ChatRoomViewController: MessagesViewController {
     deinit {
         self.preseter.closeWS()
     }
-    
+        
 //    MARK: UI Properties
+    private lazy var imagePickerController: UIImagePickerController = {
+        let view = UIImagePickerController()
+        
+        view.delegate = self
+        view.allowsEditing = true
+        view.sourceType = .photoLibrary
+        
+        return view
+    }()
+    
     private let activityIndicatorView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .medium)
         
@@ -53,12 +63,43 @@ final class ChatRoomViewController: MessagesViewController {
         return view
     }()
     
+    private lazy var photosCollectionView: ImageWithXmarkCollectionView = {
+        let view = ImageWithXmarkCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        
+        view.callBack = { [ weak self ] images in
+            guard let self = self else {
+                return
+            }
+            
+            if !images.isEmpty {
+                self.messageInputBar.sendButton.isEnabled = true
+            } else if self.messageInputBar.inputTextView.text.isEmpty {
+                self.messageInputBar.sendButton.isEnabled = false
+            }
+        }
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var chatRoomHeaderView: ChatRoomHeaderView = {
         let view = ChatRoomHeaderView()
         
         view.user = self.preseter.chatRoom?.users.filter { [ weak self ] in $0.id != self?.preseter.getUserID() }.first
         view.didTapAvatarImageViewAction = self.preseter.goToProfile
         view.didTapBackButtonAction = { [ weak self ] in self?.navigationController?.popViewController(animated: true) }
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var paperclipButton: UIButton = {
+        let view = UIButton()
+        
+        view.setImage(.init(systemName: "paperclip"), for: .normal)
+        view.tintColor = .lightGray
+        view.imageViewSizeToButton()
+        view.addTarget(self, action: #selector(self.didTapPaperclipButton), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -105,7 +146,7 @@ final class ChatRoomViewController: MessagesViewController {
         self.view.addSubview(self.statusBarView)
         self.view.addSubview(self.chatRoomHeaderView)
         self.view.addSubview(self.activityIndicatorView)
-                
+        
         for constraint in self.view.constraints {
             self.view.removeConstraint(constraint)
         }
@@ -133,6 +174,15 @@ final class ChatRoomViewController: MessagesViewController {
         self.activityIndicatorView.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
+        
+        self.paperclipButton.snp.makeConstraints { make in
+            make.width.equalTo(23.67)
+            make.height.equalTo(23.67)
+        }
+        
+        self.photosCollectionView.snp.makeConstraints { make in
+            make.height.equalTo(150)
+        }
     }
     
 //    MARK: Configure Messages Collection View
@@ -158,11 +208,23 @@ final class ChatRoomViewController: MessagesViewController {
         self.messageInputBar.sendButton.imageView?.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview()
         }
+        self.messageInputBar.leftStackView.insertArrangedSubview(self.paperclipButton, at: .zero)
+        self.messageInputBar.leftStackView.alignment = .center
+        self.messageInputBar.bottomStackView.addArrangedSubview(self.photosCollectionView)
+        self.messageInputBar.setLeftStackViewWidthConstant(to: 23.67, animated: false)
+        self.messageInputBar.shouldManageSendButtonEnabledState = false
+    }
+    
+//    MARK: Actions
+    @objc private func didTapPaperclipButton() {
+        self.present(self.imagePickerController, animated: true)
     }
     
 }
 
 //MARK: Extension
+extension ChatRoomViewController: UINavigationControllerDelegate { }
+
 extension ChatRoomViewController: MessagesDataSource {
     
     var currentSender: MessageKit.SenderType {
@@ -225,16 +287,41 @@ extension ChatRoomViewController: MessagesDisplayDelegate {
 }
 
 extension ChatRoomViewController: InputBarAccessoryViewDelegate {
-        
+    
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-        self.preseter.sendMessage(Message.Input(
+        if let datas = self.photosCollectionView.images
+            .map({ $0.jpegData(compressionQuality: 0.7) }).filter({ $0 != nil }) as? [Data] {
+            for data in datas {
+                self.preseter.sendMessage(.init(
+                    bodyData: data,
+                    userID: self.preseter.getUserID() ?? .init(),
+                    chatRoomID: self.preseter.chatRoom?.id
+                ))
+            }
+            
+            self.photosCollectionView.images = .init()
+        }
+        
+        guard !text.isEmpty else {
+            return
+        }
+        
+        self.preseter.sendMessage(.init(
             text: text,
-            userID: self.preseter.getUserID() ?? UUID(),
+            userID: self.preseter.getUserID() ?? .init(),
             chatRoomID: self.preseter.chatRoom?.id
         ))
         self.messagesCollectionView.scrollToLastItem()
         
-        inputBar.inputTextView.text = String()
+        inputBar.inputTextView.text = .init()
+    }
+    
+    func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
+        if !text.isEmpty {
+            self.messageInputBar.sendButton.isEnabled = true
+        } else if self.photosCollectionView.images.isEmpty {
+            self.messageInputBar.sendButton.isEnabled = false
+        }
     }
     
 }
@@ -243,6 +330,24 @@ extension ChatRoomViewController: MessagesLayoutDelegate {
     
     func avatarSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize? {
         .zero
+    }
+    
+}
+
+extension ChatRoomViewController: UIImagePickerControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.editedImage] as? UIImage else {
+            return
+        }
+        
+        self.photosCollectionView.images.append(image)
+        
+        picker.dismiss(animated: true)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
     }
     
 }

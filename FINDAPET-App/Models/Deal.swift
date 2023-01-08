@@ -16,8 +16,8 @@ struct Deal {
         var isPremiumDeal: Bool
         var isActive: Bool
         var mode: DealMode?
-        var petType: PetType?
-        var petBreed: PetBreed?
+        var petTypeID: UUID?
+        var petBreedID: UUID?
         var petClass: PetClass?
         var isMale: Bool?
         var age: String?
@@ -36,7 +36,7 @@ struct Deal {
         var mail: String?
         var buyerID: UUID?
         
-        init(id: UUID? = nil, title: String, photoDatas: [Data], tags: [String] = [String](), isPremiumDeal: Bool = false, isActive: Bool = true, mode: DealMode? = nil, petType: PetType? = nil, petBreed: PetBreed? = nil, petClass: PetClass? = nil, isMale: Bool? = nil, age: String? = nil, color: String? = nil, price: Double? = nil, currencyName: Currency = .USD, catteryID: UUID, country: String? = nil, city: String? = nil, description: String? = nil, whatsappNumber: String? = nil, telegramUsername: String? = nil, instagramUsername: String? = nil, facebookUsername: String? = nil, vkUsername: String? = nil, mail: String? = nil, buyerID: UUID? = nil) {
+        init(id: UUID? = nil, title: String, photoDatas: [Data], tags: [String] = [String](), isPremiumDeal: Bool = false, isActive: Bool = true, mode: DealMode? = nil, petTypeID: UUID? = nil, petBreedID: UUID? = nil, petClass: PetClass? = nil, isMale: Bool? = nil, age: String? = nil, color: String? = nil, price: Double? = nil, currencyName: Currency = .USD, catteryID: UUID, country: String? = nil, city: String? = nil, description: String? = nil, whatsappNumber: String? = nil, telegramUsername: String? = nil, instagramUsername: String? = nil, facebookUsername: String? = nil, vkUsername: String? = nil, mail: String? = nil, buyerID: UUID? = nil) {
             self.id = id
             self.title = title
             self.photoDatas = photoDatas
@@ -44,8 +44,8 @@ struct Deal {
             self.isPremiumDeal = isPremiumDeal
             self.isActive = isActive
             self.mode = mode
-            self.petType = petType
-            self.petBreed = petBreed
+            self.petTypeID = petTypeID
+            self.petBreedID = petBreedID
             self.petClass = petClass
             self.isMale = isMale
             self.age = age
@@ -75,9 +75,9 @@ struct Deal {
         var isActive: Bool
         var viewsCount: Int
         var mode: String
-        var petType: String
-        var petBreed: String
-        var petClass: String
+        var petType: PetType.Output
+        var petBreed: PetBreed.Output
+        var petClass: PetClass
         var isMale: Bool
         var age: String
         var color: String

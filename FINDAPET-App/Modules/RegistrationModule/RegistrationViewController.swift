@@ -81,9 +81,20 @@ final class RegistrationViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.leftViewMode = .always
-        view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+        view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 55, height: 0))
         view.rightViewMode = .always
          
+        return view
+    }()
+    
+    private lazy var showPasswordImageView: UIImageView = {
+        let view = UIImageView(image: .init(systemName: "eye.slash"))
+        
+        view.tintColor = .lightGray
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapShowPasswordImageView(_:))))
+        view.isUserInteractionEnabled = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
         return view
     }()
     
@@ -153,6 +164,8 @@ final class RegistrationViewController: UIViewController {
         self.scrollView.addSubview(self.privacyPolicyButton)
         self.scrollView.addSubview(self.registrationButton)
         
+        self.passwordTextField.addSubview(self.showPasswordImageView)
+        
         self.scrollView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.width.equalTo(self.view.safeAreaLayoutGuide)
         }
@@ -175,6 +188,11 @@ final class RegistrationViewController: UIViewController {
             make.height.equalTo(50)
         }
         
+        self.showPasswordImageView.snp.makeConstraints { make in
+            make.trailing.top.bottom.equalToSuperview().inset(15)
+            make.width.equalTo(self.showPasswordImageView.snp.height).multipliedBy(1.25)
+        }
+        
         self.privacyPolicyButton.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.top.equalTo(self.passwordTextField.snp.bottom).inset(-15)
@@ -193,7 +211,6 @@ final class RegistrationViewController: UIViewController {
     }
     
 //    MARK: Actions
-    
     @objc private func registrationButtonDidTap() {
         switch self.presenter.mode {
         case .logIn:
@@ -206,6 +223,7 @@ final class RegistrationViewController: UIViewController {
                     }
                     
                     self?.presenter.writeKeychainBearer(token: token.value)
+                    self?.presenter.writeUserID(id: token.user.id)
                     
                     if token.user.name.isEmpty {
                         let user = User.Input(
@@ -259,6 +277,18 @@ final class RegistrationViewController: UIViewController {
             )
             self.scrollView.setContentOffset(CGPoint(x: 0, y: max(self.scrollView.contentSize.height - self.scrollView.bounds.size.height, 0) ), animated: true)
         }
+    }
+    
+    @objc private func didTapShowPasswordImageView(_ sender: UIImageView) {
+        if self.passwordTextField.isSecureTextEntry {
+            self.showPasswordImageView.image = .init(systemName: "eye")
+            self.showPasswordImageView.tintColor = .lightGray
+        } else {
+            self.showPasswordImageView.image = .init(systemName: "eye.slash")
+            self.showPasswordImageView.tintColor = .lightGray
+        }
+        
+        self.passwordTextField.isSecureTextEntry.toggle()
     }
     
     @objc private func keyboardWillHide(notification: NSNotification) {

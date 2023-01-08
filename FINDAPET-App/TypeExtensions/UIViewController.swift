@@ -11,7 +11,6 @@ import UIKit
 extension UIViewController {
     
 //    MARK: Alerts
-    
     func presentAlert(title: String, message: String? = nil) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
@@ -30,6 +29,29 @@ extension UIViewController {
                 handler: { _ in action.action() }
             ))
         }
+        
+        self.present(controller, animated: true)
+    }
+    
+//    MARK: Alerts With Text Field
+    func presentAlertWithTextField(
+        title: String,
+        message: String? = nil,
+        buttonTitle: String,
+        action: @escaping (String) -> Void
+    ) {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: buttonTitle, style: .cancel) { [ weak controller ] _ in
+            guard let text = controller?.textFields?.first?.text else {
+                return
+            }
+            
+            action(text)
+        }
+        
+        controller.addTextField()
+        controller.addAction(.init(title: NSLocalizedString("Cancel", comment: .init()), style: .destructive))
+        controller.addAction(action)
         
         self.present(controller, animated: true)
     }
@@ -60,7 +82,6 @@ extension UIViewController {
     }
     
 //    MARK: Errors
-    
     func error(_ error: Error?, completionHandler: @escaping () -> Void = { }) {
         if let error = error as? RegistrationErrors {
             switch error {

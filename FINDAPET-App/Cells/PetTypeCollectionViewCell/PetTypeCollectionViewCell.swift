@@ -33,14 +33,14 @@ final class PetTypeCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var petType: PetType? {
+    var petType: PetTypeEntity? {
         didSet {
-            guard let petType = self.petType else {
+            guard let petType = self.petType, let data = petType.imageData else {
                 return
             }
             
-            self.imageView.image = .init(named: petType == .cat ? "cat logo" : "dog logo")
-            self.nameLabel.text = NSLocalizedString(petType.rawValue, comment: .init())
+            self.imageView.image = .init(data: data)
+            self.nameLabel.text = petType.name
         }
     }
     

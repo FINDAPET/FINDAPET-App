@@ -23,6 +23,15 @@ final class DealDescriptionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+//    MARK: Properties
+    private let languageCode: String = {
+        if #available(iOS 16, *) {
+            return Locale.current.language.languageCode?.identifier ?? .init()
+        } else {
+            return Locale.current.languageCode ?? .init()
+        }
+    }()
+    
 //    MARK: UI Properties
     private let titleLabel: UILabel = {
         let view = UILabel()
@@ -110,9 +119,9 @@ final class DealDescriptionView: UIView {
             value: NSLocalizedString(self.deal.isMale ? "Male" : "Female", comment: String())
         ),
         self.createKeyValueStackView(key: NSLocalizedString("Mode", comment: String()), value: self.deal.mode),
-        self.createKeyValueStackView(key: NSLocalizedString("Breed", comment: String()), value: self.deal.petBreed),
-        self.createKeyValueStackView(key: NSLocalizedString("Show Class", comment: String()), value: self.deal.petClass),
-        self.createKeyValueStackView(key: NSLocalizedString("Show Class", comment: String()), value: self.deal.petClass),
+        self.createKeyValueStackView(key: NSLocalizedString("Breed", comment: String()), value: self.deal.petBreed.name),
+        self.createKeyValueStackView(key: NSLocalizedString("Show Class", comment: String()), value: self.deal.petClass.rawValue),
+        self.createKeyValueStackView(key: NSLocalizedString("Pet Type", comment: String()), value: self.deal.petType.localizedNames[self.languageCode] ?? self.deal.petType.localizedNames["en"] ?? .init()),
         self.createKeyValueStackView(key: NSLocalizedString("Age", comment: String()), value: self.deal.age),
         self.createKeyValueStackView(key: NSLocalizedString("Color", comment: String()), value: self.deal.color)
     ]

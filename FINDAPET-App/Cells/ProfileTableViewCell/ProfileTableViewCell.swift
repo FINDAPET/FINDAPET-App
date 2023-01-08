@@ -20,8 +20,10 @@ class ProfileTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+//    MARK: Properties
     static let id = String(describing: ProfileTableViewCell.self)
     
+    var callBack: (() -> Void)?
     var user: User.Output? {
         didSet {
             guard let user = user else {
@@ -36,6 +38,8 @@ class ProfileTableViewCell: UITableViewCell {
             self.descriptionLabel.text = user.description
         }
     }
+    
+    private var chevronDescriptionButtonIsDown = true
     
 //    MARK: UI Properties
     private let containerView: UIView = {
@@ -69,7 +73,6 @@ class ProfileTableViewCell: UITableViewCell {
         view.textColor = .textColor
         view.font = .systemFont(ofSize: 24, weight: .bold)
         view.numberOfLines = .zero
-        view.textAlignment = .center
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -78,13 +81,21 @@ class ProfileTableViewCell: UITableViewCell {
     private lazy var descriptionLabel: UILabel = {
         let view = UILabel()
         
-        view.numberOfLines = 5
+        view.numberOfLines = .zero
         view.textColor = .lightGray
         view.font = .systemFont(ofSize: 14)
-        view.addGestureRecognizer(UITapGestureRecognizer(
-            target: self,
-            action: #selector(self.didTapDescriptionLabel(_:))
-        ))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var chevronDescriptionButton: UIButton = {
+        let view = UIButton()
+        
+        view.setImage(.init(systemName: "chevron.down"), for: .normal)
+        view.tintColor = .accentColor
+        view.addTarget(self, action: #selector(self.didTapChevronDescriptionButton(_:)), for: .touchUpInside)
+        view.imageViewSizeToButton()
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -107,7 +118,6 @@ class ProfileTableViewCell: UITableViewCell {
     }
     
 //    MARK: Setup Views
-    
     private func setupViews() {
         self.backgroundColor = .clear
         
@@ -116,21 +126,22 @@ class ProfileTableViewCell: UITableViewCell {
         self.containerView.addSubview(self.avatarImageView)
         self.containerView.addSubview(self.nameLabel)
         self.containerView.addSubview(self.descriptionLabel)
+        self.containerView.addSubview(self.chevronDescriptionButton)
         
         self.avatarImageView.addSubview(self.checkmarkImageView)
         
         self.avatarImageView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().inset(15)
             make.width.height.equalTo(150)
-
-            if self.descriptionLabel.frame.maxY <= self.avatarImageView.frame.maxY {
-                make.bottom.equalToSuperview().inset(15)
-            }
         }
         
         self.containerView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview().inset(15)
             make.bottom.equalToSuperview().inset(7.5)
+            
+            if self.chevronDescriptionButtonIsDown {
+                make.height.equalTo(180)
+            }
         }
         
         self.nameLabel.snp.makeConstraints { make in
@@ -143,10 +154,13 @@ class ProfileTableViewCell: UITableViewCell {
             make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
             make.trailing.equalToSuperview().inset(15)
             make.top.equalTo(self.nameLabel.snp.bottom).inset(-15)
-
-            if self.descriptionLabel.frame.maxY > self.avatarImageView.frame.maxY {
-                make.bottom.equalToSuperview().inset(15)
-            }
+        }
+        
+        self.chevronDescriptionButton.snp.makeConstraints { make in
+            make.top.equalTo(self.descriptionLabel.snp.bottom)
+            make.bottom.equalToSuperview().inset(15)
+            make.centerX.equalTo(self.descriptionLabel)
+            make.width.height.equalTo(18)
         }
         
         self.checkmarkImageView.snp.makeConstraints { make in
@@ -156,38 +170,27 @@ class ProfileTableViewCell: UITableViewCell {
     }
     
 //    MARK: Actions
-    
-    @objc private func didTapDescriptionLabel(_ sender: UILabel) {
-        UIView.animate(withDuration: 0.3) { [ weak self ] in
-            if sender.numberOfLines == .zero {
-                self?.descriptionLabel.numberOfLines = 5
-            } else if sender.numberOfLines == 5 {
-                self?.descriptionLabel.numberOfLines = .zero
+    @objc private func didTapChevronDescriptionButton(_ sender: UIButton) {
+        if self.chevronDescriptionButtonIsDown {
+            self.chevronDescriptionButton.setImage(.init(systemName: "chevron.up"), for: .normal)
+            self.containerView.snp.removeConstraints()
+            self.containerView.snp.makeConstraints { make in
+                make.leading.trailing.top.equalToSuperview().inset(15)
+                make.bottom.equalToSuperview().inset(7.5)
+            }
+        } else {
+            self.chevronDescriptionButton.setImage(.init(systemName: "chevron.down"), for: .normal)
+            self.containerView.snp.removeConstraints()
+            self.containerView.snp.makeConstraints { make in
+                make.leading.trailing.top.equalToSuperview().inset(15)
+                make.bottom.equalToSuperview().inset(7.5)
+                make.height.equalTo(180)
             }
         }
         
-        self.avatarImageView.snp.removeConstraints()
-        self.descriptionLabel.snp.removeConstraints()
-        
-        self.avatarImageView.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().inset(15)
-            make.width.height.equalTo(150)
-            make.bottom.greaterThanOrEqualToSuperview().inset(15)
-            
-            if self.descriptionLabel.frame.maxY < self.avatarImageView.frame.maxY {
-                make.bottom.equalToSuperview().inset(15)
-            }
-        }
-        
-        self.descriptionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
-            make.trailing.equalToSuperview().inset(15)
-            make.top.equalTo(self.nameLabel.snp.bottom).inset(-15)
-            
-            if self.descriptionLabel.frame.maxY >= self.avatarImageView.frame.maxY {
-                make.bottom.equalToSuperview().inset(15)
-            }
-        }
+        self.chevronDescriptionButton.tintColor = .accentColor
+        self.chevronDescriptionButtonIsDown.toggle()
+        self.callBack?()
     }
 
 }

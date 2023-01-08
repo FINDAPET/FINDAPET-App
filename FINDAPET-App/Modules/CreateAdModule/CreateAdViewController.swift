@@ -267,7 +267,7 @@ final class CreateAdViewController: UIViewController {
     @objc private func didTapSaveButton() {
         self.presenter.createAd(
             ad: Ad.Input(
-                contentData: self.contentImageView.image?.pngData() ?? Data(),
+                contentData: self.contentImageView.image?.jpegData(compressionQuality: 0.7) ?? Data(),
                 customerName: self.nameTextField.text,
                 link: self.linkTextField.text,
                 catteryID: self.presenter.user?.id

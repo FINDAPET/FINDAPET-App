@@ -364,6 +364,10 @@ extension ProfileViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             
+            cell.callBack = {
+                tableView.beginUpdates()
+                tableView.endUpdates()
+            }
             cell.selectionStyle = .none
             cell.user = self.presenter.user
             

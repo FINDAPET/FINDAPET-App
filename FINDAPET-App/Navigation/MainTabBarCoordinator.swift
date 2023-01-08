@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 protocol MainTabBarCoordinatable {
     var coordinatorDelegate: MainTabBarCoordinator? { get set }
@@ -100,54 +101,6 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
             UserDefaultsManager.write(data: currencies, key: .currencies)
         }
         
-        self.getBreeds { breeds, error in
-            if let error = error {
-                print("❌ Error: \(error.localizedDescription)")
-                
-                return
-            }
-            
-            guard let breeds = breeds else {
-                print("❌ Error: not found.")
-                
-                return
-            }
-            
-            UserDefaultsManager.write(data: breeds, key: .petBreeds)
-        }
-        
-        self.getCatBreeds { breeds, error in
-            if let error = error {
-                print("❌ Error: \(error.localizedDescription)")
-                
-                return
-            }
-            
-            guard let breeds = breeds else {
-                print("❌ Error: not found.")
-                
-                return
-            }
-            
-            UserDefaultsManager.write(data: breeds, key: .catBreeds)
-        }
-        
-        self.getDogBreeds { breeds, error in
-            if let error = error {
-                print("❌ Error: \(error.localizedDescription)")
-                
-                return
-            }
-            
-            guard let breeds = breeds else {
-                print("❌ Error: not found.")
-                
-                return
-            }
-            
-            UserDefaultsManager.write(data: breeds, key: .dogBreeds)
-        }
-        
         self.getPetClasses { classes, error in
             if let error = error {
                 print("❌ Error: \(error.localizedDescription)")
@@ -177,7 +130,9 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
                 return
             }
             
-            UserDefaultsManager.write(data: types, key: .petTypes)
+            for type in types {
+                _ = self.coreDataSavePetType(type)
+            }
         }
         
         self.getDealModes { modes, error in
@@ -245,33 +200,6 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
         )
     }
     
-    private func getBreeds(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
-        RequestManager.request(
-            method: .GET,
-            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
-            url: URLConstructor.defaultHTTP.getAllPetBreeds(),
-            completionHandler: completionHandler
-        )
-    }
-    
-    private func getDogBreeds(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
-        RequestManager.request(
-            method: .GET,
-            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
-            url: URLConstructor.defaultHTTP.getAllDogBreeds(),
-            completionHandler: completionHandler
-        )
-    }
-    
-    private func getCatBreeds(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
-        RequestManager.request(
-            method: .GET,
-            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
-            url: URLConstructor.defaultHTTP.getAllCatBreeds(),
-            completionHandler: completionHandler
-        )
-    }
-    
     private func getPetClasses(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
         RequestManager.request(
             method: .GET,
@@ -281,7 +209,7 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
         )
     }
     
-    private func getPetTypes(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
+    private func getPetTypes(_ completionHandler: @escaping ([PetType.Output]?, Error?) -> Void) {
         RequestManager.request(
             method: .GET,
             authMode: .bearer(value: self.getBearrerToken() ?? .init()),
@@ -307,6 +235,76 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
 //    MARK: User Defaults
     private func getUserDefaultsNotificationScreensID() -> [String]? {
         UserDefaultsManager.read(key: .notificationScreensID) as? [String]
+    }
+    
+//    MARK: Core Data
+    private func coreDataSavePetType(
+        _ petType: PetType.Output,
+        completionHandler: @escaping (Error?) -> Void = { _ in }
+    ) -> PetTypeEntity? {
+        let manager = CoreDataManager<PetTypeEntity>()
+        let context = manager.persistentContainer.newBackgroundContext()
+        
+        guard let description = NSEntityDescription.entity(
+            forEntityName: .init(describing: PetTypeEntity.self),
+            in: context
+        ) else {
+            completionHandler(RequestErrors.statusCodeError(statusCode: 500))
+            
+            return nil
+        }
+        
+        let model = PetTypeEntity(entity: description, insertInto: context)
+        
+        var languageCode = String()
+        
+        if #available(iOS 16, *) {
+            languageCode = Locale.current.language.languageCode?.identifier ?? .init()
+        } else {
+            languageCode = Locale.current.languageCode ?? .init()
+        }
+        
+        model.id = petType.id
+        model.name = petType.localizedNames[languageCode] ?? petType.localizedNames["en"] ?? "-"
+        model.imageData = petType.imageData
+        
+        for petBreed in petType.petBreeds {
+            guard let breed = self.coreDataSavePetBreed(petBreed, completionHandler: completionHandler) else {
+                continue
+            }
+            
+            model.addToPetBreeds(breed)
+        }
+        
+        manager.save(model, completionHandler: completionHandler)
+        
+        return model
+    }
+    
+    private func coreDataSavePetBreed(
+        _ petBreed: PetBreed.Output,
+        completionHandler: @escaping (Error?) -> Void = { _ in }
+    ) -> PetBreedEntity? {
+        let manager = CoreDataManager<PetBreedEntity>()
+        let context = manager.persistentContainer.newBackgroundContext()
+        
+        guard let description = NSEntityDescription.entity(
+            forEntityName: .init(describing: PetBreedEntity.self),
+            in: context
+        ) else {
+            completionHandler(RequestErrors.statusCodeError(statusCode: 500))
+            
+            return nil
+        }
+        
+        let model = PetBreedEntity(entity: description, insertInto: context)
+        
+        model.id = petBreed.id
+        model.name = petBreed.name
+        
+        manager.save(model, completionHandler: completionHandler)
+        
+        return model
     }
     
 //    MARK: Setup Views

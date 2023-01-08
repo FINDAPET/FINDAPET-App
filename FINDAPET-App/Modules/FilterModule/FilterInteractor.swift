@@ -18,4 +18,9 @@ final class FilterInteractor {
         UserDefaultsManager.write(data: value, key: key)
     }
     
+//    MARK: Core Data
+    func getAllPetTypes(_ completionHandler: @escaping ([PetTypeEntity], Error?) -> Void) {
+        CoreDataManager<PetTypeEntity>().all(completionHandler)
+    }
+    
 }

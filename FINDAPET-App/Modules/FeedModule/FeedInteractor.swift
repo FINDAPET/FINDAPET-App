@@ -13,7 +13,7 @@ final class FeedInteractor {
     func getDeals(_ filter: Filter, completionHandler: @escaping ([Deal.Output]?, Error?) -> Void) {
         RequestManager.request(
             sendModel: filter,
-            method: .GET,
+            method: .PUT,
             authMode: .bearer(value: self.getBearrerToken() ?? .init()),
             url: URLConstructor.defaultHTTP.allDeals(),
             completionHandler: completionHandler

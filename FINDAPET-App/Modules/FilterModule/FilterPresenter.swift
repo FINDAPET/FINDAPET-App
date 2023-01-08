@@ -9,6 +9,7 @@ import Foundation
 
 final class FilterPresenter {
     
+    var callBack: (() -> Void)?
     private(set) var filter: Filter
     private let saveAction: (Filter) -> Void
     private let rotuer: FilterRouter
@@ -21,13 +22,34 @@ final class FilterPresenter {
         self.interactor = interactor
     }
     
-//    MARK: Editing
-    func setPetType(_ petType: String? = nil) {
-        self.filter.petType = .getPetType(petType ?? .init())
+//    MARK: Properties
+    private(set) var petTypes = [PetTypeEntity]() {
+        didSet {
+            self.callBack?()
+        }
+    }
+        
+    var allBreeds: [PetBreedEntity] {
+        var petBreeds = [PetBreedEntity]()
+        
+        for petType in self.petTypes {
+            guard let breeds = petType.petBreeds as? Set<PetBreedEntity> else {
+                continue
+            }
+            
+            petBreeds += breeds
+        }
+        
+        return petBreeds
     }
     
-    func setPetBreed(_ petBreed: String? = nil) {
-        self.filter.petBreed = .getPetBreed(petBreed ?? .init())
+//    MARK: Editing
+    func setPetType(_ petTypeID: UUID? = nil) {
+        self.filter.petTypeID = petTypeID
+    }
+    
+    func setPetBreed(_ petBreedID: UUID? = nil) {
+        self.filter.petBreedID = petBreedID
     }
     
     func setPetClass(_ petClass: String? = nil) {
@@ -64,24 +86,27 @@ final class FilterPresenter {
         self.interactor.getUserDefaults(.petClasses) as? [String]
     }
     
-    func getTypesClasses() -> [String]? {
-        self.interactor.getUserDefaults(.petTypes) as? [String]
-    }
-    
-    func getPetBreeds() -> [String]? {
-        self.interactor.getUserDefaults(.petBreeds) as? [String]
-    }
-    
-    func getCatBreeds() -> [String]? {
-        self.interactor.getUserDefaults(.catBreeds) as? [String]
-    }
-    
-    func getDogBreeds() -> [String]? {
-        self.interactor.getUserDefaults(.dogBreeds) as? [String]
-    }
-    
-    func getPetType() -> [String]? {
-        self.interactor.getUserDefaults(.petTypes) as? [String]
+//    MARK: Core Data
+    func getAllPetTypes(_ completionHandler: @escaping ([PetTypeEntity], Error?) -> Void = { _, _ in }) {
+        let newCompletionHandler = { [ weak self ] petTypes, error in
+            completionHandler(petTypes, error)
+            
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard !petTypes.isEmpty else {
+                print("❌ Error: pet types is empty.")
+                
+                return
+            }
+            
+            self?.petTypes = petTypes
+        }
+        
+        self.interactor.getAllPetTypes(newCompletionHandler)
     }
     
 }

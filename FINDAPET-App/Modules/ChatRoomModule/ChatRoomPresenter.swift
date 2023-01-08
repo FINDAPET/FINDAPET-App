@@ -10,6 +10,7 @@ import Foundation
 final class ChatRoomPresenter {
     
     var callBack: (() -> Void)?
+    var secondCallBack: (() -> Void)?
     private(set) var chatRoom: ChatRoom.Output? {
         didSet {
             if let id = self.getUserID() {
@@ -103,6 +104,7 @@ final class ChatRoomPresenter {
             self.chatRoom?.messages.append(Message.Output(
                 text: message.text,
                 isViewed: message.isViewed,
+                bodyData: message.bodyData,
                 user: user,
                 createdAt: .init(),
                 chatRoom: chatRoom
@@ -121,7 +123,7 @@ final class ChatRoomPresenter {
         guard let string = self.interactor.getUserDefautls(.id) as? String else {
             return nil
         }
-        
+                
         return UUID(uuidString: string)
     }
     

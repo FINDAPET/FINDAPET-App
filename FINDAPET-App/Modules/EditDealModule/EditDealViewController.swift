@@ -29,7 +29,10 @@ final class EditDealViewController: UIViewController {
                 make.top.equalTo(self.photosTitle.snp.bottom).inset(-10)
                 make.height.equalTo(self.photosCollectionViewHeight != .zero ? self.photosCollectionViewHeight : 10)
             }
+            self?.tagsCollectionView.reloadData()
+            self?.tagsCollectionView.layoutIfNeeded()
         }
+        self.presenter.secondCallBack = { [ weak self ] in self?.petTypeCollectionView.reloadData() }
     }
     
     required init?(coder: NSCoder) {
@@ -43,9 +46,9 @@ final class EditDealViewController: UIViewController {
          (self.view.safeAreaLayoutGuide.layoutFrame.width - 45) / 2)
     }
     private var selectedIsMale: Bool?
-    private var selectedPetType: PetType? {
+    private var selectedPetType: PetTypeEntity? {
         didSet {
-            self.breedValueLabel.text = PetBreed.other.rawValue
+            self.breedValueLabel.text = "Other"
         }
     }
     
@@ -268,8 +271,9 @@ final class EditDealViewController: UIViewController {
     
     private lazy var breedValueLabel: UILabel = {
         let view = UILabel()
+        let petBreedID = self.presenter.deal.petBreedID
         
-        view.text = (self.presenter.deal.petBreed ?? .other).rawValue
+        view.text = self.presenter.allBreeds.filter { $0.id == petBreedID }.first?.name ?? "Other"
         view.textColor = .accentColor
         view.backgroundColor = .backgroundColor
         view.font = .systemFont(ofSize: 24, weight: .semibold)
@@ -584,6 +588,58 @@ final class EditDealViewController: UIViewController {
         return view
     }()
     
+    private let tagsTitleLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = NSLocalizedString("Tags", comment: .init()) + ":"
+        view.textColor = .textColor
+        view.font = .systemFont(ofSize: 24, weight: .bold)
+        view.numberOfLines = .zero
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var tagsPlusButton: UIButton = {
+        let view = UIButton()
+        
+        view.setImage(.init(systemName: "plus"), for: .normal)
+        view.tintColor = .accentColor
+        view.addTarget(self, action: #selector(self.didTapTagsPlusButton), for: .touchUpInside)
+        view.imageViewSizeToButton()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var tagsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        
+        let view = CustomCollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        view.isScrollEnabled = false
+        view.dataSource = self
+        view.delegate = self
+        view.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.id)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private let tagsDescriptionLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = NSLocalizedString("Tags as well as the title help find your ad. You can add as many tags as you like. To delete a tag, click on it.", comment: .init())
+        view.textColor = .lightGray
+        view.font = .systemFont(ofSize: 17)
+        view.numberOfLines = .zero
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
 //    MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -600,6 +656,8 @@ final class EditDealViewController: UIViewController {
             name: UIResponder.keyboardWillHideNotification,
             object: nil
         )
+        
+        self.presenter.getAllPetTypes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -628,6 +686,10 @@ final class EditDealViewController: UIViewController {
         self.secondContentView.addSubview(self.titleTextView)
         self.secondContentView.addSubview(self.descriptionTitleLabel)
         self.secondContentView.addSubview(self.descriptionTextView)
+        self.secondContentView.addSubview(self.tagsTitleLabel)
+        self.secondContentView.addSubview(self.tagsPlusButton)
+        self.secondContentView.addSubview(self.tagsCollectionView)
+        self.secondContentView.addSubview(self.tagsDescriptionLabel)
         self.secondContentView.addSubview(self.modeTitleLabel)
         self.secondContentView.addSubview(self.modeValueLabel)
         self.secondContentView.addSubview(self.petTypeTitleLabel)
@@ -711,9 +773,32 @@ final class EditDealViewController: UIViewController {
             make.height.greaterThanOrEqualTo(50)
         }
         
+        self.tagsTitleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(15)
+            make.top.equalTo(self.descriptionTextView.snp.bottom).inset(-15)
+        }
+
+        self.tagsPlusButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(15)
+            make.leading.equalTo(self.tagsTitleLabel.snp.trailing).inset(-15)
+            make.centerY.equalTo(self.tagsTitleLabel)
+            make.width.height.equalTo(25)
+        }
+
+        self.tagsCollectionView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(15)
+            make.top.equalTo(self.tagsTitleLabel.snp.bottom).inset(-10)
+            make.height.greaterThanOrEqualTo(1)
+        }
+
+        self.tagsDescriptionLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(15)
+            make.top.equalTo(self.tagsCollectionView.snp.bottom).inset(-10)
+        }
+        
         self.modeTitleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(15)
-            make.top.equalTo(self.descriptionTextView.snp.bottom).inset(-15)
+            make.top.equalTo(self.tagsDescriptionLabel.snp.bottom).inset(-15)
         }
         
         self.modeValueLabel.snp.makeConstraints { make in
@@ -872,13 +957,12 @@ final class EditDealViewController: UIViewController {
     @objc private func didTapBreedValueLabel() {
         var breedList = [String]()
         
-        switch self.selectedPetType {
-        case .cat:
-            breedList = (self.presenter.getCatBreeds() ?? PetBreed.allCatBreeds.map { $0.rawValue }).sorted(by: <)
-        case .dog:
-            breedList = (self.presenter.getDogBreeds() ?? PetBreed.allDogBreeds.map { $0.rawValue }).sorted(by: <)
-        default:
-            breedList = (self.presenter.getDogBreeds() ?? PetBreed.allCases.map { $0.rawValue }).sorted(by: <)
+        for petBreed in (self.selectedPetType?.petBreeds as? Set<PetBreedEntity>) ?? .init() {
+            guard let name = petBreed.name else {
+                continue
+            }
+            
+            breedList.append(name)
         }
         
         self.presentActionsSheet(
@@ -886,7 +970,10 @@ final class EditDealViewController: UIViewController {
             contents: breedList
         ) { [ weak self ] alertAction in
             self?.breedValueLabel.text = alertAction.title
-            self?.presenter.deal.petBreed = .getPetBreed(alertAction.title ?? .init()) ?? .other
+            
+            if let id = self?.presenter.allBreeds.filter({ $0.name == alertAction.title }).first?.id {
+                self?.presenter.deal.petBreedID = id
+            }
         }
     }
     
@@ -898,6 +985,15 @@ final class EditDealViewController: UIViewController {
             self?.petClassValueLabel.text = alertAction.title
             self?.presenter.deal.petClass = .getPetClass(alertAction.title ?? .init()) ?? .allClass
         }
+    }
+    
+    @objc private func didTapTagsPlusButton() {
+        self.presentAlertWithTextField(
+            title: NSLocalizedString("Add Tag", comment: .init()),
+            message: NSLocalizedString("Enter text", comment: .init()),
+            buttonTitle: NSLocalizedString("Add", comment: .init())) { [ weak self ] text in
+                self?.presenter.deal.tags.append(text)
+            }
     }
     
     @objc private func editingCountryTextField(_ sender: UITextField) {
@@ -994,7 +1090,7 @@ extension EditDealViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true)
         
-        guard let data = (info[.editedImage] as? UIImage)?.pngData() else {
+        guard let data = (info[.editedImage] as? UIImage)?.jpegData(compressionQuality: 0.7) else {
             return
         }
         
@@ -1009,8 +1105,10 @@ extension EditDealViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {        
         if collectionView == self.photosCollectionView {
             return self.presenter.deal.photoDatas.count
+        } else if collectionView == self.tagsCollectionView {
+            return self.presenter.deal.tags.count
         } else if collectionView == self.petTypeCollectionView {
-            return self.presenter.getPetClasses()?.count ?? PetType.allCases.count
+            return self.presenter.petTypes.count
         }
         
         return 2
@@ -1033,11 +1131,22 @@ extension EditDealViewController: UICollectionViewDataSource {
                 return .init()
             }
                     
-            cell.petType = .getPetType(self.presenter.getPetType()?[indexPath.row] ?? .init()) ?? .allCases[indexPath.row]
+            cell.petType = self.presenter.petTypes[indexPath.item]
             
-            if self.presenter.deal.petType == cell.petType {
+            if self.presenter.deal.petTypeID == cell.petType?.id {
                 cell.isSelected = true
             }
+            
+            return cell
+        } else if collectionView == self.tagsCollectionView {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: TagCollectionViewCell.id,
+                for: indexPath
+            ) as? TagCollectionViewCell else {
+                return .init()
+            }
+            
+            cell.value = self.presenter.deal.tags[indexPath.item]
             
             return cell
         }
@@ -1064,24 +1173,42 @@ extension EditDealViewController: UICollectionViewDataSource {
 extension EditDealViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == self.photosCollectionView {
+        if collectionView == self.photosCollectionView || collectionView == self.tagsCollectionView {
             collectionView.deselectItem(at: indexPath, animated: true)
             
-            self.presentAlert(
-                title: NSLocalizedString("Do you want to delete this photo?",comment: .init()),
-                actions: (
-                    title: NSLocalizedString("Remove", comment: .init()),
-                    style: UIAlertAction.Style.destructive,
-                    action: { [ weak self ] in
-                        self?.presenter.deal.photoDatas.remove(at: indexPath.item)
-                    }
-                ),
-                (
-                    title: NSLocalizedString("No", comment: .init()),
-                    style: UIAlertAction.Style.default,
-                    action: { }
+            if collectionView == self.photosCollectionView {
+                self.presentAlert(
+                    title: NSLocalizedString("Do you want to delete this photo?",comment: .init()),
+                    actions: (
+                        title: NSLocalizedString("Remove", comment: .init()),
+                        style: UIAlertAction.Style.destructive,
+                        action: { [ weak self ] in
+                            self?.presenter.deal.photoDatas.remove(at: indexPath.item)
+                        }
+                    ),
+                    (
+                        title: NSLocalizedString("No", comment: .init()),
+                        style: UIAlertAction.Style.default,
+                        action: { }
+                    )
                 )
-            )
+            } else {
+                self.presentAlert(
+                    title: NSLocalizedString("Do you want delete this tag?",comment: .init()),
+                    actions: (
+                        title: NSLocalizedString("Delete", comment: .init()),
+                        style: UIAlertAction.Style.destructive,
+                        action: { [ weak self ] in
+                            self?.presenter.deal.tags.remove(at: indexPath.item)
+                        }
+                    ),
+                    (
+                        title: NSLocalizedString("No", comment: .init()),
+                        style: UIAlertAction.Style.default,
+                        action: { }
+                    )
+                )
+            }
         } else {
             for i in 0 ..< collectionView.visibleCells.count {
                 if collectionView.cellForItem(at: indexPath) == collectionView.visibleCells[i] {
@@ -1097,10 +1224,10 @@ extension EditDealViewController: UICollectionViewDelegate {
                 if self.selectedPetType == cell.petType {
                     collectionView.deselectItem(at: indexPath, animated: true)
                     
-                    self.presenter.deal.petType = nil
+                    self.presenter.deal.petTypeID = nil
                     self.selectedPetType = nil
                 } else {
-                    self.presenter.deal.petType = cell.petType
+                    self.presenter.deal.petTypeID = cell.petType?.id
                     self.selectedPetType = cell.petType
                 }
             } else {
@@ -1131,6 +1258,8 @@ extension EditDealViewController: UICollectionViewDelegateFlowLayout {
                 width: (collectionView.bounds.width - 15) / 2,
                 height: (collectionView.bounds.width - 15) / 2
             )
+        } else if collectionView == self.tagsCollectionView {
+            return .init(width: 1, height: 1)
         }
         
         return .init(

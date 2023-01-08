@@ -106,3 +106,12 @@
 "Create" = "Create";
 "Complaint" = "Complaint";
 "Buyer" = "Buyer";
+"Attach a photo of the document or uncheck the box" = "Attach a photo of the document or uncheck the box.";
+"Document photo is empty" = "Document photo is empty";
+"Do you want delete this tag?" = "Do you want delete this tag?";
+"Tags" = "Tags";
+"Add Tag" = "Add Tag";
+"Enter text" = "Enter text";
+"Cancel" = "Cancel";
+"Add" = "Add";
+"Tags as well as the title help find your ad. You can add as many tags as you like. To delete a tag, click on it." = "Tags as well as the title help find your ad. You can add as many tags as you like. To delete a tag, click on it.";

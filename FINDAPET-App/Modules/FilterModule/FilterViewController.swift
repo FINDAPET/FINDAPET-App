@@ -16,6 +16,8 @@ final class FilterViewController: UIViewController {
         self.presenter = presenter
         
         super.init(nibName: nil, bundle: nil)
+        
+        self.presenter.callBack = { [ weak self ] in self?.petTypeCollectionView.reloadData() }
     }
     
     required init?(coder: NSCoder) {
@@ -24,9 +26,9 @@ final class FilterViewController: UIViewController {
     
 //    MARK: Properties
     private var selectedIsMale: Bool?
-    private var selectedPetType: PetType? {
+    private var selectedPetType: PetTypeEntity? {
         didSet {
-            self.breedValueLabel.text = PetBreed.other.rawValue
+            self.breedValueLabel.text = "Other"
         }
     }
     
@@ -92,8 +94,9 @@ final class FilterViewController: UIViewController {
     
     private lazy var breedValueLabel: UILabel = {
         let view = UILabel()
+        let filterPetBreedID = self.presenter.filter.petBreedID
         
-        view.text = self.presenter.filter.petBreed?.rawValue ?? "–"
+        view.text = self.presenter.allBreeds.filter { $0.id == filterPetBreedID }.first?.name ?? "–"
         view.textColor = .accentColor
         view.backgroundColor = .textFieldColor
         view.font = .systemFont(ofSize: 24, weight: .semibold)
@@ -239,6 +242,12 @@ final class FilterViewController: UIViewController {
     }()
     
     //    MARK: Life Cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.presenter.getAllPetTypes()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -377,13 +386,12 @@ final class FilterViewController: UIViewController {
     @objc private func didTapBreedValueLabel() {
         var breedList = [String]()
         
-        switch self.selectedPetType {
-        case .cat:
-            breedList = (self.presenter.getCatBreeds() ?? PetBreed.allCatBreeds.map { $0.rawValue }).sorted(by: <)
-        case .dog:
-            breedList = (self.presenter.getDogBreeds() ?? PetBreed.allDogBreeds.map { $0.rawValue }).sorted(by: <)
-        default:
-            breedList = (self.presenter.getDogBreeds() ?? PetBreed.allCases.map { $0.rawValue }).sorted(by: <)
+        for petBreed in (self.selectedPetType?.petBreeds as? Set<PetBreedEntity>) ?? .init() {
+            guard let name = petBreed.name else {
+                continue
+            }
+            
+            breedList.append(name)
         }
         
         self.presentActionsSheet(
@@ -391,7 +399,7 @@ final class FilterViewController: UIViewController {
             contents: breedList
         ) { [ weak self ] alertAction in
             self?.breedValueLabel.text = alertAction.title
-            self?.presenter.setPetBreed(alertAction.title)
+            self?.presenter.setPetBreed(self?.presenter.allBreeds.filter { $0.name == alertAction.title }.first?.id)
         }
     }
     
@@ -401,7 +409,7 @@ final class FilterViewController: UIViewController {
             contents: (self.presenter.getPetClasses() ?? PetClass.allCases.map { $0.rawValue }).sorted(by: <)
         ) { [ weak self ] alertAction in
             self?.petClassValueLabel.text = alertAction.title
-            self?.presenter.setPetClass(alertAction.title)
+            self?.presenter.setPetClass(alertAction.title == "–" ? nil : alertAction.title)
         }
     }
     
@@ -424,7 +432,7 @@ final class FilterViewController: UIViewController {
 extension FilterViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        collectionView == self.petTypeCollectionView ? self.presenter.getPetType()?.count ?? PetType.allCases.count : 2
+        collectionView == self.petTypeCollectionView ? self.presenter.petTypes.count : 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -436,9 +444,9 @@ extension FilterViewController: UICollectionViewDataSource {
                 return .init()
             }
                     
-            cell.petType = .getPetType(self.presenter.getPetType()?[indexPath.row] ?? .init()) ?? .allCases[indexPath.row]
+            cell.petType = self.presenter.petTypes[indexPath.row]
             
-            if self.presenter.filter.petType == cell.petType {
+            if self.presenter.filter.petTypeID == cell.petType?.id {
                 cell.isSelected = true
             }
             
@@ -483,7 +491,7 @@ extension FilterViewController: UICollectionViewDelegate {
                 self.presenter.setPetType()
                 self.selectedPetType = nil
             } else {
-                self.presenter.setPetType(cell.petType?.rawValue)
+                self.presenter.setPetType(cell.petType?.id)
                 self.selectedPetType = cell.petType
             }
         } else {
