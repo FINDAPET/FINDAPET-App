@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import StoreKit
 
 final class SubscriptionPresenter {
     
@@ -20,30 +19,29 @@ final class SubscriptionPresenter {
     }
     
 //    MARK: Properties
-    private(set) var products = [SKProduct]() {
+    private(set) var subscriptions = [TitleSubscription]() {
         didSet {
             self.callBack?()
         }
     }
     
 //    MARK: Requestss
-    func makeUserPremium(_ subscription: Subscription, completionHandler: @escaping (Error?) -> Void) {
+    func makeUserPremium(_ subscription: Subscription.Input, completionHandler: @escaping (Error?) -> Void = { _ in }) {
         self.interactor.makePremium(subscription: subscription, completionHandler: completionHandler)
     }
     
-//    MARK: Purchase
-    func getSubscriptionProducts(callBack: @escaping ([SKProduct]) -> Void = { _ in }) {
-        let newCallBack: ([SKProduct]) -> Void = { [ weak self ] products in
-            self?.products = products
+    func getSubscriptions(completionHandler: @escaping ([TitleSubscription]?, Error?) -> Void = { _, _ in }) {
+        let newCompletionHandler: ([TitleSubscription]?, Error?) -> Void = { [ weak self ] newSubscriptions, error in
+            completionHandler(newSubscriptions, error)
             
-            callBack(products)
+            guard let newSubscriptions = newSubscriptions, error == nil else {
+                return
+            }
+            
+            self?.subscriptions = newSubscriptions
         }
         
-        self.interactor.getProducts(with: ProductsID.getSubscriptions(), callBack: newCallBack)
-    }
-    
-    func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
-        self.interactor.makePayment(product, callBack: callBack)
+        self.interactor.getSubscrptions(completionHandler: newCompletionHandler)
     }
     
 //    MARK: User Defaults
@@ -57,6 +55,10 @@ final class SubscriptionPresenter {
     
     func getSubscription() -> String? {
         self.interactor.get(.subscription) as? String
+    }
+    
+    func getUserID() -> String? {
+        self.interactor.get(.id) as? String
     }
     
 }

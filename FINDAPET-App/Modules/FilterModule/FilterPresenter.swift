@@ -33,7 +33,7 @@ final class FilterPresenter {
         var petBreeds = [PetBreedEntity]()
         
         for petType in self.petTypes {
-            guard let breeds = petType.petBreeds as? Set<PetBreedEntity> else {
+            guard let breeds = petType.petBreeds else {
                 continue
             }
             

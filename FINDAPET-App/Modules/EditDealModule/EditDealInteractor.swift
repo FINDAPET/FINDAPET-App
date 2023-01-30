@@ -37,11 +37,11 @@ final class EditDealInteractor {
     
 //    MARK: Purchase
     func getProducts(_ completionHandler: @escaping ([SKProduct]) -> Void) {
-        PurchaseManager.shared.getProducts([.premiumDeal], callBack: completionHandler)
+//        PurchaseManager.shared.getProducts([.premiumDeal], callBack: completionHandler)
     }
     
     func makePayment(_ product: SKProduct, completionHandler: @escaping (Error?) -> Void) {
-        PurchaseManager.shared.makePayment(product, callBack: completionHandler)
+//        PurchaseManager.shared.makePayment(product, callBack: completionHandler)
     }
     
 //    MARK: Keychain

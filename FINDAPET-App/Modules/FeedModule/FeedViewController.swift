@@ -127,6 +127,7 @@ final class FeedViewController: UIViewController {
     
 //    MARK: Actions
     @objc private func onRefresh() {
+        self.presenter.setFilterCheckedIDs()
         self.presenter.getDeals { [ weak self ] _, error in
             self?.error(error)
         }
@@ -209,6 +210,22 @@ extension FeedViewController: UITableViewDelegate {
         self.presenter.goToDeal(deal: self.presenter.deals[indexPath.row - (self.presenter.ad != nil ? 1 : 0)])
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView == self.tableView else {
+            return
+        }
+        
+        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        
+        activityIndicatorView.startAnimating()
+        
+        self.tableView.tableFooterView = activityIndicatorView
+        
+        self.presenter.getDeals { _, _ in
+            self.tableView.tableFooterView = nil
+        }
+    }
+    
 }
 
 extension FeedViewController: SearchViewDelegate {
@@ -218,7 +235,7 @@ extension FeedViewController: SearchViewDelegate {
     }
     
     func searchView(_ searchView: SearchView, didTapSearchButton button: UIButton) {
-        self.presenter.deleteFilter()
+        self.presenter.setFilterCheckedIDs()
         self.presenter.getRandomAd()
         self.presenter.getDeals { [ weak self ] _, error in
             self?.error(error)

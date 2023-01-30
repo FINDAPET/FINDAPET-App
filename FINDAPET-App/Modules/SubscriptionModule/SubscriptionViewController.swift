@@ -52,7 +52,7 @@ final class SubscriptionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.presenter.getSubscriptionProducts()
+        self.presenter.getSubscriptions()
     }
     
 //    MARK: Setup Views
@@ -76,9 +76,7 @@ final class SubscriptionViewController: UIViewController {
 extension SubscriptionViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(self.presenter.products.count)
-        
-        return self.presenter.products.count
+        self.presenter.subscriptions.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -86,11 +84,7 @@ extension SubscriptionViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        cell.product = self.presenter.products[indexPath.item]
-        
-        if let subscription = self.presenter.getSubscription(), cell.product?.productIdentifier == subscription {
-            cell.isSelected = true
-        }
+        cell.subscription = self.presenter.subscriptions[indexPath.item]
         
         return cell
     }
@@ -110,65 +104,12 @@ extension SubscriptionViewController: UICollectionViewDelegate {
             }
         }
         
-        if self.presenter.products[indexPath.item].productIdentifier != self.presenter.getSubscription() {
-            self.presenter.makePayment(self.presenter.products[indexPath.item]) { [ weak self ] error in
-                guard let self = self, error == nil else {
-                    collectionView.deselectItem(at: indexPath, animated: true)
-                    
-                    return
-                }
-                
-                self.presenter.makePayment(self.presenter.products[indexPath.item]) {
-                    self.error($0) {
-                        guard let id = ProductsID.getProductID(rawValue: self.presenter.products[indexPath.item].productIdentifier) else {
-                            print("❌ Error: product is equal to nil.")
-                            
-                            collectionView.deselectItem(at: indexPath, animated: true)
-                            self.presentAlert(title: NSLocalizedString("Error", comment: String()))
-                            
-                            return
-                        }
-                        
-                        self.presenter.makeUserPremium(Subscription(productID: id)) { error in
-                            self.error(error) {
-                                switch id {
-                                case .premiumSubscriptionOneMonth:
-                                    self.presenter.setSubscription(id)
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(month: 1),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                case .premiumSubscriptionThreeMonth:
-                                    self.presenter.setSubscription(id)
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(month: 3),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                case .premiumSubscriptionSixMonth:
-                                    self.presenter.setSubscription(id)
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(month: 6),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                case .premiumSubscriptionOneYear:
-                                    self.presenter.setSubscription(id)
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(year: 1),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                default:
-                                    collectionView.deselectItem(at: indexPath, animated: true)
-                                    self.presentAlert(title: NSLocalizedString("Error", comment: .init()))
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        self.presenter.makeUserPremium(.init(
+            localizedNames: cell.subscription?.localizedNames ?? .init(),
+            expirationDate: .init().addingTimeInterval(.init(2_592_000 * (cell.subscription?.monthsCount ?? 1))),
+            userID: .init(uuidString: self.presenter.getUserID() ?? .init())
+        )) { [ weak self ] error in
+            self?.error(error)
         }
     }
     
