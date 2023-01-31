@@ -7,8 +7,21 @@
 
 import Foundation
 
-struct Subscription: Encodable {
+struct Subscription {
+    typealias CountryCode = String
     
-    var productID: ProductsID
+    struct Input: Encodable {
+        var id: UUID?
+        var localizedNames: [CountryCode : String]
+        var expirationDate: Date
+        var userID: UUID?
+    }
     
+    struct Output: Decodable {
+        var id: UUID?
+        var localizedNames: [CountryCode : String]
+        var expirationDate: Date
+        var user: User
+        var createdAt: Date?
+    }
 }

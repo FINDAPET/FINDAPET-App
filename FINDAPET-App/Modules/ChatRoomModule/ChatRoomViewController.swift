@@ -236,8 +236,7 @@ extension ChatRoomViewController: MessagesDataSource {
             ads: [Ad.Output](),
             myOffers: [Offer.Output](),
             offers: [Offer.Output](),
-            chatRooms: [ChatRoom.Output](),
-            isPremiumUser: true
+            chatRooms: [ChatRoom.Output]()
         )
     }
     
@@ -253,10 +252,9 @@ extension ChatRoomViewController: MessagesDataSource {
                 ads: [Ad.Output](),
                 myOffers: [Offer.Output](),
                 offers: [Offer.Output](),
-                chatRooms: [ChatRoom.Output](),
-                isPremiumUser: true
+                chatRooms: [ChatRoom.Output]()
             ),
-            chatRoom: ChatRoom.Output(users: [User.Output](), messages: [Message.Output]())
+            chatRoom: ChatRoom.Output(users: [User.Output](),messages: [Message.Output]())
         )
     }
     

@@ -38,10 +38,19 @@ class SubscriptionCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var product: SKProduct? {
+    var subscription: TitleSubscription? {
         didSet {
-            self.nameLabel.text = self.product?.localizedDescription
-            self.priceLabel.text = "\(self.product?.price.stringValue ?? String())\(self.product?.priceLocale.currencySymbol ?? String())"
+            guard let subscription = self.subscription else {
+                return
+            }
+            
+            if #available(iOS 16, *) {
+                self.nameLabel.text = subscription.localizedNames[Locale.current.language.languageCode?.identifier ?? .init()]
+            } else {
+                self.nameLabel.text = subscription.localizedNames[Locale.current.languageCode ?? .init()]
+            }
+            
+            self.priceLabel.text = "\(subscription.price)\(UserDefaultsManager.read(key: .currency) as? String ?? .init())"
         }
     }
     

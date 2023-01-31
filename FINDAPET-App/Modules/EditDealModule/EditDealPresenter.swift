@@ -10,16 +10,17 @@ import StoreKit
 
 final class EditDealPresenter {
     
-    var callBack: (() -> Void)?
+    var callBack: ((Deal.Input) -> Void)?
     var secondCallBack: (() -> Void)?
     lazy var deal = Deal.Input(
         title: .init(),
         photoDatas: .init(),
         isPremiumDeal: self.getNextDealIsPremium() ?? false,
+        mode: .everywhere,
         catteryID: self.getUserID() ?? .init()
     ) {
         didSet {
-            self.callBack?()
+            self.callBack?(self.deal)
         }
     }
     private let router: EditDealRouter
@@ -48,7 +49,7 @@ final class EditDealPresenter {
         var petBreeds = [PetBreedEntity]()
         
         for petType in self.petTypes {
-            guard let breeds = petType.petBreeds as? Set<PetBreedEntity> else {
+            guard let breeds = petType.petBreeds else {
                 continue
             }
             
@@ -123,11 +124,11 @@ final class EditDealPresenter {
     
 //    MARK: Purchase
     func getProducts(_ completionHandler: @escaping ([SKProduct]) -> Void) {
-        PurchaseManager.shared.getProducts([.premiumDeal], callBack: completionHandler)
+//        PurchaseManager.shared.getProducts([.premiumDeal], callBack: completionHandler)
     }
     
     func makePayment(_ product: SKProduct, completionHandler: @escaping (Error?) -> Void) {
-        PurchaseManager.shared.makePayment(product, callBack: completionHandler)
+//        PurchaseManager.shared.makePayment(product, callBack: completionHandler)
     }
     
 //    MARK: Core Data

@@ -17,7 +17,9 @@ final class EditDealViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
         
-        self.presenter.callBack = { [ weak self ] in
+        self.presenter.callBack = { [ weak self ] deal in
+            self?.noPhotosLabel.isHidden = !deal.photoDatas.isEmpty
+            self?.noTagsLabel.isHidden = !deal.tags.isEmpty
             self?.photosCollectionView.reloadData()
             self?.photosCollectionView.snp.removeConstraints()
             self?.photosCollectionView.snp.makeConstraints { make in
@@ -32,7 +34,10 @@ final class EditDealViewController: UIViewController {
             self?.tagsCollectionView.reloadData()
             self?.tagsCollectionView.layoutIfNeeded()
         }
-        self.presenter.secondCallBack = { [ weak self ] in self?.petTypeCollectionView.reloadData() }
+        self.presenter.secondCallBack = { [ weak self ] in
+            self?.petTypeCollectionView.reloadData()
+            self?.petTypeCollectionView.layoutIfNeeded()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -104,6 +109,19 @@ final class EditDealViewController: UIViewController {
         view.delegate = self
         view.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: PhotoCollectionViewCell.id)
         view.isScrollEnabled = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private let noPhotosLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = NSLocalizedString("No Photos", comment: .init())
+        view.textColor = .lightGray
+        view.font = .systemFont(ofSize: 24)
+        view.textAlignment = .center
+        view.numberOfLines = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -628,6 +646,19 @@ final class EditDealViewController: UIViewController {
         return view
     }()
     
+    private let noTagsLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = NSLocalizedString("No Tags", comment: .init())
+        view.textColor = .lightGray
+        view.font = .systemFont(ofSize: 24)
+        view.textAlignment = .center
+        view.numberOfLines = .zero
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private let tagsDescriptionLabel: UILabel = {
         let view = UILabel()
         
@@ -681,6 +712,7 @@ final class EditDealViewController: UIViewController {
         self.firstContentView.addSubview(self.photosTitle)
         self.firstContentView.addSubview(self.photosPlusButton)
         self.firstContentView.addSubview(self.photosCollectionView)
+        self.firstContentView.addSubview(self.noPhotosLabel)
         
         self.secondContentView.addSubview(self.titleTitleLabel)
         self.secondContentView.addSubview(self.titleTextView)
@@ -689,6 +721,7 @@ final class EditDealViewController: UIViewController {
         self.secondContentView.addSubview(self.tagsTitleLabel)
         self.secondContentView.addSubview(self.tagsPlusButton)
         self.secondContentView.addSubview(self.tagsCollectionView)
+        self.secondContentView.addSubview(self.noTagsLabel)
         self.secondContentView.addSubview(self.tagsDescriptionLabel)
         self.secondContentView.addSubview(self.modeTitleLabel)
         self.secondContentView.addSubview(self.modeValueLabel)
@@ -742,9 +775,13 @@ final class EditDealViewController: UIViewController {
         
         self.photosCollectionView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(15)
-            make.bottom.equalToSuperview()
             make.top.equalTo(self.photosTitle.snp.bottom).inset(-10)
             make.height.equalTo(self.photosCollectionViewHeight != .zero ? self.photosCollectionViewHeight : 1)
+        }
+        
+        self.noPhotosLabel.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview().inset(15)
+            make.top.equalTo(self.photosCollectionView.snp.bottom).inset(-10)
         }
         
         self.secondContentView.snp.makeConstraints { make in
@@ -790,10 +827,15 @@ final class EditDealViewController: UIViewController {
             make.top.equalTo(self.tagsTitleLabel.snp.bottom).inset(-10)
             make.height.greaterThanOrEqualTo(1)
         }
+        
+        self.noTagsLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(15)
+            make.top.equalTo(self.tagsCollectionView.snp.bottom).inset(-10)
+        }
 
         self.tagsDescriptionLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(15)
-            make.top.equalTo(self.tagsCollectionView.snp.bottom).inset(-10)
+            make.top.equalTo(self.noTagsLabel.snp.bottom).inset(-10)
         }
         
         self.modeTitleLabel.snp.makeConstraints { make in
@@ -939,6 +981,60 @@ final class EditDealViewController: UIViewController {
     
 //    MARK: Acrions
     @objc private func didTapCreateButton() {
+        guard !self.presenter.deal.photoDatas.isEmpty else {
+            self.presentAlert(title: "No Photos", message: "Add at least one photo.")
+            
+            return
+        }
+        
+        guard !self.presenter.deal.title.isEmpty else {
+            self.presentAlert(title: "Title field is empty", message: "Fill it")
+            
+            return
+        }
+        
+        guard self.presenter.deal.petTypeID != nil else {
+            self.presentAlert(title: "Not Selected Pet Type", message: "Select pet type")
+            
+            return
+        }
+        
+        guard self.presenter.deal.petBreedID != nil else {
+            self.presentAlert(title: "Not Selected Pet Breed", message: "Select pet breed")
+            
+            return
+        }
+        
+        guard self.presenter.deal.petClass != nil else {
+            self.presentAlert(title: "Not Selected Pet Class", message: "Select pet class")
+            
+            return
+        }
+        
+        guard self.presenter.deal.isMale != nil else {
+            self.presentAlert(title: "Not Selected Pet Sex", message: "Select pet sex")
+            
+            return
+        }
+        
+        guard self.presenter.deal.age != nil else {
+            self.presentAlert(title: "Age field is empty", message: "Fill it")
+            
+            return
+        }
+        
+        guard self.presenter.deal.color != nil else {
+            self.presentAlert(title: "Color field is empty", message: "Fill it")
+            
+            return
+        }
+        
+        guard self.presenter.deal.price != nil else {
+            self.presentAlert(title: "Price field is empty", message: "Fill it")
+            
+            return
+        }
+        
         self.presenter.createDeal { [ weak self ] error in
             self?.error(error) {
                 self?.presenter.notificationCenterManagerPostUpdateProfileScreen()
@@ -957,7 +1053,7 @@ final class EditDealViewController: UIViewController {
     @objc private func didTapBreedValueLabel() {
         var breedList = [String]()
         
-        for petBreed in (self.selectedPetType?.petBreeds as? Set<PetBreedEntity>) ?? .init() {
+        for petBreed in self.selectedPetType?.petBreeds ?? .init() {
             guard let name = petBreed.name else {
                 continue
             }

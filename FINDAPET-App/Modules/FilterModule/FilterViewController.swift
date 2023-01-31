@@ -28,7 +28,11 @@ final class FilterViewController: UIViewController {
     private var selectedIsMale: Bool?
     private var selectedPetType: PetTypeEntity? {
         didSet {
-            self.breedValueLabel.text = "Other"
+            if self.selectedPetType != nil {
+                self.breedValueLabel.text = "Other"
+            } else {
+                self.breedValueLabel.text = "–"
+            }
         }
     }
     
@@ -385,13 +389,23 @@ final class FilterViewController: UIViewController {
     
     @objc private func didTapBreedValueLabel() {
         var breedList = [String]()
-        
-        for petBreed in (self.selectedPetType?.petBreeds as? Set<PetBreedEntity>) ?? .init() {
-            guard let name = petBreed.name else {
-                continue
+                
+        if let selectedPetType = self.selectedPetType {
+            for petBreed in selectedPetType.petBreeds ?? .init() {
+                guard let name = petBreed.name else {
+                    continue
+                }
+                
+                breedList.append(name)
             }
-            
-            breedList.append(name)
+        } else {
+            for petBreed in self.presenter.allBreeds {
+                guard let name = petBreed.name else {
+                    continue
+                }
+                
+                breedList.append(name)
+            }
         }
         
         self.presentActionsSheet(

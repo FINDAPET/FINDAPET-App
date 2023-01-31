@@ -23,6 +23,7 @@ final class FeedPresenter {
     private var filter = Filter()
     private(set) var deals = [Deal.Output]() {
         didSet {
+            self.filter.checkedIDs = self.deals.map(\.id).filter { $0 != nil } as? [UUID] ?? .init()
             self.callBack?()
         }
     }
@@ -35,6 +36,10 @@ final class FeedPresenter {
 //    MARK: Editing
     func setFilterTitle(_ title: String) {
         self.filter.title = title
+    }
+    
+    func setFilterCheckedIDs(_ checkedIDs: [UUID] = .init()) {
+        self.filter.checkedIDs = checkedIDs
     }
     
     func deleteFilter() {
@@ -50,7 +55,7 @@ final class FeedPresenter {
                 return
             }
             
-            self?.deals = deals?.sorted { $0.score > $1.score } ?? .init()
+            self?.deals += deals?.sorted { $0.score > $1.score } ?? .init()
         }
         
         self.interactor.getDeals(self.filter, completionHandler: newCompletionHandler)
@@ -88,6 +93,7 @@ final class FeedPresenter {
         self.router.getFilter(filter: self.filter) { filter in
             self.filter = filter
             
+            self.setFilterCheckedIDs()
             self.getDeals(completionHandler: completionHandler)
             self.getRandomAd()
         }

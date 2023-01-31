@@ -8,5 +8,5 @@
 import Foundation
 
 enum Paths: String {
-    case auth, logOut, users, deals, bought, ads, offers, my, change, delete, admin, on, off, wait, verify, all, catteryes, approove, deactivate, activate, offer, sold, new, me, cattery, chats, with, messages, update, convert, chat, premium, not, random, view, notification, screens, complaints, currencies, deal, modes, pet, breeds, classes, types, cats, dogs
+    case auth, logOut, users, deals, bought, ads, offers, my, change, delete, admin, on, off, wait, verify, all, catteryes, approove, deactivate, activate, offer, sold, new, me, cattery, chats, with, messages, update, convert, chat, premium, not, random, view, notification, screens, complaints, currencies, deal, modes, pet, breeds, classes, types, cats, dogs, subscription, subscriptions, title
 }

@@ -76,7 +76,8 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
             
             guard let IDs = self.getUserDefaultsNotificationScreensID(),
                   let notificationScreen = (notificationScreens ?? .init())
-                .filter({ !IDs.contains($0.id?.uuidString ?? .init()) }).first else {
+                .filter({ !IDs.contains($0.id?.uuidString ?? .init()) || $0.isRequired })
+                .sorted(by: { $0.isRequired == true && $1.isRequired == false }).first else {
                 print("❌ Error: not found.")
                 
                 return
@@ -269,38 +270,21 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
         model.imageData = petType.imageData
         
         for petBreed in petType.petBreeds {
-            guard let breed = self.coreDataSavePetBreed(petBreed, completionHandler: completionHandler) else {
+            guard let petBreedDescription = NSEntityDescription.entity(
+                forEntityName: .init(describing: PetBreedEntity.self),
+                in: context
+            ) else {
                 continue
             }
             
+            let breed = PetBreedEntity(entity: petBreedDescription, insertInto: context)
+            
+            breed.id = petBreed.id
+            breed.name = petBreed.name
+            breed.petType = model
+
             model.addToPetBreeds(breed)
         }
-        
-        manager.save(model, completionHandler: completionHandler)
-        
-        return model
-    }
-    
-    private func coreDataSavePetBreed(
-        _ petBreed: PetBreed.Output,
-        completionHandler: @escaping (Error?) -> Void = { _ in }
-    ) -> PetBreedEntity? {
-        let manager = CoreDataManager<PetBreedEntity>()
-        let context = manager.persistentContainer.newBackgroundContext()
-        
-        guard let description = NSEntityDescription.entity(
-            forEntityName: .init(describing: PetBreedEntity.self),
-            in: context
-        ) else {
-            completionHandler(RequestErrors.statusCodeError(statusCode: 500))
-            
-            return nil
-        }
-        
-        let model = PetBreedEntity(entity: description, insertInto: context)
-        
-        model.id = petBreed.id
-        model.name = petBreed.name
         
         manager.save(model, completionHandler: completionHandler)
         

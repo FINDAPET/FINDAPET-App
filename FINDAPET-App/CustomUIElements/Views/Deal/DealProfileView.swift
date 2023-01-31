@@ -64,7 +64,7 @@ final class DealProfileView: UIView {
         let view = UIImageView(image: .init(systemName: "checkmark"))
         
         view.tintColor = .accentColor
-        view.isHidden = !self.user.isPremiumUser
+        view.isHidden = self.user.subscription == nil
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view

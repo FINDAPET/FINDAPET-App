@@ -17,6 +17,29 @@ struct NotificationScreen {
         var textColorHEX: String
         var buttonTitleColorHEX: String
         var buttonColorHEX: String
+        var isRequired: Bool
+        
+        init(
+            id: UUID? = nil,
+            backgroundImageData: Data,
+            title: String,
+            text: String,
+            buttonTitle: String,
+            textColorHEX: String,
+            buttonTitleColorHEX: String,
+            buttonColorHEX: String,
+            isRequired: Bool
+        ) {
+            self.id = id
+            self.backgroundImageData = backgroundImageData
+            self.title = title
+            self.text = text
+            self.buttonTitle = buttonTitle
+            self.textColorHEX = textColorHEX
+            self.buttonTitleColorHEX = buttonTitleColorHEX
+            self.buttonColorHEX = buttonColorHEX
+            self.isRequired = isRequired
+        }
     }
     
     struct Output: Decodable {
@@ -28,5 +51,6 @@ struct NotificationScreen {
         var textColorHEX: String
         var buttonTitleColorHEX: String
         var buttonColorHEX: String
+        var isRequired: Bool
     }
 }
