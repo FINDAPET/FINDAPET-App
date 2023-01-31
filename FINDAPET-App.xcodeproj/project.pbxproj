@@ -981,7 +981,6 @@
 			isa = PBXGroup;
 			children = (
 				E3E1D176290310720069EE46 /* Enums */,
-				E3F4B04828FD7EF90083815E /* SideMenuSides */,
 				E36F622628F9EBA8007C7623 /* Modules */,
 				E37AC6A428F82CD4003AC7D3 /* Cells */,
 				E337A3F028F7143700FA6417 /* StoreProducts */,
@@ -1160,6 +1159,7 @@
 		E3E1D176290310720069EE46 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
+				E3F4B04928FD7F430083815E /* SideMenuSides.swift */,
 				E3E1D177290310840069EE46 /* Currency.swift */,
 				E3E05D122921440300605F49 /* DealMode.swift */,
 				E3E05D18292149E700605F49 /* PetClass.swift */,
@@ -1226,14 +1226,6 @@
 				E33130A6292A9D1E009C26A1 /* SideMenu */,
 			);
 			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		E3F4B04828FD7EF90083815E /* SideMenuSides */ = {
-			isa = PBXGroup;
-			children = (
-				E3F4B04928FD7F430083815E /* SideMenuSides.swift */,
-			);
-			path = SideMenuSides;
 			sourceTree = "<group>";
 		};
 		E3F4B04D28FDC5640083815E /* CurrencyConverter */ = {
