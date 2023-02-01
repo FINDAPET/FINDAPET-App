@@ -59,7 +59,7 @@ extension User {
         var myOffers: [Offer.Output]
         var offers: [Offer.Output]
         var chatRooms: [ChatRoom.Output]
-        var subscription: Subscription.Output?
+        var isPremiumUser: Bool
     }
 }
 

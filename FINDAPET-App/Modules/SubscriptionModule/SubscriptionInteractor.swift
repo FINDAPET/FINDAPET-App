@@ -6,30 +6,31 @@
 //
 
 import Foundation
+import StoreKit
 
 final class SubscriptionInteractor {
     
-//    MARK: Requests
-    func makePremium(subscription: Subscription.Input, completionHandler: @escaping (Error?) -> Void) {
+//    MARK: - Requests
+    func makePremium(subscription: Subscription, completionHandler: @escaping (Error?) -> Void) {
         RequestManager.request(
             model: subscription,
-            method: .POST,
+            method: .PUT,
             authMode: .bearer(value: self.getBearrerToken() ?? .init()),
-            url: URLConstructor.defaultHTTP.newSubscriptions(),
+            url: URLConstructor.defaultHTTP.makeUserPremium(),
             completionHandler: completionHandler
         )
     }
     
-    func getSubscrptions(completionHandler: @escaping ([TitleSubscription]?, Error?) -> Void) {
-        RequestManager.request(
-            method: .GET,
-            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
-            url: URLConstructor.defaultHTTP.titleSubscriptions(),
-            completionHandler: completionHandler
-        )
+//    MARK: - Purchase
+    func getProducts(with products: [ProductsID], callBack: @escaping ([SKProduct]) -> Void) {
+        PurchaseManager.shared.getProducts(products, callBack: callBack)
     }
     
-//    MARK: User Defaults
+    func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
+        PurchaseManager.shared.makePayment(product, callBack: callBack)
+    }
+    
+//    MARK: - User Defaults
     func get(_ key: UserDefaultsKeys) -> Any? {
         UserDefaultsManager.read(key: key)
     }
@@ -38,7 +39,7 @@ final class SubscriptionInteractor {
         UserDefaultsManager.write(data: value, key: key)
     }
     
-//    MARK: Keychain
+//    MARK: - Keychain
     private func getBearrerToken() -> String? {
         KeychainManager.shared.read(key: .token)
     }

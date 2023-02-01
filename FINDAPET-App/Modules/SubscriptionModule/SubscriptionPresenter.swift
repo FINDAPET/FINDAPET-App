@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StoreKit
 
 final class SubscriptionPresenter {
     
@@ -19,29 +20,29 @@ final class SubscriptionPresenter {
     }
     
 //    MARK: Properties
-    private(set) var subscriptions = [TitleSubscription]() {
+    private(set) var products = [SKProduct]() {
         didSet {
             self.callBack?()
         }
     }
     
 //    MARK: Requestss
-    func makeUserPremium(_ subscription: Subscription.Input, completionHandler: @escaping (Error?) -> Void = { _ in }) {
+    func makeUserPremium(_ subscription: Subscription, completionHandler: @escaping (Error?) -> Void = { _ in }) {
         self.interactor.makePremium(subscription: subscription, completionHandler: completionHandler)
     }
     
-    func getSubscriptions(completionHandler: @escaping ([TitleSubscription]?, Error?) -> Void = { _, _ in }) {
-        let newCompletionHandler: ([TitleSubscription]?, Error?) -> Void = { [ weak self ] newSubscriptions, error in
-            completionHandler(newSubscriptions, error)
+    func getSubscriptionsProducts(callBack: @escaping ([SKProduct]) -> Void = { _ in }) {
+        let newCallBack: ([SKProduct]) -> Void = { [ weak self ] products in
+            callBack(products)
             
-            guard let newSubscriptions = newSubscriptions, error == nil else {
-                return
-            }
-            
-            self?.subscriptions = newSubscriptions
+            self?.products = products
         }
         
-        self.interactor.getSubscrptions(completionHandler: newCompletionHandler)
+        self.interactor.getProducts(with: ProductsID.getSubscriptions(), callBack: newCallBack)
+    }
+    
+    func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
+        self.interactor.makePayment(product, callBack: callBack)
     }
     
 //    MARK: User Defaults

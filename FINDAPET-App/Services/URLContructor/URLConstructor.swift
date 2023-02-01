@@ -189,10 +189,17 @@ final class URLConstructor {
             .appendingPathComponent(Paths.admin.rawValue)
     }
     
-    func subscription() -> URL {
+    func makeUserPremium() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
-            .appendingPathComponent(Paths.subscription.rawValue)
+            .appendingPathComponent(Paths.premium.rawValue)
+    }
+    
+    func makeUserNotPremium() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.users.rawValue)
+            .appendingPathComponent(Paths.not.rawValue)
+            .appendingPathComponent(Paths.premium.rawValue)
     }
     
     //    MARK: Offer
@@ -516,75 +523,6 @@ final class URLConstructor {
             .appendingPathComponent(Paths.notification.rawValue)
             .appendingPathComponent(Paths.screens.rawValue)
             .appendingPathComponent(notificationScreenID.uuidString)
-            .appendingPathComponent(Paths.delete.rawValue)
-    }
-    
-//    MARK: Subscription
-    func subscriptions() -> URL {
-        self.baseURL
-            .appendingPathComponent(Paths.subscriptions.rawValue)
-            .appendingPathComponent(Paths.all.rawValue)
-    }
-    
-    func subscription(with id: UUID) -> URL {
-        self.baseURL
-            .appendingPathComponent(Paths.subscriptions.rawValue)
-            .appendingPathComponent(id.uuidString)
-    }
-    
-    func newSubscriptions() -> URL {
-        self.baseURL
-            .appendingPathComponent(Paths.subscriptions.rawValue)
-            .appendingPathComponent(Paths.new.rawValue)
-    }
-    
-    func changeSubscriptions() -> URL {
-        self.baseURL
-            .appendingPathComponent(Paths.subscriptions.rawValue)
-            .appendingPathComponent(Paths.change.rawValue)
-    }
-    
-    func deleteSubscription(with id: UUID) -> URL {
-        self.baseURL
-            .appendingPathComponent(Paths.subscriptions.rawValue)
-            .appendingPathComponent(id.uuidString)
-            .appendingPathComponent(Paths.delete.rawValue)
-    }
-    
-//    MARK: Title Subscrption
-    func titleSubscriptions() -> URL {
-        self.baseURL
-            .appendingPathComponent(Paths.title.rawValue)
-            .appendingPathComponent(Paths.subscriptions.rawValue)
-            .appendingPathComponent(Paths.all.rawValue)
-    }
-    
-    func titleSubscription(with id: UUID) -> URL {
-        self.baseURL
-            .appendingPathComponent(Paths.title.rawValue)
-            .appendingPathComponent(Paths.subscriptions.rawValue)
-            .appendingPathComponent(id.uuidString)
-    }
-    
-    func newTitleSubscriptions() -> URL {
-        self.baseURL
-            .appendingPathComponent(Paths.title.rawValue)
-            .appendingPathComponent(Paths.subscriptions.rawValue)
-            .appendingPathComponent(Paths.new.rawValue)
-    }
-    
-    func changeTitleSubscriptions() -> URL {
-        self.baseURL
-            .appendingPathComponent(Paths.title.rawValue)
-            .appendingPathComponent(Paths.subscriptions.rawValue)
-            .appendingPathComponent(Paths.change.rawValue)
-    }
-    
-    func deleteTitleSubscription(with id: UUID) -> URL {
-        self.baseURL
-            .appendingPathComponent(Paths.title.rawValue)
-            .appendingPathComponent(Paths.subscriptions.rawValue)
-            .appendingPathComponent(id.uuidString)
             .appendingPathComponent(Paths.delete.rawValue)
     }
     

@@ -12,11 +12,11 @@ final class DealInteractor {
     
 //    MARK: Purchase
     func getProducts(with productsID: [ProductsID], callBack: @escaping ([SKProduct]) -> Void) {
-//        PurchaseManager.shared.getProducts(productsID, callBack: callBack)
+        PurchaseManager.shared.getProducts(productsID, callBack: callBack)
     }
     
     func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
-//        PurchaseManager.shared.makePayment(product, callBack: callBack)
+        PurchaseManager.shared.makePayment(product, callBack: callBack)
     }
     
 //    MARK: Requests

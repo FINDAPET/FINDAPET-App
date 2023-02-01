@@ -88,7 +88,6 @@
 		E34ABC5928A7D48300A7D2C8 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */; };
 		E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */; };
 		E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */; };
-		E357B43E297EF52700086424 /* TitleSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E357B43D297EF52700086424 /* TitleSubscription.swift */; };
 		E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */; };
 		E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */; };
 		E35E09F228F739F200B310D1 /* YandexMobileMetricaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */; };
@@ -190,6 +189,7 @@
 		E3E4D6A228B92BF4002B0BE6 /* PrivacyPolicyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E4D6A128B92BF4002B0BE6 /* PrivacyPolicyInteractor.swift */; };
 		E3E4D6A428B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E4D6A328B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift */; };
 		E3E4D6A628B92C07002B0BE6 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E4D6A528B92C07002B0BE6 /* PrivacyPolicyViewController.swift */; };
+		E3EB1E33298AC18F009805A8 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EB1E32298AC18F009805A8 /* PurchaseManager.swift */; };
 		E3F4B04128FD69B30083815E /* SideMenu in Frameworks */ = {isa = PBXBuildFile; productRef = E3F4B04028FD69B30083815E /* SideMenu */; };
 		E3F4B04728FD7D510083815E /* SlideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F4B04628FD7D510083815E /* SlideMenuViewController.swift */; };
 		E3F4B04A28FD7F430083815E /* SideMenuSides.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F4B04928FD7F430083815E /* SideMenuSides.swift */; };
@@ -282,7 +282,6 @@
 		E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
 		E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSAuthentaficationMode.swift; sourceTree = "<group>"; };
-		E357B43D297EF52700086424 /* TitleSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleSubscription.swift; sourceTree = "<group>"; };
 		E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 		E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseErrors.swift; sourceTree = "<group>"; };
 		E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexMobileMetricaManager.swift; sourceTree = "<group>"; };
@@ -386,6 +385,7 @@
 		E3E4D6A128B92BF4002B0BE6 /* PrivacyPolicyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyInteractor.swift; sourceTree = "<group>"; };
 		E3E4D6A328B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyPresenter.swift; sourceTree = "<group>"; };
 		E3E4D6A528B92C07002B0BE6 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
+		E3EB1E32298AC18F009805A8 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		E3F4B04628FD7D510083815E /* SlideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SlideMenuViewController.swift; path = "../New Group/SlideMenuViewController.swift"; sourceTree = "<group>"; };
 		E3F4B04928FD7F430083815E /* SideMenuSides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuSides.swift; sourceTree = "<group>"; };
 		E3F4B04B28FDC55C0083815E /* CurrencyConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverter.swift; sourceTree = "<group>"; };
@@ -592,6 +592,7 @@
 		E34ABC2D28A771A600A7D2C8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E3EB1E31298AC181009805A8 /* PurchaseManager */,
 				E3D74F6828A6A508004C5172 /* CoreDataManager */,
 				E30560EA290EB8B500E0881C /* NotificationCenterManager */,
 				E3F4B04D28FDC5640083815E /* CurrencyConverter */,
@@ -621,7 +622,6 @@
 				E325351E28F58CE600878A7F /* ChatRoom.swift */,
 				E36F622428F9E5F1007C7623 /* ExchangeConvert.swift */,
 				E3E05CF9291EA64300605F49 /* Subscription.swift */,
-				E357B43D297EF52700086424 /* TitleSubscription.swift */,
 				E3E05D04291EB55400605F49 /* Filter.swift */,
 				E34A3ADC293E0A790038625F /* Complaint.swift */,
 				E34A3ADE293E0ADA0038625F /* NotificationScreen.swift */,
@@ -1215,6 +1215,14 @@
 			path = PrivacyPolicyModule;
 			sourceTree = "<group>";
 		};
+		E3EB1E31298AC181009805A8 /* PurchaseManager */ = {
+			isa = PBXGroup;
+			children = (
+				E3EB1E32298AC18F009805A8 /* PurchaseManager.swift */,
+			);
+			path = PurchaseManager;
+			sourceTree = "<group>";
+		};
 		E3F4B04528FD7D340083815E /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1408,7 +1416,6 @@
 				E3E1D189290326870069EE46 /* SettingsRouter.swift in Sources */,
 				E3993F6C290AF8A6000C218C /* InfoPresenter.swift in Sources */,
 				E3D9570728AFD65000CCF566 /* EditProfilePresenter.swift in Sources */,
-				E357B43E297EF52700086424 /* TitleSubscription.swift in Sources */,
 				E30561082912E6E000E0881C /* CreateOfferRouter.swift in Sources */,
 				E305610A2912E6F500E0881C /* CreateOfferInteractor.swift in Sources */,
 				E39177EF296778EB008A7F90 /* CustomCollectionView.swift in Sources */,
@@ -1483,6 +1490,7 @@
 				E3CEE67B28ABD5E300468ED2 /* FeedCoordinator.swift in Sources */,
 				E334BAF42916E729009AAB91 /* ChatRoomInteractor.swift in Sources */,
 				E34ABC3E28A7BD9F00A7D2C8 /* HTTPAuthentaficationMode.swift in Sources */,
+				E3EB1E33298AC18F009805A8 /* PurchaseManager.swift in Sources */,
 				E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */,
 				E30560F6290ECE8300E0881C /* DealInteractor.swift in Sources */,
 				E3E05D19292149E700605F49 /* PetClass.swift in Sources */,
