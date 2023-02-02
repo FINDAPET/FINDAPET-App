@@ -27,4 +27,8 @@ final class DealRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.getComplaint(complaint)
     }
     
+    func getBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {
+        self.coordinatorDelegate?.getBrowseImage(dataSource)
+    }
+    
 }

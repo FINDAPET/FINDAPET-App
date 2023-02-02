@@ -15,4 +15,8 @@ final class ChatRoomRouter: ChatRoomCoordinatable {
         self.coordinatorDelegate?.goToProfile(userID: userID)
     }
     
+    func getBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {
+        self.coordinatorDelegate?.getBrowseImage(dataSource)
+    }
+    
 }

@@ -25,20 +25,20 @@ extension User {
         var avatarData: Data?
         var documentData: Data?
         var description: String?
-        var deviceToken: String?
+        var deviceTokens: [String]
         var isCatteryWaitVerify: Bool
         var chatRoomsID: [UUID]
         var countryCode: String?
         var basicCurrencyName: Currency
         
-        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, deviceToken: String? = nil, chatRoomsID: [UUID] = [UUID](), countryCode: String? = nil, basicCurrencyName: Currency = .USD) {
+        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, deviceTokens: [String] = .init(), chatRoomsID: [UUID] = [UUID](), countryCode: String? = nil, basicCurrencyName: Currency = .USD) {
             self.id = id
             self.name = name
             self.avatarData = avatarData
             self.documentData = documentData
             self.description = description
             self.isCatteryWaitVerify = isCatteryWaitVerify
-            self.deviceToken = deviceToken
+            self.deviceTokens = deviceTokens
             self.chatRoomsID = chatRoomsID
             self.countryCode = countryCode
             self.basicCurrencyName = basicCurrencyName

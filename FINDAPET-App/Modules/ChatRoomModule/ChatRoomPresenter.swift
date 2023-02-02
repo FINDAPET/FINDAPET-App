@@ -144,4 +144,8 @@ final class ChatRoomPresenter {
         self.router.goToProfile(userID: self.userID)
     }
     
+    func getBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {
+        self.router.getBrowseImage(dataSource)
+    }
+    
 }

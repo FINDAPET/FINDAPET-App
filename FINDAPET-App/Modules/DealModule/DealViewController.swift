@@ -224,6 +224,8 @@ final class DealViewController: UIViewController {
         return viewController
     }()
     
+    private lazy var browseImagesViewController = self.presenter.getBrowseImage(self)
+    
 //    MARK: Life Cycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -525,6 +527,13 @@ extension DealViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        
+        guard let viewController = self.browseImagesViewController else {
+            return
+        }
+        
+        self.navigationController?.pushViewController(viewController, animated: true)
+        viewController.scrollToImage(at: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -553,6 +562,22 @@ extension DealViewController: UICollectionViewDelegateFlowLayout {
             bottom: .zero,
             right: (collectionView.frame.width - (collectionView.frame.width - 30)) / 2
         )
+    }
+    
+}
+
+extension DealViewController: BrowseImagesViewControllerDataSource {
+    
+    func browseImagesViewController(_ viewController: BrowseImagesViewController, collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        self.presenter.deal?.photoDatas.count ?? .zero
+    }
+    
+    func browseImagesViewController(_ viewController: BrowseImagesViewController, collectionView: UICollectionView, imageForItemAt indexPath: IndexPath) -> UIImage? {
+        guard let data = self.presenter.deal?.photoDatas[indexPath.item] else {
+            return nil
+        }
+        
+        return .init(data: data)
     }
     
 }

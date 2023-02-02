@@ -363,7 +363,9 @@ final class EditProfileViewController: UIViewController {
             }
         }
         
-        self.presenter.user.deviceToken = self.presenter.readUserDefaultsDeviceToken()
+        if let deviceToken = self.presenter.readUserDefaultsDeviceToken() {
+            self.presenter.user.deviceTokens.append(deviceToken)
+        }
         
         self.presenter.editUser { error in
             self.error(error) { [ weak self ] in

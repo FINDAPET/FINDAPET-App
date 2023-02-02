@@ -238,6 +238,19 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.coordinatorDelegate?.coordinatorDelegate?.start()
     }
     
+//    MARK: Browse Image
+    func getBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController {
+        let viewController = BrowseImagesViewController()
+        
+        viewController.dataSource = dataSource
+        
+        return viewController
+    }
+    
+    func goToBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) {
+        self.navigationController.pushViewController(self.getBrowseImage(dataSource), animated: true)
+    }
+    
 //    MARK: Setup Views
     private func setupViews() {
         self.navigationController.tabBarItem = UITabBarItem(

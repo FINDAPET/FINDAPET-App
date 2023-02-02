@@ -12,14 +12,14 @@ import InputBarAccessoryView
 
 final class ChatRoomViewController: MessagesViewController {
 
-    private let preseter: ChatRoomPresenter
+    private let presenter: ChatRoomPresenter
     
     init(preseter: ChatRoomPresenter) {
-        self.preseter = preseter
+        self.presenter = preseter
         
         super.init(nibName: nil, bundle: nil)
         
-        self.preseter.callBack = { [ weak self ] in
+        self.presenter.callBack = { [ weak self ] in
             self?.messagesCollectionView.reloadData()
             self?.messagesCollectionView.scrollToLastItem()
         }
@@ -30,7 +30,7 @@ final class ChatRoomViewController: MessagesViewController {
     }
     
     deinit {
-        self.preseter.closeWS()
+        self.presenter.closeWS()
     }
         
 //    MARK: UI Properties
@@ -85,8 +85,8 @@ final class ChatRoomViewController: MessagesViewController {
     private lazy var chatRoomHeaderView: ChatRoomHeaderView = {
         let view = ChatRoomHeaderView()
         
-        view.user = self.preseter.chatRoom?.users.filter { [ weak self ] in $0.id != self?.preseter.getUserID() }.first
-        view.didTapAvatarImageViewAction = self.preseter.goToProfile
+        view.user = self.presenter.chatRoom?.users.filter { [ weak self ] in $0.id != self?.presenter.getUserID() }.first
+        view.didTapAvatarImageViewAction = self.presenter.goToProfile
         view.didTapBackButtonAction = { [ weak self ] in self?.navigationController?.popViewController(animated: true) }
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -104,6 +104,8 @@ final class ChatRoomViewController: MessagesViewController {
         
         return view
     }()
+    
+    private lazy var browseImagesViewController = self.presenter.getBrowseImage(self)
         
 //    MARK: Life Cycle
     override func viewWillAppear(_ animated: Bool) {
@@ -115,23 +117,23 @@ final class ChatRoomViewController: MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if self.preseter.chatRoom == nil {
+        if self.presenter.chatRoom == nil {
             self.activityIndicatorView.isHidden = false
             
-            self.preseter.getChatRoom { [ weak self ] _, error in
+            self.presenter.getChatRoom { [ weak self ] _, error in
                 self?.error(error) { [ weak self ] in
                     self?.messagesCollectionView.scrollToLastItem()
                     self?.activityIndicatorView.isHidden = true
                     
-                    if self?.preseter.chatRoom?.messages.filter({ $0.id != self?.preseter.getUserID() && !$0.isViewed }).count ?? .zero != .zero {
-                        self?.preseter.viewAllMessages()
-                        self?.preseter.notificationCenterManagerHideNotViewedMessagesCountLabel()
+                    if self?.presenter.chatRoom?.messages.filter({ $0.id != self?.presenter.getUserID() && !$0.isViewed }).count ?? .zero != .zero {
+                        self?.presenter.viewAllMessages()
+                        self?.presenter.notificationCenterManagerHideNotViewedMessagesCountLabel()
                     }
                 }
             }
         }
         
-        self.preseter.chatRoom()
+        self.presenter.chatRoom()
     }
     
 //    MARK: Setup Views
@@ -191,8 +193,9 @@ final class ChatRoomViewController: MessagesViewController {
         self.messagesCollectionView.messagesDataSource = self
         self.messagesCollectionView.messagesLayoutDelegate = self
         self.messagesCollectionView.messagesDisplayDelegate = self
+        self.messagesCollectionView.messageCellDelegate = self
         self.messagesCollectionView.scrollToLastItem()
-        self.preseter.callBack?()
+        self.presenter.callBack?()
     }
     
 //    MARK: Configure Message Input Bar
@@ -228,9 +231,9 @@ extension ChatRoomViewController: UINavigationControllerDelegate { }
 extension ChatRoomViewController: MessagesDataSource {
     
     var currentSender: MessageKit.SenderType {
-        self.preseter.chatRoom?.users.filter { [ weak self ] user in user.id == self?.preseter.getUserID() }.first ?? User.Output(
-            id: self.preseter.getUserID(),
-            name: self.preseter.getUserName() ?? String(),
+        self.presenter.chatRoom?.users.filter { [ weak self ] user in user.id == self?.presenter.getUserID() }.first ?? User.Output(
+            id: self.presenter.getUserID(),
+            name: self.presenter.getUserName() ?? String(),
             deals: [Deal.Output](),
             boughtDeals: [Deal.Output](),
             ads: [Ad.Output](),
@@ -242,12 +245,12 @@ extension ChatRoomViewController: MessagesDataSource {
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) -> MessageKit.MessageType {
-        self.preseter.chatRoom?.messages.sorted { $0.sentDate < $1.sentDate }[indexPath.section] ?? Message.Output(
+        self.presenter.chatRoom?.messages.sorted { $0.sentDate < $1.sentDate }[indexPath.section] ?? Message.Output(
             text: String(),
             isViewed: .random(),
             user: User.Output(
-                id: self.preseter.getUserID(),
-                name: self.preseter.getUserName() ?? String(),
+                id: self.presenter.getUserID(),
+                name: self.presenter.getUserName() ?? String(),
                 deals: [Deal.Output](),
                 boughtDeals: [Deal.Output](),
                 ads: [Ad.Output](),
@@ -261,7 +264,7 @@ extension ChatRoomViewController: MessagesDataSource {
     }
     
     func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int {
-        self.preseter.chatRoom?.messages.count ?? .zero
+        self.presenter.chatRoom?.messages.count ?? .zero
     }
     
 }
@@ -269,7 +272,7 @@ extension ChatRoomViewController: MessagesDataSource {
 extension ChatRoomViewController: MessagesDisplayDelegate {
     
     func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        if message.sender.senderId == self.preseter.getUserID()?.uuidString {
+        if message.sender.senderId == self.presenter.getUserID()?.uuidString {
             return .accentColor
         }
         
@@ -277,11 +280,28 @@ extension ChatRoomViewController: MessagesDisplayDelegate {
     }
     
     func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        if message.sender.senderId == self.preseter.getUserID()?.uuidString {
+        if message.sender.senderId == self.presenter.getUserID()?.uuidString {
             return .white
         }
         
         return .textColor
+    }
+    
+}
+
+extension ChatRoomViewController: MessageCellDelegate {
+    
+    func didTapImage(in cell: MessageCollectionViewCell) {
+        guard let index = self.presenter.chatRoom?.messages
+            .map({ $0.bodyData })
+            .firstIndex(of: cell.largeContentImage?.pngData()),
+              let viewController = self.browseImagesViewController else {
+            return
+        }
+        
+        self.navigationController?.pushViewController(viewController, animated: true)
+        
+        viewController.scrollToImage(at: .init(item: index, section: .zero))
     }
     
 }
@@ -292,10 +312,10 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
         if let datas = self.photosCollectionView.images
             .map({ $0.jpegData(compressionQuality: 0.7) }).filter({ $0 != nil }) as? [Data] {
             for data in datas {
-                self.preseter.sendMessage(.init(
+                self.presenter.sendMessage(.init(
                     bodyData: data,
-                    userID: self.preseter.getUserID() ?? .init(),
-                    chatRoomID: self.preseter.chatRoom?.id
+                    userID: self.presenter.getUserID() ?? .init(),
+                    chatRoomID: self.presenter.chatRoom?.id
                 ))
             }
             
@@ -306,10 +326,10 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
             return
         }
         
-        self.preseter.sendMessage(.init(
+        self.presenter.sendMessage(.init(
             text: text,
-            userID: self.preseter.getUserID() ?? .init(),
-            chatRoomID: self.preseter.chatRoom?.id
+            userID: self.presenter.getUserID() ?? .init(),
+            chatRoomID: self.presenter.chatRoom?.id
         ))
         self.messagesCollectionView.scrollToLastItem()
         
@@ -348,6 +368,24 @@ extension ChatRoomViewController: UIImagePickerControllerDelegate {
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
+    }
+    
+}
+
+extension ChatRoomViewController: BrowseImagesViewControllerDataSource {
+    
+    func browseImagesViewController(_ viewController: BrowseImagesViewController, collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        self.presenter.chatRoom?.messages.filter { $0.bodyData != nil }.count ?? .zero
+    }
+    
+    func browseImagesViewController(_ viewController: BrowseImagesViewController, collectionView: UICollectionView, imageForItemAt indexPath: IndexPath) -> UIImage? {
+        guard let data = self.presenter.chatRoom?.messages
+            .filter({ $0.bodyData != nil })
+            .map({ $0.bodyData })[indexPath.item] else {
+            return nil
+        }
+        
+        return .init(data: data)
     }
     
 }

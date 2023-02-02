@@ -172,4 +172,8 @@ final class DealPresenter {
         return self.router.getComplaint(.init(text: .init(), senderID: id, dealID: self.deal?.id))
     }
     
+    func getBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {
+        self.router.getBrowseImage(dataSource)
+    }
+    
 }
