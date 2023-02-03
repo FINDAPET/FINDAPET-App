@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 final class URLConstructor {
     
@@ -39,12 +40,14 @@ final class URLConstructor {
     func auth() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.auth.rawValue)
+            .appendingPathComponent(UIDevice.current.identifierForVendor?.uuidString ?? .init())
     }
     
     //    MARK: Log Out
     func logOut() -> URL {
         self.baseURL
             .appendingPathComponent(Paths.logOut.rawValue)
+            .appendingPathComponent(UIDevice.current.identifierForVendor?.uuidString ?? .init())
     }
     
     //    MARK: User
