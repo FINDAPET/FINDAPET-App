@@ -71,7 +71,7 @@ class InfoViewController: UIViewController {
     private lazy var supportingTeamEmailLinkButton: UIButton = {
         let view = UIButton()
         
-        view.setTitle(suportingTeamEmail, for: .normal)
+        view.setTitle(.init(suportingTeamEmail), for: .normal)
         view.setTitleColor(.accentColor, for: .normal)
         view.addTarget(self, action: #selector(self.didTapSuppotingTeamEmailLinkButton), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +82,7 @@ class InfoViewController: UIViewController {
     private lazy var advertisingTeamEmailLinkButton: UIButton = {
         let view = UIButton()
         
-        view.setTitle(advertisingTeamEmail, for: .normal)
+        view.setTitle(.init(advertisingTeamEmail), for: .normal)
         view.setTitleColor(.accentColor, for: .normal)
         view.addTarget(self, action: #selector(self.didTapAdvertisingTeamEmailLinkButton), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false

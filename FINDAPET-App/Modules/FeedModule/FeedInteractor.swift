@@ -34,6 +34,16 @@ final class FeedInteractor {
         ApplicationRequestManager.request(url)
     }
     
+//    MARK: Notification Center
+    func notificationCenterManagerAddObserver(
+        _ observer: Any,
+        name: NotificationCenterManagerKeys,
+        additional parameter: String? = nil,
+        action: Selector
+    ) {
+        NotificationCenterManager.addObserver(observer, name: name, additional: parameter, action: action)
+    }
+    
 //    MARK: Keychain
     private func getBearrerToken() -> String? {
         KeychainManager.shared.read(key: .token)

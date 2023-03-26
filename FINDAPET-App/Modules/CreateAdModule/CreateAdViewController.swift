@@ -24,7 +24,17 @@ final class CreateAdViewController: UIViewController {
     
 //    MARK: UI Properties
     private let activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .medium)
+        if #available(iOS 13.0, *) {
+            let view = UIActivityIndicatorView(style: .medium)
+            
+            view.startAnimating()
+            view.isHidden = true
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
         view.isHidden = true
@@ -63,7 +73,23 @@ final class CreateAdViewController: UIViewController {
     }()
     
     private lazy var avatarImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(systemName: "plus"))
+        if #available(iOS 13.0, *) {
+            let view = UIImageView(image: UIImage(systemName: "plus"))
+            
+            view.backgroundColor = .textFieldColor
+            view.tintColor = .lightGray
+            view.clipsToBounds = true
+            view.layer.masksToBounds = true
+            view.layer.cornerRadius = 75
+            view.layer.borderColor = UIColor.lightGray.cgColor
+            view.layer.borderWidth = 2
+            view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapAvatarImageView)))
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIImageView(image: UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate))
         
         view.backgroundColor = .textFieldColor
         view.tintColor = .lightGray
@@ -79,7 +105,23 @@ final class CreateAdViewController: UIViewController {
     }()
     
     private lazy var contentImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(systemName: "plus"))
+        if #available(iOS 13.0, *) {
+            let view = UIImageView(image: UIImage(systemName: "plus"))
+            
+            view.backgroundColor = .textFieldColor
+            view.tintColor = .lightGray
+            view.clipsToBounds = true
+            view.layer.masksToBounds = true
+            view.layer.cornerRadius = 25
+            view.layer.borderColor = UIColor.lightGray.cgColor
+            view.layer.borderWidth = 2
+            view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapContentImageView)))
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIImageView(image: UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate))
         
         view.backgroundColor = .textFieldColor
         view.tintColor = .lightGray

@@ -17,7 +17,14 @@ final class ChatRoomsViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
         
-        self.presenter.callBack = { [ weak self ] in self?.tableView.reloadData() }
+        self.presenter.callBack = { [ weak self ] in
+            guard let self = self else {
+                return
+            }
+            
+            self.isEmptyTableView = self.presenter.chatRooms.isEmpty
+            self.tableView.reloadData()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -25,14 +32,24 @@ final class ChatRoomsViewController: UIViewController {
     }
     
 //    MARK: Properties
-    private var isEmptyTableView = true
+    private lazy var isEmptyTableView = self.presenter.chatRooms.isEmpty
     
 //    MARK: UI Properties
-    private let activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .medium)
+    private lazy var activityIndicatorView: UIActivityIndicatorView = {
+        if #available(iOS 13.0, *) {
+            let view = UIActivityIndicatorView(style: .medium)
+            
+            view.startAnimating()
+            view.isHidden = !self.presenter.chatRooms.isEmpty
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
-        view.isHidden = true
+        view.isHidden = !self.presenter.chatRooms.isEmpty
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -55,7 +72,7 @@ final class ChatRoomsViewController: UIViewController {
         view.backgroundColor = .clear
         view.delegate = self
         view.dataSource = self
-        view.isHidden = false
+        view.isHidden = self.presenter.chatRooms.isEmpty
         view.refreshControl = self.refreshControl
         view.register(NotFoundTableViewCell.self, forCellReuseIdentifier: NotFoundTableViewCell.id)
         view.register(ChatRoomTableViewCell.self, forCellReuseIdentifier: ChatRoomTableViewCell.id)
@@ -105,9 +122,7 @@ final class ChatRoomsViewController: UIViewController {
     
 //    MARK: Actions
     @objc private func onRefresh() {
-        self.presenter.getAllChatRooms { [ weak self ] _, error in
-            self?.error(error)
-        }
+        self.presenter.getAllChatRooms { [ weak self ] _, _ in self?.refreshControl.endRefreshing() }
     }
     
 }
@@ -116,15 +131,7 @@ final class ChatRoomsViewController: UIViewController {
 extension ChatRoomsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.presenter.chatRooms.isEmpty {
-            self.isEmptyTableView = true
-            
-            return 1
-        }
-        
-        self.isEmptyTableView = false
-        
-        return self.presenter.chatRooms.count
+        self.isEmptyTableView ? 1 : self.presenter.chatRooms.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -133,9 +140,11 @@ extension ChatRoomsViewController: UITableViewDataSource {
         }
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRoomTableViewCell.id) as? ChatRoomTableViewCell else {
-            return UITableViewCell()
+            return .init()
         }
         
+        tableView.isHidden = false
+        self.activityIndicatorView.isHidden = true
         cell.chatRoom = self.presenter.chatRooms[indexPath.row]
         
         return cell
@@ -146,7 +155,7 @@ extension ChatRoomsViewController: UITableViewDataSource {
 extension ChatRoomsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        UITableView.automaticDimension
+        130
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -9,25 +9,30 @@ import Foundation
 
 final class ChatRoomPresenter {
     
+//    MARK: Properties
     var callBack: (() -> Void)?
     var secondCallBack: (() -> Void)?
     private(set) var chatRoom: ChatRoom.Output? {
         didSet {
-            if let id = self.getUserID() {
+            if let id = self.getUserID(), self.userID == nil {
                 self.userID = self.chatRoom?.users.filter { $0.id != id }.first?.id
             }
             
-            self.callBack?()
+            DispatchQueue.main.async { [ weak self ] in self?.callBack?() }
         }
     }
     private var userID: UUID?
     private let router: ChatRoomRouter
     private let interactor: ChatRoomInteractor
     
+//    MARK: Init
     init(chatRoom: ChatRoom.Output, router: ChatRoomRouter, interactor: ChatRoomInteractor) {
         var chatRoom = chatRoom
         
-        chatRoom.messages = chatRoom.messages.sorted { $0.sentDate < $1.sentDate }
+        chatRoom.messages = chatRoom.messages.sorted {
+            ISO8601DateFormatter().date(from: $0.createdAt ?? .init()) ?? .init() <
+                ISO8601DateFormatter().date(from: $1.createdAt ?? .init()) ?? .init()
+        }
         
         self.chatRoom = chatRoom
         self.router = router
@@ -39,6 +44,17 @@ final class ChatRoomPresenter {
         self.userID = userID
         self.router = router
         self.interactor = interactor
+    }
+    
+//    MARK: Editing
+    func addID() {
+        var string = String()
+        
+        for id in self.chatRoom?.users.map({ $0.id?.uuidString }).filter({ $0 != nil }) as? [String] ?? .init() {
+            string += id
+        }
+        
+        self.chatRoom?.id = string
     }
     
 //    MARK: Request
@@ -99,23 +115,44 @@ final class ChatRoomPresenter {
         self.interactor.chatRoom(with: id, completionHandler: newCompletionHandler)
     }
     
-    func sendMessage(_ message: Message.Input, completionHandler: @escaping (Error?) -> Void = { _ in }) {
+    func sendMessage(_ message: Message.Input, completion: @escaping () -> Void = { }) {
         if let chatRoom = self.chatRoom, let user = chatRoom.users.filter({ $0.id == message.userID }).first {
             self.chatRoom?.messages.append(Message.Output(
                 text: message.text,
                 isViewed: message.isViewed,
                 bodyData: message.bodyData,
                 user: user,
-                createdAt: .init(),
+                createdAt: ISO8601DateFormatter().string(from: .init()),
                 chatRoom: chatRoom
             ))
         }
         
-        self.interactor.sendMessage(message: message, completionHander: completionHandler)
+        self.interactor.sendMessage(message: message, completion: completion)
+    }
+    
+    func sendString(_ string: String, completion: @escaping () -> Void = { }) {
+        self.interactor.sendString(string, completion: completion)
     }
     
     func closeWS() {
         self.interactor.closeWS()
+    }
+    
+//    MARK: Sound Manager
+    func playOnSendMessageSound() {
+        do {
+            try self.interactor.playSound(with: .onSendMessage, for: .mp3)
+        } catch {
+            print("❌ Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func playOnGetMessageSound() {
+        do {
+            try self.interactor.playSound(with: .onGetMessage, for: .mp3)
+        } catch {
+            print("❌ Error: \(error.localizedDescription)")
+        }
     }
     
 //    MARK: User Defautls
@@ -131,11 +168,15 @@ final class ChatRoomPresenter {
         self.interactor.getUserDefautls(.userName) as? String
     }
     
+    func getChatRoomsID() -> [String] {
+        (self.interactor.getUserDefautls(.chatRoomsID) as? [String]) ?? .init()
+    }
+    
 //    MARK: Notification Center
     func notificationCenterManagerHideNotViewedMessagesCountLabel() {
         self.interactor.notificationCenterManagerPost(
             .hideNotViewedMessagesCountLabelInChatRoomWithID,
-            additional: self.chatRoom?.id?.uuidString
+            additional: self.chatRoom?.id
         )
     }
     

@@ -25,7 +25,7 @@ final class PetTypeCollectionViewCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
-            if self.isSelected {
+            if self.isSelected {                
                 self.layer.borderWidth = 3
             } else {
                 self.layer.borderWidth = .zero
@@ -33,13 +33,13 @@ final class PetTypeCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var petType: PetTypeEntity? {
+    var petType: PetType.Entity? {
         didSet {
-            guard let petType = self.petType, let data = petType.imageData else {
+            guard let petType = self.petType else {
                 return
             }
-            
-            self.imageView.image = .init(data: data)
+                        
+            self.imageView.image = .init(data: petType.imageData)
             self.nameLabel.text = petType.name
         }
     }

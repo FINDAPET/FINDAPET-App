@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import JGProgressHUD
 
 final class DealViewController: UIViewController {
 
@@ -81,7 +82,6 @@ final class DealViewController: UIViewController {
         
         view.font = .systemFont(ofSize: 24)
         view.textColor = .textColor
-        view.numberOfLines = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -90,6 +90,7 @@ final class DealViewController: UIViewController {
     private lazy var chatButton: UIButton = {
         let view = UIButton()
         
+        view.isHidden = self.presenter.deal?.cattery.id == self.presenter.getUserID()
         view.addTarget(self, action: #selector(self.didTapChatButton), for: .touchUpInside)
         view.setTitle(NSLocalizedString("Message", comment: String()), for: .normal)
         view.setTitleColor(.white, for: .normal)
@@ -103,6 +104,7 @@ final class DealViewController: UIViewController {
     private lazy var createOfferButton: UIButton = {
         let view = UIButton()
         
+        view.isHidden = self.presenter.deal?.cattery.id == self.presenter.getUserID()
         view.addTarget(self, action: #selector(self.didTapCreateOfferButton), for: .touchUpInside)
         view.setTitle(NSLocalizedString("Make Offer", comment: String()), for: .normal)
         view.setTitleColor(.white, for: .normal)
@@ -117,6 +119,7 @@ final class DealViewController: UIViewController {
     private lazy var makePremiumButton: UIButton = {
         let view = UIButton()
         
+        view.isHidden = self.presenter.deal?.cattery.id != self.presenter.getUserID()
         view.addTarget(self, action: #selector(self.didTapMakePremiumButton), for: .touchUpInside)
         view.setTitle(NSLocalizedString("Make Premium", comment: String()), for: .normal)
         view.setTitleColor(.white, for: .normal)
@@ -136,7 +139,11 @@ final class DealViewController: UIViewController {
         let view = DealDescriptionView(deal: deal)
         
         view.didTapBuyerAvatarImageViewAction = { [ weak self ] id in
-            self?.presenter.goToProfile(with: id)
+            guard let profileViewController = self?.presenter.getProfile(with: id) else {
+                return
+            }
+            
+            self?.navigationController?.pushViewController(profileViewController, animated: true)
         }
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -148,19 +155,26 @@ final class DealViewController: UIViewController {
             return .init()
         }
         
-        let view = DealProfileView(user: user) { [ weak self ] in self?.presenter.goToProfile() }
+        let view = DealProfileView(user: user) { [ weak self ] in
+            guard let profileViewController = self?.presenter.getProfile(with: user.id) else {
+                return
+            }
+            
+            self?.navigationController?.pushViewController(profileViewController, animated: true)
+        }
         
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
-    private let viewsCountLabel: UILabel = {
+    private lazy var viewsCountLabel: UILabel = {
         let view = UILabel()
         
         view.textColor = .lightGray
         view.font = .systemFont(ofSize: 16)
         view.numberOfLines = .zero
+        view.isHidden = self.presenter.deal?.photoDatas.isEmpty ?? true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -186,6 +200,7 @@ final class DealViewController: UIViewController {
         viewController?.view.alpha = .zero
         viewController?.view.translatesAutoresizingMaskIntoConstraints = false
         viewController?.callBack = { [ weak self ] in
+            self?.presenter.notificationCenterManagerPostUpdateProfileScreen()
             UIView.animate(withDuration: 0.2) {
                 viewController?.view.alpha = .zero
                 self?.translutionView.alpha = .zero
@@ -224,6 +239,14 @@ final class DealViewController: UIViewController {
         return viewController
     }()
     
+    private let progressIndicator: JGProgressHUD = {
+        let view = JGProgressHUD()
+        
+        view.textLabel.text = NSLocalizedString("Loading", comment: .init())
+        
+        return view
+    }()
+    
     private lazy var browseImagesViewController = self.presenter.getBrowseImage(self)
     
 //    MARK: Life Cycle
@@ -237,7 +260,10 @@ final class DealViewController: UIViewController {
         super.viewDidLoad()
         
         if self.presenter.dealID != nil {
+            self.progressIndicator.show(in: self.view, animated: true)
             self.presenter.getDeal { [ weak self ] _, error in
+                self?.progressIndicator.dismiss(animated: true)
+                
                 self?.error(error) {
                     self?.setupValues()
                 }
@@ -246,16 +272,26 @@ final class DealViewController: UIViewController {
             self.presenter.viewDeal()
             self.setupValues()
         }
+        
+        self.presenter.notificationCenterManagerAddObserverUpdateDealScreen(self, action: #selector(self.updateScreen))
     }
     
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
-        self.navigationController?.navigationBar.standardAppearance.backgroundColor = .clear
+        if #available(iOS 13.0, *) {
+            self.navigationController?.navigationBar.standardAppearance.backgroundColor = .clear
+        }
+        
         self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
-        self.tabBarController?.tabBar.standardAppearance.backgroundColor = .clear
+        
+        if #available(iOS 13.0, *) {
+            self.tabBarController?.tabBar.standardAppearance.backgroundColor = .clear
+        }
+        
         self.navigationController?.navigationBar.isHidden = false
+        self.tabBarController?.tabBar.isHidden = false
         self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
         
         self.view.addSubview(self.scrollView)
@@ -271,36 +307,87 @@ final class DealViewController: UIViewController {
         self.scrollView.addSubview(self.collectionViewItemNumberLabel)
         self.scrollView.insertSubview(self.collectionViewItemNumberLabel, at: 8)
         
-        if self.presenter.deal?.cattery.id ?? UUID() == self.presenter.getUserID() ?? UUID() {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                image: .init(systemName: "exclamationmark.triangle"),
-                style: .plain,
-                target: self,
-                action: #selector(self.didTapComplaintNavigationBarButton)
-            )
+        if self.presenter.deal?.cattery.id != self.presenter.getUserID() {
+            if #available(iOS 13.0, *) {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: .init(systemName: "exclamationmark.triangle"),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapComplaintNavigationBarButton)
+                )
+            } else {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: .init(named: "exclamationmark.triangle")?.withRenderingMode(.alwaysTemplate),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapComplaintNavigationBarButton)
+                )
+            }
             self.navigationItem.rightBarButtonItem?.tintColor = .accentColor
-            
+
+            self.makePremiumButton.isHidden = true
+
             self.scrollView.addSubview(self.chatButton)
             self.scrollView.addSubview(self.createOfferButton)
-            
+
             self.chatButton.snp.makeConstraints { make in
                 make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-                make.top.equalTo(self.titleLabel.snp.bottom).inset(-25)
+                make.top.equalTo(self.priceLabel.snp.bottom).inset(-25)
                 make.height.equalTo(50)
             }
-            
+
             self.createOfferButton.snp.makeConstraints { make in
                 make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
                 make.top.equalTo(self.chatButton.snp.bottom).inset(-15)
                 make.height.equalTo(50)
             }
+
+            self.dealDescriptionView.snp.makeConstraints { make in
+                make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+                make.top.equalTo(self.createOfferButton.snp.bottom).inset(-15)
+            }
+        } else {
+            if #available(iOS 13.0, *) {
+                self.navigationItem.rightBarButtonItems = [
+                    .init(
+                        image: .init(systemName: "trash"),
+                        style: .plain,
+                        target: self,
+                        action: #selector(self.didTapDeleteNavigationBarButton)
+                    ),
+                    .init(
+                        image: .init(systemName: "square.and.pencil"),
+                        style: .plain,
+                        target: self,
+                        action: #selector(self.didTapEditBarButtonItem)
+                    )
+                ]
+            } else {
+                self.navigationItem.rightBarButtonItems = [
+                    .init(
+                        image: .init(named: "trash")?.withRenderingMode(.alwaysTemplate),
+                        style: .plain,
+                        target: self,
+                        action: #selector(self.didTapDeleteNavigationBarButton)
+                    ),
+                    .init(
+                        image: .init(named: "square.and.pencil")?.withRenderingMode(.alwaysTemplate),
+                        style: .plain,
+                        target: self,
+                        action: #selector(self.didTapEditBarButtonItem)
+                    )
+                ]
+            }
             
+            self.chatButton.isHidden = true
+            self.createOfferButton.isHidden = true
+                        
             if !(self.presenter.deal?.isPremiumDeal ?? false) && self.presenter.deal?.cattery.id == self.presenter.getUserID() {
                 self.scrollView.addSubview(self.makePremiumButton)
                 
                 self.makePremiumButton.snp.makeConstraints { make in
                     make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-                    make.top.equalTo(self.createOfferButton.snp.bottom).inset(-15)
+                    make.top.equalTo(self.priceLabel.snp.bottom).inset(-15)
                     make.height.equalTo(50)
                 }
                 
@@ -313,28 +400,11 @@ final class DealViewController: UIViewController {
                 
                 self.dealDescriptionView.snp.makeConstraints { make in
                     make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-                    make.top.equalTo(self.createOfferButton.snp.bottom).inset(-15)
+                    make.top.equalTo(self.priceLabel.snp.bottom).inset(-15)
                 }
             }
-        } else {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                image: .init(systemName: "trash"),
-                style: .plain,
-                target: self,
-                action: #selector(self.didTapDeleteNavigationBarButton)
-            )
-            self.navigationItem.rightBarButtonItem?.tintColor = .accentColor
-            
-            self.createOfferButton.isHidden = true
-            self.chatButton.isHidden = true
-            self.makePremiumButton.isHidden = true
-            
-            self.dealDescriptionView.snp.makeConstraints { make in
-                make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-                make.top.equalTo(self.titleLabel.snp.bottom).inset(-15)
-            }
         }
-        
+
         self.scrollView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
@@ -353,14 +423,13 @@ final class DealViewController: UIViewController {
         }
         
         self.titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.top.equalTo(self.collectionView.snp.bottom).inset(-15)
         }
         
         self.priceLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.leading.equalTo(self.titleLabel.snp.trailing).inset(-15)
-            make.centerY.equalTo(self.titleLabel)
+            make.top.equalTo(self.titleLabel.snp.bottom).inset(-15)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
         }
 
         self.dealProfileView.snp.makeConstraints { make in
@@ -382,14 +451,34 @@ final class DealViewController: UIViewController {
 //    MARK: Setup Values
     private func setupValues() {
         self.titleLabel.text = self.presenter.deal?.title
-        self.priceLabel.text = "\(self.presenter.deal?.price ?? .zero) \(self.presenter.deal?.currencyName ?? String())"
-        self.viewsCountLabel.text = "\(self.presenter.deal?.viewsCount ?? .zero) \(NSLocalizedString("Views", comment: String()))"
+        self.priceLabel.text = "\(Int(self.presenter.deal?.price.rounded(.up) ?? .zero)) \(self.presenter.deal?.currencyName ?? String())"
+        self.viewsCountLabel.text = "\(self.presenter.deal?.viewsCount ?? .zero) \(NSLocalizedString("Views", comment: .init()))"
+        self.viewsCountLabel.isHidden = self.presenter.deal?.photoDatas.isEmpty ?? true
         self.collectionViewItemNumberLabel.text = "1/\(self.presenter.deal?.photoDatas.count ?? 1)"
     }
     
 //    MARK: Actions
+    @objc private func didTapEditBarButtonItem() {
+        guard let editDealViewController = self.presenter.getEditDeal() else {
+            return
+        }
+        
+        self.navigationController?.pushViewController(editDealViewController, animated: true)
+    }
+    
     @objc private func didTapChatButton() {
-        self.presenter.goToChatRoom()
+        guard let chatRoomViewController = self.presenter.getChatRoom() else {
+            return
+        }
+        
+        self.navigationController?.pushViewController(chatRoomViewController, animated: true)
+    }
+    
+    @objc private func updateScreen() {
+        self.progressIndicator.show(in: self.view, animated: true)
+        self.presenter.getDeal { [ weak self ] _, _ in
+            self?.progressIndicator.dismiss(animated: true)
+        }
     }
     
     @objc private func didTapMakePremiumButton() {
@@ -406,7 +495,9 @@ final class DealViewController: UIViewController {
                 self?.error(error) {
                     self?.presenter.makeDealPremium()
                     self?.presenter.changeDeal { error in
-                        self?.error(error)
+                        self?.error(error) {
+                            self?.presenter.notificationCenterManagerPostUpdateProfileScreen()
+                        }
                     }
                 }
             }

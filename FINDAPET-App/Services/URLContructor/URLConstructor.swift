@@ -23,17 +23,25 @@ final class URLConstructor {
     }
     
     init(mailTo: String) {
-        self.baseURL = URL(string: "\(Schemes.mailto.rawValue):\(mailTo)") ?? URL(fileURLWithPath: String())
+        if #available(iOS 16.0, *) {
+            self.baseURL = .init(string: "\(Schemes.mailto.rawValue):\(mailTo)") ?? .init(filePath: .init())
+        } else {
+            self.baseURL = .init(string: "\(Schemes.mailto.rawValue):\(mailTo)") ?? .init(fileURLWithPath: .init())
+        }
     }
     
     init(string: String) {
-        self.baseURL = URL(string: string) ?? URL(fileURLWithPath: String())
+        if #available(iOS 16.0, *) {
+            self.baseURL = .init(string: string) ?? .init(filePath: .init())
+        } else {
+            self.baseURL = .init(string: string) ?? .init(fileURLWithPath: .init())
+        }
     }
     
     static let localhostHTTP = URLConstructor(scheme: .http, host: .localhost, port: .localhost)
     static let localhostWS = URLConstructor(scheme: .ws, host: .localhost, port: .localhost)
-    static let defaultHTTP = URLConstructor(scheme: .http, host: .localhost, port: .localhost)
-    static let defaultWS = URLConstructor(scheme: .ws, host: .localhost, port: .localhost)
+    static let defaultHTTP = URLConstructor(scheme: .https, host: .base)
+    static let defaultWS = URLConstructor(scheme: .wss, host: .base)
     static let exchange = URLConstructor(scheme: .http, host: .exchange)
     
     //    MARK: Auth
@@ -117,6 +125,12 @@ final class URLConstructor {
         self.baseURL
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(Paths.me.rawValue)
+    }
+    
+    func getChats() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.users.rawValue)
+            .appendingPathComponent(Paths.chats.rawValue)
     }
     
     func deleteUser(userID: UUID) -> URL {
@@ -203,6 +217,20 @@ final class URLConstructor {
             .appendingPathComponent(Paths.users.rawValue)
             .appendingPathComponent(Paths.not.rawValue)
             .appendingPathComponent(Paths.premium.rawValue)
+    }
+    
+    func getChatRoomsID() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.users.rawValue)
+            .appendingPathComponent(Paths.chats.rawValue)
+            .appendingPathComponent(Paths.id.rawValue)
+    }
+    
+    func getUserSearchTitles() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.users.rawValue)
+            .appendingPathComponent(Paths.search.rawValue)
+            .appendingPathComponent(Paths.titles.rawValue)
     }
     
     //    MARK: Offer
@@ -370,16 +398,16 @@ final class URLConstructor {
             .appendingPathComponent(Paths.all.rawValue)
     }
     
-    func chatRoom(chatRoomID: UUID) -> URL {
+    func chatRoom(chatRoomID: String) -> URL {
         self.baseURL
             .appendingPathComponent(Paths.chats.rawValue)
-            .appendingPathComponent(chatRoomID.uuidString)
+            .appendingPathComponent(chatRoomID)
     }
     
-    func viewAllMessages(in chatRoomID: UUID) -> URL {
+    func viewAllMessages(in chatRoomID: String) -> URL {
         self.baseURL
-            .appendingPathComponent(Paths.chat.rawValue)
-            .appendingPathComponent(chatRoomID.uuidString)
+            .appendingPathComponent(Paths.chats.rawValue)
+            .appendingPathComponent(chatRoomID)
             .appendingPathComponent(Paths.messages.rawValue)
             .appendingPathComponent(Paths.view.rawValue)
     }
@@ -526,6 +554,43 @@ final class URLConstructor {
             .appendingPathComponent(Paths.notification.rawValue)
             .appendingPathComponent(Paths.screens.rawValue)
             .appendingPathComponent(notificationScreenID.uuidString)
+            .appendingPathComponent(Paths.delete.rawValue)
+    }
+    
+//    MARK: Search Title
+    func getAllSearchTitles() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.search.rawValue)
+            .appendingPathComponent(Paths.titles.rawValue)
+            .appendingPathComponent(Paths.all.rawValue)
+    }
+    
+    func searchTitle(with id: UUID) -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.search.rawValue)
+            .appendingPathComponent(Paths.titles.rawValue)
+            .appendingPathComponent(id.uuidString)
+    }
+    
+    func newSearchTitle() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.search.rawValue)
+            .appendingPathComponent(Paths.titles.rawValue)
+            .appendingPathComponent(Paths.new.rawValue)
+    }
+    
+    func changeSearchTitle() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.search.rawValue)
+            .appendingPathComponent(Paths.titles.rawValue)
+            .appendingPathComponent(Paths.change.rawValue)
+    }
+    
+    func deleteSearchTitle(with id: UUID) -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.search.rawValue)
+            .appendingPathComponent(Paths.titles.rawValue)
+            .appendingPathComponent(id.uuidString)
             .appendingPathComponent(Paths.delete.rawValue)
     }
     

@@ -9,6 +9,9 @@ import Foundation
 
 final class FilterInteractor {
     
+//    MARK: Properties
+    private let petTypeCoreData = CoreDataManager<PetTypeEntity>()
+    
 //    MARK: User Defaults
     func getUserDefaults(_ key: UserDefaultsKeys) -> Any? {
         UserDefaultsManager.read(key: key)
@@ -20,7 +23,7 @@ final class FilterInteractor {
     
 //    MARK: Core Data
     func getAllPetTypes(_ completionHandler: @escaping ([PetTypeEntity], Error?) -> Void) {
-        CoreDataManager<PetTypeEntity>().all(completionHandler)
+        self.petTypeCoreData.all(completionHandler)
     }
     
 }

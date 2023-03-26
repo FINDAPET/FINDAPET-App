@@ -61,12 +61,13 @@ open class BrowseImagesViewController: UIViewController {
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
+        self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: .init())
         
         self.view.addSubview(self.collectionView)
         
         self.collectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.centerY.equalToSuperview()
             make.height.equalTo(self.collectionView.snp.width)
         }
     }

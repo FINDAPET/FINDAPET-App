@@ -10,6 +10,9 @@ import StoreKit
 
 final class EditDealInteractor {
     
+//    MARK: Properties
+    private let petTypeCoreData = CoreDataManager<PetTypeEntity>()
+    
 //    MARK: Requests
     func createDeal(_ deal: Deal.Input, completionHandler: @escaping (Error?) -> Void) {
         RequestManager.request(
@@ -21,9 +24,19 @@ final class EditDealInteractor {
         )
     }
     
+    func changeDeal(_ deal: Deal.Input, completionHandler: @escaping (Error?) -> Void) {
+        RequestManager.request(
+            model: deal,
+            method: .PUT,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.changeDeal(),
+            completionHandler: completionHandler
+        )
+    }
+    
 //    MARK: Notification Center
-    func notificationCenterManagerPost(_ key: NotificationCenterManagerKeys) {
-        NotificationCenterManager.post(key)
+    func notificationCenterManagerPost(_ key: NotificationCenterManagerKeys, additional parameters: String? = nil) {
+        NotificationCenterManager.post(key, additional: parameters)
     }
     
 //    MARK: User Defaults
@@ -37,11 +50,11 @@ final class EditDealInteractor {
     
 //    MARK: Purchase
     func getProducts(_ completionHandler: @escaping ([SKProduct]) -> Void) {
-//        PurchaseManager.shared.getProducts([.premiumDeal], callBack: completionHandler)
+        PurchaseManager.shared.getProducts([.premiumDeal], callBack: completionHandler)
     }
     
     func makePayment(_ product: SKProduct, completionHandler: @escaping (Error?) -> Void) {
-//        PurchaseManager.shared.makePayment(product, callBack: completionHandler)
+        PurchaseManager.shared.makePayment(product, callBack: completionHandler)
     }
     
 //    MARK: Keychain
@@ -51,7 +64,7 @@ final class EditDealInteractor {
     
 //    MARK: Core Data
     func getAllPetTypes(_ completionHandler: @escaping ([PetTypeEntity], Error?) -> Void) {
-        CoreDataManager<PetTypeEntity>().all(completionHandler)
+        self.petTypeCoreData.all(completionHandler)
     }
     
 }

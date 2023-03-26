@@ -9,19 +9,41 @@ import UIKit
 import SnapKit
 import MessageKit
 import InputBarAccessoryView
+import JGProgressHUD
 
 final class ChatRoomViewController: MessagesViewController {
-
+    
+//    MARK: Properties
     private let presenter: ChatRoomPresenter
     
-    init(preseter: ChatRoomPresenter) {
-        self.presenter = preseter
+//    MARK: Init
+    init(presenter: ChatRoomPresenter) {
+        self.presenter = presenter
         
         super.init(nibName: nil, bundle: nil)
         
         self.presenter.callBack = { [ weak self ] in
-            self?.messagesCollectionView.reloadData()
-            self?.messagesCollectionView.scrollToLastItem()
+            if self?.isFirstLoad ?? true {
+                self?.isFirstLoad = false
+                self?.messagesCollectionView.reloadData()
+                self?.messagesCollectionView.scrollToLastItem(animated: false)
+                
+                UIView.animate(withDuration: 0.1) {
+                    self?.messagesCollectionView.alpha = 1
+                    self?.messageInputBar.alpha = 1
+                }
+            } else {
+                self?.messagesCollectionView.reloadDataAndKeepOffset()
+                self?.messagesCollectionView.scrollToLastItem()
+                
+                guard let first = self?.presenter.chatRoom?.messages.last?.user.id,
+                      let second = self?.presenter.getUserID(),
+                      first != second else {
+                    return
+                }
+                
+                self?.presenter.playOnGetMessageSound()
+            }
         }
     }
     
@@ -29,9 +51,8 @@ final class ChatRoomViewController: MessagesViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        self.presenter.closeWS()
-    }
+//    MARK: Proretries
+    private var isFirstLoad = true
         
 //    MARK: UI Properties
     private lazy var imagePickerController: UIImagePickerController = {
@@ -44,21 +65,19 @@ final class ChatRoomViewController: MessagesViewController {
         return view
     }()
     
-    private let activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .medium)
-        
-        view.startAnimating()
-        view.isHidden = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
-    
     private let statusBarView: UIView = {
         let view = UIView()
         
         view.backgroundColor = .textFieldColor
         view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private let progressIndicator: JGProgressHUD = {
+        let view = JGProgressHUD()
+        
+        view.textLabel.text = NSLocalizedString("Loading", comment: .init())
         
         return view
     }()
@@ -96,7 +115,11 @@ final class ChatRoomViewController: MessagesViewController {
     private lazy var paperclipButton: UIButton = {
         let view = UIButton()
         
-        view.setImage(.init(systemName: "paperclip"), for: .normal)
+        if #available(iOS 13.0, *) {
+            view.setImage(.init(systemName: "paperclip"), for: .normal)
+        } else {
+            view.setImage(.init(named: "paperclip")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
         view.tintColor = .lightGray
         view.imageViewSizeToButton()
         view.addTarget(self, action: #selector(self.didTapPaperclipButton), for: .touchUpInside)
@@ -117,29 +140,63 @@ final class ChatRoomViewController: MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if self.presenter.chatRoom == nil {
-            self.activityIndicatorView.isHidden = false
+        if self.presenter.chatRoom?.id == nil {
+            self.progressIndicator.show(in: self.view, animated: true)
             
             self.presenter.getChatRoom { [ weak self ] _, error in
-                self?.error(error) { [ weak self ] in
-                    self?.messagesCollectionView.scrollToLastItem()
-                    self?.activityIndicatorView.isHidden = true
-                    
-                    if self?.presenter.chatRoom?.messages.filter({ $0.id != self?.presenter.getUserID() && !$0.isViewed }).count ?? .zero != .zero {
-                        self?.presenter.viewAllMessages()
-                        self?.presenter.notificationCenterManagerHideNotViewedMessagesCountLabel()
-                    }
+                self?.progressIndicator.dismiss(animated: true)
+                
+                guard self?.presenter.chatRoom?.messages
+                    .filter({ $0.id != self?.presenter.getUserID() && !$0.isViewed }).count ?? .zero != .zero else {
+                    return
                 }
+                
+                self?.presenter.viewAllMessages()
+                self?.presenter.notificationCenterManagerHideNotViewedMessagesCountLabel()
             }
+        } else {
+            self.presenter.viewAllMessages()
+            self.presenter.notificationCenterManagerHideNotViewedMessagesCountLabel()
         }
         
         self.presenter.chatRoom()
+        
+        guard !(self.presenter.chatRoom?.messages.isEmpty ?? true) else {
+            return
+        }
+        
+        self.messagesCollectionView.scrollToLastItem(animated: false)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard self.isFirstLoad else {
+            return
+        }
+        
+        self.isFirstLoad = false
+        self.messagesCollectionView.reloadData()
+        self.messagesCollectionView.scrollToLastItem(animated: false)
+        
+        UIView.animate(withDuration: 0.2) { [ weak self ] in
+            self?.messagesCollectionView.alpha = 1
+            self?.messageInputBar.alpha = 1
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        self.isFirstLoad = true
+        self.presenter.closeWS()
     }
     
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationController?.navigationBar.isHidden = true
                 
         self.configureMessagesCollectionView()
@@ -147,7 +204,6 @@ final class ChatRoomViewController: MessagesViewController {
         
         self.view.addSubview(self.statusBarView)
         self.view.addSubview(self.chatRoomHeaderView)
-        self.view.addSubview(self.activityIndicatorView)
         
         for constraint in self.view.constraints {
             self.view.removeConstraint(constraint)
@@ -169,14 +225,6 @@ final class ChatRoomViewController: MessagesViewController {
             make.top.equalTo(self.chatRoomHeaderView.snp.bottom)
         }
         
-        self.messageInputBar.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalTo(self.view)
-        }
-        
-        self.activityIndicatorView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-        
         self.paperclipButton.snp.makeConstraints { make in
             make.width.equalTo(23.67)
             make.height.equalTo(23.67)
@@ -190,20 +238,27 @@ final class ChatRoomViewController: MessagesViewController {
 //    MARK: Configure Messages Collection View
     private func configureMessagesCollectionView() {
         self.messagesCollectionView.backgroundColor = .clear
+        self.messagesCollectionView.alpha = .zero
         self.messagesCollectionView.messagesDataSource = self
         self.messagesCollectionView.messagesLayoutDelegate = self
         self.messagesCollectionView.messagesDisplayDelegate = self
         self.messagesCollectionView.messageCellDelegate = self
-        self.messagesCollectionView.scrollToLastItem()
-        self.presenter.callBack?()
+        self.showMessageTimestampOnSwipeLeft = true
+        self.scrollsToLastItemOnKeyboardBeginsEditing = true
     }
     
 //    MARK: Configure Message Input Bar
     private func configureMessageInputBar() {
+        self.messageInputBar.alpha = .zero
         self.messageInputBar.delegate = self
         self.messageInputBar.backgroundColor = .textFieldColor
         self.messageInputBar.inputTextView.backgroundColor = .textFieldColor
-        self.messageInputBar.sendButton.setImage(.init(systemName: "arrow.up"), for: .normal)
+        
+        if #available(iOS 13.0, *) {
+            self.messageInputBar.sendButton.setImage(.init(systemName: "arrow.up"), for: .normal)
+        } else {
+            self.messageInputBar.sendButton.setImage(.init(named: "arrow.up")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
         self.messageInputBar.sendButton.setTitle(nil, for: .normal)
         self.messageInputBar.sendButton.backgroundColor = .textFieldColor
         self.messageInputBar.sendButton.tintColor = .accentColor
@@ -223,48 +278,91 @@ final class ChatRoomViewController: MessagesViewController {
         self.present(self.imagePickerController, animated: true)
     }
     
+    @objc private func keyboadWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.messagesCollectionView.contentInset.bottom = keyboardSize.height
+            self.messagesCollectionView.verticalScrollIndicatorInsets = UIEdgeInsets(
+                top: 0,
+                left: 0,
+                bottom: keyboardSize.height,
+                right: 0
+            )
+            self.messagesCollectionView.setContentOffset(.init(
+                x: 0,
+                y: max(self.messagesCollectionView.contentSize.height - self.messagesCollectionView.bounds.size.height, 0)
+            ), animated: true)
+        }
+    }
+    
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        self.messagesCollectionView.contentInset.bottom = .zero
+        self.messagesCollectionView.verticalScrollIndicatorInsets = .zero
+    }
+    
 }
 
 //MARK: Extension
 extension ChatRoomViewController: UINavigationControllerDelegate { }
 
 extension ChatRoomViewController: MessagesDataSource {
-    
-    var currentSender: MessageKit.SenderType {
-        self.presenter.chatRoom?.users.filter { [ weak self ] user in user.id == self?.presenter.getUserID() }.first ?? User.Output(
-            id: self.presenter.getUserID(),
-            name: self.presenter.getUserName() ?? String(),
-            deals: [Deal.Output](),
-            boughtDeals: [Deal.Output](),
-            ads: [Ad.Output](),
-            myOffers: [Offer.Output](),
-            offers: [Offer.Output](),
-            chatRooms: [ChatRoom.Output](),
-            isPremiumUser: .random()
-        )
+    func currentSender() -> MessageKit.SenderType {
+        guard let user = self.presenter.chatRoom?.users.first(where: { [ weak self ] user in
+            user.id == self?.presenter.getUserID()
+        }) else {
+            return User.SenderType(
+                senderId: self.presenter.getUserID()?.uuidString ?? .init(),
+                displayName: self.presenter.getUserName() ?? .init()
+            )
+        }
+        
+        return User.SenderType(senderId: user.id?.uuidString ?? .init(), displayName: user.name)
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) -> MessageKit.MessageType {
-        self.presenter.chatRoom?.messages.sorted { $0.sentDate < $1.sentDate }[indexPath.section] ?? Message.Output(
-            text: String(),
-            isViewed: .random(),
-            user: User.Output(
-                id: self.presenter.getUserID(),
-                name: self.presenter.getUserName() ?? String(),
-                deals: [Deal.Output](),
-                boughtDeals: [Deal.Output](),
-                ads: [Ad.Output](),
-                myOffers: [Offer.Output](),
-                offers: [Offer.Output](),
-                chatRooms: [ChatRoom.Output](),
-                isPremiumUser: .random()
-            ),
-            chatRoom: ChatRoom.Output(users: [User.Output](),messages: [Message.Output]())
+        guard let message = self.presenter.chatRoom?.messages.sorted(by: {
+            $0.createdAt ?? .init() < $1.createdAt ?? .init()
+        })[indexPath.section] else {
+            return Message.MessageType(
+                sender: User.SenderType(
+                    senderId: self.presenter.getUserID()?.uuidString ?? .init(),
+                    displayName: self.presenter.getUserName() ?? .init()
+                ),
+                messageId: .init(),
+                sentDate: .init(),
+                kind: .text(.init())
+            )
+        }
+        
+        guard let data = message.bodyData, let image = UIImage(data: data) else {
+            return Message.MessageType(
+                sender: User.SenderType(senderId: message.user.id?.uuidString ?? .init(), displayName: message.user.name),
+                messageId: message.id?.uuidString ?? .init(),
+                sentDate: ISO8601DateFormatter().date(from: message.createdAt ?? .init()) ?? .init(),
+                kind: .text(message.text ?? .init())
+            )
+        }
+        
+        return Message.MessageType(
+            sender: User.SenderType(senderId: message.user.id?.uuidString ?? .init(), displayName: message.user.name),
+            messageId: message.id?.uuidString ?? .init(),
+            sentDate: ISO8601DateFormatter().date(from: message.createdAt ?? .init()) ?? .init(),
+            kind: .photo(Message.MediaItem(size: image.size, image: image, placeholderImage: image))
         )
     }
     
     func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int {
         self.presenter.chatRoom?.messages.count ?? .zero
+    }
+    
+    func messageTimestampLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "EEEE, MMM d, yyyy"
+                
+        return .init(
+            string: dateFormatter.string(from: message.sentDate),
+            attributes: [.font : UIFont.boldSystemFont(ofSize: 10), .foregroundColor : UIColor.lightGray]
+        )
     }
     
 }
@@ -292,9 +390,23 @@ extension ChatRoomViewController: MessagesDisplayDelegate {
 extension ChatRoomViewController: MessageCellDelegate {
     
     func didTapImage(in cell: MessageCollectionViewCell) {
-        guard let index = self.presenter.chatRoom?.messages
+        if #available(iOS 13.0, *) {
+            guard let index = self.presenter.chatRoom?.messages
+                .map({ $0.bodyData })
+                .firstIndex(of: cell.largeContentImage?.pngData()),
+                  let viewController = self.browseImagesViewController else {
+                return
+            }
+            
+            self.navigationController?.pushViewController(viewController, animated: true)
+            
+            viewController.scrollToImage(at: .init(item: index, section: .zero))
+        }
+        
+        guard let cell = cell as? MediaMessageCell,
+              let index = self.presenter.chatRoom?.messages
             .map({ $0.bodyData })
-            .firstIndex(of: cell.largeContentImage?.pngData()),
+            .firstIndex(of: cell.imageView.image?.pngData()),
               let viewController = self.browseImagesViewController else {
             return
         }
@@ -312,6 +424,8 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
         if let datas = self.photosCollectionView.images
             .map({ $0.jpegData(compressionQuality: 0.7) }).filter({ $0 != nil }) as? [Data] {
             for data in datas {
+                print(data)
+                
                 self.presenter.sendMessage(.init(
                     bodyData: data,
                     userID: self.presenter.getUserID() ?? .init(),
@@ -333,6 +447,15 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
         ))
         self.messagesCollectionView.scrollToLastItem()
         
+//        Maybe later. If it will be needed
+//        self.presenter.playOnSendMessageSound()
+        
+        guard self.presenter.chatRoom?.id == nil else {
+            return
+        }
+        
+        self.presenter.addID()
+                
         inputBar.inputTextView.text = .init()
     }
     

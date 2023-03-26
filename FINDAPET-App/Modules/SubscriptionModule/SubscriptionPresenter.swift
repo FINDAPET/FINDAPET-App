@@ -45,6 +45,11 @@ final class SubscriptionPresenter {
         self.interactor.makePayment(product, callBack: callBack)
     }
     
+//    MARK: Notification Center
+    func reloadProfileScreen() {
+        self.interactor.notificationCenterManagerPost(.reloadProfileScreen)
+    }
+    
 //    MARK: User Defaults
     func setPremiumUserDate(_ value: Date) {
         self.interactor.set(value, to: .premiumUserDate)
@@ -60,6 +65,11 @@ final class SubscriptionPresenter {
     
     func getUserID() -> String? {
         self.interactor.get(.id) as? String
+    }
+    
+//    MARK: Routing
+    func getSubscriptionInforamation() -> SubscriptionInformationView? {
+        self.router.getSubscriptionInforamation()
     }
     
 }

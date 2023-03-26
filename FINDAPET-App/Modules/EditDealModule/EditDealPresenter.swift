@@ -10,6 +10,7 @@ import StoreKit
 
 final class EditDealPresenter {
     
+    let isCreate: Bool
     var callBack: ((Deal.Input) -> Void)?
     var secondCallBack: (() -> Void)?
     lazy var deal = Deal.Input(
@@ -17,9 +18,12 @@ final class EditDealPresenter {
         photoDatas: .init(),
         isPremiumDeal: self.getNextDealIsPremium() ?? false,
         mode: .everywhere,
+        petClass: .allClass,
+        birthDate: .init(),
+        currencyName: .getCurrency(wtih: self.getUserCurrency() ?? .init()) ?? .USD,
         catteryID: self.getUserID() ?? .init()
     ) {
-        didSet {
+        didSet {            
             self.callBack?(self.deal)
         }
     }
@@ -27,9 +31,10 @@ final class EditDealPresenter {
     private let interactor: EditDealInteractor
     
     
-    init(router: EditDealRouter, interactor: EditDealInteractor, deal: Deal.Input? = nil) {
+    init(router: EditDealRouter, interactor: EditDealInteractor, deal: Deal.Input? = nil, isCreate: Bool = true) {
         self.router = router
         self.interactor = interactor
+        self.isCreate = isCreate
         
         guard let deal = deal else {
             return
@@ -39,29 +44,31 @@ final class EditDealPresenter {
     }
     
 //    MARK: Properties
-    private(set) var petTypes = [PetTypeEntity]() {
-        didSet {
+    private(set) var petTypes = [PetType.Entity]() {
+        didSet {            
             self.secondCallBack?()
         }
     }
         
-    var allBreeds: [PetBreedEntity] {
-        var petBreeds = [PetBreedEntity]()
+    var allBreeds: [PetBreed.Entity] {
+        var petBreeds = [PetBreed.Entity]()
         
         for petType in self.petTypes {
-            guard let breeds = petType.petBreeds else {
-                continue
-            }
-            
-            petBreeds += breeds
+            petBreeds += petType.petBreeds
         }
         
         return petBreeds
+            .sorted { $0.name.first ?? "a" < $1.name.first ?? "a" }
+            .sorted { $0.name != "Other" && $1.name == "Other" }
     }
     
 //    MARK: Requests
     func createDeal(completionHandler: @escaping (Error?) -> Void) {
-        self.interactor.createDeal(deal, completionHandler: completionHandler)
+        self.interactor.createDeal(self.deal, completionHandler: completionHandler)
+    }
+    
+    func changeDeal(completionHandler: @escaping (Error?) -> Void) {
+        self.interactor.changeDeal(self.deal, completionHandler: completionHandler)
     }
     
 //    MARK: Notifcation Center
@@ -69,9 +76,17 @@ final class EditDealPresenter {
         self.interactor.notificationCenterManagerPost(.reloadProfileScreen)
     }
     
+    func notificationCenterManagerPostUpdateDealScreen() {
+        self.interactor.notificationCenterManagerPost(.reloadDealScreen, additional: self.deal.id?.uuidString)
+    }
+    
+    func notificationCenterManagerPostUpdateFeedScreen() {
+        self.interactor.notificationCenterManagerPost(.reloadFeedScreen)
+    }
+    
 //    MARK: User Defaults
     func getUserID() -> UUID? {
-        self.interactor.getUserDefaults(.id) as? UUID
+        .init(uuidString: self.interactor.getUserDefaults(.id) as? String ?? .init())
     }
     
     func getUserCurrency() -> String? {
@@ -98,57 +113,70 @@ final class EditDealPresenter {
         self.interactor.getUserDefaults(.petClasses) as? [String]
     }
     
-    func getTypesClasses() -> [String]? {
-        self.interactor.getUserDefaults(.petTypes) as? [String]
-    }
-    
-    func getPetBreeds() -> [String]? {
-        self.interactor.getUserDefaults(.petBreeds) as? [String]
-    }
-    
-    func getCatBreeds() -> [String]? {
-        self.interactor.getUserDefaults(.catBreeds) as? [String]
-    }
-    
-    func getDogBreeds() -> [String]? {
-        self.interactor.getUserDefaults(.dogBreeds) as? [String]
-    }
-    
-    func getPetType() -> [String]? {
-        self.interactor.getUserDefaults(.petTypes) as? [String]
-    }
-    
     func getAllCurrencies() -> [String]? {
         self.interactor.getUserDefaults(.currencies) as? [String]
     }
     
+    func getCountry() -> String? {
+        self.interactor.getUserDefaults(.country) as? String
+    }
+    
+    func getCity() -> String? {
+        self.interactor.getUserDefaults(.city) as? String
+    }
+    
 //    MARK: Purchase
     func getProducts(_ completionHandler: @escaping ([SKProduct]) -> Void) {
-//        PurchaseManager.shared.getProducts([.premiumDeal], callBack: completionHandler)
+        PurchaseManager.shared.getProducts([.premiumDeal], callBack: completionHandler)
     }
     
     func makePayment(_ product: SKProduct, completionHandler: @escaping (Error?) -> Void) {
-//        PurchaseManager.shared.makePayment(product, callBack: completionHandler)
+        PurchaseManager.shared.makePayment(product, callBack: completionHandler)
     }
     
 //    MARK: Core Data
     func getAllPetTypes(_ completionHandler: @escaping ([PetTypeEntity], Error?) -> Void = { _, _ in }) {
-        let newCompletionHandler = { [ weak self ] petTypes, error in
-            completionHandler(petTypes, error)
+        let newCompletionHandler: ([PetTypeEntity], Error?) -> Void = { [ weak self ] newPetTypes, error in
+            completionHandler(newPetTypes, error)
             
+            var types = [PetType.Entity]()
+                                    
             if let error = error {
                 print("❌ Error: \(error.localizedDescription)")
                 
                 return
             }
             
-            guard !petTypes.isEmpty else {
+            guard !newPetTypes.isEmpty else {
                 print("❌ Error: pet types is empty.")
                 
                 return
             }
             
-            self?.petTypes = petTypes
+            for newPetType in Set(newPetTypes) {
+                var type = PetType.Entity(
+                    id: newPetType.id,
+                    name: newPetType.name,
+                    imageData: newPetType.imageData,
+                    petBreeds: .init()
+                )
+                
+                for petBreed in newPetType.petBreeds {
+                    type.petBreeds.append(.init(
+                        id: petBreed.id,
+                        name: "\(petBreed.name ?? .init())",
+                        petType: type
+                    ))
+                }
+                
+                type.petBreeds = type.petBreeds
+                    .sorted { $0.name.first ?? "a" < $1.name.first ?? "a" }
+                    .sorted { $0.name != "Other" && $1.name == "Other" }
+                
+                types.append(type)
+            }
+            
+            self?.petTypes = types
         }
         
         self.interactor.getAllPetTypes(newCompletionHandler)

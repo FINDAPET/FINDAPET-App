@@ -167,7 +167,6 @@ final class SettingsBlockView: UIView {
         }
         
         self.currencyValueLabel.snp.makeConstraints { make in
-//            make.trailing.equalToSuperview().inset(15)
             make.top.equalTo(self.cityTextField.snp.bottom).inset(-15)
             make.leading.equalTo(self.currencyLabel.snp.trailing).inset(-15)
             make.height.equalTo(50)

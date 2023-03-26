@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Gzip
 
 final class RequestManager {
     
@@ -20,6 +21,7 @@ final class RequestManager {
         
         req.httpMethod = method.rawValue
         req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
+        req.addValue(Headers.gzip.rawValue, forHTTPHeaderField: Headers.contentEncoding.rawValue)
         
         if let authMode = authMode {
             switch authMode {
@@ -58,7 +60,7 @@ final class RequestManager {
                     return
                 }
                 
-                guard let data = data else {
+                guard let data = (try? data?.gunzipped()) ?? data else {
                     print("❌ Error: data is equal to nil.")
                     
                     DispatchQueue.main.async {
@@ -106,6 +108,7 @@ final class RequestManager {
         
         req.httpMethod = method.rawValue
         req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
+        req.addValue(Headers.gzip.rawValue, forHTTPHeaderField: Headers.contentEncoding.rawValue)
         
         if let authMode = authMode {
             switch authMode {
@@ -122,7 +125,8 @@ final class RequestManager {
             }
         }
         
-        if let sendData = try? JSONEncoder().encode(sendModel) {
+        if let sendData = (try? JSONEncoder().encode(sendModel).gzipped()) ?? (try? JSONEncoder().encode(sendModel)) {
+            req.setValue(.init(format: "%lu", UInt(sendData.count)), forHTTPHeaderField: Headers.contentLenght.rawValue)
             req.httpBody = sendData
             
             URLSession.shared.dataTask(with: req) { data, response, error in
@@ -147,7 +151,7 @@ final class RequestManager {
                         return
                     }
                     
-                    guard let data = data else {
+                    guard let data = (try? data?.gunzipped()) ?? data else {
                         print("❌ Error: data is equal to nil.")
                         
                         DispatchQueue.main.async {
@@ -202,6 +206,7 @@ final class RequestManager {
         
         req.httpMethod = method.rawValue
         req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
+        req.addValue(Headers.gzip.rawValue, forHTTPHeaderField: Headers.contentEncoding.rawValue)
         
         if let authMode = authMode {
             switch authMode {
@@ -218,10 +223,11 @@ final class RequestManager {
             }
         }
         
-        if let data = try? JSONEncoder().encode(model) {
+        if let data = (try? JSONEncoder().encode(model).gzipped()) ?? (try? JSONEncoder().encode(model)) {
+            req.setValue(.init(format: "%lu", UInt(data.count)), forHTTPHeaderField: Headers.contentLenght.rawValue)
             req.httpBody = data
             
-            URLSession.shared.dataTask(with: req) { data, response, error in
+            URLSession.shared.dataTask(with: req) { _, response, error in
                 if let error = error {
                     print("❌ Error: \(error.localizedDescription)")
                     
@@ -278,6 +284,7 @@ final class RequestManager {
         
         req.httpMethod = method.rawValue
         req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
+        req.addValue(Headers.gzip.rawValue, forHTTPHeaderField: Headers.contentEncoding.rawValue)
         
         if let authMode = authMode {
             switch authMode {
@@ -294,7 +301,7 @@ final class RequestManager {
             }
         }
         
-        URLSession.shared.dataTask(with: req) { data, response, error in
+        URLSession.shared.dataTask(with: req) { _, response, error in
             if let error = error {
                 print("❌ Error: \(error.localizedDescription)")
                 

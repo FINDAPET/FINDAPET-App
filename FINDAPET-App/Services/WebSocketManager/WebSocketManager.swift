@@ -6,26 +6,22 @@
 //
 
 import Foundation
+import Starscream
 
 final class WebSocketManager {
-    
+
 //    MARK: Request 1
     static func webSocket(
         url: URL,
-        authMode: WSAuthentaficationMode?,
+        authMode: WSAuthentaficationMode? = nil,
         completionHandler: @escaping (String?, Error?) -> Void
     ) -> WebSocketSender {
         var req = URLRequest(url: url)
-        let configuration = URLSessionConfiguration.default
-        
+
         req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
-        
-        configuration.sessionSendsLaunchEvents = true
-        configuration.isDiscretionary = true
-        configuration.allowsCellularAccess = true
-        configuration.shouldUseExtendedBackgroundIdleMode = true
-        configuration.waitsForConnectivity = true
-        
+        req.addValue(Headers.gzip.rawValue, forHTTPHeaderField: Headers.contentEncoding.rawValue)
+        req.setValue(.init(format: "%lu", UInt.max), forHTTPHeaderField: Headers.contentLenght.rawValue)
+                
         if let authMode = authMode {
             switch authMode {
             case .base(let email, let password):
@@ -40,52 +36,27 @@ final class WebSocketManager {
                 )
             }
         }
-        
-        let webSocketTask = URLSession(configuration: configuration).webSocketTask(with: req)
-        
-        webSocketTask.receive { result in
-            switch result {
-            case .success(let message):
-                switch message {
-                case .string(let string):
-                    completionHandler(string, nil)
-                default:
-                    break
-                }
-                
-                webSocketTask.cancel()
-            case .failure(let error):
-                print("❌ Error: \(error.localizedDescription)")
-                
-                completionHandler(nil, error)
-                
-                webSocketTask.cancel()
-                
-                return
-            }
-        }
-        
-        webSocketTask.resume()
-        
-        return WebSocketSender(webSocketTask)
+
+        let socket = WebSocket(request: req, compressionHandler: WSCompression())
+        let sender = WebSocketSender(socket: socket)
+
+        sender.onTextAction = completionHandler
+        socket.delegate = sender
+        socket.connect()
+
+        return sender
     }
-    
+
 //    MARK: Request 2
-    static func webSocket<T: Decodable>(
+    static func webSocket(
         url: URL,
-        authMode: WSAuthentaficationMode?,
-        completionHandler: @escaping (T?, Error?) -> Void
+        authMode: WSAuthentaficationMode? = nil,
+        completionHandler: @escaping (Data?, Error?) -> Void
     ) -> WebSocketSender {
         var req = URLRequest(url: url)
-        let configuration = URLSessionConfiguration.default
-        
+
         req.setValue(Headers.applicationJson.rawValue, forHTTPHeaderField: Headers.contentType.rawValue)
-        
-        configuration.sessionSendsLaunchEvents = true
-        configuration.isDiscretionary = true
-        configuration.allowsCellularAccess = true
-        configuration.shouldUseExtendedBackgroundIdleMode = true
-        configuration.waitsForConnectivity = true
+        req.addValue(Headers.gzip.rawValue, forHTTPHeaderField: Headers.contentEncoding.rawValue)
         
         if let authMode = authMode {
             switch authMode {
@@ -102,41 +73,24 @@ final class WebSocketManager {
             }
         }
         
-        let webSocketTask = URLSession(configuration: configuration).webSocketTask(with: req)
+        var socket: WebSocket!
         
-        webSocketTask.receive { result in
-            switch result {
-            case .success(let message):
-                switch message {
-                case .data(let data):
-                    guard let model = try? JSONDecoder().decode(T.self, from: data) else {
-                        print("❌ Error: decoding failed.")
-                        
-                        completionHandler(nil, RequestErrors.decodingFailed)
-                        
-                        return
-                    }
-                    
-                    completionHandler(model, nil)
-                default:
-                    break
-                }
-                
-                webSocketTask.cancel()
-            case .failure(let error):
-                print("❌ Error: \(error.localizedDescription)")
-                
-                completionHandler(nil, error)
-                
-                webSocketTask.cancel()
-                
-                return
-            }
+        if #available(iOS 13.0, *) {
+            socket = WebSocket(request: req, engine: NativeEngine())
+        } else {
+            socket = WebSocket(
+                request: req,
+                engine: WSEngine(transport: TCPTransport(), compressionHandler: WSCompression())
+            )
         }
         
-        webSocketTask.resume()
-        
-        return WebSocketSender(webSocketTask)
+        let sender = WebSocketSender(socket: socket)
+
+        sender.onBinaryAction = completionHandler
+        socket.delegate = sender
+        socket.connect()
+
+        return sender
     }
-    
+
 }

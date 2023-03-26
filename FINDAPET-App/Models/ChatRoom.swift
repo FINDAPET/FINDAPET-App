@@ -9,17 +9,17 @@ import Foundation
 
 struct ChatRoom {
     struct Input: Encodable {
-        var id: UUID?
+        var id: String?
         var usersID: [UUID]
         
-        init(id: UUID? = nil, usersID: [UUID] = [UUID]()) {
+        init(id: String? = nil, usersID: [UUID] = [UUID]()) {
             self.id = id
             self.usersID = usersID
         }
     }
     
     struct Output: Decodable {
-        var id: UUID?
+        var id: String?
         var users: [User.Output]
         var messages: [Message.Output]
     }

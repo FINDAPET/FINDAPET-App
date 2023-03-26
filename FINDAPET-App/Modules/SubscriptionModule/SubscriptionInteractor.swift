@@ -39,6 +39,11 @@ final class SubscriptionInteractor {
         UserDefaultsManager.write(data: value, key: key)
     }
     
+//    MARK: Notification Center
+    func notificationCenterManagerPost(_ key: NotificationCenterManagerKeys, additional parameters: String? = nil) {
+        NotificationCenterManager.post(key, additional: parameters)
+    }
+    
 //    MARK: - Keychain
     private func getBearrerToken() -> String? {
         KeychainManager.shared.read(key: .token)

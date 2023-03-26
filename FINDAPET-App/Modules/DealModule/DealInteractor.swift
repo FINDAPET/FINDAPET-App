@@ -67,8 +67,17 @@ final class DealInteractor {
     }
     
 //    MARK: Notification Center
-    func notificationCenterManagerPost(_ key: NotificationCenterManagerKeys) {
-        NotificationCenterManager.post(key)
+    func notificationCenterManagerPost(_ key: NotificationCenterManagerKeys, additional parameter: String? = nil) {
+        NotificationCenterManager.post(key, additional: parameter)
+    }
+    
+    func notificationCenterManagerAddObserver(
+        _ observer: Any,
+        name: NotificationCenterManagerKeys,
+        additional parameter: String? = nil,
+        action: Selector
+    ) {
+        NotificationCenterManager.addObserver(observer, name: name, additional: parameter, action: action)
     }
     
 //    MARK: Keychain

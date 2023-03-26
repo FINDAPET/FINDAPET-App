@@ -74,7 +74,7 @@ extension ImageWithXmarkCollectionView: UICollectionViewDataSource {
         cell.photoImageView.clipsToBounds = true
         cell.photoImageView.layer.masksToBounds = true
         cell.photoImageView.layer.cornerRadius = 25
-        cell.image = self.images[indexPath.item]
+        cell.imageData = self.images[indexPath.item].pngData()
         cell.delegate = self
         
         return cell
@@ -104,7 +104,7 @@ extension ImageWithXmarkCollectionView: ImageWithXmarkCollectionViewCellDelegate
     
     func imageWithXmarkCollectionViewCell(_ cell: ImageWithXmarkCollectionViewCell, didTapXmarkButton xmarkButton: UIButton) {
         for i in 0 ..< self.images.count {
-            if cell.image == self.images[i] {
+            if cell.imageData == self.images[i].pngData() {
                 self.images.remove(at: i)
                 
                 break

@@ -8,5 +8,5 @@
 import Foundation
 
 enum NotificationCenterManagerKeys: String {
-    case reloadProfileScreen, hideNotViewedMessagesCountLabelInChatRoomWithID
+    case reloadProfileScreen, hideNotViewedMessagesCountLabelInChatRoomWithID, reloadDealScreen, reloadFeedScreen
 }

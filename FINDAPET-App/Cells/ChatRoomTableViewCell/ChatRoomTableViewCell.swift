@@ -40,8 +40,11 @@ final class ChatRoomTableViewCell: UITableViewCell {
                 message.user.id != self?.getUserID() && !message.isViewed
             }.count
             
-            self.lastMessageLabel.text = self.chatRoom?.messages.sorted { $0.sentDate < $1.sentDate }.first?.text
-            self.notViewedMessagesCountLabel.text = " \(count) "
+            self.lastMessageLabel.text = self.chatRoom?.messages.sorted {
+                ISO8601DateFormatter().date(from: $0.createdAt ?? .init()) ?? .init() <
+                    ISO8601DateFormatter().date(from: $1.createdAt ?? .init()) ?? .init()
+            }.first?.text
+            self.notViewedMessagesCountLabel.text = "\(count)"
             
             if count != .zero {
                 self.notViewedMessagesCountLabel.isHidden = false
@@ -92,7 +95,7 @@ final class ChatRoomTableViewCell: UITableViewCell {
         view.isHidden = true
         view.clipsToBounds = true
         view.layer.masksToBounds = true
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 15
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -126,8 +129,7 @@ final class ChatRoomTableViewCell: UITableViewCell {
         self.notViewedMessagesCountLabel.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(15)
             make.centerY.equalTo(self.lastMessageLabel)
-            make.height.equalTo(20)
-            make.width.greaterThanOrEqualTo(20)
+            make.height.width.equalTo(30)
         }
     }
     
@@ -136,9 +138,14 @@ final class ChatRoomTableViewCell: UITableViewCell {
         NotificationCenterManager.addObserver(
             self,
             name: .hideNotViewedMessagesCountLabelInChatRoomWithID,
-            additional: self.chatRoom?.id?.uuidString,
+            additional: self.chatRoom?.id,
             action: #selector(self.hideNotViewedMessagesCountLabelAction)
         )
+    }
+    
+//    MARK: Edititng
+    func hideNotViewedMessagesCountLabel() {
+        self.notViewedMessagesCountLabel.isHidden = true
     }
     
 //    MARK: User Defautls

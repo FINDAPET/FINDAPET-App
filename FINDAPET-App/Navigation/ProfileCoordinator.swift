@@ -14,10 +14,11 @@ protocol ProfileCoordinatable {
 
 final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
     
-    var coordinatorDelegate: MainTabBarCoordinator?
-    
+//    MARK: Properties
+    weak var coordinatorDelegate: MainTabBarCoordinator?
     let navigationController = UINavigationController()
     
+//    MARK: Start
     func start() {
         self.setupViews()
         self.goToProfile()
@@ -183,16 +184,16 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
     }
     
 //    MARK: Chat Room
-    func getChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) -> ChatRoomViewController {
-        let coordinator = ChatRoomCoordinator()
-        
-        coordinator.start()
-        
-        return coordinator.getChatRoom(chatRoom: chatRoom, userID: userID)
+    func getChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) -> ChatRoomViewController? {
+        self.coordinatorDelegate?.getChatRoom(chatRoom: chatRoom, userID: userID)
     }
     
     func goToChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) {
-        self.navigationController.pushViewController(self.getChatRoom(chatRoom: chatRoom, userID: userID), animated: true)
+        guard let chatRoomViewController = self.getChatRoom(chatRoom: chatRoom, userID: userID) else {
+            return
+        }
+        
+        self.navigationController.pushViewController(chatRoomViewController, animated: true)
     }
     
 //    MARK: Info
@@ -251,13 +252,32 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getBrowseImage(dataSource), animated: true)
     }
     
+//    MARK: Edit Deal
+    func getEditDeal(_ deal: Deal.Input, isCreate: Bool = true) -> EditDealViewController {
+        EditDealCoordinator().getEditDeal(deal: deal, isCreate: isCreate)
+    }
+    
+    func goToEditDeal(_ deal: Deal.Input, isCreate: Bool = true) {
+        self.navigationController.pushViewController(self.getEditDeal(deal, isCreate: isCreate), animated: true)
+    }
+    
 //    MARK: Setup Views
     private func setupViews() {
-        self.navigationController.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Profile", comment: ""),
-            image: UIImage(systemName: "person"),
-            selectedImage: UIImage(systemName: "person")
-        )
+        if #available(iOS 13.0, *) {
+            self.navigationController.tabBarItem = UITabBarItem(
+                title: NSLocalizedString("Profile", comment: ""),
+                image: UIImage(systemName: "person"),
+                selectedImage: UIImage(systemName: "person")
+            )
+        } else {
+            self.navigationController.navigationBar.tintColor = .accentColor
+            self.navigationController.tabBarItem = UITabBarItem(
+                title: NSLocalizedString("Profile", comment: ""),
+                image: UIImage(named: "person")?.withRenderingMode(.alwaysTemplate),
+                selectedImage: UIImage(named: "person")?.withRenderingMode(.alwaysTemplate)
+            )
+        }
+        
         self.navigationController.navigationBar.isHidden = true
     }
     

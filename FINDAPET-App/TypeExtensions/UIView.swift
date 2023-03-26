@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 extension UIView {
     
@@ -117,7 +118,8 @@ extension UIView {
             
             view.text = "\(key):"
             view.textColor = .textColor
-            view.font = .systemFont(ofSize: 24, weight: .semibold)
+            view.adjustsFontSizeToFitWidth = true
+            view.setContentHuggingPriority(.required, for: .horizontal)
             view.translatesAutoresizingMaskIntoConstraints = false
             
             return view
@@ -128,7 +130,7 @@ extension UIView {
             
             view.text = value
             view.textColor = .textColor
-            view.font = .systemFont(ofSize: 24)
+            view.adjustsFontSizeToFitWidth = true
             view.translatesAutoresizingMaskIntoConstraints = false
             
             return view

@@ -14,4 +14,11 @@ struct PetType {
         var imageData: Data
         var petBreeds: [PetBreed.Output]
     }
+    
+    struct Entity: Hashable {
+        var id: UUID?
+        var name: String
+        var imageData: Data
+        var petBreeds: [PetBreed.Entity]
+    }
 }

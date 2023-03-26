@@ -23,21 +23,17 @@ final class FilterPresenter {
     }
     
 //    MARK: Properties
-    private(set) var petTypes = [PetTypeEntity]() {
+    private(set) var petTypes = [PetType.Entity]() {
         didSet {
             self.callBack?()
         }
     }
         
-    var allBreeds: [PetBreedEntity] {
-        var petBreeds = [PetBreedEntity]()
+    var allBreeds: [PetBreed.Entity] {
+        var petBreeds = [PetBreed.Entity]()
         
         for petType in self.petTypes {
-            guard let breeds = petType.petBreeds else {
-                continue
-            }
-            
-            petBreeds += breeds
+            petBreeds += petType.petBreeds
         }
         
         return petBreeds
@@ -88,22 +84,47 @@ final class FilterPresenter {
     
 //    MARK: Core Data
     func getAllPetTypes(_ completionHandler: @escaping ([PetTypeEntity], Error?) -> Void = { _, _ in }) {
-        let newCompletionHandler = { [ weak self ] petTypes, error in
-            completionHandler(petTypes, error)
+        let newCompletionHandler: ([PetTypeEntity], Error?) -> Void = { [ weak self ] newPetTypes, error in
+            completionHandler(newPetTypes, error)
             
+            var types = [PetType.Entity]()
+                                    
             if let error = error {
                 print("❌ Error: \(error.localizedDescription)")
                 
                 return
             }
             
-            guard !petTypes.isEmpty else {
+            guard !newPetTypes.isEmpty else {
                 print("❌ Error: pet types is empty.")
                 
                 return
             }
             
-            self?.petTypes = petTypes
+            for newPetType in Set(newPetTypes) {
+                var type = PetType.Entity(
+                    id: newPetType.id,
+                    name: newPetType.name,
+                    imageData: newPetType.imageData,
+                    petBreeds: .init()
+                )
+                
+                for petBreed in newPetType.petBreeds {
+                    type.petBreeds.append(.init(
+                        id: petBreed.id,
+                        name: "\(petBreed.name ?? .init())",
+                        petType: type
+                    ))
+                }
+                
+                type.petBreeds = type.petBreeds
+                    .sorted { $0.name.first ?? "a" < $1.name.first ?? "a" }
+                    .sorted { $0.name != "Other" && $1.name == "Other" }
+                
+                types.append(type)
+            }
+            
+            self?.petTypes = types
         }
         
         self.interactor.getAllPetTypes(newCompletionHandler)

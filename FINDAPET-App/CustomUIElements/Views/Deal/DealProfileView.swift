@@ -11,11 +11,11 @@ import SnapKit
 final class DealProfileView: UIView {
 
     private let user: User.Output
-    private let avatarImageTapAction: () -> Void
+    private let didTapViewAction: () -> Void
     
-    init(user: User.Output, avatarImageTapAction: @escaping () -> Void) {
+    init(user: User.Output, didTapViewAction: @escaping () -> Void) {
         self.user = user
-        self.avatarImageTapAction = avatarImageTapAction
+        self.didTapViewAction = didTapViewAction
         
         super.init(frame: .zero)
     }
@@ -61,7 +61,17 @@ final class DealProfileView: UIView {
     }()
     
     private lazy var checkmarkImageView: UIImageView = {
-        let view = UIImageView(image: .init(systemName: "checkmark"))
+        if #available(iOS 13.0, *) {
+            let view = UIImageView(image: .init(systemName: "checkmark"))
+            
+            view.tintColor = .accentColor
+            view.isHidden = !self.user.isPremiumUser
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIImageView(image: .init(named: "checkmark")?.withRenderingMode(.alwaysTemplate))
         
         view.tintColor = .accentColor
         view.isHidden = !self.user.isPremiumUser
@@ -83,6 +93,8 @@ final class DealProfileView: UIView {
         self.clipsToBounds = true
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 25
+        self.isUserInteractionEnabled = true
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapView)))
         
         self.addSubview(self.avatarImageView)
         self.addSubview(self.nameLabel)
@@ -114,8 +126,8 @@ final class DealProfileView: UIView {
     }
     
 //    MARK: Actions
-    @objc private func didTapAvatarImageView() {
-        self.avatarImageTapAction()
+    @objc private func didTapView() {
+        self.didTapViewAction()
     }
     
 }

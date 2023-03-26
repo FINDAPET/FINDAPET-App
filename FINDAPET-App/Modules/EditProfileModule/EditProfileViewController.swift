@@ -66,7 +66,12 @@ final class EditProfileViewController: UIViewController {
     private lazy var avatarImageView: UIImageView = {
         let view = UIImageView()
         
-        view.image = self.presenter.user.avatarData == nil ? UIImage(systemName: "plus") : UIImage(data: self.presenter.user.avatarData ?? Data())
+        if #available(iOS 13.0, *) {
+            view.image = self.presenter.user.avatarData == nil ? UIImage(systemName: "plus") : UIImage(data: self.presenter.user.avatarData ?? Data())
+        } else {
+            view.image = self.presenter.user.avatarData == nil ? UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate) : UIImage(data: self.presenter.user.avatarData ?? Data())
+        }
+        
         view.backgroundColor = .textFieldColor
         view.tintColor = .lightGray
         view.layer.cornerRadius = 75
@@ -84,7 +89,12 @@ final class EditProfileViewController: UIViewController {
     private lazy var documentImageView: UIImageView = {
         let view = UIImageView()
         
-        view.image = self.presenter.user.documentData == nil ? UIImage(systemName: "plus") : UIImage(data: self.presenter.user.documentData ?? Data())
+        if #available(iOS 13.0, *) {
+            view.image = self.presenter.user.avatarData == nil ? UIImage(systemName: "plus") : UIImage(data: self.presenter.user.avatarData ?? Data())
+        } else {
+            view.image = self.presenter.user.avatarData == nil ? UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate) : UIImage(data: self.presenter.user.avatarData ?? Data())
+        }
+        
         view.backgroundColor = .textFieldColor
         view.tintColor = .lightGray
         view.layer.cornerRadius = 25
@@ -129,8 +139,12 @@ final class EditProfileViewController: UIViewController {
     private lazy var checkmarkImageView: UIImageView = {
         let view = UIImageView()
         
-        view.image = UIImage(systemName: self.presenter.user.documentData == nil ? "square" : "checkmark.square")
-        view.image?.withTintColor(.accentColor)
+        if #available(iOS 13.0, *) {
+            view.image = UIImage(systemName: self.presenter.user.documentData == nil ? "square" : "checkmark.square")
+        } else {
+            view.image = UIImage(named: self.presenter.user.documentData == nil ? "square" : "checkmark.square")?.withRenderingMode(.alwaysTemplate)
+        }
+        view.tintColor = .accentColor
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapCheckmarkImageView)))
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -394,8 +408,14 @@ final class EditProfileViewController: UIViewController {
             self.catteryDocumentLabel.isHidden = false
             self.documentImageView.isHidden = false
             self.infoLabel.isHidden = false
-            self.checkmarkImageView.image = UIImage(systemName: "checkmark.square")
-            self.checkmarkImageView.image?.withTintColor(.accentColor)
+            
+            if #available(iOS 13.0, *) {
+                self.checkmarkImageView.image = UIImage(systemName: "checkmark.square")
+            } else {
+                self.checkmarkImageView.image = UIImage(named: "checkmark.square")?.withRenderingMode(.alwaysTemplate)
+            }
+            
+            self.checkmarkImageView.tintColor = .accentColor
             
             UIView.animate(withDuration: 0.35) { [ weak self ] in
                 guard let self = self else {
@@ -430,8 +450,14 @@ final class EditProfileViewController: UIViewController {
             }
         } else {
             self.presenter.user.isCatteryWaitVerify = false
-            self.checkmarkImageView.image = UIImage(systemName: "square")
-            self.checkmarkImageView.image?.withTintColor(.accentColor)
+            
+            if #available(iOS 13.0, *) {
+                self.checkmarkImageView.image = UIImage(systemName: "square")
+            } else {
+                self.checkmarkImageView.image = UIImage(named: "square")?.withRenderingMode(.alwaysTemplate)
+            }
+            
+            self.checkmarkImageView.tintColor = .accentColor
             
             UIView.animate(withDuration: 0.5) { [ weak self ] in
                 self?.catteryDocumentLabel.alpha = 0

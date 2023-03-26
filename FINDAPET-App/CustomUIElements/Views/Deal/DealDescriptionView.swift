@@ -17,6 +17,8 @@ final class DealDescriptionView: UIView {
         self.deal = deal
         
         super.init(frame: .zero)
+        
+        self.setupViews()
     }
     
     required init?(coder: NSCoder) {
@@ -57,7 +59,7 @@ final class DealDescriptionView: UIView {
     private let buyerStackView: UIStackView = {
         let view = UIStackView()
         
-        view.axis = .vertical
+        view.axis = .horizontal
         view.spacing = 10
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -99,6 +101,17 @@ final class DealDescriptionView: UIView {
         return view
     }()
     
+    private let commentTitleLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = NSLocalizedString("Comment", comment: .init())
+        view.textColor = .textColor
+        view.font = .systemFont(ofSize: 28, weight: .bold)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private lazy var descriptionLabel: UILabel = {
         let view = UILabel()
         
@@ -111,67 +124,91 @@ final class DealDescriptionView: UIView {
         return view
     }()
     
-    private lazy var keyValueStackViews = [
-        self.createKeyValueStackView(key: NSLocalizedString("Country", comment: String()), value: self.deal.country ?? String()),
-        self.createKeyValueStackView(key: NSLocalizedString("City", comment: String()), value: self.deal.city ?? String()),
+    private lazy var keyValueStackViews: [UIStackView] = [
         self.createKeyValueStackView(
             key: NSLocalizedString("Sex", comment: String()),
             value: NSLocalizedString(self.deal.isMale ? "Male" : "Female", comment: String())
         ),
-        self.createKeyValueStackView(key: NSLocalizedString("Mode", comment: String()), value: self.deal.mode),
+        self.createKeyValueStackView(key: NSLocalizedString("Sold", comment: String()), value: self.deal.mode),
         self.createKeyValueStackView(key: NSLocalizedString("Breed", comment: String()), value: self.deal.petBreed.name),
         self.createKeyValueStackView(key: NSLocalizedString("Show Class", comment: String()), value: self.deal.petClass.rawValue),
         self.createKeyValueStackView(key: NSLocalizedString("Pet Type", comment: String()), value: self.deal.petType.localizedNames[self.languageCode] ?? self.deal.petType.localizedNames["en"] ?? .init()),
-        self.createKeyValueStackView(key: NSLocalizedString("Age", comment: String()), value: self.deal.age),
+        self.createKeyValueStackView(key: NSLocalizedString("Age", comment: String()), value: { [ weak self ] in
+            guard let string = self?.deal.birthDate, let date = ISO8601DateFormatter().date(from: string) else {
+                return "–"
+            }
+
+            let dateFormatter = DateFormatter()
+
+            dateFormatter.dateFormat = "dd.MM.yyyy"
+
+            return dateFormatter.string(from: date)
+        }()),
         self.createKeyValueStackView(key: NSLocalizedString("Color", comment: String()), value: self.deal.color)
     ]
-    
-//    MARK: Life Cycle
-    override func layoutSubviews() {
-        super.layoutSubviews()
         
-        self.setupViews()
-    }
-    
 //    MARK: Setup Views
     private func setupViews() {
         self.backgroundColor = .textFieldColor
         self.layer.masksToBounds = true
         self.clipsToBounds = true
         self.layer.cornerRadius = 25
+        self.buyerStackView.isHidden = self.deal.buyer == nil
+        self.commentTitleLabel.isHidden = self.deal.description == nil
+        self.descriptionLabel.isHidden = self.deal.description == nil
+        
+        if let country = self.deal.country {
+            self.keyValueStackViews.append(self.createKeyValueStackView(
+                key: NSLocalizedString("Country", comment: .init()),
+                value: country
+            ))
+        }
+        
+        if let city = self.deal.city {
+            self.keyValueStackViews.append(self.createKeyValueStackView(
+                key: NSLocalizedString("City", comment: .init()),
+                value: city
+            ))
+        }
         
         self.addSubview(self.titleLabel)
         self.addSubview(self.descriptionStackView)
         self.addSubview(self.buyerStackView)
+        self.addSubview(self.commentTitleLabel)
         self.addSubview(self.descriptionLabel)
         
         self.buyerStackView.addArrangedSubviews(self.buyerKeyLabel, self.buyerAvastarImageView, self.buyerNameValueLabel)
-                
+        
         self.descriptionStackView.addArrangedSubviews(self.keyValueStackViews)
 
         self.titleLabel.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview().inset(15)
         }
-        
+
         self.descriptionStackView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(15)
             make.trailing.lessThanOrEqualToSuperview().inset(15)
             make.top.equalTo(self.titleLabel.snp.bottom).inset(-15)
         }
-        
+
         self.buyerStackView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(15)
             make.trailing.lessThanOrEqualToSuperview().inset(15)
             make.top.equalTo(self.descriptionStackView.snp.bottom).inset(-10)
         }
-        
+
         self.buyerAvastarImageView.snp.makeConstraints { make in
             make.width.height.equalTo(17)
         }
 
+        self.commentTitleLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(15)
+            make.top.equalTo(self.buyerStackView.snp.bottom).inset(-15)
+        }
+
         self.descriptionLabel.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview().inset(15)
-            make.top.equalTo(self.buyerStackView.snp.bottom).inset(-15)
+            make.top.equalTo(self.commentTitleLabel.snp.bottom).inset(-10)
         }
     }
     

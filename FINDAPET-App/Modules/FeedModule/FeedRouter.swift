@@ -23,4 +23,8 @@ final class FeedRouter: FeedCoordinatable {
         self.coordinatorDelegate?.getFilter(filter: filter, saveAction: saveAction)
     }
     
+    func goToSearch(with title: String?, _ onTapSearchButtonAction: @escaping (String) -> Void) {
+        self.coordinatorDelegate?.goToSearch(with: title, onTapSearchButtonAction)
+    }
+    
 }

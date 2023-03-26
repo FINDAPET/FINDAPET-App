@@ -12,7 +12,7 @@ final class DealPresenter {
     
     var callBack: (() -> Void)?
     private(set) var deal: Deal.Output? {
-        didSet {
+        didSet {            
             self.callBack?()
         }
     }
@@ -47,8 +47,8 @@ final class DealPresenter {
     }
     
 //    MARK: Requests
-    func getDeal(completionHandler: @escaping (Deal.Output?, Error?) -> Void) {
-        guard let dealID = self.dealID else {
+    func getDeal(completionHandler: @escaping (Deal.Output?, Error?) -> Void = { _, _ in }) {
+        guard let dealID = self.dealID ?? self.deal?.id else {
             completionHandler(nil, nil)
             
             return
@@ -89,7 +89,7 @@ final class DealPresenter {
                 petBreedID: deal.petBreed.id,
                 petClass: deal.petClass,
                 isMale: deal.isActive,
-                age: deal.age,
+                birthDate: ISO8601DateFormatter().date(from: deal.birthDate) ?? .init(),
                 color: deal.color,
                 price: Double(deal.price),
                 currencyName: Currency.getCurrency(wtih: deal.currencyName) ?? .USD,
@@ -97,12 +97,6 @@ final class DealPresenter {
                 country: deal.country,
                 city: deal.city,
                 description: deal.description,
-                whatsappNumber: deal.whatsappNumber,
-                telegramUsername: deal.telegramUsername,
-                instagramUsername: deal.instagramUsername,
-                facebookUsername: deal.facebookUsername,
-                vkUsername: deal.vkUsername,
-                mail: deal.mail,
                 buyerID: deal.buyer?.id
             ),
             completionHandler: completionHandler
@@ -122,6 +116,14 @@ final class DealPresenter {
     }
     
     func viewDeal(completionHandler: @escaping (Error?) -> Void = { _ in }) {
+        guard self.deal?.cattery.id != self.getUserID() else {
+            print("❌ Error: bad request")
+            
+            completionHandler(RequestErrors.statusCodeError(statusCode: 500))
+            
+            return
+        }
+        
         guard let id = self.deal?.id else {
             print("❌ Error: deal id is equal to nil.")
             
@@ -147,13 +149,40 @@ final class DealPresenter {
         self.interactor.notificationCenterManagerPost(.reloadProfileScreen)
     }
     
-//    MARK: Routing
-    func goToProfile(with id: UUID? = nil) {
-        self.router.goToProfile(with: id ?? self.deal?.cattery.id)
+    func notificationCenterManagerAddObserverUpdateDealScreen(
+        _ observer: Any,
+        action: Selector
+    ) {
+        self.interactor.notificationCenterManagerAddObserver(
+            observer,
+            name: .reloadDealScreen,
+            additional: self.deal?.id?.uuidString,
+            action: action
+        )
     }
     
-    func goToChatRoom() {
-        self.router.goToChatRoom(userID: self.deal?.cattery.id)
+//    MARK: Routing
+    func getProfile(with id: UUID? = nil) -> ProfileViewController? {
+        self.router.getProfile(with: id)
+    }
+    
+    func getChatRoom() -> ChatRoomViewController? {
+        guard let cattery = self.deal?.cattery else {
+            return nil
+        }
+        
+        return self.router.getChatRoom(chatRoom: .init(users: [cattery, .init(
+            id: self.getUserID(),
+            name: .init(),
+            deals: .init(),
+            boughtDeals: .init(),
+            ads: .init(),
+            myOffers: .init(),
+            offers: .init(),
+            chatRooms: .init(),
+            score: .zero,
+            isPremiumUser: .random()
+        )], messages: .init()))
     }
     
     func getCreateOffer() -> CreateOfferViewController? {
@@ -174,6 +203,38 @@ final class DealPresenter {
     
     func getBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {
         self.router.getBrowseImage(dataSource)
+    }
+    
+    func getEditDeal() -> EditDealViewController? {
+        guard let deal = self.deal else {
+            return nil
+        }
+        
+        return self.router.getEditDeal(
+            .init(
+                id: deal.id,
+                title: deal.title,
+                photoDatas: deal.photoDatas,
+                tags: deal.tags,
+                isPremiumDeal: deal.isPremiumDeal,
+                isActive: deal.isActive,
+                mode: .getDealMode(deal.mode),
+                petTypeID: deal.petType.id,
+                petBreedID: deal.petBreed.id,
+                petClass: deal.petClass,
+                isMale: deal.isMale,
+                birthDate: ISO8601DateFormatter().date(from: deal.birthDate) ?? .init(),
+                color: deal.color,
+                price: deal.price,
+                currencyName: .getCurrency(wtih: deal.currencyName) ?? .USD,
+                catteryID: deal.cattery.id ?? .init(),
+                country: deal.country,
+                city: deal.city,
+                description: deal.description,
+                buyerID: deal.buyer?.id
+            ),
+            isCreate: false
+        )
     }
     
 }

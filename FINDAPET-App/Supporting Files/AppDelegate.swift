@@ -10,53 +10,36 @@ import CoreData
 import UserNotifications
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate {
     
+//    MARK: Porperties
+    var window: UIWindow?
+    private let registrationCoordinator: RegistrationCoordinator = {
+        let coordinator = RegistrationCoordinator()
+        
+        coordinator.start()
+        
+        return coordinator
+    }()
+    
+//    MARK: Application
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        if #unavailable(iOS 13.0) {
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            self.window?.rootViewController = self.registrationCoordinator.navigationController
+            self.window?.makeKeyAndVisible()
+        }
+        
         self.registerForPushNotifications()
         self.checkSusbscription()
         
-        if #available(iOS 16, *) {
-            self.setCurrency(Locale.current.currency?.identifier ?? Currency.USD.rawValue)
-        } else {
-            self.setCurrency(Locale.current.currencyCode ?? Currency.USD.rawValue)
-        }
-        
         do {
-            try YandexMobileMetricaManager.start(with: ymmYnadexMetricaAPIKey)
+            try YandexMobileMetricaManager.start(with: .init(ymmYnadexMetricaAPIKey))
         } catch {
             print("❌ Error: \(error.localizedDescription)")
         }
         
         return true
-    }
-    
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "FINDAPET_App")
-        
-        container.loadPersistentStores { storeDescription, error in
-            if let error = error as NSError? {
-                print("Unresolved error \(error), \(error.userInfo)")
-            }
-        }
-        
-        return container
-    }()
-
-    // MARK: - Core Data Saving support
-
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                
-                print("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
     }
     
 //    MARK: - Notifications
@@ -97,10 +80,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register: \(error)")
-    }
-    
-    private func setCurrency(_ value: String) {
-        UserDefaultsManager.write(data: value, key: .currency)
     }
     
     private func checkSusbscription() {

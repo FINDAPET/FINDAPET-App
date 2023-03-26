@@ -2,7 +2,7 @@
 //  PetTypeEntity+CoreDataProperties.swift
 //  FINDAPET-App
 //
-//  Created by Artemiy Zuzin on 20.01.2023.
+//  Created by Artemiy Zuzin on 19.03.2023.
 //
 //
 
@@ -17,9 +17,9 @@ extension PetTypeEntity {
     }
 
     @NSManaged public var id: UUID?
-    @NSManaged public var name: String?
-    @NSManaged public var imageData: Data?
-    @NSManaged public var petBreeds: Set<PetBreedEntity>?
+    @NSManaged public var imageData: Data
+    @NSManaged public var name: String
+    @NSManaged public var petBreeds: Set<PetBreedEntity>
 
 }
 
@@ -40,6 +40,5 @@ extension PetTypeEntity {
 
 }
 
-extension PetTypeEntity : Identifiable {
-
-}
+//MARK: Extension Identifiable
+extension PetTypeEntity: Identifiable { }

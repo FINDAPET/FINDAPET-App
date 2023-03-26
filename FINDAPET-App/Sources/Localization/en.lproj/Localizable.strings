@@ -27,7 +27,7 @@
 "Main" = "Main";
 "Your name or your cattery name" = "Your name or your cattery name";
 "Description(optional)" = "Description(optional)";
-"Register as a cattery(optional)" = "Register as a cattery(optional)";
+"Register as a cattery(optional)" = "Register as official cattery(optional)";
 "Cattery documents" = "Cattery document(optional)";
 "Name field is empty" = "Name field is empty";
 "Cattery document image is empty" = "Cattery document image is empty";
@@ -131,3 +131,18 @@
 "Age field is empty" = "Age field is empty";
 "Color field is empty" = "Color field is empty";
 "Price field is empty" = "Price field is empty";
+"Not Selected(breed)" = "Not Selected";
+"Not Selected(class)" = "Not Selected";
+"You successfully posted a deal!" = "You successfully posted a deal!";
+"Post" = "Post";
+"Loading" = "Loading";
+"Sold" = "Sold";
+"Comment" = "Comment";
+"All deals viewed" = "All deals viewed";
+"Birth Date" = "Birth Date";
+"Add birth date" = "Add birth date";
+"Not Selected(birth date)" = "Not Selected";
+"Official Cattery" = "Official Cattery";
+"No messages yet" = "No messages yet";
+"Price is equal to 0" = "Price is equal to 0";
+"Valid until" = "Valid until";

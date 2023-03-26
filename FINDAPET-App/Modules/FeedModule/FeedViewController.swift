@@ -16,6 +16,8 @@ final class FeedViewController: UIViewController {
         self.presenter = presenter
         
         super.init(nibName: nil, bundle: nil)
+        
+        self.presenter.callBack = { [ weak self ] in self?.tableView.reloadData() }
     }
     
     required init?(coder: NSCoder) {
@@ -23,11 +25,21 @@ final class FeedViewController: UIViewController {
     }
     
 //    MARK: UI Properties
+    private var isRefreshing = false
     private var isEmptyTableView = true
     
 //    MARK: UI Properties
     private let activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .medium)
+        if #available(iOS 13.0, *) {
+            let view = UIActivityIndicatorView(style: .medium)
+            
+            view.startAnimating()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +74,7 @@ final class FeedViewController: UIViewController {
     }()
     
     private lazy var searchView: SearchView = {
-        let view = SearchView()
+        let view = SearchView(mode: .withFilter)
         
         view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -94,12 +106,18 @@ final class FeedViewController: UIViewController {
             self?.tableView.isHidden = false
             self?.error(error)
         }
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .reloadFeedScreen,
+            action: #selector(self.reloadScreen)
+        )
     }
     
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.navigationItem.setHidesBackButton(true, animated: false)
         
         self.view.addSubview(self.searchView)
         self.view.addSubview(self.statusBarView)
@@ -128,13 +146,24 @@ final class FeedViewController: UIViewController {
 //    MARK: Actions
     @objc private func onRefresh() {
         self.presenter.setFilterCheckedIDs()
+        self.presenter.makeDealsEmpty()
         self.presenter.getDeals { [ weak self ] _, error in
             self?.error(error)
+        }
+    }
+    
+    @objc private func reloadScreen() {
+        self.presenter.setFilterCheckedIDs()
+        self.presenter.makeDealsEmpty()
+        self.presenter.getDeals { [ weak self ] _, error in
+            self?.activityIndicatorView.isHidden = true
+            self?.tableView.isHidden = false
         }
     }
         
 }
 
+//MARK: Extensions
 extension FeedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -211,18 +240,46 @@ extension FeedViewController: UITableViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView == self.tableView else {
+        guard scrollView == self.tableView,
+              !self.isRefreshing,
+              scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) else {
             return
         }
         
-        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        if #available(iOS 13.0, *) {
+            let activityIndicatorView = UIActivityIndicatorView(style: .large)
+            
+            activityIndicatorView.startAnimating()
+            
+            self.tableView.tableFooterView = activityIndicatorView
+        } else {
+            let activityIndicatorView = UIActivityIndicatorView(style: .gray)
+            
+            activityIndicatorView.startAnimating()
+            
+            self.tableView.tableFooterView = activityIndicatorView
+        }
         
-        activityIndicatorView.startAnimating()
         
-        self.tableView.tableFooterView = activityIndicatorView
-        
-        self.presenter.getDeals { _, _ in
-            self.tableView.tableFooterView = nil
+        self.isRefreshing = true
+        self.presenter.getDeals { [ weak self ] deals, _ in
+            self?.tableView.tableFooterView = nil
+            self?.isRefreshing = false
+            
+            if deals?.isEmpty ?? true {
+                let label = UILabel()
+                
+                label.textColor = .accentColor
+                label.text = NSLocalizedString("All deals viewed", comment: .init())
+                label.font = .systemFont(ofSize: 18, weight: .semibold)
+                label.numberOfLines = .zero
+                label.textAlignment = .center
+                
+                self?.tableView.tableFooterView = label
+                self?.isRefreshing = true
+                
+                label.sizeToFit()
+            }
         }
     }
     
@@ -230,22 +287,51 @@ extension FeedViewController: UITableViewDelegate {
 
 extension FeedViewController: SearchViewDelegate {
     
-    func searchView(_ searchView: SearchView, editingSearchTextField textField: UITextField) {
-        self.presenter.setFilterTitle(textField.text ?? .init())
+    func searchView(_ searchView: SearchView, didTapSearchTextField textField: UITextField) {
+        self.presenter.goToSearch { [ weak self ] title in
+            self?.presenter.setFilterCheckedIDs()
+            self?.presenter.getRandomAd()
+            self?.presenter.makeDealsEmpty()
+            self?.presenter.setFilterTitle(title)
+            self?.activityIndicatorView.isHidden = false
+            self?.tableView.isHidden = true
+            self?.presenter.getDeals { _, error in
+                self?.activityIndicatorView.isHidden = true
+                self?.tableView.isHidden = false
+                self?.error(error)
+            }
+        }
     }
     
     func searchView(_ searchView: SearchView, didTapSearchButton button: UIButton) {
-        self.presenter.setFilterCheckedIDs()
-        self.presenter.getRandomAd()
-        self.presenter.getDeals { [ weak self ] _, error in
-            self?.error(error)
+        self.presenter.goToSearch { [ weak self ] title in
+            self?.presenter.setFilterCheckedIDs()
+            self?.presenter.getRandomAd()
+            self?.presenter.makeDealsEmpty()
+            self?.presenter.setFilterTitle(title)
+            self?.activityIndicatorView.isHidden = false
+            self?.tableView.isHidden = true
+            self?.presenter.getDeals { _, error in
+                self?.activityIndicatorView.isHidden = true
+                self?.tableView.isHidden = false
+                self?.error(error)
+            }
         }
     }
     
     func searchView(_ searchView: SearchView, didTapFilterButton button: UIButton) {
-        guard let viewController = self.presenter.getFilter(completionHandler: { [ weak self ] _, error in
-            self?.error(error)
-        }) else {
+        guard let viewController = self.presenter.getFilter(
+            startHandler: { [ weak self ] in
+                self?.tableView.isHidden = true
+                self?.activityIndicatorView.isHidden = false
+                self?.presenter.setFilterCheckedIDs()
+            },
+            completionHandler: { [ weak self ] _, error in
+                self?.tableView.isHidden = false
+                self?.activityIndicatorView.isHidden = true
+                self?.error(error)
+            }
+        ) else {
             return
         }
         

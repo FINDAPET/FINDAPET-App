@@ -27,9 +27,13 @@ final class EditDealViewController: UIViewController {
                     return
                 }
                 
-                make.leading.trailing.bottom.equalToSuperview().inset(15)
+                make.leading.trailing.equalToSuperview().inset(15)
                 make.top.equalTo(self.photosTitle.snp.bottom).inset(-10)
                 make.height.equalTo(self.photosCollectionViewHeight != .zero ? self.photosCollectionViewHeight : 10)
+                
+                if !deal.photoDatas.isEmpty {
+                    make.bottom.equalToSuperview().inset(15)
+                }
             }
             self?.tagsCollectionView.reloadData()
             self?.tagsCollectionView.layoutIfNeeded()
@@ -50,10 +54,14 @@ final class EditDealViewController: UIViewController {
           CGFloat(Int(self.presenter.deal.photoDatas.count / 2))) *
          (self.view.safeAreaLayoutGuide.layoutFrame.width - 45) / 2)
     }
-    private var selectedIsMale: Bool?
-    private var selectedPetType: PetTypeEntity? {
-        didSet {
-            self.breedValueLabel.text = "Other"
+    private lazy var selectedIsMale = self.presenter.deal.isMale
+    private lazy var selectedPetType = self.presenter.petTypes.first(where: { [ weak self ] petType in
+        petType.id == self?.presenter.deal.petTypeID
+    }) {
+        willSet {
+            if self.selectedPetType != nil && self.selectedPetType?.id != newValue?.id {
+                self.breedValueLabel.text = "Other"
+            }
         }
     }
     
@@ -92,7 +100,11 @@ final class EditDealViewController: UIViewController {
     private lazy var photosPlusButton: UIButton = {
         let view = UIButton()
         
-        view.setImage(.init(systemName: "plus"), for: .normal)
+        if #available(iOS 13.0, *) {
+            view.setImage(.init(systemName: "plus"), for: .normal)
+        } else {
+            view.setImage(.init(named: "plus")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
         view.tintColor = .accentColor
         view.addTarget(self, action: #selector(self.didTapPhotosPlusButton), for: .touchUpInside)
         view.imageView?.translatesAutoresizingMaskIntoConstraints = false
@@ -107,14 +119,17 @@ final class EditDealViewController: UIViewController {
         view.backgroundColor = .clear
         view.dataSource = self
         view.delegate = self
-        view.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: PhotoCollectionViewCell.id)
+        view.register(
+            ImageWithXmarkCollectionViewCell.self,
+            forCellWithReuseIdentifier: ImageWithXmarkCollectionViewCell.id
+        )
         view.isScrollEnabled = false
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
-    private let noPhotosLabel: UILabel = {
+    private lazy var noPhotosLabel: UILabel = {
         let view = UILabel()
         
         view.text = NSLocalizedString("No Photos", comment: .init())
@@ -122,6 +137,7 @@ final class EditDealViewController: UIViewController {
         view.font = .systemFont(ofSize: 24)
         view.textAlignment = .center
         view.numberOfLines = .zero
+        view.isHidden = !self.presenter.deal.photoDatas.isEmpty
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -166,6 +182,7 @@ final class EditDealViewController: UIViewController {
     private lazy var titleTextView: UITextView = {
         let view = UITextView()
         
+        view.text = self.presenter.deal.title
         view.font = .systemFont(ofSize: 17)
         view.isScrollEnabled = false
         view.sizeToFit()
@@ -199,6 +216,7 @@ final class EditDealViewController: UIViewController {
     private lazy var descriptionTextView: UITextView = {
         let view = UITextView()
         
+        view.text = self.presenter.deal.description
         view.font = .systemFont(ofSize: 17)
         view.isScrollEnabled = false
         view.sizeToFit()
@@ -291,7 +309,10 @@ final class EditDealViewController: UIViewController {
         let view = UILabel()
         let petBreedID = self.presenter.deal.petBreedID
         
-        view.text = self.presenter.allBreeds.filter { $0.id == petBreedID }.first?.name ?? "Other"
+        view.text = self.presenter.allBreeds.first { $0.id == petBreedID }?.name ?? NSLocalizedString(
+            "Not Selected(breed)",
+            comment: .init()
+        )
         view.textColor = .accentColor
         view.backgroundColor = .backgroundColor
         view.font = .systemFont(ofSize: 24, weight: .semibold)
@@ -381,7 +402,8 @@ final class EditDealViewController: UIViewController {
     
     private lazy var countryTextField: UITextField = {
         let view = UITextField()
-         
+        
+        view.text = self.presenter.deal.id != nil ? self.presenter.deal.country : self.presenter.getCountry()
         view.textColor = .textColor
         view.backgroundColor = .backgroundColor
         view.placeholder = NSLocalizedString("Country", comment: "")
@@ -402,7 +424,8 @@ final class EditDealViewController: UIViewController {
     
     private lazy var cityTextField: UITextField = {
         let view = UITextField()
-         
+        
+        view.text = self.presenter.deal.id != nil ? self.presenter.deal.city : self.presenter.getCity()
         view.textColor = .textColor
         view.backgroundColor = .backgroundColor
         view.placeholder = NSLocalizedString("City", comment: "")
@@ -435,7 +458,8 @@ final class EditDealViewController: UIViewController {
     
     private lazy var colorTextField: UITextField = {
         let view = UITextField()
-         
+        
+        view.text = self.presenter.deal.color
         view.textColor = .textColor
         view.backgroundColor = .backgroundColor
         view.placeholder = NSLocalizedString("Color", comment: "")
@@ -453,35 +477,29 @@ final class EditDealViewController: UIViewController {
         return view
     }()
     
-    private let ageTitleLabel: UILabel = {
+    private let birthDateLabel: UILabel = {
         let view = UILabel()
         
-        view.text = "\(NSLocalizedString("Age", comment: .init())):"
+        view.text = NSLocalizedString("Birth Date", comment: .init()) + ":"
         view.textColor = .textColor
         view.font = .systemFont(ofSize: 24, weight: .bold)
         view.numberOfLines = .zero
+        view.setContentHuggingPriority(.required, for: .horizontal)
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
-    private lazy var ageTextField: UITextField = {
-        let view = UITextField()
-         
-        view.textColor = .textColor
-        view.backgroundColor = .backgroundColor
-        view.placeholder = NSLocalizedString("Age", comment: "")
-        view.layer.cornerRadius = 25
-        view.layer.borderColor = UIColor.lightGray.cgColor
-        view.layer.borderWidth = 0.5
+    private lazy var birthDatePicker: UIDatePicker = {
+        let view = UIDatePicker()
+        
+        view.setDate(ISO8601DateFormatter().date(from: self.presenter.deal.birthDate) ?? .init(), animated: false)
+        view.backgroundColor = .textFieldColor
         view.tintColor = .accentColor
+        view.datePickerMode = .date
+        view.addTarget(self, action: #selector(self.setBirthDate(_:)), for: .editingDidEnd)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        view.leftViewMode = .always
-        view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
-        view.addTarget(self, action: #selector(self.editingAgeTextField(_:)), for: .allEditingEvents)
-        view.rightViewMode = .always
-         
+        
         return view
     }()
     
@@ -500,6 +518,7 @@ final class EditDealViewController: UIViewController {
     private lazy var priceTextField: UITextField = {
         let view = UITextField()
         
+        view.text = .init(Int(self.presenter.deal.price?.rounded(.up) ?? .zero))
         view.keyboardType = .numberPad
         view.textColor = .textColor
         view.tintColor = .accentColor
@@ -513,7 +532,7 @@ final class EditDealViewController: UIViewController {
         view.rightViewMode = .always
         view.layer.cornerRadius = 25
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
-        view.addTarget(self, action: #selector(self.editingPriceTextField), for: .touchUpInside)
+        view.addTarget(self, action: #selector(self.editingPriceTextField), for: .allEditingEvents)
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -525,7 +544,7 @@ final class EditDealViewController: UIViewController {
         view.backgroundColor = .backgroundColor
         view.layer.borderWidth = 0.5
         view.layer.borderColor = UIColor.lightGray.cgColor
-        view.setTitle(self.presenter.getUserCurrency(), for: .normal)
+        view.setTitle(self.presenter.deal.currencyName.rawValue, for: .normal)
         view.setTitleColor(.accentColor, for: .normal)
         view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         view.layer.cornerRadius = 25
@@ -564,13 +583,16 @@ final class EditDealViewController: UIViewController {
         let view = UISwitch()
         
         view.setOn(
-            self.presenter.getNextDealIsPremium() ?? false || self.presenter.getPremiumUserDate() ?? .init() > .init(),
+            self.presenter.getNextDealIsPremium() ?? false ||
+            self.presenter.getPremiumUserDate() ?? .init() > .init() ||
+            self.presenter.deal.isPremiumDeal,
             animated: false
         )
         view.isEnabled = !(
-            self.presenter.getNextDealIsPremium() ?? false || self.presenter.getPremiumUserDate() ?? .init() > .init()
+            self.presenter.getNextDealIsPremium() ?? false ||
+            self.presenter.getPremiumUserDate() ?? .init() > .init() ||
+            self.presenter.deal.isPremiumDeal
         )
-        view.thumbTintColor = .textFieldColor
         view.tintColor = .backgroundColor
         view.onTintColor = .accentColor
         view.addTarget(self, action: #selector(self.premiumDealSwitchValueChanged(_:)), for: .valueChanged)
@@ -599,7 +621,7 @@ final class EditDealViewController: UIViewController {
         view.layer.cornerRadius = 25
         view.backgroundColor = .accentColor
         view.setTitleColor(.white, for: .normal)
-        view.setTitle(NSLocalizedString("Create", comment: .init()), for: .normal)
+        view.setTitle(NSLocalizedString("Post", comment: .init()), for: .normal)
         view.addTarget(self, action: #selector(self.didTapCreateButton), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -621,7 +643,11 @@ final class EditDealViewController: UIViewController {
     private lazy var tagsPlusButton: UIButton = {
         let view = UIButton()
         
-        view.setImage(.init(systemName: "plus"), for: .normal)
+        if #available(iOS 13.0, *) {
+            view.setImage(.init(systemName: "plus"), for: .normal)
+        } else {
+            view.setImage(.init(named: "plus")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
         view.tintColor = .accentColor
         view.addTarget(self, action: #selector(self.didTapTagsPlusButton), for: .touchUpInside)
         view.imageViewSizeToButton()
@@ -637,6 +663,7 @@ final class EditDealViewController: UIViewController {
         
         let view = CustomCollectionView(frame: .zero, collectionViewLayout: layout)
         
+        view.backgroundColor = .clear
         view.isScrollEnabled = false
         view.dataSource = self
         view.delegate = self
@@ -646,7 +673,7 @@ final class EditDealViewController: UIViewController {
         return view
     }()
     
-    private let noTagsLabel: UILabel = {
+    private lazy var noTagsLabel: UILabel = {
         let view = UILabel()
         
         view.text = NSLocalizedString("No Tags", comment: .init())
@@ -654,6 +681,7 @@ final class EditDealViewController: UIViewController {
         view.font = .systemFont(ofSize: 24)
         view.textAlignment = .center
         view.numberOfLines = .zero
+        view.isHidden = !self.presenter.deal.photoDatas.isEmpty
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -675,19 +703,6 @@ final class EditDealViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.keyboadWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-        
         self.presenter.getAllPetTypes()
     }
     
@@ -700,7 +715,7 @@ final class EditDealViewController: UIViewController {
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
-        self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.navigationBar.isHidden = self.presenter.isCreate
         
         self.view.addSubview(self.scrollView)
         
@@ -738,8 +753,8 @@ final class EditDealViewController: UIViewController {
         self.secondContentView.addSubview(self.cityTextField)
         self.secondContentView.addSubview(self.colorTitleLabel)
         self.secondContentView.addSubview(self.colorTextField)
-        self.secondContentView.addSubview(self.ageTitleLabel)
-        self.secondContentView.addSubview(self.ageTextField)
+        self.secondContentView.addSubview(self.birthDateLabel)
+        self.secondContentView.addSubview(self.birthDatePicker)
         self.secondContentView.addSubview(self.priceTitleLabel)
         self.secondContentView.addSubview(self.priceTextField)
         self.secondContentView.addSubview(self.currencyButton)
@@ -921,20 +936,21 @@ final class EditDealViewController: UIViewController {
             make.height.equalTo(50)
         }
         
-        self.ageTitleLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(15)
-            make.top.equalTo(self.colorTextField.snp.bottom).inset(-15)
+        self.birthDateLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(15)
+            make.trailing.equalTo(self.secondContentView.snp.centerX)
+            make.top.equalTo(self.colorTextField.snp.bottom).inset(-20)
         }
         
-        self.ageTextField.snp.makeConstraints { make in
+        self.birthDatePicker.snp.makeConstraints { make in
+            make.top.equalTo(self.birthDateLabel.snp.bottom).inset(-10)
             make.leading.trailing.equalToSuperview().inset(15)
-            make.top.equalTo(self.ageTitleLabel.snp.bottom).inset(-10)
             make.height.equalTo(50)
         }
         
         self.priceTitleLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(15)
-            make.top.equalTo(self.ageTextField.snp.bottom).inset(-15)
+            make.trailing.leading.equalToSuperview().inset(15)
+            make.top.equalTo(self.birthDatePicker.snp.bottom).inset(-15)
         }
         
         self.priceTextField.snp.makeConstraints { make in
@@ -979,7 +995,7 @@ final class EditDealViewController: UIViewController {
         }
     }
     
-//    MARK: Acrions
+//    MARK: Actions
     @objc private func didTapCreateButton() {
         guard !self.presenter.deal.photoDatas.isEmpty else {
             self.presentAlert(title: "No Photos", message: "Add at least one photo.")
@@ -1017,12 +1033,6 @@ final class EditDealViewController: UIViewController {
             return
         }
         
-        guard self.presenter.deal.age != nil else {
-            self.presentAlert(title: "Age field is empty", message: "Fill it")
-            
-            return
-        }
-        
         guard self.presenter.deal.color != nil else {
             self.presentAlert(title: "Color field is empty", message: "Fill it")
             
@@ -1035,40 +1045,138 @@ final class EditDealViewController: UIViewController {
             return
         }
         
-        self.presenter.createDeal { [ weak self ] error in
-            self?.error(error) {
-                self?.presenter.notificationCenterManagerPostUpdateProfileScreen()
-                
-                if self?.presenter.getNextDealIsPremium() ?? false && self?.presenter.deal.isPremiumDeal ?? false {
-                    self?.presenter.setNextDealIsPremium(false)
+        guard self.presenter.deal.price != .zero else {
+            self.presentAlert(title: "Error", message: "Price is equal to 0")
+            
+            return
+        }
+        
+        if self.presenter.isCreate {
+            self.presenter.createDeal { [ weak self ] error in
+                self?.error(error) {
+                    self?.presenter.notificationCenterManagerPostUpdateProfileScreen()
+                    self?.presenter.notificationCenterManagerPostUpdateFeedScreen()
+                    
+                    if self?.presenter.getNextDealIsPremium() ?? false && self?.presenter.deal.isPremiumDeal ?? false {
+                        self?.presenter.setNextDealIsPremium(false)
+                    }
+                    
+                    guard let self = self else {
+                        return
+                    }
+                    
+                    self.titleTextView.text = nil
+                    self.descriptionTextView.text = nil
+                    self.modeValueLabel.text = DealMode.everywhere.rawValue
+                    self.breedValueLabel.text = "–"
+                    self.petClassValueLabel.text = PetClass.allClass.rawValue
+                    self.countryTextField.text = nil
+                    self.cityTextField.text = nil
+                    self.colorTextField.text = nil
+                    self.selectedIsMale = nil
+                    self.selectedPetType = nil
+                    self.presenter.deal = .init(
+                        title: .init(),
+                        photoDatas: .init(),
+                        isPremiumDeal: self.presenter.getNextDealIsPremium() ?? false,
+                        mode: .everywhere,
+                        petClass: .allClass,
+                        birthDate: .init(),
+                        currencyName: .getCurrency(wtih: self.presenter.getUserCurrency() ?? .init()) ?? .USD,
+                        catteryID: self.presenter.getUserID() ?? .init()
+                    )
+                    self.priceTextField.text = "0"
+                    self.presentAlert(title: NSLocalizedString("You successfully posted a deal!", comment: .init()))
+                    
+                    for i in .zero ..< self.petTypeCollectionView.visibleCells.count {
+                        self.petTypeCollectionView.deselectItem(at: .init(item: i, section: .zero), animated: true)
+                    }
+                    
+                    for i in .zero ..< self.sexCollectionView.visibleCells.count {
+                        self.sexCollectionView.deselectItem(at: .init(item: i, section: .zero), animated: true)
+                    }
+                }
+            }
+        } else {
+            self.presenter.changeDeal { [ weak self ] error in
+                self?.error(error) {
+                    self?.presenter.notificationCenterManagerPostUpdateProfileScreen()
+                    self?.presenter.notificationCenterManagerPostUpdateFeedScreen()
+                    
+                    if self?.presenter.getNextDealIsPremium() ?? false && self?.presenter.deal.isPremiumDeal ?? false {
+                        self?.presenter.setNextDealIsPremium(false)
+                    }
+                    
+                    self?.presenter.notificationCenterManagerPostUpdateDealScreen()
+                    self?.navigationController?.popViewController(animated: true)
                 }
             }
         }
     }
     
+    @objc private func setBirthDate(_ sender: UIDatePicker) {
+        self.presenter.deal.birthDate = ISO8601DateFormatter().string(from: sender.date)
+    }
+    
     @objc private func didTapModeValueLabel() {
+        self.presentActionsSheet(
+            title: NSLocalizedString("Mode", comment: .init()),
+            contents: DealMode.allCases.map { $0.rawValue }) { [ weak self ] alertAction in
+                self?.modeValueLabel.text = alertAction.title
+            }
+        
         self.presenter.deal.mode = .getDealMode(self.modeValueLabel.text ?? .init())
     }
     
     @objc private func didTapBreedValueLabel() {
         var breedList = [String]()
-        
-        for petBreed in self.selectedPetType?.petBreeds ?? .init() {
-            guard let name = petBreed.name else {
-                continue
+                
+        for petBreed in self.selectedPetType?.petBreeds ?? self.presenter.allBreeds.map({
+            var petBreed = $0
+            
+            if petBreed.name == "Other", let name = petBreed.petType?.name {
+                petBreed.name += "(\(name))"
             }
             
-            breedList.append(name)
+            return petBreed
+        }) {
+            breedList.append(petBreed.name)
         }
         
         self.presentActionsSheet(
             title: NSLocalizedString("Breed", comment: .init()),
             contents: breedList
         ) { [ weak self ] alertAction in
+            guard var title = alertAction.title else {
+                return
+            }
+            
             self?.breedValueLabel.text = alertAction.title
             
-            if let id = self?.presenter.allBreeds.filter({ $0.name == alertAction.title }).first?.id {
-                self?.presenter.deal.petBreedID = id
+            if title.contains("Other") {
+                for name in self?.presenter.petTypes.map({ $0.name }) ?? .init() {
+                    if title.contains(name) {
+                        title = title.replacingOccurrences(of: "(\(name))", with: String())
+                        
+                        break
+                    }
+                }
+            }
+            
+            if let petBreed = self?.presenter.allBreeds.filter({ $0.name == title }).first {
+                self?.presenter.deal.petBreedID = petBreed.id
+                self?.presenter.deal.petTypeID = petBreed.petType?.id
+                self?.selectedPetType = self?.presenter.petTypes.first { $0.id == petBreed.petType?.id }
+                
+                guard let index = self?.presenter.petTypes.firstIndex(where: { $0.id == petBreed.petType?.id }) else {
+                    return
+                }
+                
+                self?.petTypeCollectionView.selectItem(
+                    at: .init(item: index, section: .zero),
+                    animated: true,
+                    scrollPosition: .centeredHorizontally
+                )
             }
         }
     }
@@ -1077,7 +1185,7 @@ final class EditDealViewController: UIViewController {
         self.presentActionsSheet(
             title: NSLocalizedString("Pet Class", comment: .init()),
             contents: (self.presenter.getPetClasses() ?? PetClass.allCases.map { $0.rawValue }).sorted(by: <)
-        ) { [ weak self ] alertAction in
+        ) { [ weak self ] alertAction in            
             self?.petClassValueLabel.text = alertAction.title
             self?.presenter.deal.petClass = .getPetClass(alertAction.title ?? .init()) ?? .allClass
         }
@@ -1088,7 +1196,7 @@ final class EditDealViewController: UIViewController {
             title: NSLocalizedString("Add Tag", comment: .init()),
             message: NSLocalizedString("Enter text", comment: .init()),
             buttonTitle: NSLocalizedString("Add", comment: .init())) { [ weak self ] text in
-                self?.presenter.deal.tags.append(text)
+                self?.presenter.deal.tags.append(text.replacingOccurrences(of: " ", with: "").lowercased())
             }
     }
     
@@ -1102,10 +1210,6 @@ final class EditDealViewController: UIViewController {
     
     @objc private func editingColorTextField(_ sender: UITextField) {
         self.presenter.deal.color = sender.text
-    }
-    
-    @objc private func editingAgeTextField(_ sender: UITextField) {
-        self.presenter.deal.age = sender.text
     }
     
     @objc private func editingPriceTextField(_ sender: UITextField) {
@@ -1148,24 +1252,6 @@ final class EditDealViewController: UIViewController {
             self?.presenter.deal.currencyName = .getCurrency(wtih: alertAction.title ?? .init()) ?? .USD
             self?.currencyButton.setTitle(alertAction.title, for: .normal)
         }
-    }
-    
-    @objc private func keyboadWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            self.scrollView.contentInset.bottom = keyboardSize.height
-            self.scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(
-                top: 0,
-                left: 0,
-                bottom: keyboardSize.height,
-                right: 0
-            )
-            self.scrollView.setContentOffset(CGPoint(x: 0, y: max(self.scrollView.contentSize.height - self.scrollView.bounds.size.height, 0) ), animated: true)
-        }
-    }
-    
-    @objc private func keyboardWillHide(notification: NSNotification) {
-        self.scrollView.contentInset.bottom = .zero
-        self.scrollView.verticalScrollIndicatorInsets = .zero
     }
     
     @objc private func didTapPhotosPlusButton() {
@@ -1212,11 +1298,18 @@ extension EditDealViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == self.photosCollectionView {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCollectionViewCell.id, for: indexPath) as? PhotoCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ImageWithXmarkCollectionViewCell.id,
+                for: indexPath
+            ) as? ImageWithXmarkCollectionViewCell else {
                 return .init()
             }
             
-            cell.image = .init(data: self.presenter.deal.photoDatas[indexPath.item])
+            cell.photoImageView.clipsToBounds = true
+            cell.photoImageView.layer.masksToBounds = true
+            cell.photoImageView.layer.cornerRadius = 25
+            cell.imageData = self.presenter.deal.photoDatas[indexPath.item]
+            cell.delegate = self
             
             return cell
         } else if collectionView == self.petTypeCollectionView {
@@ -1228,6 +1321,7 @@ extension EditDealViewController: UICollectionViewDataSource {
             }
                     
             cell.petType = self.presenter.petTypes[indexPath.item]
+            cell.backgroundColor = .backgroundColor
             
             if self.presenter.deal.petTypeID == cell.petType?.id {
                 cell.isSelected = true
@@ -1272,23 +1366,7 @@ extension EditDealViewController: UICollectionViewDelegate {
         if collectionView == self.photosCollectionView || collectionView == self.tagsCollectionView {
             collectionView.deselectItem(at: indexPath, animated: true)
             
-            if collectionView == self.photosCollectionView {
-                self.presentAlert(
-                    title: NSLocalizedString("Do you want to delete this photo?",comment: .init()),
-                    actions: (
-                        title: NSLocalizedString("Remove", comment: .init()),
-                        style: UIAlertAction.Style.destructive,
-                        action: { [ weak self ] in
-                            self?.presenter.deal.photoDatas.remove(at: indexPath.item)
-                        }
-                    ),
-                    (
-                        title: NSLocalizedString("No", comment: .init()),
-                        style: UIAlertAction.Style.default,
-                        action: { }
-                    )
-                )
-            } else {
+            if collectionView == self.tagsCollectionView {
                 self.presentAlert(
                     title: NSLocalizedString("Do you want delete this tag?",comment: .init()),
                     actions: (
@@ -1366,6 +1444,27 @@ extension EditDealViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         15
+    }
+    
+}
+
+extension EditDealViewController: ImageWithXmarkCollectionViewCellDelegate {
+    
+    func imageWithXmarkCollectionViewCell(_ cell: ImageWithXmarkCollectionViewCell, didTapXmarkButton xmarkButton: UIButton) {
+        for i in .zero ..< self.presenter.deal.photoDatas.count {
+            if cell.imageData == self.presenter.deal.photoDatas[i] {
+                self.presenter.deal.photoDatas.remove(at: i)
+                
+                break
+            }
+        }
+    }
+    
+    func imageWithXmarkCollectionViewCell(_ cell: ImageWithXmarkCollectionViewCell, imageViewSize imageView: UIImageView) -> CGSize {
+        .init(
+            width: ((self.photosCollectionView.bounds.width - 15) / 2) - 15,
+            height: ((self.photosCollectionView.bounds.width - 15) / 2) - 15
+        )
     }
     
 }

@@ -15,7 +15,13 @@ extension UIColor {
     static let borderColor = UIColor.createColor(lightMode: .black, darkMode: .systemGray)
     static let secondaryTextColor = UIColor.createColor(lightMode: .systemGray, darkMode: .white)
     static let backgroundColor = UIColor.createColor(
-        lightMode: .systemGray6,
+        lightMode: {
+            if #available(iOS 13.0, *) {
+                return .systemGray6
+            }
+            
+            return .init(red: 242/255, green: 242/255, blue: 247/255, alpha: 1)
+        }(),
         darkMode: UIColor(red: 30/255, green: 29/255,  blue: 42/255, alpha: 1)
     )
     static let textFieldColor = UIColor.createColor(

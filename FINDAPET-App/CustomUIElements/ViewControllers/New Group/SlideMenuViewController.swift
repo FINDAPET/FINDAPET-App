@@ -69,20 +69,40 @@ final class SlideMenuViewController: UIViewController {
     private func setupViews() {
         switch self.side {
         case .left:
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "list.bullet"),
-                style: .plain,
-                target: self,
-                action: #selector(self.didTapHamburgerButton)
-            )
+            if #available(iOS 13.0, *) {
+                self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                    image: UIImage(systemName: "list.bullet"),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapHamburgerButton)
+                )
+            } else {
+                self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                    image: UIImage(named: "list.bullet")?.withRenderingMode(.alwaysTemplate),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapHamburgerButton)
+                )
+            }
+            
             self.navigationItem.leftBarButtonItem?.tintColor = self.hamburgerColor
         case .right:
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "list.bullet"),
-                style: .plain,
-                target: self,
-                action: #selector(self.didTapHamburgerButton)
-            )
+            if #available(iOS 13.0, *) {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: UIImage(systemName: "list.bullet"),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapHamburgerButton)
+                )
+            } else {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: UIImage(named: "list.bullet")?.withRenderingMode(.alwaysTemplate),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapHamburgerButton)
+                )
+            }
+            
             self.navigationItem.rightBarButtonItem?.tintColor = self.hamburgerColor
         }
         

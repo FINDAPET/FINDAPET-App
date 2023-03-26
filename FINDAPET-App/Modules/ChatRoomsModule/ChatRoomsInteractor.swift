@@ -14,7 +14,7 @@ final class ChatRoomsInteractor {
         RequestManager.request(
             method: .GET,
             authMode: .bearer(value: self.getBearrerToken() ?? String()),
-            url: URLConstructor.defaultHTTP.allChatRooms(),
+            url: URLConstructor.defaultHTTP.getChats(),
             completionHandler: completionHandler
         )
     }

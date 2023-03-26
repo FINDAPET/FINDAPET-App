@@ -9,6 +9,7 @@ import Foundation
 
 final class SettingsInteractor {
     
+//    MARK: Currency
     func getAllCurrencies() -> [Currency] {
         Currency.allCases
     }

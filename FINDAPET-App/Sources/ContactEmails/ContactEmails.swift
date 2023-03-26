@@ -7,5 +7,5 @@
 
 import Foundation
 
-let suportingTeamEmail = ""
-let advertisingTeamEmail = ""
+let suportingTeamEmail: StaticString = ""
+let advertisingTeamEmail: StaticString = ""

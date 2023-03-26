@@ -42,6 +42,17 @@ final class SubscriptionViewController: UIViewController {
         return view
     }()
     
+    private lazy var subscriptionInformationView: SubscriptionInformationView? = {
+        let view = self.presenter.getSubscriptionInforamation()
+        
+        view?.setupValues()
+        view?.alpha = self.presenter.getSubscription() == nil ? .zero : 1
+        view?.isHidden = self.presenter.getSubscription() == nil
+        view?.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
 //    MARK: Life Cycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -69,6 +80,26 @@ final class SubscriptionViewController: UIViewController {
             make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
         }
+        
+        guard let subscriptionInformationView = self.subscriptionInformationView else {
+            return
+        }
+        
+        self.view.addSubview(subscriptionInformationView)
+        self.view.insertSubview(subscriptionInformationView, at: 10)
+        
+        subscriptionInformationView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+        }
+        
+        if self.presenter.getSubscription() != nil {
+            self.navigationController?.navigationBar.isHidden = true
+            self.collectionView.isHidden = true
+            subscriptionInformationView.isHidden = false
+            subscriptionInformationView.alpha = 1
+            subscriptionInformationView.setupValues()
+        }
     }
 
 }
@@ -88,7 +119,7 @@ extension SubscriptionViewController: UICollectionViewDataSource {
         }
         
         cell.product = self.presenter.products[indexPath.item]
-        
+                
         if let subscription = self.presenter.getSubscription(), cell.product?.productIdentifier == subscription {
             cell.isSelected = true
         }
@@ -101,6 +132,27 @@ extension SubscriptionViewController: UICollectionViewDataSource {
 extension SubscriptionViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let subscription = self.presenter.getSubscription(),
+           let cell = collectionView.cellForItem(at: indexPath) as? SubscriptionCollectionViewCell,
+           cell.product?.productIdentifier != subscription {
+            collectionView.deselectItem(at: indexPath, animated: false)
+            
+            for i in .zero ..< collectionView.visibleCells.count {
+                guard let subCell = collectionView.visibleCells[i] as? SubscriptionCollectionViewCell,
+                      subCell.product?.productIdentifier == subscription else {
+                    collectionView.selectItem(
+                        at: .init(item: i, section: .zero),
+                        animated: false,
+                        scrollPosition: .centeredHorizontally
+                    )
+                    
+                    continue
+                }
+            }
+            
+            return
+        }
+        
         guard let cell = collectionView.cellForItem(at: indexPath) as? SubscriptionCollectionViewCell else {
                     return
                 }
@@ -135,32 +187,122 @@ extension SubscriptionViewController: UICollectionViewDelegate {
                                         switch id {
                                         case .premiumSubscriptionOneMonth:
                                             self.presenter.setSubscription(id)
-                                            self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                                after: .init(),
-                                                matching: .init(month: 1),
-                                                matchingPolicy: .previousTimePreservingSmallerComponents
-                                            ) ?? .init())
+                                            self.presenter.setPremiumUserDate({
+                                                var compenents = Calendar.current.dateComponents(
+                                                    [.day, .month, .hour, .year],
+                                                    from: .init()
+                                                )
+                                                
+                                                compenents.month = (compenents.month ?? .zero) + 1
+                                                
+                                                return Calendar.current.date(from: compenents) ?? .init()
+                                            }())
+                                            self.presenter.reloadProfileScreen()
+                                            self.subscriptionInformationView?.setupValues()
+                                            self.subscriptionInformationView?.alpha = .zero
+                                            
+                                            UIView.animate(withDuration: 0.25) {
+                                                self.collectionView.alpha = .zero
+                                                self.view.backgroundColor = .accentColor
+                                                self.navigationController?.navigationBar.alpha = .zero
+                                            } completion: { completed in
+                                                self.navigationController?.navigationBar.isHidden = true
+                                                self.collectionView.isHidden = true
+                                                self.subscriptionInformationView?.isHidden = false
+                                                
+                                                UIView.animate(withDuration: 0.25) {
+                                                    self.subscriptionInformationView?.alpha = 1
+                                                }
+                                            }
                                         case .premiumSubscriptionThreeMonth:
                                             self.presenter.setSubscription(id)
-                                            self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                                after: .init(),
-                                                matching: .init(month: 3),
-                                                matchingPolicy: .previousTimePreservingSmallerComponents
-                                            ) ?? .init())
+                                            self.presenter.setPremiumUserDate({
+                                                var compenents = Calendar.current.dateComponents(
+                                                    [.day, .month, .hour, .year],
+                                                    from: .init()
+                                                )
+                                                
+                                                compenents.month = (compenents.month ?? .zero) + 3
+                                                
+                                                return Calendar.current.date(from: compenents) ?? .init()
+                                            }())
+                                            self.presenter.reloadProfileScreen()
+                                            self.subscriptionInformationView?.setupValues()
+                                            self.subscriptionInformationView?.alpha = .zero
+                                            
+                                            UIView.animate(withDuration: 0.25) {
+                                                self.collectionView.alpha = .zero
+                                                self.view.backgroundColor = .accentColor
+                                                self.navigationController?.navigationBar.alpha = .zero
+                                            } completion: { completed in
+                                                self.navigationController?.navigationBar.isHidden = true
+                                                self.collectionView.isHidden = true
+                                                self.subscriptionInformationView?.isHidden = false
+                                                
+                                                UIView.animate(withDuration: 0.25) {
+                                                    self.subscriptionInformationView?.alpha = 1
+                                                }
+                                            }
                                         case .premiumSubscriptionSixMonth:
                                             self.presenter.setSubscription(id)
-                                            self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                                after: .init(),
-                                                matching: .init(month: 6),
-                                                matchingPolicy: .previousTimePreservingSmallerComponents
-                                            ) ?? .init())
+                                            self.presenter.setPremiumUserDate({
+                                                var compenents = Calendar.current.dateComponents(
+                                                    [.day, .month, .hour, .year],
+                                                    from: .init()
+                                                )
+                                                
+                                                compenents.month = (compenents.month ?? .zero) + 6
+                                                
+                                                return Calendar.current.date(from: compenents) ?? .init()
+                                            }())
+                                            self.presenter.reloadProfileScreen()
+                                            self.subscriptionInformationView?.setupValues()
+                                            self.subscriptionInformationView?.alpha = .zero
+                                            
+                                            UIView.animate(withDuration: 0.25) {
+                                                self.collectionView.alpha = .zero
+                                                self.view.backgroundColor = .accentColor
+                                                self.navigationController?.navigationBar.alpha = .zero
+                                            } completion: { completed in
+                                                self.navigationController?.navigationBar.isHidden = true
+                                                self.collectionView.isHidden = true
+                                                self.subscriptionInformationView?.isHidden = false
+                                                
+                                                UIView.animate(withDuration: 0.25) {
+                                                    self.subscriptionInformationView?.alpha = 1
+                                                }
+                                            }
                                         case .premiumSubscriptionOneYear:
                                             self.presenter.setSubscription(id)
-                                            self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                                after: .init(),
-                                                matching: .init(year: 1),
-                                                matchingPolicy: .previousTimePreservingSmallerComponents
-                                            ) ?? .init())
+                                            self.presenter.setPremiumUserDate({
+                                                var compenents = Calendar.current.dateComponents(
+                                                    [.day, .month, .hour, .year],
+                                                    from: .init()
+                                                )
+                                                
+                                                compenents.year = (compenents.year ?? .zero) + 1
+                                                
+                                                print(Calendar.current.date(from: compenents) as Any)
+                                                
+                                                return Calendar.current.date(from: compenents) ?? .init()
+                                            }())
+                                            self.presenter.reloadProfileScreen()
+                                            self.subscriptionInformationView?.setupValues()
+                                            self.subscriptionInformationView?.alpha = .zero
+                                            
+                                            UIView.animate(withDuration: 0.25) {
+                                                self.collectionView.alpha = .zero
+                                                self.view.backgroundColor = .accentColor
+                                                self.navigationController?.navigationBar.alpha = .zero
+                                            } completion: { completed in
+                                                self.navigationController?.navigationBar.isHidden = true
+                                                self.collectionView.isHidden = true
+                                                self.subscriptionInformationView?.isHidden = false
+                                                
+                                                UIView.animate(withDuration: 0.25) {
+                                                    self.subscriptionInformationView?.alpha = 1
+                                                }
+                                            }
                                         default:
                                             collectionView.deselectItem(at: indexPath, animated: true)
                                             self.presentAlert(title: NSLocalizedString("Error", comment: .init()))

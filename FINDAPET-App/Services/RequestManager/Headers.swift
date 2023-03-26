@@ -11,6 +11,9 @@ enum Headers: String {
     case applicationJson = "application/json"
     case contentType = "Content-Type"
     case authorization = "Authorization"
+    case contentEncoding = "Content-Encoding"
+    case contentLenght = "Content-Length"
+    case gzip
     
     static func authString(email: String, password: String) -> String? {
         guard let authString = "\(email):\(password)".data(using: .utf8)?.base64EncodedString() else {

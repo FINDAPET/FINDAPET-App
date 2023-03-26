@@ -10,4 +10,5 @@ import Foundation
 enum Hosts: String {
     case localhost = "127.0.0.1"
     case exchange = "api.exchangerate.host"
+    case base = "e498-83-234-52-196.ngrok.io"
 }

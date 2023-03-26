@@ -37,7 +37,7 @@ final class ResizableImageCollectionViewCell: UICollectionViewCell {
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         view.minimumZoomScale = 1
-        view.maximumZoomScale = 10
+        view.maximumZoomScale = 5
         view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -47,7 +47,7 @@ final class ResizableImageCollectionViewCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let view = UIImageView()
         
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleAspectFit
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -60,7 +60,11 @@ final class ResizableImageCollectionViewCell: UICollectionViewCell {
         self.scrollView.addSubview(self.imageView)
         
         self.scrollView.snp.makeConstraints { make in
-            make.leading.trailing.top.bottom.equalToSuperview()
+            make.leading.trailing.bottom.top.equalToSuperview()
+        }
+        
+        self.imageView.snp.makeConstraints { make in
+            make.height.width.equalTo(self)
         }
     }
     

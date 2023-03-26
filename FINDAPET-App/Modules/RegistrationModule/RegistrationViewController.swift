@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import JGProgressHUD
 
 final class RegistrationViewController: UIViewController {
 
@@ -88,7 +89,18 @@ final class RegistrationViewController: UIViewController {
     }()
     
     private lazy var showPasswordImageView: UIImageView = {
-        let view = UIImageView(image: .init(systemName: "eye.slash"))
+        if #available(iOS 13.0, *) {
+            let view = UIImageView(image: .init(systemName: "eye.slash"))
+            
+            view.tintColor = .lightGray
+            view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapShowPasswordImageView(_:))))
+            view.isUserInteractionEnabled = true
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIImageView(image: .init(named: "eye.slash")?.withRenderingMode(.alwaysTemplate))
         
         view.tintColor = .lightGray
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapShowPasswordImageView(_:))))
@@ -105,7 +117,13 @@ final class RegistrationViewController: UIViewController {
         view.titleLabel?.font = .systemFont(ofSize: 20)
         view.titleLabel?.numberOfLines = .zero
         view.tintColor = .accentColor
-        view.setTitleColor(.link, for: .normal)
+        
+        if #available(iOS 13.0, *) {
+            view.setTitleColor(.link, for: .normal)
+        } else {
+            view.setTitleColor(.systemBlue, for: .normal)
+        }
+        
         view.addTarget(self, action: #selector(self.didTapPrivacyPolicyButton), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -128,8 +146,15 @@ final class RegistrationViewController: UIViewController {
         return view
     }()
     
-//    MARK: Life Cycle
+    private let progressIndicator: JGProgressHUD = {
+        let view = JGProgressHUD()
+        
+        view.textLabel.text = NSLocalizedString("Loading", comment: .init())
+        
+        return view
+    }()
     
+//    MARK: Life Cycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -137,7 +162,6 @@ final class RegistrationViewController: UIViewController {
     }
     
 //    MARK: Setup Views
-    
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = false
@@ -214,8 +238,13 @@ final class RegistrationViewController: UIViewController {
     @objc private func registrationButtonDidTap() {
         switch self.presenter.mode {
         case .logIn:
-            self.presenter.auth(email: self.emailTextField.text ?? "", password: self.emailTextField.text ?? "") { token, error in
-                self.error(error) { [ weak self ] in
+            self.progressIndicator.show(in: self.view, animated: true)
+            self.presenter.auth(
+                email: self.emailTextField.text ?? .init(),
+                password: self.passwordTextField.text ?? .init()
+            ) { [ weak self ] token, error in
+                self?.progressIndicator.dismiss(animated: true)
+                self?.error(error) {
                     guard let token = token else {
                         self?.presentAlert(title: NSLocalizedString("Failed to make a request", comment: ""))
                         
@@ -224,6 +253,7 @@ final class RegistrationViewController: UIViewController {
                     
                     self?.presenter.writeKeychainBearer(token: token.value)
                     self?.presenter.writeUserID(id: token.user.id)
+                    self?.presenter.setCurrency(token.user.basicCurrencyName)
                     
                     if token.user.name.isEmpty {
                         let user = User.Input(
@@ -240,26 +270,39 @@ final class RegistrationViewController: UIViewController {
                 }
             }
         case .signIn:
-            self.presenter.createUser(user: User.Create(email: self.emailTextField.text ?? "", password: self.emailTextField.text ?? "")) { [ weak self ] error in
-                self?.presenter.auth(email: self?.emailTextField.text ?? "", password: self?.emailTextField.text ?? "") { token, error in
-                    self?.error(error) { [ weak self ] in
-                        guard let token = token else {
-                            self?.presentAlert(title: NSLocalizedString("Failed to make a request", comment: ""))
+            self.progressIndicator.show(in: self.view, animated: true)
+            self.presenter.createUser(
+                user: .init(
+                    email: self.emailTextField.text ?? .init(),
+                    password: self.emailTextField.text ?? .init()
+                )
+            ) { [ weak self ] error in
+                self?.progressIndicator.dismiss(animated: true)
+                self?.presenter.auth(
+                    email: self?.emailTextField.text ?? .init(),
+                    password: self?.emailTextField.text ?? .init()
+                ) { token, error in
+                    self?.presenter.setCurrencyRequest { _ in
+                        self?.error(error) { [ weak self ] in
+                            guard let token = token else {
+                                self?.presentAlert(title: NSLocalizedString("Failed to make a request", comment: ""))
+                                
+                                return
+                            }
+                                                        
+                            self?.presenter.writeKeychainBearer(token: token.value)
+                            self?.presenter.writeUserID(id: token.user.id)
+                            self?.presenter.setCurrency(token.user.basicCurrencyName)
                             
-                            return
+                            let user = User.Input(
+                                id: token.user.id,
+                                name: token.user.name,
+                                description: token.user.description,
+                                isCatteryWaitVerify: token.user.isCatteryWaitVerify
+                            )
+                            
+                            self?.presenter.goToEditProfile(user: user)
                         }
-                        
-                        self?.presenter.writeKeychainBearer(token: token.value)
-                        self?.presenter.writeUserID(id: token.user.id)
-                        
-                        let user = User.Input(
-                            id: token.user.id,
-                            name: token.user.name,
-                            description: token.user.description,
-                            isCatteryWaitVerify: token.user.isCatteryWaitVerify
-                        )
-                        
-                        self?.presenter.goToEditProfile(user: user)
                     }
                 }
             }
@@ -281,10 +324,21 @@ final class RegistrationViewController: UIViewController {
     
     @objc private func didTapShowPasswordImageView(_ sender: UIImageView) {
         if self.passwordTextField.isSecureTextEntry {
-            self.showPasswordImageView.image = .init(systemName: "eye")
+            if #available(iOS 13.0, *) {
+                self.showPasswordImageView.image = .init(systemName: "eye")
+            } else {
+                self.showPasswordImageView.image = .init(named: "eye")?.withRenderingMode(.alwaysTemplate)
+            }
+            
             self.showPasswordImageView.tintColor = .lightGray
         } else {
-            self.showPasswordImageView.image = .init(systemName: "eye.slash")
+            if #available(iOS 13.0, *) {
+                self.showPasswordImageView.image = .init(systemName: "eye.slash")
+            } else {
+                self.showPasswordImageView.image = .init(named: "eye.slash")?.withRenderingMode(.alwaysTemplate)
+            }
+            
+            self.showPasswordImageView.setNeedsDisplay()
             self.showPasswordImageView.tintColor = .lightGray
         }
         

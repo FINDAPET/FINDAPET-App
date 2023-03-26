@@ -12,4 +12,10 @@ struct PetBreed {
         var id: UUID?
         var name: String
     }
+    
+    struct Entity: Hashable {
+        var id: UUID?
+        var name: String
+        var petType: PetType.Entity?
+    }
 }

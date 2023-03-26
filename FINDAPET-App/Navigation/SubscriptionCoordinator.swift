@@ -14,8 +14,7 @@ protocol SubscriptionCoordinatable {
 
 final class SubscriptionCoordinator: MainTabBarCoordinatable, Coordinator {
     
-    var coordinatorDelegate: MainTabBarCoordinator?
-    
+    weak var coordinatorDelegate: MainTabBarCoordinator?
     let navigationController = UINavigationController()
     
     func start() {
@@ -39,13 +38,36 @@ final class SubscriptionCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getSubscription(), animated: true)
     }
     
+//    MARK: Subscription Information
+    func getSubscriptionInformation() -> SubscriptionInformationView {
+        let router = SubscriptionInformationRouter()
+        let interactor = SubscriptionInformationInteractor()
+        let presenter = SubscriptionInformationPresenter(router: router, interactor: interactor)
+        let view = SubscriptionInformationView(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        return view
+    }
+    
 //    MARK: Setup Views
     private func setupViews() {
-        self.navigationController.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Subscription", comment: ""),
-            image: UIImage(systemName: "crown"),
-            selectedImage: UIImage(systemName: "crown")
-        )
+        self.navigationController.navigationBar.tintColor = .accentColor
+        
+        if #available(iOS 13.0, *) {
+            self.navigationController.tabBarItem = UITabBarItem(
+                title: NSLocalizedString("Subscription", comment: ""),
+                image: UIImage(systemName: "crown"),
+                selectedImage: UIImage(systemName: "crown")
+            )
+        } else {
+            self.navigationController.navigationBar.tintColor = .accentColor
+            self.navigationController.tabBarItem = UITabBarItem(
+                title: NSLocalizedString("Subscription", comment: ""),
+                image: UIImage(named: "crown")?.withRenderingMode(.alwaysTemplate),
+                selectedImage: UIImage(named: "crown")?.withRenderingMode(.alwaysTemplate)
+            )
+        }
     }
     
 }

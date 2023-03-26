@@ -31,7 +31,12 @@ class ChatRoomHeaderView: UIView {
     private lazy var backButton: UIButton = {
         let view = UIButton()
         
-        view.setImage(.init(systemName: "chevron.backward"), for: .normal)
+        if #available(iOS 13.0, *) {
+            view.setImage(.init(systemName: "chevron.backward"), for: .normal)
+        } else {
+            view.setImage(.init(named: "chevron.backward")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
+        
         view.tintColor = .accentColor
         view.addTarget(self, action: #selector(self.didTapBackButton), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false

@@ -22,9 +22,13 @@ open class ImageWithXmarkCollectionViewCell: UICollectionViewCell {
     static let id = String(describing: ImageWithXmarkCollectionViewCell.self)
     
     var delegate: ImageWithXmarkCollectionViewCellDelegate?
-    var image: UIImage? {
+    var imageData: Data? {
         didSet {
-            self.photoImageView.image = self.image
+            guard let imageData = self.imageData else {
+                return
+            }
+            
+            self.photoImageView.image = .init(data: imageData)
         }
     }
     
@@ -41,7 +45,7 @@ open class ImageWithXmarkCollectionViewCell: UICollectionViewCell {
     
 //    MARK: UIProperties
     lazy var photoImageView: UIImageView = {
-        let view = UIImageView(image: self.image)
+        let view = UIImageView(image: .init(data: self.imageData ?? .init()))
         
         view.addGestureRecognizer(
             UITapGestureRecognizer(target: self, action: #selector(self.didTapImageView(_:)))
@@ -56,7 +60,12 @@ open class ImageWithXmarkCollectionViewCell: UICollectionViewCell {
         let view = UIButton()
         
         view.backgroundColor = .white
-        view.setImage(.init(systemName: "xmark.circle.fill"), for: .normal)
+        
+        if #available(iOS 13.0, *) {
+            view.setImage(.init(systemName: "xmark.circle.fill"), for: .normal)
+        } else {
+            view.setImage(.init(named: "xmark.circle.fill")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
         view.tintColor = .lightGray
         view.clipsToBounds = true
         view.layer.masksToBounds = true

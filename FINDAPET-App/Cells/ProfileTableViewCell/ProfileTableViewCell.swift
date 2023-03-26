@@ -36,6 +36,8 @@ class ProfileTableViewCell: UITableViewCell {
             
             self.nameLabel.text = user.name
             self.descriptionLabel.text = user.description
+            self.descriptionLabel.isHidden = user.description?.isEmpty ?? true
+            self.checkmarkImageView.isHidden = user.documentData == nil
         }
     }
     
@@ -54,12 +56,12 @@ class ProfileTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let avatarImageView: UIImageView = {
+    private lazy var avatarImageView: UIImageView = {
         let view = UIImageView()
         
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.layer.borderWidth = 2
-        view.layer.cornerRadius = 75
+        view.layer.cornerRadius = view.bounds.width / 2
         view.clipsToBounds = true
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -92,17 +94,32 @@ class ProfileTableViewCell: UITableViewCell {
     private lazy var chevronDescriptionButton: UIButton = {
         let view = UIButton()
         
-        view.setImage(.init(systemName: "chevron.down"), for: .normal)
+        if #available(iOS 13.0, *) {
+            view.setImage(.init(systemName: "chevron.down"), for: .normal)
+        } else {
+            view.setImage(.init(named: "chevron.down")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
+        
         view.tintColor = .accentColor
         view.addTarget(self, action: #selector(self.didTapChevronDescriptionButton(_:)), for: .touchUpInside)
         view.imageViewSizeToButton()
+        view.isHidden = self.user?.description?.isEmpty ?? true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
     private lazy var checkmarkImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(systemName: "checkmark"))
+        if #available(iOS 13.0, *) {
+            let view = UIImageView(image: UIImage(systemName: "checkmark"))
+            
+            view.tintColor = .accentColor
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIImageView(image: UIImage(named: "checkmark")?.withRenderingMode(.alwaysTemplate))
         
         view.tintColor = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -127,12 +144,11 @@ class ProfileTableViewCell: UITableViewCell {
         self.containerView.addSubview(self.nameLabel)
         self.containerView.addSubview(self.descriptionLabel)
         self.containerView.addSubview(self.chevronDescriptionButton)
-        
-        self.avatarImageView.addSubview(self.checkmarkImageView)
+        self.containerView.addSubview(self.checkmarkImageView)
         
         self.avatarImageView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().inset(15)
-            make.width.height.equalTo(150)
+            make.width.height.equalTo(self.snp.width).multipliedBy(0.35)
         }
         
         self.containerView.snp.makeConstraints { make in
@@ -146,7 +162,6 @@ class ProfileTableViewCell: UITableViewCell {
         
         self.nameLabel.snp.makeConstraints { make in
             make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
-            make.trailing.equalToSuperview().inset(15)
             make.top.equalTo(self.avatarImageView)
         }
         
@@ -164,22 +179,42 @@ class ProfileTableViewCell: UITableViewCell {
         }
         
         self.checkmarkImageView.snp.makeConstraints { make in
-            make.bottom.leading.equalToSuperview()
-            make.width.height.equalTo(15)
+            make.trailing.equalToSuperview().inset(15)
+            make.leading.equalTo(self.nameLabel.snp.trailing).inset(-10)
+            make.centerY.equalTo(self.nameLabel)
+            make.width.height.equalTo(30)
         }
+        
+        self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.width / 2
     }
     
 //    MARK: Actions
     @objc private func didTapChevronDescriptionButton(_ sender: UIButton) {
         if self.chevronDescriptionButtonIsDown {
-            self.chevronDescriptionButton.setImage(.init(systemName: "chevron.up"), for: .normal)
+            if #available(iOS 13.0, *) {
+                self.chevronDescriptionButton.setImage(.init(systemName: "chevron.up"), for: .normal)
+            } else {
+                self.chevronDescriptionButton.setImage(
+                    .init(named: "chevron.up")?.withRenderingMode(.alwaysTemplate),
+                    for: .normal
+                )
+            }
+            
             self.containerView.snp.removeConstraints()
             self.containerView.snp.makeConstraints { make in
                 make.leading.trailing.top.equalToSuperview().inset(15)
                 make.bottom.equalToSuperview().inset(7.5)
             }
         } else {
-            self.chevronDescriptionButton.setImage(.init(systemName: "chevron.down"), for: .normal)
+            if #available(iOS 13.0, *) {
+                self.chevronDescriptionButton.setImage(.init(systemName: "chevron.down"), for: .normal)
+            } else {
+                self.chevronDescriptionButton.setImage(
+                    .init(named: "chevron.down")?.withRenderingMode(.alwaysTemplate),
+                    for: .normal
+                )
+            }
+            
             self.containerView.snp.removeConstraints()
             self.containerView.snp.makeConstraints { make in
                 make.leading.trailing.top.equalToSuperview().inset(15)

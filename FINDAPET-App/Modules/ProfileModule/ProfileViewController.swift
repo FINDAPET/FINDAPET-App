@@ -19,10 +19,6 @@ final class ProfileViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.presenter.callBack = { [ weak self ] in self?.tableView.reloadData() }
-        
-        if self.presenter.userID == nil {
-            NotificationCenterManager.addObserver(self, name: .reloadProfileScreen, action: #selector(self.refreshScreen))
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -34,15 +30,23 @@ final class ProfileViewController: UIViewController {
     
 //    MARK: UI Properties
     private lazy var activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .medium)
+        if #available(iOS 13.0, *) {
+            let view = UIActivityIndicatorView(style: .medium)
+            
+            view.startAnimating()
+            view.isHidden = true
+            view.isHidden = self.presenter.user != nil
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
         view.isHidden = true
+        view.isHidden = self.presenter.user != nil
         view.translatesAutoresizingMaskIntoConstraints = false
-        
-        if self.presenter.user == nil {
-            view.isHidden = false
-        }
         
         return view
     }()
@@ -169,6 +173,16 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         self.getUser()
+        
+        guard self.presenter.userID == nil else {
+            return
+        }
+        
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .reloadProfileScreen,
+            action: #selector(self.refreshScreen)
+        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -184,24 +198,43 @@ final class ProfileViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor : UIColor.textColor]
         self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
         self.title = NSLocalizedString("Profile", comment: "")
+        self.navigationItem.setHidesBackButton(self.presenter.userID == nil, animated: false)
         
-        if self.presenter.userID == nil {
-            self.navigationItem.setHidesBackButton(true, animated: false)
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "list.bullet"),
-                style: .plain,
-                target: self,
-                action: #selector(self.didTapSlideMenuBarButton)
-            )
+        if self.presenter.userID == nil || self.presenter.userID == self.presenter.getMyID() {
+            if #available(iOS 13.0, *) {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: UIImage(systemName: "list.bullet"),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapSlideMenuBarButton)
+                )
+            } else {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: UIImage(named: "list.bullet")?.withRenderingMode(.alwaysTemplate),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapSlideMenuBarButton)
+                )
+            }
         } else {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "exclamationmark.triangle"),
-                style: .plain,
-                target: self,
-                action: #selector(self.didTapComplaintNavigationBarButton)
-            )
+            if #available(iOS 13.0, *) {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: UIImage(systemName: "exclamationmark.triangle"),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapComplaintNavigationBarButton)
+                )
+            } else {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: UIImage(named: "exclamationmark.triangle")?.withRenderingMode(.alwaysTemplate),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapComplaintNavigationBarButton)
+                )
+            }
         }
         
         self.view.addSubview(self.activityIndicatorView)
@@ -264,10 +297,18 @@ final class ProfileViewController: UIViewController {
     }
     
     private func logOut() {
-        self.presenter.logOut {  [ weak self ] error in
-            self?.error(error) { [ weak self ] in
+        self.presenter.logOut { [ weak self ] error in
+            self?.error(error) {
                 self?.presenter.writeIsFirstEditing()
                 self?.presenter.deleteKeychainData()
+                self?.presenter.deleteCity()
+                self?.presenter.deleteCountry()
+                self?.presenter.deleteUserID()
+                self?.presenter.deleteDealsID()
+                self?.presenter.deleteUserName()
+                self?.presenter.deleteDeviceToken()
+                self?.presenter.deleteUserCurrency()
+                self?.presenter.deleteNotificationScreensID()
                 self?.presenter.goToOnboarding()
             }
         }

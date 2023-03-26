@@ -67,14 +67,15 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
     func start() {
         self.setupViews()
         
-        self.getNotificationScreens { notificationScreens, error in
+        self.getNotificationScreens { [ weak self ] notificationScreens, error in
             if let error = error {
                 print("❌ Error: \(error.localizedDescription)")
                 
                 return
             }
             
-            guard let IDs = self.getUserDefaultsNotificationScreensID(),
+            guard let self = self,
+                  let IDs = self.getUserDefaultsNotificationScreensID(),
                   let notificationScreen = (notificationScreens ?? .init())
                 .filter({ !IDs.contains($0.id?.uuidString ?? .init()) || $0.isRequired })
                 .sorted(by: { $0.isRequired == true && $1.isRequired == false }).first else {
@@ -151,6 +152,37 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
             
             UserDefaultsManager.write(data: modes, key: .dealModes)
         }
+        
+        self.getChatRoomsID { chatRoomsID, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                
+                return
+            }
+            
+            guard let chatRoomsID = chatRoomsID else {
+                print("❌ Error: not found.")
+                
+                return
+            }
+            
+            UserDefaultsManager.write(data: chatRoomsID, key: .chatRoomsID)
+        }
+    }
+    
+//    MARK: Profile
+    func getProfile(userID: UUID? = nil) -> ProfileViewController {
+        self.profileCoordinator.getProfile(userID: userID)
+    }
+    
+//    MARK: Deal
+    func getDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) -> DealViewController {
+        self.profileCoordinator.getDeal(dealID: dealID, deal: deal)
+    }
+    
+//    MARK: Chat Room
+    func getChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) -> ChatRoomViewController {
+        self.chatRoomCoordinator.getChatRoom(chatRoom: chatRoom, userID: userID)
     }
     
 //    MARK: Notification Screen
@@ -228,6 +260,15 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
         )
     }
     
+    private func getChatRoomsID(_ completionHandler: @escaping ([String]?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.getChatRoomsID(),
+            completionHandler: completionHandler
+        )
+    }
+    
 //    MARK: Keychain
     private func getBearrerToken() -> String? {
         KeychainManager.shared.read(key: .token)
@@ -293,8 +334,11 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
     
 //    MARK: Setup Views
     private func setupViews() {
-        self.tabBarController.tabBar.clipsToBounds = true
-        self.tabBarController.tabBar.layer.masksToBounds = true
+        if #unavailable(iOS 13.0) {
+            self.tabBarController.tabBar.tintColor = .accentColor
+        }
+        
+        self.tabBarController.navigationController?.navigationBar.isHidden = true
         self.tabBarController.viewControllers = [
             self.feedCoordinator.navigationController,
             self.chatRoomCoordinator.navigationController,

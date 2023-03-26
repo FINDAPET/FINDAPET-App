@@ -16,7 +16,7 @@ struct Message {
         var isViewed: Bool
         var bodyData: Data?
         var userID: UUID
-        var chatRoomID: UUID?
+        var chatRoomID: String?
         
         init(
             id: UUID? = nil,
@@ -24,7 +24,7 @@ struct Message {
             isViewed: Bool = false,
             bodyData: Data? = nil,
             userID: UUID,
-            chatRoomID: UUID? = nil
+            chatRoomID: String? = nil
         ) {
             self.id = id
             self.text = text
@@ -41,44 +41,25 @@ struct Message {
         var isViewed: Bool
         var bodyData: Data?
         var user: User.Output
-        var createdAt: Date?
+        var createdAt: String?
         var chatRoom: ChatRoom.Output
     }
 }
 
-extension Message.Output: MediaItem {
-    
-    var url: URL? { nil }
-    var size: CGSize { self.image?.size ?? .zero }
-    var image: UIImage? {        
-        guard let data = self.bodyData else {
-            return nil
-        }
-        
-        return .init(data: data)
+extension Message {
+    struct MessageType: MessageKit.MessageType {
+        var sender: MessageKit.SenderType
+        var messageId: String
+        var sentDate: Date
+        var kind: MessageKit.MessageKind
     }
-    
-    var placeholderImage: UIImage {
-        let imageView = UIImageView(image: .init(systemName: "photo")?.withRenderingMode(.alwaysTemplate))
-        
-        imageView.tintColor = .lightGray
-        
-        return imageView.image ?? .init()
-    }
-    
 }
 
-extension Message.Output: MessageType {
-    
-    var sender: MessageKit.SenderType { self.user }
-    var messageId: String { self.id?.uuidString ?? String() }
-    var sentDate: Date { self.createdAt ?? Date() }
-    var kind: MessageKit.MessageKind {
-        if self.image != nil {
-            return .photo(self)
-        }
-        
-        return .text(self.text ?? .init())
+extension Message {
+    struct MediaItem: MessageKit.MediaItem {
+        var url: URL?
+        var size: CGSize
+        var image: UIImage?
+        var placeholderImage: UIImage
     }
-    
 }

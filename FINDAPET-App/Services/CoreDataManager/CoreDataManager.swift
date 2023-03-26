@@ -14,6 +14,7 @@ final class CoreDataManager<T : NSManagedObject>: NSObject {
     let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "FINDAPET_App")
         
+        container.viewContext.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
         container.loadPersistentStores { storeDescription, error in
             if let error = error {
                 print("❌ Error: \(error)")
@@ -23,12 +24,18 @@ final class CoreDataManager<T : NSManagedObject>: NSObject {
         return container
     }()
     
-    private(set) lazy var fetchedResultController = NSFetchedResultsController<T>(
-        fetchRequest: NSFetchRequest<T>(entityName: .init(describing: T.self)),
-        managedObjectContext: self.persistentContainer.viewContext,
-        sectionNameKeyPath: nil,
-        cacheName: nil
-    )
+    private(set) lazy var fetchedResultController: NSFetchedResultsController<T> = {
+        let request = NSFetchRequest<T>(entityName: .init(describing: T.self))
+        
+        request.sortDescriptors = [.init(key: "name", ascending: false)]
+        
+        return .init(
+            fetchRequest: request,
+            managedObjectContext: self.persistentContainer.viewContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+    }()
     
 //    MARK: Actions
     func all(_ completionHandler: @escaping ([T], Error?) -> Void) {
@@ -68,7 +75,7 @@ final class CoreDataManager<T : NSManagedObject>: NSObject {
     }
     
     func delete(_ model: T, completionHadler: @escaping (Error?) -> Void) {
-        let viewContext = self.persistentContainer.viewContext
+        let viewContext = self.persistentContainer.newBackgroundContext()
         
         viewContext.perform {
             do {

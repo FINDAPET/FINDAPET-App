@@ -49,7 +49,7 @@ final class AdsViewController: UIViewController {
     }()
     
     private lazy var tableView: UITableView = {
-        let view = UITableView(frame: .zero, style: .insetGrouped)
+        let view = UITableView(frame: .zero, style: .plain)
         
         view.delegate = self
         view.dataSource = self

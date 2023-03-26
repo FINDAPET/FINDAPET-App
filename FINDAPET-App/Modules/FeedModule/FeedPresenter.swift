@@ -20,7 +20,7 @@ final class FeedPresenter {
     }
     
 //    MARK: Properties
-    private var filter = Filter()
+    private(set) var filter = Filter()
     private(set) var deals = [Deal.Output]() {
         didSet {
             self.filter.checkedIDs = self.deals.map(\.id).filter { $0 != nil } as? [UUID] ?? .init()
@@ -44,6 +44,20 @@ final class FeedPresenter {
     
     func deleteFilter() {
         self.filter = Filter(title: self.filter.title)
+    }
+    
+    func makeDealsEmpty() {
+        self.deals = .init()
+    }
+    
+//    MARK: Notification Center
+    func notificationCenterManagerAddObserver(
+        _ observer: Any,
+        name: NotificationCenterManagerKeys,
+        additional parameter: String? = nil,
+        action: Selector
+    ) {
+        self.interactor.notificationCenterManagerAddObserver(observer, name: name, additional: parameter, action: action)
     }
     
 //    MARK: Requests
@@ -77,7 +91,11 @@ final class FeedPresenter {
     
 //    MARK: Aplication Requests
     func goToUrl() {
-        self.interactor.goTo(url: URL(string: self.ad?.link ?? .init()) ?? .init(fileURLWithPath: .init()))
+        if #available(iOS 16.0, *) {
+            self.interactor.goTo(url: .init(string: self.ad?.link ?? .init()) ?? .init(filePath: .init()))
+        } else {
+            self.interactor.goTo(url: .init(string: self.ad?.link ?? .init()) ?? .init(fileURLWithPath: .init()))
+        }
     }
     
 //    MARK: Routing
@@ -89,13 +107,22 @@ final class FeedPresenter {
         self.router.goToProfile(userID: self.ad?.cattery?.id)
     }
     
-    func getFilter(completionHandler: @escaping ([Deal.Output]?, Error?) -> Void) -> FilterViewController? {
-        self.router.getFilter(filter: self.filter) { filter in
-            self.filter = filter
+    func goToSearch(_ onTapSearchButtonAction: @escaping (String) -> Void) {
+        self.router.goToSearch(with: self.filter.title, onTapSearchButtonAction)
+    }
+    
+    func getFilter(
+        startHandler: @escaping () -> Void = { },
+        completionHandler: @escaping ([Deal.Output]?, Error?) -> Void
+    ) -> FilterViewController? {
+        self.router.getFilter(filter: self.filter) { [ weak self ] filter in
+            startHandler()
             
-            self.setFilterCheckedIDs()
-            self.getDeals(completionHandler: completionHandler)
-            self.getRandomAd()
+            self?.filter = filter
+            self?.makeDealsEmpty()
+            self?.setFilterCheckedIDs()
+            self?.getDeals(completionHandler: completionHandler)
+            self?.getRandomAd()
         }
     }
     

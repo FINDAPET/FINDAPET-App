@@ -59,13 +59,13 @@ final class ProfilePresenter {
     }
     
     func goToEditProfile() {
-        self.router.goToEditProfile(user: User.Input(
+        self.router.goToEditProfile(user: .init(
             id: self.user?.id,
             name: self.user?.name ?? String(),
             avatarData: self.user?.avatarData,
             documentData: self.user?.documentData,
             description: self.user?.description,
-            chatRoomsID: self.user?.chatRooms.map { $0.id ?? UUID() } ?? [UUID]()
+            chatRoomsID: self.user?.chatRooms.map { $0.id ?? .init() } ?? .init()
         ))
     }
     
@@ -82,7 +82,6 @@ final class ProfilePresenter {
     }
     
 //    MARK: Requests
-    
     func getUser(completionHandler: @escaping (User.Output?, Error?) -> Void) {
         self.interactor.getUser(completionHandler: completionHandler)
     }
@@ -97,19 +96,17 @@ final class ProfilePresenter {
         self.interactor.logOut(completionHandler: completionHandler)
     }
     
-//    MARK: Currency Converter
-    
-    func convert(
-        _ first: String,
-        to second: String,
-        value: Int,
-        completionHandler: @escaping (ExchangeConvert.Output?, Error?) -> Void
+//    MARK: Notification Center
+    func notificationCenterManagerAddObserver(
+        _ observer: Any,
+        name: NotificationCenterManagerKeys,
+        additional parameter: String? = nil,
+        action: Selector
     ) {
-        self.interactor.convert(first, to: second, value: value, completionHandler: completionHandler)
+        self.interactor.notificationCenterManagerAddObserver(observer, name: name, additional: parameter, action: action)
     }
     
 //    MARK: User Defaults
-    
     func getMyID() -> UUID? {
         self.interactor.getMyID()
     }
@@ -120,6 +117,38 @@ final class ProfilePresenter {
     
     func writeIsFirstEditing() {
         self.interactor.writeIsFirstEditing()
+    }
+    
+    func deleteUserID() {
+        self.interactor.setUserDefaults(nil, with: .id)
+    }
+    
+    func deleteDealsID() {
+        self.interactor.setUserDefaults(nil, with: .dealsID)
+    }
+    
+    func deleteDeviceToken() {
+        self.interactor.setUserDefaults(nil, with: .deviceToken)
+    }
+    
+    func deleteUserName() {
+        self.interactor.setUserDefaults(nil, with: .userName)
+    }
+    
+    func deleteUserCurrency() {
+        self.interactor.setUserDefaults(nil, with: .currency)
+    }
+    
+    func deleteNotificationScreensID() {
+        self.interactor.setUserDefaults(nil, with: .notificationScreensID)
+    }
+    
+    func deleteCountry() {
+        self.interactor.setUserDefaults(nil, with: .country)
+    }
+    
+    func deleteCity() {
+        self.interactor.setUserDefaults(nil, with: .city)
     }
     
     private func saveDealsID() {
@@ -134,7 +163,6 @@ final class ProfilePresenter {
     }
     
 //    MARK: Keychain
-    
     func deleteKeychainData() {
         self.interactor.deleteKeychainData()
     }

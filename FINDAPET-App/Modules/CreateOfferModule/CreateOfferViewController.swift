@@ -159,7 +159,7 @@ final class CreateOfferViewController: UIViewController {
         }
         
         self.titleLabel.text = self.presenter.deal.title
-        self.priceTextField.text = String(self.presenter.deal.price)
+        self.priceTextField.text = .init(Int(self.presenter.deal.price.rounded(.up)))
     }
     
 //    MARK: Actions
@@ -173,7 +173,7 @@ final class CreateOfferViewController: UIViewController {
         }
         
         self.presenter.createOffer(
-            price: Int(self.priceTextField.text ?? String()) ?? self.presenter.deal.price,
+            price: .init(self.priceTextField.text ?? String()) ?? .init(self.presenter.deal.price),
             currencyName: .getCurrency(wtih: self.currencyButton.titleLabel?.text ?? String()) ?? .USD
         ) { [ weak self ] error in
             self?.error(error) {

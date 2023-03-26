@@ -14,40 +14,43 @@ protocol RegistrationCoordinatable {
 
 final class RegistrationCoordinator: Coordinator {
     
+//    MARK: - Properties
     let navigationController = UINavigationController()
+    private let mainTabBarCoordinator = MainTabBarCoordinator()
     
+//    MARK: - Start
     func start() {
         self.setupViews()
         
         if let email = self.getEmail(), let password = self.getPassword() {
             self.goToLaunchScreen()
-            self.logIn(email: email, password: password) { token, error in
+            self.logIn(email: email, password: password) { [ weak self ] token, error in
                 if error != nil {
-                    self.goToOnboarding()
+                    self?.goToOnboarding(false)
                     
                     return
                 }
                 
                 guard let token = token else {
-                    self.goToOnboarding()
+                    self?.goToOnboarding(false)
                     
                     return
                 }
                 
-                self.setBearrerToken(token.value)
+                self?.setBearrerToken(token.value)
                 
                 if token.user.name.isEmpty {
-                    self.goToEditProfile(user: .init(id: self.getUserID()))
+                    self?.goToEditProfile(user: .init(id: self?.getUserID()))
                 } else {
-                    self.goToMainTabBar()
+                    self?.goToMainTabBar(false)
                 }
             }
         } else {
-            self.goToOnboarding()
+            self.goToOnboarding(false)
         }
     }
     
-    func goToOnboarding() {
+    func goToOnboarding(_ animated: Bool = true) {
         let router = OnboardingRouter()
         let interactor = OnboardingInteractor()
         let presenter = OnboardingPresenter(router: router, interactor: interactor)
@@ -55,7 +58,7 @@ final class RegistrationCoordinator: Coordinator {
         
         router.coordinatorDelegate = self
         
-        self.navigationController.pushViewController(viewController, animated: true)
+        self.navigationController.pushViewController(viewController, animated: animated)
     }
     
     func goToRegistration(mode: RegistrationMode) {
@@ -99,13 +102,10 @@ final class RegistrationCoordinator: Coordinator {
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
-    func goToMainTabBar() {
-        let coordinator = MainTabBarCoordinator()
-        
-        coordinator.coordinatorDelegate = self
-        coordinator.start()
-                
-        self.navigationController.pushViewController(coordinator.tabBarController, animated: true)
+    func goToMainTabBar(_ animated: Bool = true) {
+        self.mainTabBarCoordinator.coordinatorDelegate = self
+        self.mainTabBarCoordinator.start()
+        self.navigationController.pushViewController(self.mainTabBarCoordinator.tabBarController, animated: animated)
         
         UserDefaultsManager.write(data: false, key: .isFirstEditing)
     }
@@ -159,6 +159,10 @@ final class RegistrationCoordinator: Coordinator {
 //    MARK: Setup Views
     private func setupViews() {
         self.navigationController.navigationBar.isHidden = true
+        
+        if #unavailable(iOS 13.0) {
+            self.navigationController.navigationBar.tintColor = .accentColor
+        }
     }
     
 }
