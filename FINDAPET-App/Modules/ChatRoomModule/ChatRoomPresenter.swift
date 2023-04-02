@@ -115,7 +115,7 @@ final class ChatRoomPresenter {
         self.interactor.chatRoom(with: id, completionHandler: newCompletionHandler)
     }
     
-    func sendMessage(_ message: Message.Input, completion: @escaping () -> Void = { }) {
+    func sendMessage(_ message: Message.Input) {
         if let chatRoom = self.chatRoom, let user = chatRoom.users.filter({ $0.id == message.userID }).first {
             self.chatRoom?.messages.append(Message.Output(
                 text: message.text,
@@ -127,15 +127,15 @@ final class ChatRoomPresenter {
             ))
         }
         
-        self.interactor.sendMessage(message: message, completion: completion)
+        self.interactor.sendMessage(message: message)
     }
     
-    func sendString(_ string: String, completion: @escaping () -> Void = { }) {
-        self.interactor.sendString(string, completion: completion)
+    func sendString(_ string: String) {
+        self.interactor.sendString(string)
     }
     
-    func closeWS() {
-        self.interactor.closeWS()
+    func closeWS(_ completionHandler: @escaping (Error?) -> Void = { _ in }) {
+        self.interactor.closeWS(completionHandler)
     }
     
 //    MARK: Sound Manager

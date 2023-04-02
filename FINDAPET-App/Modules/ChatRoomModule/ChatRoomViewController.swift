@@ -385,6 +385,10 @@ extension ChatRoomViewController: MessagesDisplayDelegate {
         return .textColor
     }
     
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        avatarView.isHidden = true
+    }
+        
 }
 
 extension ChatRoomViewController: MessageCellDelegate {
@@ -447,7 +451,7 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
         ))
         self.messagesCollectionView.scrollToLastItem()
         
-//        Maybe later. If it will be needed
+///        Maybe later. If it will be needed
 //        self.presenter.playOnSendMessageSound()
         
         guard self.presenter.chatRoom?.id == nil else {

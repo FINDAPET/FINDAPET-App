@@ -51,7 +51,6 @@
 		E325351D28F58C6500878A7F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E325351C28F58C6500878A7F /* Message.swift */; };
 		E325351F28F58CE600878A7F /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E325351E28F58CE600878A7F /* ChatRoom.swift */; };
 		E32AC0D728FB182F00081886 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E32AC0D628FB182F00081886 /* SnapKit */; };
-		E32AC0DA28FB184100081886 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E32AC0D928FB184100081886 /* KeychainAccess */; };
 		E33130A1292A82F0009C26A1 /* EditDealCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130A0292A82F0009C26A1 /* EditDealCoordinator.swift */; };
 		E33130AE293243E7009C26A1 /* EditDealRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130AD293243E7009C26A1 /* EditDealRouter.swift */; };
 		E33130B0293243F8009C26A1 /* EditDealInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130AF293243F8009C26A1 /* EditDealInteractor.swift */; };
@@ -95,13 +94,6 @@
 		E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */; };
 		E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */; };
 		E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */; };
-		E35C60DF29CF85B000108F53 /* RightNativeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C60DE29CF85B000108F53 /* RightNativeEngine.swift */; };
-		E35C60E229CF885D00108F53 /* RightWSEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C60E129CF885D00108F53 /* RightWSEngine.swift */; };
-		E35C60E429CF893600108F53 /* RightFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C60E329CF893600108F53 /* RightFrame.swift */; };
-		E35C60E629CF897A00108F53 /* RightFrameCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C60E529CF897A00108F53 /* RightFrameCollector.swift */; };
-		E35C60E829CF89E100108F53 /* RightFrameEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C60E729CF89E100108F53 /* RightFrameEvent.swift */; };
-		E35C60EA29CF8A5700108F53 /* RightFramerEventClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C60E929CF8A5700108F53 /* RightFramerEventClient.swift */; };
-		E35C60EC29D0971F00108F53 /* RightWSFramer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C60EB29D0971F00108F53 /* RightWSFramer.swift */; };
 		E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */; };
 		E35E09F228F739F200B310D1 /* YandexMobileMetricaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */; };
 		E35E09F428F73A9000B310D1 /* YandexMobileMetricaErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F328F73A9000B310D1 /* YandexMobileMetricaErrors.swift */; };
@@ -115,6 +107,7 @@
 		E37437A6292249590077FA28 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37437A5292249590077FA28 /* FilterViewController.swift */; };
 		E37437A8292255850077FA28 /* PetTypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37437A7292255850077FA28 /* PetTypeCollectionViewCell.swift */; };
 		E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AC6A528F82CF1003AC7D3 /* DealTableViewCell.swift */; };
+		E37C3E6529D0B9F500B64845 /* WebSocketKit in Frameworks */ = {isa = PBXBuildFile; productRef = E37C3E6429D0B9F500B64845 /* WebSocketKit */; };
 		E37D546729C0F2F900816450 /* SearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37D546629C0F2F900816450 /* SearchRouter.swift */; };
 		E37D546929C0F30600816450 /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37D546829C0F30600816450 /* SearchPresenter.swift */; };
 		E37D546B29C0F31800816450 /* SearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37D546A29C0F31800816450 /* SearchInteractor.swift */; };
@@ -148,7 +141,6 @@
 		E3B7DDAF295CA62E00D570F3 /* LaunchScreenInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7DDAE295CA62E00D570F3 /* LaunchScreenInteractor.swift */; };
 		E3B7DDB1295CA63A00D570F3 /* LaunchScreenPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7DDB0295CA63A00D570F3 /* LaunchScreenPresenter.swift */; };
 		E3B7DDB3295CA64700D570F3 /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7DDB2295CA64700D570F3 /* LaunchScreenViewController.swift */; };
-		E3BF793929D0AAD00076EECF /* RightEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BF793829D0AAD00076EECF /* RightEngine.swift */; };
 		E3CE7300291BB4F300577206 /* ChatRoomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CE72FF291BB4F300577206 /* ChatRoomHeaderView.swift */; };
 		E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */; };
 		E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67828ABD3BA00468ED2 /* UIColor.swift */; };
@@ -181,6 +173,7 @@
 		E3DBD03928FF216F0063DC35 /* OffersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DBD03828FF216F0063DC35 /* OffersPresenter.swift */; };
 		E3DBD03B28FF21800063DC35 /* OffersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DBD03A28FF21800063DC35 /* OffersViewController.swift */; };
 		E3DBD03E28FF32C10063DC35 /* OfferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DBD03D28FF32C10063DC35 /* OfferTableViewCell.swift */; };
+		E3DF88F029D9BF6E001F17D7 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = E3DF88EF29D9BF6E001F17D7 /* SwiftKeychainWrapper */; };
 		E3E05CFA291EA64300605F49 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05CF9291EA64300605F49 /* Subscription.swift */; };
 		E3E05CFD291EB44800605F49 /* FeedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05CFC291EB44800605F49 /* FeedRouter.swift */; };
 		E3E05CFF291EB45700605F49 /* FeedInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E05CFE291EB45700605F49 /* FeedInteractor.swift */; };
@@ -216,7 +209,6 @@
 		E3E8C59529C4E582005CC294 /* SubscriptionInformationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8C59429C4E582005CC294 /* SubscriptionInformationPresenter.swift */; };
 		E3E8C59729C4E601005CC294 /* SubscriptionInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8C59629C4E601005CC294 /* SubscriptionInformationView.swift */; };
 		E3E8C59A29C5BCD1005CC294 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = E3E8C59929C5BCD1005CC294 /* MessageKit */; };
-		E3E8C5A329C5EEF0005CC294 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = E3E8C5A229C5EEF0005CC294 /* Starscream */; };
 		E3EB1E33298AC18F009805A8 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EB1E32298AC18F009805A8 /* PurchaseManager.swift */; };
 		E3F4B04128FD69B30083815E /* SideMenu in Frameworks */ = {isa = PBXBuildFile; productRef = E3F4B04028FD69B30083815E /* SideMenu */; };
 		E3F4B04728FD7D510083815E /* SlideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F4B04628FD7D510083815E /* SlideMenuViewController.swift */; };
@@ -316,13 +308,6 @@
 		E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSAuthentaficationMode.swift; sourceTree = "<group>"; };
 		E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
-		E35C60DE29CF85B000108F53 /* RightNativeEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightNativeEngine.swift; sourceTree = "<group>"; };
-		E35C60E129CF885D00108F53 /* RightWSEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightWSEngine.swift; sourceTree = "<group>"; };
-		E35C60E329CF893600108F53 /* RightFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightFrame.swift; sourceTree = "<group>"; };
-		E35C60E529CF897A00108F53 /* RightFrameCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightFrameCollector.swift; sourceTree = "<group>"; };
-		E35C60E729CF89E100108F53 /* RightFrameEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightFrameEvent.swift; sourceTree = "<group>"; };
-		E35C60E929CF8A5700108F53 /* RightFramerEventClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightFramerEventClient.swift; sourceTree = "<group>"; };
-		E35C60EB29D0971F00108F53 /* RightWSFramer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightWSFramer.swift; sourceTree = "<group>"; };
 		E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseErrors.swift; sourceTree = "<group>"; };
 		E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexMobileMetricaManager.swift; sourceTree = "<group>"; };
 		E35E09F328F73A9000B310D1 /* YandexMobileMetricaErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexMobileMetricaErrors.swift; sourceTree = "<group>"; };
@@ -368,7 +353,6 @@
 		E3B7DDAE295CA62E00D570F3 /* LaunchScreenInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenInteractor.swift; sourceTree = "<group>"; };
 		E3B7DDB0295CA63A00D570F3 /* LaunchScreenPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenPresenter.swift; sourceTree = "<group>"; };
 		E3B7DDB2295CA64700D570F3 /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
-		E3BF793829D0AAD00076EECF /* RightEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightEngine.swift; sourceTree = "<group>"; };
 		E3CE72FF291BB4F300577206 /* ChatRoomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomHeaderView.swift; sourceTree = "<group>"; };
 		E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
 		E3CEE67828ABD3BA00468ED2 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -453,13 +437,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3E8C5A329C5EEF0005CC294 /* Starscream in Frameworks */,
 				E3B7B08428FC67340089762E /* YandexMobileMetrica in Frameworks */,
 				E32AC0D728FB182F00081886 /* SnapKit in Frameworks */,
 				E3F4B04128FD69B30083815E /* SideMenu in Frameworks */,
 				E3E8C59A29C5BCD1005CC294 /* MessageKit in Frameworks */,
-				E32AC0DA28FB184100081886 /* KeychainAccess in Frameworks */,
+				E37C3E6529D0B9F500B64845 /* WebSocketKit in Frameworks */,
 				E343E8A629CF1BDB005BE2FE /* Gzip in Frameworks */,
+				E3DF88F029D9BF6E001F17D7 /* SwiftKeychainWrapper in Frameworks */,
 				E3F9754729A40FA60056B3DA /* JGProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -787,25 +771,9 @@
 			path = ProfileTableViewCell;
 			sourceTree = "<group>";
 		};
-		E35C60DD29CF858600108F53 /* Starscream */ = {
-			isa = PBXGroup;
-			children = (
-				E35C60DE29CF85B000108F53 /* RightNativeEngine.swift */,
-				E35C60E129CF885D00108F53 /* RightWSEngine.swift */,
-				E35C60E329CF893600108F53 /* RightFrame.swift */,
-				E35C60E529CF897A00108F53 /* RightFrameCollector.swift */,
-				E35C60E729CF89E100108F53 /* RightFrameEvent.swift */,
-				E35C60E929CF8A5700108F53 /* RightFramerEventClient.swift */,
-				E35C60EB29D0971F00108F53 /* RightWSFramer.swift */,
-				E3BF793829D0AAD00076EECF /* RightEngine.swift */,
-			);
-			path = Starscream;
-			sourceTree = "<group>";
-		};
 		E35C60E029CF865700108F53 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E35C60DD29CF858600108F53 /* Starscream */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1410,13 +1378,13 @@
 			name = "FINDAPET-App";
 			packageProductDependencies = (
 				E32AC0D628FB182F00081886 /* SnapKit */,
-				E32AC0D928FB184100081886 /* KeychainAccess */,
 				E3B7B08328FC67340089762E /* YandexMobileMetrica */,
 				E3F4B04028FD69B30083815E /* SideMenu */,
 				E3F9754629A40FA60056B3DA /* JGProgressHUD */,
 				E3E8C59929C5BCD1005CC294 /* MessageKit */,
-				E3E8C5A229C5EEF0005CC294 /* Starscream */,
 				E343E8A529CF1BDB005BE2FE /* Gzip */,
+				E37C3E6429D0B9F500B64845 /* WebSocketKit */,
+				E3DF88EF29D9BF6E001F17D7 /* SwiftKeychainWrapper */,
 			);
 			productName = "FINDAPET-App";
 			productReference = E3D74F4C28A69BD2004C5172 /* FINDAPET-App.app */;
@@ -1449,13 +1417,13 @@
 			mainGroup = E3D74F4328A69BD2004C5172;
 			packageReferences = (
 				E32AC0D528FB182F00081886 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				E32AC0D828FB184100081886 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				E3B7B08228FC67340089762E /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */,
 				E3F4B03F28FD69B30083815E /* XCRemoteSwiftPackageReference "SideMenu" */,
 				E3F9754529A40FA60056B3DA /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				E3E8C59829C5BCD1005CC294 /* XCRemoteSwiftPackageReference "MessageKit" */,
-				E3E8C5A129C5EEF0005CC294 /* XCRemoteSwiftPackageReference "Starscream" */,
 				E343E8A429CF1BDB005BE2FE /* XCRemoteSwiftPackageReference "GzipSwift" */,
+				E37C3E6329D0B9F500B64845 /* XCRemoteSwiftPackageReference "websocket-kit" */,
+				E3DF88EE29D9BF6E001F17D7 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 			);
 			productRefGroup = E3D74F4D28A69BD2004C5172 /* Products */;
 			projectDirPath = "";
@@ -1496,8 +1464,6 @@
 				E30065062916900500FAB319 /* ChatRoomCoordinator.swift in Sources */,
 				E347A5482901B3690089271F /* UIView.swift in Sources */,
 				E34A3ADF293E0ADA0038625F /* NotificationScreen.swift in Sources */,
-				E3BF793929D0AAD00076EECF /* RightEngine.swift in Sources */,
-				E35C60EC29D0971F00108F53 /* RightWSFramer.swift in Sources */,
 				E3E8C58D29C4E42B005CC294 /* SubscriptionInformationRouter.swift in Sources */,
 				E3993F73290B14F9000C218C /* SubscriptionCoordinator.swift in Sources */,
 				E320ACC529C7A125004B640D /* SoundFileType.swift in Sources */,
@@ -1567,7 +1533,6 @@
 				E3993F71290B0A12000C218C /* ContactEmails.swift in Sources */,
 				E3E4D6A028B92BE3002B0BE6 /* PrivacyPolicyRouter.swift in Sources */,
 				E3E1EB51290063C600F536F4 /* AdsRouter.swift in Sources */,
-				E35C60E829CF89E100108F53 /* RightFrameEvent.swift in Sources */,
 				E3993F6E290AF8B4000C218C /* InfoViewController.swift in Sources */,
 				E313B89A28ACE37B00E33975 /* RegistrationInteractor.swift in Sources */,
 				E3E05D05291EB55400605F49 /* Filter.swift in Sources */,
@@ -1617,8 +1582,6 @@
 				E3B784AD298BB45B004E209B /* ResizableImageCollectionViewCell.swift in Sources */,
 				E34A3AE2294366330038625F /* NotificationScreenRouter.swift in Sources */,
 				E34ABC2F28A771C200A7D2C8 /* RequestManager.swift in Sources */,
-				E35C60DF29CF85B000108F53 /* RightNativeEngine.swift in Sources */,
-				E35C60E429CF893600108F53 /* RightFrame.swift in Sources */,
 				E3E05CFA291EA64300605F49 /* Subscription.swift in Sources */,
 				E305EC7B28ACD78200A3AAD3 /* OnboardingRouter.swift in Sources */,
 				E3993F612909B643000C218C /* CreateAdInteractor.swift in Sources */,
@@ -1654,9 +1617,6 @@
 				E3F82C91296453220049F398 /* CoreDataManager.swift in Sources */,
 				E35E09F428F73A9000B310D1 /* YandexMobileMetricaErrors.swift in Sources */,
 				E312607E28BE39BC0097D040 /* ProfileRouter.swift in Sources */,
-				E35C60E229CF885D00108F53 /* RightWSEngine.swift in Sources */,
-				E35C60E629CF897A00108F53 /* RightFrameCollector.swift in Sources */,
-				E35C60EA29CF8A5700108F53 /* RightFramerEventClient.swift in Sources */,
 				E312608228BE39E10097D040 /* ProfilePresenter.swift in Sources */,
 				E3B7DDAF295CA62E00D570F3 /* LaunchScreenInteractor.swift in Sources */,
 				E34ABC4C28A7CEC100A7D2C8 /* String.swift in Sources */,
@@ -1945,20 +1905,20 @@
 				kind = branch;
 			};
 		};
-		E32AC0D828FB184100081886 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		E343E8A429CF1BDB005BE2FE /* XCRemoteSwiftPackageReference "GzipSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/1024jp/GzipSwift.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.0.0;
+			};
+		};
+		E37C3E6329D0B9F500B64845 /* XCRemoteSwiftPackageReference "websocket-kit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vapor/websocket-kit.git";
+			requirement = {
+				kind = exactVersion;
+				version = 2.2.0;
 			};
 		};
 		E3B7B08228FC67340089762E /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */ = {
@@ -1969,6 +1929,14 @@
 				kind = branch;
 			};
 		};
+		E3DF88EE29D9BF6E001F17D7 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		E3E8C59829C5BCD1005CC294 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MessageKit/MessageKit";
@@ -1976,14 +1944,6 @@
 				kind = versionRange;
 				maximumVersion = 4.0.0;
 				minimumVersion = 3.0.0;
-			};
-		};
-		E3E8C5A129C5EEF0005CC294 /* XCRemoteSwiftPackageReference "Starscream" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/daltoniam/Starscream.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.0;
 			};
 		};
 		E3F4B03F28FD69B30083815E /* XCRemoteSwiftPackageReference "SideMenu" */ = {
@@ -2010,30 +1970,30 @@
 			package = E32AC0D528FB182F00081886 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
-		E32AC0D928FB184100081886 /* KeychainAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E32AC0D828FB184100081886 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
-		};
 		E343E8A529CF1BDB005BE2FE /* Gzip */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E343E8A429CF1BDB005BE2FE /* XCRemoteSwiftPackageReference "GzipSwift" */;
 			productName = Gzip;
+		};
+		E37C3E6429D0B9F500B64845 /* WebSocketKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E37C3E6329D0B9F500B64845 /* XCRemoteSwiftPackageReference "websocket-kit" */;
+			productName = WebSocketKit;
 		};
 		E3B7B08328FC67340089762E /* YandexMobileMetrica */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E3B7B08228FC67340089762E /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */;
 			productName = YandexMobileMetrica;
 		};
+		E3DF88EF29D9BF6E001F17D7 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E3DF88EE29D9BF6E001F17D7 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
 		E3E8C59929C5BCD1005CC294 /* MessageKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E3E8C59829C5BCD1005CC294 /* XCRemoteSwiftPackageReference "MessageKit" */;
 			productName = MessageKit;
-		};
-		E3E8C5A229C5EEF0005CC294 /* Starscream */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E3E8C5A129C5EEF0005CC294 /* XCRemoteSwiftPackageReference "Starscream" */;
-			productName = Starscream;
 		};
 		E3F4B04028FD69B30083815E /* SideMenu */ = {
 			isa = XCSwiftPackageProductDependency;

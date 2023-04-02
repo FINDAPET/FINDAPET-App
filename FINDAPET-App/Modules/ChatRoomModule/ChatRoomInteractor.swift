@@ -76,16 +76,16 @@ final class ChatRoomInteractor {
             }
     }
     
-    func sendMessage(message: Message.Input, completion: @escaping () -> Void = { }) {
-        self.webSocketSender?.send(message, completion: completion)
+    func sendMessage(message: Message.Input) {
+        self.webSocketSender?.send(message)
     }
     
-    func sendString(_ string: String, completion: @escaping () -> Void = { }) {
-        self.webSocketSender?.send(string, completion: completion)
+    func sendString(_ string: String) {
+        self.webSocketSender?.send(string)
     }
     
-    func closeWS() {
-        self.webSocketSender?.close()
+    func closeWS(_ completionHandler: @escaping (Error?) -> Void) {
+        self.webSocketSender?.close(completionHandler)
     }
     
 //    MARK: User Defaults
