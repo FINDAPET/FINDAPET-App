@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import JGProgressHUD
 
 final class EditProfileViewController: UIViewController {
 
@@ -37,6 +38,7 @@ final class EditProfileViewController: UIViewController {
         
         view.allowsEditing = true
         view.sourceType = .photoLibrary
+        view.navigationBar.tintColor = .accentColor
         
         return view
     }()
@@ -46,6 +48,7 @@ final class EditProfileViewController: UIViewController {
         
         view.allowsEditing = true
         view.sourceType = .photoLibrary
+        view.navigationBar.tintColor = .accentColor
         
         return view
     }()
@@ -90,9 +93,13 @@ final class EditProfileViewController: UIViewController {
         let view = UIImageView()
         
         if #available(iOS 13.0, *) {
-            view.image = self.presenter.user.avatarData == nil ? UIImage(systemName: "plus") : UIImage(data: self.presenter.user.avatarData ?? Data())
+            view.image = self.presenter.user.documentData == nil ? .init(systemName: "plus") : .init(
+                data: self.presenter.user.documentData ?? .init()
+            )
         } else {
-            view.image = self.presenter.user.avatarData == nil ? UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate) : UIImage(data: self.presenter.user.avatarData ?? Data())
+            view.image = self.presenter.user.documentData == nil ? .init(named: "plus")?.withRenderingMode(
+                .alwaysTemplate
+            ) : .init(data: self.presenter.user.documentData ?? .init())
         }
         
         view.backgroundColor = .textFieldColor
@@ -102,9 +109,9 @@ final class EditProfileViewController: UIViewController {
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.clipsToBounds = true
         view.layer.masksToBounds = true
-        view.isHidden = self.presenter.user.avatarData == nil ? true : false
+        view.isHidden = true
         view.isUserInteractionEnabled = true
-        view.alpha = self.presenter.user.avatarData == nil ? 0 : 1
+        view.alpha = .zero
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.showDocumentImagePickerController)))
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -117,7 +124,7 @@ final class EditProfileViewController: UIViewController {
         view.text = NSLocalizedString("Register as a cattery(optional)", comment: "")
         view.textColor = .textColor
         view.font = .systemFont(ofSize: 16, weight: .regular)
-        view.numberOfLines = 0
+        view.numberOfLines = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -129,8 +136,9 @@ final class EditProfileViewController: UIViewController {
         view.text = NSLocalizedString("Cattery documents", comment: "")
         view.textColor = .textColor
         view.font = .systemFont(ofSize: 20, weight: .bold)
-        view.isHidden = self.presenter.user.avatarData == nil ? true : false
-        view.alpha = self.presenter.user.avatarData == nil ? 0 : 1
+        view.isHidden = true
+        view.alpha = .zero
+        view.numberOfLines = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -140,12 +148,19 @@ final class EditProfileViewController: UIViewController {
         let view = UIImageView()
         
         if #available(iOS 13.0, *) {
-            view.image = UIImage(systemName: self.presenter.user.documentData == nil ? "square" : "checkmark.square")
+            view.image = .init(
+                systemName: self.presenter.user.documentData == nil &&
+                !self.presenter.user.isCatteryWaitVerify ? "square" : "checkmark.square"
+            )
         } else {
-            view.image = UIImage(named: self.presenter.user.documentData == nil ? "square" : "checkmark.square")?.withRenderingMode(.alwaysTemplate)
+            view.image = .init(
+                named: self.presenter.user.documentData == nil &&
+                !self.presenter.user.isCatteryWaitVerify ? "square" : "checkmarksquare"
+            )?.withRenderingMode(.alwaysTemplate)
         }
         view.tintColor = .accentColor
-        view.isUserInteractionEnabled = true
+        view.isUserInteractionEnabled = !self.presenter.user.isCatteryWaitVerify || self.presenter.user.documentData != nil
+        view.alpha = self.presenter.user.isCatteryWaitVerify || self.presenter.user.documentData != nil ? 0.7 : 1
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapCheckmarkImageView)))
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -159,21 +174,22 @@ final class EditProfileViewController: UIViewController {
         view.text = "*" + NSLocalizedString("Verified catteries are always marked for the buyer", comment: "")
         view.textColor = .lightGray
         view.font = .systemFont(ofSize: 14)
-        view.isHidden = self.presenter.user.avatarData == nil ? true : false
-        view.alpha = self.presenter.user.avatarData == nil ? 0 : 1
+        view.isHidden = true
+        view.alpha = .zero
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
     private lazy var nameTextFieldAndTitle = self.view.createTextFieldsView(
-        title: NSLocalizedString("Main", comment: ""),
+        title: NSLocalizedString("Main", comment: .init()),
         fields: [
             (
-                placeholder: NSLocalizedString("Your name or your cattery name", comment: ""),
+                placeholder: NSLocalizedString("Your name or your cattery name", comment: .init()),
                 text: self.presenter.user.name,
-                action: { [ weak self ] textField in
-                    self?.presenter.user.name = textField.text ?? "" }
+                action: { [ weak self ] in
+                    self?.presenter.user.name = $0.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? .init()
+                }
             )
         ]
     )
@@ -212,10 +228,19 @@ final class EditProfileViewController: UIViewController {
         return view
     }()
     
+    private let progressIndicator: JGProgressHUD = {
+        let view = JGProgressHUD()
+        
+        view.textLabel.text = NSLocalizedString("Loading", comment: .init())
+        
+        return view
+    }()
+    
     private lazy var avatarImagePickerControllerDelegate = AvatarImagePickerControllerDelegate { [ weak self ] image in
         self?.avatarImageView.image = image
-        self?.presenter.user.avatarData = image.jpegData(compressionQuality: 0.7) ?? (UIImage(named: "empty avatar")?.pngData() ?? Data())
-        
+        self?.presenter.user.avatarData = image.jpegData(compressionQuality: 0.7) ?? (UIImage(
+            named: "empty avatar"
+        )?.pngData() ?? .init())
     }
     
     private lazy var documentImagePickerControllerDelegate = DocumentImagePickerControllerDelegate { [ weak self ] image in
@@ -227,6 +252,14 @@ final class EditProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.presenter.registerForPushNotifications { [ weak self ] error in
+            guard error == nil else {
+                return
+            }
+            
+            self?.presenter.createDeviceToken()
+        }
         
         NotificationCenter.default.addObserver(
             self,
@@ -261,17 +294,18 @@ final class EditProfileViewController: UIViewController {
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         self.title = NSLocalizedString("Edit profile", comment: String())
-        
-        if self.presenter.readUserDefaultsIsFirstEdititng() {
-            self.navigationController?.navigationBar.isHidden = true
-        } else {
-            self.navigationController?.navigationBar.isHidden = false
-        }
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
+        self.navigationController?.navigationBar.isHidden = self.presenter.user.name.isEmpty
         
         self.view.backgroundColor = .backgroundColor
         
         self.avatarImagePickerController.delegate = self.avatarImagePickerControllerDelegate
         self.documentImagePickerController.delegate = self.documentImagePickerControllerDelegate
+        (self.nameTextFieldAndTitle.arrangedSubviews.last as? UITextField)?.delegate = self
         
         self.view.addSubview(self.scrollView)
         
@@ -345,8 +379,8 @@ final class EditProfileViewController: UIViewController {
             make.bottom.equalToSuperview().inset(15)
             make.height.equalTo(50)
             
-            if self.presenter.user.avatarData == nil {
-                make.top.equalTo(self.checkmarkLabel.snp.bottom).inset(-25)
+            if self.presenter.user.documentData == nil || self.presenter.isCatteryWaitVerify {
+                make.top.equalTo(self.checkmarkImageView.snp.bottom).inset(-25)
             } else {
                 make.top.equalTo(self.infoLabel.snp.bottom).inset(-25)
             }
@@ -355,9 +389,8 @@ final class EditProfileViewController: UIViewController {
     }
     
 //    MARK: Actions
-        
     @objc private func saveButtonDidTap() {
-        guard self.presenter.user.name != "" else {
+        guard !self.presenter.user.name.isEmpty else {
             self.presentAlert(
                 title: NSLocalizedString("Name field is empty", comment: ""),
                 message: NSLocalizedString("Fill in all required fields", comment: "")
@@ -367,7 +400,7 @@ final class EditProfileViewController: UIViewController {
         }
         
         if self.presenter.user.isCatteryWaitVerify {
-            guard self.presenter.user.documentData != nil else {
+            guard self.presenter.user.documentData != nil || self.presenter.isCatteryWaitVerify else {
                 self.presentAlert(
                     title: NSLocalizedString("Document photo is empty", comment: .init()),
                     message: NSLocalizedString("Attach a photo of the document or uncheck the box", comment: .init())
@@ -377,18 +410,25 @@ final class EditProfileViewController: UIViewController {
             }
         }
         
-        if let deviceToken = self.presenter.readUserDefaultsDeviceToken() {
-            self.presenter.user.deviceTokens.append(deviceToken)
-        }
-        
-        self.presenter.editUser { error in
-            self.error(error) { [ weak self ] in
+        self.progressIndicator.show(in: self.view)
+        self.presenter.editUser { [ weak self ] error in
+            self?.progressIndicator.dismiss()
+            self?.error(error) {
                 self?.presenter.writeUserDefaultsIsFirstEdititng()
                 self?.presenter.writeUserDefaultsUserName()
-                self?.presenter.goToMainTabBar()
                 
-                if self?.presenter.readUserDefaultsDeviceToken() != nil {
-                    self?.presentAlert(title: NSLocalizedString("When your kennel is verified we will send you a notification", comment: ""))
+                if !(self?.navigationController?.viewControllers.contains(where: { $0 is UITabBarController }) ?? true) {
+                    self?.presenter.goToMainTabBar()
+                } else {
+                    self?.navigationController?.popViewController(animated: true)
+                    self?.presenter.postNotificationCenterReloadProfileScreen()
+                }
+                
+                if self?.presenter.readUserDefaultsDeviceToken() != nil && self?.presenter.user.isCatteryWaitVerify ?? true{
+                    self?.presentAlert(title: NSLocalizedString(
+                        "When your kennel is verified we will send you a notification",
+                        comment: .init()
+                    ))
                 }
             }
         }
@@ -412,7 +452,7 @@ final class EditProfileViewController: UIViewController {
             if #available(iOS 13.0, *) {
                 self.checkmarkImageView.image = UIImage(systemName: "checkmark.square")
             } else {
-                self.checkmarkImageView.image = UIImage(named: "checkmark.square")?.withRenderingMode(.alwaysTemplate)
+                self.checkmarkImageView.image = UIImage(named: "checkmarksquare")?.withRenderingMode(.alwaysTemplate)
             }
             
             self.checkmarkImageView.tintColor = .accentColor
@@ -473,9 +513,7 @@ final class EditProfileViewController: UIViewController {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [ weak self ] in
-                guard let self = self else {
-                    return
-                }
+                guard let self else { return }
                 
                 UIView.animate(withDuration: 0.35) { [ weak self ] in
                     guard let self = self else {
@@ -490,7 +528,6 @@ final class EditProfileViewController: UIViewController {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     self.saveButton.snp.removeConstraints()
-                    
                     self.saveButton.snp.makeConstraints { make in
                         make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
                         make.top.equalTo(self.checkmarkLabel.snp.bottom).inset(-25)
@@ -520,8 +557,11 @@ final class EditProfileViewController: UIViewController {
         self.scrollView.verticalScrollIndicatorInsets = .zero
     }
     
-//    MARK: Classes
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
     
+//    MARK: Classes
     fileprivate class AvatarImagePickerControllerDelegate: NSObject {
         private let callBack: (UIImage) -> Void
         
@@ -544,6 +584,7 @@ final class EditProfileViewController: UIViewController {
     
 }
 
+// MARK: - Extensions
 extension EditProfileViewController.AvatarImagePickerControllerDelegate: UINavigationControllerDelegate { }
 
 extension EditProfileViewController.AvatarImagePickerControllerDelegate: UIImagePickerControllerDelegate {
@@ -566,7 +607,10 @@ extension EditProfileViewController.DocumentImagePickerControllerDelegate: UINav
 
 extension EditProfileViewController.DocumentImagePickerControllerDelegate: UIImagePickerControllerDelegate {
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
+    ) {
         if let image = info[.editedImage] as? UIImage {
             self.callBack(image)
         }
@@ -582,8 +626,20 @@ extension EditProfileViewController.DocumentImagePickerControllerDelegate: UIIma
 
 extension EditProfileViewController: UITextViewDelegate {
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        self.presenter.user.description = textView.text.isEmpty ? nil : textView.text
+    func textViewDidChange(_ textView: UITextView) {
+        self.presenter.user.description = textView.text.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ? nil : textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+}
+
+extension EditProfileViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true
     }
     
 }

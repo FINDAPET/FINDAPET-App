@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import SideMenu
+import JGProgressHUD
 
 final class ProfileViewController: UIViewController {
 
@@ -34,8 +35,8 @@ final class ProfileViewController: UIViewController {
             let view = UIActivityIndicatorView(style: .medium)
             
             view.startAnimating()
-            view.isHidden = true
             view.isHidden = self.presenter.user != nil
+            view.color = .accentColor
             view.translatesAutoresizingMaskIntoConstraints = false
             
             return view
@@ -44,9 +45,17 @@ final class ProfileViewController: UIViewController {
         let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
-        view.isHidden = true
         view.isHidden = self.presenter.user != nil
+        view.color = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private let progressIndicator: JGProgressHUD = {
+        let view = JGProgressHUD()
+        
+        view.textLabel.text = NSLocalizedString("Loading", comment: .init())
         
         return view
     }()
@@ -64,18 +73,15 @@ final class ProfileViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         
-        view.backgroundColor = .clear
+        view.backgroundColor = .backgroundColor
         view.dataSource = self
         view.delegate = self
         view.refreshControl = self.refreshControl
         view.register(ProfileTableViewCell.self, forCellReuseIdentifier: ProfileTableViewCell.id)
         view.register(DealTableViewCell.self, forCellReuseIdentifier: DealTableViewCell.cellID)
         view.separatorColor = .clear
+        view.isHidden = self.presenter.user == nil
         view.translatesAutoresizingMaskIntoConstraints = false
-        
-        if self.presenter.user == nil {
-            view.isHidden = true
-        }
         
         return view
     }()
@@ -94,15 +100,17 @@ final class ProfileViewController: UIViewController {
                 (title: NSLocalizedString("Suggested offers", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToOffers()
             }),
-                (title: NSLocalizedString("My ad", comment: ""), color: .white, action: { [ weak self ] in
-                    self?.presenter.goToAds()
-            }),
+//                full version
+//                (title: NSLocalizedString("My ad", comment: ""), color: .white, action: { [ weak self ] in
+//                    self?.presenter.goToAds()
+//            }),
                 (title: NSLocalizedString("Edit profile", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToEditProfile()
             }),
-                (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: { [ weak self ] in
-                    self?.presenter.goToCreateAd()
-            }),
+//                full version
+//                (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: { [ weak self ] in
+//                    self?.presenter.goToCreateAd()
+//            }),
                 (title: NSLocalizedString("Settings", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToSettings()
             }),
@@ -116,6 +124,7 @@ final class ProfileViewController: UIViewController {
         )
         
         view.view.backgroundColor = .accentColor
+        view.view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         view.view.layer.cornerRadius = 25
         
         return view
@@ -124,8 +133,9 @@ final class ProfileViewController: UIViewController {
     private lazy var sideMenuViewController: SideMenuNavigationController = {
         let view = SideMenuNavigationController(rootViewController: self.slideMenuViewController)
         
+        view.navigationBar.backgroundColor = .clear
         view.presentationStyle = .menuSlideIn
-        view.menuWidth = 220
+        view.menuWidth = 230
         
         return view
     }()
@@ -167,13 +177,13 @@ final class ProfileViewController: UIViewController {
         return view
     }()
     
+    private lazy var browseImageViewController = self.presenter.getBrowseImage(dataSource: self)
+    
 //    MARK: Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.getUser()
-        
+                
         guard self.presenter.userID == nil else {
             return
         }
@@ -191,10 +201,17 @@ final class ProfileViewController: UIViewController {
         self.setupViews()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.getUser()
+    }
+    
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.tabBarController?.tabBar.isHidden = false
+        self.tabBarController?.navigationController?.navigationBar.isHidden = true
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
@@ -203,7 +220,7 @@ final class ProfileViewController: UIViewController {
         self.title = NSLocalizedString("Profile", comment: "")
         self.navigationItem.setHidesBackButton(self.presenter.userID == nil, animated: false)
         
-        if self.presenter.userID == nil || self.presenter.userID == self.presenter.getMyID() {
+        if self.presenter.userID == nil {
             if #available(iOS 13.0, *) {
                 self.navigationItem.rightBarButtonItem = UIBarButtonItem(
                     image: UIImage(systemName: "list.bullet"),
@@ -219,7 +236,7 @@ final class ProfileViewController: UIViewController {
                     action: #selector(self.didTapSlideMenuBarButton)
                 )
             }
-        } else {
+        } else if self.presenter.userID != self.presenter.getMyID() {
             if #available(iOS 13.0, *) {
                 self.navigationItem.rightBarButtonItem = UIBarButtonItem(
                     image: UIImage(systemName: "exclamationmark.triangle"),
@@ -297,7 +314,9 @@ final class ProfileViewController: UIViewController {
     }
     
     private func logOut() {
+        self.progressIndicator.show(in: self.view)
         self.presenter.logOut { [ weak self ] error in
+            self?.progressIndicator.dismiss(animated: true)
             self?.error(error) {
                 self?.presenter.writeIsFirstEditing()
                 self?.presenter.deleteKeychainData()
@@ -309,14 +328,52 @@ final class ProfileViewController: UIViewController {
                 self?.presenter.deleteDeviceToken()
                 self?.presenter.deleteUserCurrency()
                 self?.presenter.deleteNotificationScreensID()
-                self?.presenter.goToOnboarding()
+                self?.presenter.notificationCenterManagerPostMakeChatRoomsRefreshing()
+                self?.presenter.notificationCenterManagerPostMakeFeedRefreshing()
+                self?.presenter.notificationCenterManagerPostMakeNilFilter()
+                self?.presenter.notificationCenterManagerPostMakeFeedEmpty()
+                self?.presenter.notificationCenterManagerPostMakeChatRoomsEmpty()
+                self?.activityIndicatorView.isHidden = false
+                self?.tableView.isHidden = true
+                self?.tabBarController?.selectedIndex = .zero
+                
+                if self?.tabBarController?.navigationController?.viewControllers.first is OnboardingViewController {
+                    guard !(self?.tabBarController?.navigationController?.viewControllers.isEmpty ?? true),
+                          let viewController = self?.tabBarController?.navigationController?.viewControllers.first else {
+                        return
+                    }
+                    
+                    self?.tabBarController?.navigationController?.popToViewController(viewController, animated: true)
+                } else if self?.tabBarController?.navigationController?.viewControllers.first is LaunchScreenViewController
+                            && !(self?.tabBarController?.navigationController?.viewControllers[1] is UITabBarController) {
+                    guard self?.tabBarController?.navigationController?.viewControllers.count ?? .zero >= 2,
+                          let viewController = self?.tabBarController?.navigationController?.viewControllers[1] else {
+                        return
+                    }
+                    
+                    self?.tabBarController?.navigationController?.popToViewController(viewController, animated: true)
+                } else {
+                    guard !(self?.tabBarController?.navigationController?.viewControllers.isEmpty ?? true),
+                          let viewController = self?.tabBarController?.navigationController?.viewControllers.first else {
+                        return
+                    }
+                    
+                    self?.tabBarController?.navigationController?.popToViewController(viewController, animated: false)
+                    self?.presenter.goToOnboarding(false)
+                }
             }
         }
     }
     
 //    MARK: Actions
     @objc private func didTapSlideMenuBarButton() {
+        self.translutionView.alpha = .zero
+        self.translutionView.isHidden = false
+        
         self.present(self.sideMenuViewController, animated: true)
+        UIView.animate(withDuration: 0.2) { [ weak self ] in
+            self?.translutionView.alpha = 0.5
+        }
     }
     
     @objc private func onRefresh() {
@@ -324,6 +381,8 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func refreshScreen() {
+        self.activityIndicatorView.isHidden = false
+        self.tableView.isHidden = true
         self.getUser()
     }
     
@@ -331,8 +390,22 @@ final class ProfileViewController: UIViewController {
         guard let viewController = self.complaintViewController,
               viewController.parent != nil,
               viewController.view.superview != nil else {
+            self.sideMenuViewController.dismiss(animated: true)
+            
+            UIView.animate(withDuration: 0.2) { [ weak self ] in
+                self?.translutionView.alpha = .zero
+            } completion: { [ weak self ] isCompleted in
+                guard isCompleted else {
+                    return
+                }
+                
+                self?.translutionView.isHidden = true
+            }
+            
             return
         }
+        
+        self.sideMenuViewController.dismiss(animated: true)
         
         UIView.animate(withDuration: 0.2) { [ weak self ] in
             viewController.view.alpha = .zero
@@ -347,7 +420,7 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func didTapComplaintNavigationBarButton() {
-        guard let complaintViewController  = self.complaintViewController else {
+        guard self.presenter.user != nil, let complaintViewController  = self.complaintViewController else {
             return
         }
         
@@ -401,13 +474,21 @@ extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == .zero {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.id) as? ProfileTableViewCell else {
-                return UITableViewCell()
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ProfileTableViewCell.id
+            ) as? ProfileTableViewCell else {
+                return .init()
             }
             
-            cell.callBack = {
-                tableView.beginUpdates()
-                tableView.endUpdates()
+            cell.didTapChervonDescriptionButtonAction = { [ weak tableView ] in
+                tableView?.beginUpdates()
+                tableView?.endUpdates()
+            }
+            cell.didTapAvatarImageViewAction = { [ weak self ] imageView in
+                guard let browseImageViewController = self?.browseImageViewController,
+                      self?.presenter.user?.avatarData != nil else { return }
+                
+                self?.navigationController?.pushViewController(browseImageViewController, animated: true)
             }
             cell.selectionStyle = .none
             cell.user = self.presenter.user
@@ -415,8 +496,10 @@ extension ProfileViewController: UITableViewDataSource {
             return cell
         }
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DealTableViewCell.cellID) as? DealTableViewCell else {
-            return UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DealTableViewCell.cellID
+        ) as? DealTableViewCell else {
+            return .init()
         }
         
         if indexPath.section == 1 {
@@ -444,14 +527,37 @@ extension ProfileViewController: UITableViewDelegate {
         return nil
     }
     
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let view = view as? UITableViewHeaderFooterView else { return }
+        
+        view.contentView.backgroundColor = .backgroundColor
+        view.textLabel?.textColor = .textColor
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard indexPath.section != 0, let user = self.presenter.user else {
+        guard indexPath.section != .zero, let user = self.presenter.user else {
             return
         }
         
-        self.presenter.goToDeal(deal: user.deals[indexPath.row])
+        if self.presenter.userID == nil {
+            if indexPath.section == 1 {
+                self.presenter.goToDeal(deal: user.deals[indexPath.row])
+            } else {
+                self.presenter.goToDeal(deal: user.boughtDeals[indexPath.row])
+            }
+        } else {
+            guard let viewController = indexPath.section == .zero ? self.presenter.getDeal(
+                user.deals[indexPath.row]
+            ) : self.presenter.getDeal(
+                user.boughtDeals[indexPath.row]
+            ) else {
+                return
+            }
+            
+            self.navigationController?.pushViewController(viewController, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -476,6 +582,22 @@ extension ProfileViewController: SideMenuNavigationControllerDelegate {
         } completion: { [ weak self ] _ in
             self?.translutionView.isHidden = true
         }
+    }
+    
+}
+
+extension ProfileViewController: BrowseImagesViewControllerDataSource {
+    
+    func browseImagesViewController(
+        _ viewController: BrowseImagesViewController,
+        collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int { 1 }
+    
+    func browseImagesViewController(_ viewController: BrowseImagesViewController, collectionView: UICollectionView, imageForItemAt indexPath: IndexPath) -> UIImage? {
+        guard let data = self.presenter.user?.avatarData else { return nil }
+        
+        return .init(data: data)
     }
     
 }

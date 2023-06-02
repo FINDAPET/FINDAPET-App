@@ -23,7 +23,8 @@ class ProfileTableViewCell: UITableViewCell {
 //    MARK: Properties
     static let id = String(describing: ProfileTableViewCell.self)
     
-    var callBack: (() -> Void)?
+    var didTapChervonDescriptionButtonAction: (() -> Void)?
+    var didTapAvatarImageViewAction: ((UIImageView) -> Void)?
     var user: User.Output? {
         didSet {
             guard let user = user else {
@@ -31,13 +32,14 @@ class ProfileTableViewCell: UITableViewCell {
             }
             
             if let avatarData = user.avatarData {
-                self.avatarImageView.image = UIImage(data: avatarData) ?? UIImage(named: "empty avatar")
+                self.avatarImageView.image = .init(data: avatarData) ?? .init(named: "empty avatar")
             }
             
             self.nameLabel.text = user.name
             self.descriptionLabel.text = user.description
             self.descriptionLabel.isHidden = user.description?.isEmpty ?? true
             self.checkmarkImageView.isHidden = user.documentData == nil
+            self.chevronDescriptionButton.isHidden = user.description?.isEmpty ?? true
         }
     }
     
@@ -57,13 +59,15 @@ class ProfileTableViewCell: UITableViewCell {
     }()
     
     private lazy var avatarImageView: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView(image: .init(named: "empty avatar"))
         
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.layer.borderWidth = 2
         view.layer.cornerRadius = view.bounds.width / 2
         view.clipsToBounds = true
         view.layer.masksToBounds = true
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapAvatarImageView)))
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -75,6 +79,7 @@ class ProfileTableViewCell: UITableViewCell {
         view.textColor = .textColor
         view.font = .systemFont(ofSize: 24, weight: .bold)
         view.numberOfLines = .zero
+        view.textAlignment = .center
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -138,17 +143,16 @@ class ProfileTableViewCell: UITableViewCell {
     private func setupViews() {
         self.backgroundColor = .clear
         
-        self.addSubview(self.containerView)
+        self.contentView.addSubview(self.containerView)
         
         self.containerView.addSubview(self.avatarImageView)
         self.containerView.addSubview(self.nameLabel)
         self.containerView.addSubview(self.descriptionLabel)
         self.containerView.addSubview(self.chevronDescriptionButton)
-        self.containerView.addSubview(self.checkmarkImageView)
         
         self.avatarImageView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().inset(15)
-            make.width.height.equalTo(self.snp.width).multipliedBy(0.35)
+            make.width.height.equalTo(self.containerView.snp.width).multipliedBy(0.4)
         }
         
         self.containerView.snp.makeConstraints { make in
@@ -160,13 +164,21 @@ class ProfileTableViewCell: UITableViewCell {
             }
         }
         
+        self.nameLabel.snp.removeConstraints()
         self.nameLabel.snp.makeConstraints { make in
             make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
-            make.top.equalTo(self.avatarImageView)
+            
+            guard self.user?.documentData == nil else {
+                make.top.equalToSuperview().inset(15)
+                
+                return
+            }
+            
+            make.top.trailing.equalToSuperview().inset(15)
         }
         
         self.descriptionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
+            make.leading.equalTo(self.nameLabel)
             make.trailing.equalToSuperview().inset(15)
             make.top.equalTo(self.nameLabel.snp.bottom).inset(-15)
         }
@@ -175,17 +187,21 @@ class ProfileTableViewCell: UITableViewCell {
             make.top.equalTo(self.descriptionLabel.snp.bottom)
             make.bottom.equalToSuperview().inset(15)
             make.centerX.equalTo(self.descriptionLabel)
-            make.width.height.equalTo(18)
+            make.width.height.equalTo(22)
         }
+        
+        self.avatarImageView.layer.cornerRadius = (self.contentView.bounds.width - 30) * 0.4 / 2
+        
+        guard self.user?.documentData != nil else { return }
+        
+        self.containerView.addSubview(self.checkmarkImageView)
         
         self.checkmarkImageView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(15)
-            make.leading.equalTo(self.nameLabel.snp.trailing).inset(-10)
+            make.leading.equalTo(self.nameLabel.snp.trailing).inset(-5)
             make.centerY.equalTo(self.nameLabel)
             make.width.height.equalTo(30)
         }
-        
-        self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.width / 2
     }
     
 //    MARK: Actions
@@ -225,7 +241,11 @@ class ProfileTableViewCell: UITableViewCell {
         
         self.chevronDescriptionButton.tintColor = .accentColor
         self.chevronDescriptionButtonIsDown.toggle()
-        self.callBack?()
+        self.didTapChervonDescriptionButtonAction?()
+    }
+    
+    @objc private func didTapAvatarImageView() {
+        self.didTapAvatarImageViewAction?(self.avatarImageView)
     }
 
 }

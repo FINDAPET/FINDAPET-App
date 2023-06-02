@@ -20,29 +20,29 @@ final class SubscriptionPresenter {
     }
     
 //    MARK: Properties
-    private(set) var products = [SKProduct]() {
+    private(set) var subscriptions = [TitleSubscription]() {
         didSet {
             self.callBack?()
         }
     }
     
 //    MARK: Requestss
-    func makeUserPremium(_ subscription: Subscription, completionHandler: @escaping (Error?) -> Void = { _ in }) {
+    func makeUserPremium(_ subscription: Subscription.Input, completionHandler: @escaping (Error?) -> Void = { _ in }) {
         self.interactor.makePremium(subscription: subscription, completionHandler: completionHandler)
     }
     
-    func getSubscriptionsProducts(callBack: @escaping ([SKProduct]) -> Void = { _ in }) {
-        let newCallBack: ([SKProduct]) -> Void = { [ weak self ] products in
-            callBack(products)
+    func getSubscriptions(completionHandler: @escaping ([TitleSubscription]?, Error?) -> Void = { _, _ in }) {
+        let newCompletionHandler: ([TitleSubscription]?, Error?) -> Void = { [ weak self ] newSubscriptions, error in
+            completionHandler(newSubscriptions, error)
             
-            self?.products = products
+            guard let newSubscriptions = newSubscriptions, error == nil else {
+                return
+            }
+            
+            self?.subscriptions = newSubscriptions
         }
         
-        self.interactor.getProducts(with: ProductsID.getSubscriptions(), callBack: newCallBack)
-    }
-    
-    func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
-        self.interactor.makePayment(product, callBack: callBack)
+        self.interactor.getSubscrptions(completionHandler: newCompletionHandler)
     }
     
 //    MARK: Notification Center
@@ -55,12 +55,16 @@ final class SubscriptionPresenter {
         self.interactor.set(value, to: .premiumUserDate)
     }
     
-    func setSubscription(_ value: ProductsID) {
-        self.interactor.set(value.rawValue, to: .subscription)
+    func setSubscription(_ value: UUID? = nil) {
+        self.interactor.set(value?.uuidString, to: .subscription)
     }
     
-    func getSubscription() -> String? {
-        self.interactor.get(.subscription) as? String
+    func getSubscription() -> UUID? {
+        guard let str = self.interactor.get(.subscription) as? String else {
+            return nil
+        }
+        
+        return .init(uuidString: str)
     }
     
     func getUserID() -> String? {

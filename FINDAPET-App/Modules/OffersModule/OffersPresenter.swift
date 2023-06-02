@@ -71,6 +71,16 @@ final class OffersPresenter {
         self.interactor.acceptOffer(dealID: dealID, offerID: offerID, completionHandler: completionHandler)
     }
     
+    func deleteOffer(_ offerID: UUID, completionHandler: @escaping (Error?) -> Void = { _ in }) {
+        self.interactor.deleteOffer(offerID: offerID) { [ weak self ] error in
+            completionHandler(error)
+            
+            guard error == nil else { return }
+            
+            self?.offers.removeAll { $0.id == offerID }
+        }
+    }
+    
 //    MARK: Routing
     func goToChatRoom(userID: UUID? = nil) {
         self.router.goToChatRoom(userID: userID)

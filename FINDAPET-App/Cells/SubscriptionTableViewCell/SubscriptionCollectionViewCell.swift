@@ -38,10 +38,19 @@ class SubscriptionCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var product: SKProduct? {
+    var subscription: TitleSubscription? {
         didSet {
-            self.nameLabel.text = self.product?.localizedDescription
-            self.priceLabel.text = "\(self.product?.price.stringValue ?? .init())\(self.product?.priceLocale.currencySymbol ?? .init())"
+            guard let subscription = self.subscription else {
+                return
+            }
+            
+            if #available(iOS 16, *) {
+                self.nameLabel.text = subscription.localizedNames[Locale.current.language.languageCode?.identifier ?? .init()]
+            } else {
+                self.nameLabel.text = subscription.localizedNames[Locale.current.languageCode ?? .init()]
+            }
+            
+            self.priceLabel.text = "\(subscription.price)\(UserDefaultsManager.read(key: .currency) as? String ?? .init())"
         }
     }
     
@@ -76,8 +85,8 @@ class SubscriptionCollectionViewCell: UICollectionViewCell {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 25
         
-        self.addSubview(self.nameLabel)
-        self.addSubview(self.priceLabel)
+        self.contentView.addSubview(self.nameLabel)
+        self.contentView.addSubview(self.priceLabel)
         
         self.nameLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(15)

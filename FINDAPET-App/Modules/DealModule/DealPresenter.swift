@@ -91,7 +91,7 @@ final class DealPresenter {
                 isMale: deal.isActive,
                 birthDate: ISO8601DateFormatter().date(from: deal.birthDate) ?? .init(),
                 color: deal.color,
-                price: Double(deal.price),
+                price: deal.price != nil ? Double(deal.price ?? .zero) : nil,
                 currencyName: Currency.getCurrency(wtih: deal.currencyName) ?? .USD,
                 catteryID: deal.cattery.id ?? UUID(),
                 country: deal.country,
@@ -149,6 +149,14 @@ final class DealPresenter {
         self.interactor.notificationCenterManagerPost(.reloadProfileScreen)
     }
     
+    func notificationCenterManagerPostMakeFeedEmpty() {
+        self.interactor.notificationCenterManagerPost(.makeFeedEmpty)
+    }
+    
+    func notificationCenterManagerPostMakeFeedRefreshing() {
+        self.interactor.notificationCenterManagerPost(.makeFeedRefreshing)
+    }
+    
     func notificationCenterManagerAddObserverUpdateDealScreen(
         _ observer: Any,
         action: Selector
@@ -180,8 +188,7 @@ final class DealPresenter {
             myOffers: .init(),
             offers: .init(),
             chatRooms: .init(),
-            score: .zero,
-            isPremiumUser: .random()
+            score: .zero
         )], messages: .init()))
     }
     

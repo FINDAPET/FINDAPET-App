@@ -63,8 +63,7 @@ final class ChatRoomInteractor {
                         myOffers: .init(),
                         offers: .init(),
                         chatRooms: .init(),
-                        score: .zero,
-                        isPremiumUser: .random()
+                        score: .zero
                     ),
                     createdAt: model["createdAt"] as? String,
                     chatRoom: .init(

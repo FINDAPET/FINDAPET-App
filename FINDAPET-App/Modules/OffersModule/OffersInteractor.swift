@@ -36,6 +36,15 @@ final class OffersInteractor {
         )
     }
     
+    func deleteOffer(offerID: UUID, completionHandler: @escaping (Error?) -> Void) {
+        RequestManager.request(
+            method: .DELETE,
+            authMode: .bearer(value: self.getBearerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.deleteOffer(offerID: offerID),
+            completionHandler: completionHandler
+        )
+    }
+    
 //    MARK: Keychain Manager
     private func getBearerToken() -> String? {
         KeychainManager.shared.read(key: .token)

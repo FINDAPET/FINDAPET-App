@@ -30,8 +30,8 @@ final class ProfilePresenter {
     }
         
 //    MARK: Routing
-    func goToOnboarding() {
-        self.router.goToOnboarding()
+    func goToOnboarding(_ animated: Bool = true) {
+        self.router.goToOnboarding(animated)
     }
     
     func goToOffers() {
@@ -61,12 +61,17 @@ final class ProfilePresenter {
     func goToEditProfile() {
         self.router.goToEditProfile(user: .init(
             id: self.user?.id,
-            name: self.user?.name ?? String(),
+            name: self.user?.name ?? .init(),
             avatarData: self.user?.avatarData,
             documentData: self.user?.documentData,
             description: self.user?.description,
+            isCatteryWaitVerify: self.user?.isCatteryWaitVerify ?? false,
             chatRoomsID: self.user?.chatRooms.map { $0.id ?? .init() } ?? .init()
         ))
+    }
+    
+    func getBrowseImage(dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {
+        self.router.getBrowseImage(dataSource: dataSource)
     }
     
     func goToDeal(deal: Deal.Output) {
@@ -79,6 +84,10 @@ final class ProfilePresenter {
         }
         
         return self.router.getComplaint(.init(text: .init(), senderID: id))
+    }
+    
+    func getDeal(_ deal: Deal.Output) -> DealViewController? {
+        self.router.getDeal(deal: deal)
     }
     
 //    MARK: Requests
@@ -104,6 +113,26 @@ final class ProfilePresenter {
         action: Selector
     ) {
         self.interactor.notificationCenterManagerAddObserver(observer, name: name, additional: parameter, action: action)
+    }
+    
+    func notificationCenterManagerPostMakeChatRoomsRefreshing() {
+        self.interactor.notificationCenterManagerPost(.makeChatRoomsRefreshing)
+    }
+    
+    func notificationCenterManagerPostMakeFeedRefreshing() {
+        self.interactor.notificationCenterManagerPost(.makeFeedRefreshing)
+    }
+    
+    func notificationCenterManagerPostMakeNilFilter() {
+        self.interactor.notificationCenterManagerPost(.makeNilFilter)
+    }
+    
+    func notificationCenterManagerPostMakeFeedEmpty() {
+        self.interactor.notificationCenterManagerPost(.makeFeedEmpty)
+    }
+    
+    func notificationCenterManagerPostMakeChatRoomsEmpty() {
+        self.interactor.notificationCenterManagerPost(.makeChatRoomsEmpty)
     }
     
 //    MARK: User Defaults

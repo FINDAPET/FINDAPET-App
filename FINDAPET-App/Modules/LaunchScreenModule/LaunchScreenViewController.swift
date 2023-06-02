@@ -43,6 +43,26 @@ final class LaunchScreenViewController: UIViewController {
         return view
     }()
     
+    private let activityIndicatorView: UIActivityIndicatorView = {
+        if #available(iOS 13.0, *) {
+            let view = UIActivityIndicatorView(style: .medium)
+            
+            view.color = .white
+            view.startAnimating()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIActivityIndicatorView(style: .white)
+        
+        view.color = .white
+        view.startAnimating()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
 //    MARK: Life Cycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -55,12 +75,18 @@ final class LaunchScreenViewController: UIViewController {
         self.view.backgroundColor = .accentColor
         
         self.view.addSubview(self.logoImageView)
+        self.view.addSubview(self.activityIndicatorView)
         self.view.addSubview(self.nameLabel)
         
         self.logoImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(50)
             make.height.equalTo(self.logoImageView.snp.width)
+        }
+        
+        self.activityIndicatorView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(self.logoImageView.snp.bottom).inset(-30)
         }
         
         self.nameLabel.snp.makeConstraints { make in

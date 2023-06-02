@@ -22,7 +22,7 @@ final class FeedPresenter {
 //    MARK: Properties
     private(set) var filter = Filter()
     private(set) var deals = [Deal.Output]() {
-        didSet {
+        didSet {            
             self.filter.checkedIDs = self.deals.map(\.id).filter { $0 != nil } as? [UUID] ?? .init()
             self.callBack?()
         }
@@ -43,11 +43,19 @@ final class FeedPresenter {
     }
     
     func deleteFilter() {
-        self.filter = Filter(title: self.filter.title)
+        self.filter = .init(title: self.filter.title)
+    }
+    
+    func fullFilterDelete() {
+        self.filter = .init()
     }
     
     func makeDealsEmpty() {
         self.deals = .init()
+    }
+    
+    func sortDeals() {
+        self.deals = .init(Set(self.deals)).sorted { $0.score > $1.score }
     }
     
 //    MARK: Notification Center
@@ -61,15 +69,13 @@ final class FeedPresenter {
     }
     
 //    MARK: Requests
-    func getDeals(completionHandler: @escaping ([Deal.Output]?, Error?) -> Void) {
+    func getDeals(isDealsSortable: Bool = false, _ completionHandler: @escaping ([Deal.Output]?, Error?) -> Void) {
         let newCompletionHandler: ([Deal.Output]?, Error?) -> Void = { [ weak self ] deals, error in
-            completionHandler(deals?.sorted { $0.score > $1.score }, error)
+            completionHandler(deals?.filter(\.isActive).sorted { $0.score > $1.score }, error)
             
-            guard error == nil else {
-                return
-            }
+            guard error == nil else { return }
             
-            self?.deals += deals?.sorted { $0.score > $1.score } ?? .init()
+            self?.deals += .init(Set(deals ?? .init())).filter(\.isActive).sorted { $0.score > $1.score }
         }
         
         self.interactor.getDeals(self.filter, completionHandler: newCompletionHandler)
@@ -121,7 +127,7 @@ final class FeedPresenter {
             self?.filter = filter
             self?.makeDealsEmpty()
             self?.setFilterCheckedIDs()
-            self?.getDeals(completionHandler: completionHandler)
+            self?.getDeals(completionHandler)
             self?.getRandomAd()
         }
     }

@@ -40,8 +40,8 @@ final class URLConstructor {
     
     static let localhostHTTP = URLConstructor(scheme: .http, host: .localhost, port: .localhost)
     static let localhostWS = URLConstructor(scheme: .ws, host: .localhost, port: .localhost)
-    static let defaultHTTP = URLConstructor(scheme: .https, host: .base)
-    static let defaultWS = URLConstructor(scheme: .wss, host: .base)
+    static let defaultHTTP = URLConstructor.localhostHTTP//URLConstructor(scheme: .https, host: .base)
+    static let defaultWS = URLConstructor.localhostWS//URLConstructor(scheme: .wss, host: .base)
     static let exchange = URLConstructor(scheme: .http, host: .exchange)
     
     //    MARK: Auth
@@ -594,6 +594,75 @@ final class URLConstructor {
             .appendingPathComponent(Paths.delete.rawValue)
     }
     
+//    MARK: Subscription
+    func subscriptions() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.subscriptions.rawValue)
+            .appendingPathComponent(Paths.all.rawValue)
+    }
+    
+    func subscription(with id: UUID) -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.subscriptions.rawValue)
+            .appendingPathComponent(id.uuidString)
+    }
+    
+    func newSubscriptions() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.subscriptions.rawValue)
+            .appendingPathComponent(Paths.new.rawValue)
+    }
+    
+    func changeSubscriptions() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.subscriptions.rawValue)
+            .appendingPathComponent(Paths.change.rawValue)
+    }
+    
+    func deleteSubscription(with id: UUID) -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.subscriptions.rawValue)
+            .appendingPathComponent(id.uuidString)
+            .appendingPathComponent(Paths.delete.rawValue)
+    }
+    
+//    MARK: Title Subscription
+    func titleSubscriptions() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.title.rawValue)
+            .appendingPathComponent(Paths.subscriptions.rawValue)
+            .appendingPathComponent(Paths.all.rawValue)
+    }
+    
+    func titleSubscription(with id: UUID) -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.title.rawValue)
+            .appendingPathComponent(Paths.subscriptions.rawValue)
+            .appendingPathComponent(id.uuidString)
+    }
+    
+    func newTitleSubscriptions() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.title.rawValue)
+            .appendingPathComponent(Paths.subscriptions.rawValue)
+            .appendingPathComponent(Paths.new.rawValue)
+    }
+    
+    func changeTitleSubscriptions() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.title.rawValue)
+            .appendingPathComponent(Paths.subscriptions.rawValue)
+            .appendingPathComponent(Paths.change.rawValue)
+    }
+    
+    func deleteTitleSubscription(with id: UUID) -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.title.rawValue)
+            .appendingPathComponent(Paths.subscriptions.rawValue)
+            .appendingPathComponent(id.uuidString)
+            .appendingPathComponent(Paths.delete.rawValue)
+    }
+    
 //    MARK: Currency
     func getAllCurrencies() -> URL {
         self.baseURL
@@ -631,6 +700,29 @@ final class URLConstructor {
             .appendingPathComponent(Paths.pet.rawValue)
             .appendingPathComponent(Paths.types.rawValue)
             .appendingPathComponent(Paths.all.rawValue)
+    }
+    
+//    MARK: - Device Token
+    func createDeviceToken() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.device.rawValue)
+            .appendingPathComponent(Paths.tokens.rawValue)
+            .appendingPathComponent(Paths.new.rawValue)
+    }
+    
+//    MARK: Privacy Policy
+    func getPrivacyPolicy() -> URL {
+        var url = self.baseURL
+            .appendingPathComponent(Paths.privacy.rawValue)
+            .appendingPathComponent(Paths.policy.rawValue)
+        
+        if #available(iOS 16, *), let countryCode = Locale.current.language.languageCode?.identifier {
+            url = url.appendingPathComponent(countryCode)
+        } else if let countryCode = Locale.current.languageCode {
+            url = url.appendingPathComponent(countryCode)
+        }
+        
+        return url
     }
     
 //    MARK: Exchange

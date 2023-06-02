@@ -26,4 +26,9 @@ final class InfoPresenter {
         self.interactor.applicationGo(to: URLConstructor(mailTo: .init(advertisingTeamEmail)).mailTo())
     }
     
+//    MARK: Router
+    func goToPrivacyPolicy() {
+        self.router.goToWebView(URLConstructor.defaultHTTP.getPrivacyPolicy())
+    }
+    
 }

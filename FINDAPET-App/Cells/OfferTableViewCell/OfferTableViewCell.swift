@@ -29,6 +29,7 @@ final class OfferTableViewCell: UITableViewCell {
             self.setupViews()
         }
     }
+    var deleteButtonAction: (() -> Void)?
     var buyerAvatarImageViewAction: ((UUID) -> Void)?
     var offer: Offer.Output? {
         didSet {
@@ -118,7 +119,7 @@ final class OfferTableViewCell: UITableViewCell {
     }()
     
     private lazy var avatarImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "empty avatar"))
+        let view = UIImageView(image: .init(named: "empty avatar"))
         
         view.layer.cornerRadius = 12.5
         view.layer.masksToBounds = true
@@ -156,7 +157,9 @@ final class OfferTableViewCell: UITableViewCell {
         
         view.backgroundColor = .accentColor
         view.setTitleColor(.white, for: .normal)
-        view.setTitle("Message", for: .normal)
+        view.setTitle(NSLocalizedString("Message", comment: .init()), for: .normal)
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
         view.layer.cornerRadius = 25
         view.addTarget(self, action: #selector(self.didTapMessageButton), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -169,9 +172,26 @@ final class OfferTableViewCell: UITableViewCell {
         
         view.backgroundColor = .systemGreen
         view.setTitleColor(.white, for: .normal)
-        view.setTitle("Accept", for: .normal)
+        view.setTitle(NSLocalizedString("Accept", comment: .init()), for: .normal)
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
         view.layer.cornerRadius = 25
         view.addTarget(self, action: #selector(self.didTapAcceptButton), for: .touchUpInside)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var deleteButton: UIButton = {
+        let view = UIButton()
+        
+        view.backgroundColor = .systemRed
+        view.setTitleColor(.white, for: .normal)
+        view.setTitle(NSLocalizedString("Delete", comment: .init()), for: .normal)
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 25
+        view.addTarget(self, action: #selector(self.didTapDeleteButton), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -181,7 +201,7 @@ final class OfferTableViewCell: UITableViewCell {
     private func setupViews() {
         self.backgroundColor = .clear
         
-        self.addSubview(self.containerView)
+        self.contentView.addSubview(self.containerView)
         
         self.containerView.addSubview(self.dealImageView)
         self.containerView.addSubview(self.titleLabel)
@@ -196,6 +216,8 @@ final class OfferTableViewCell: UITableViewCell {
         
         if self.acceptButtonAction != nil {
             self.stackView.addArrangedSubview(self.acceptButton)
+        } else if self.deleteButtonAction != nil {
+            self.stackView.addArrangedSubview(self.deleteButton)
         }
         
         self.containerView.snp.makeConstraints { make in
@@ -246,10 +268,10 @@ final class OfferTableViewCell: UITableViewCell {
             make.leading.trailing.bottom.equalToSuperview().inset(15)
         }
         
-        self.messageButton.snp.makeConstraints { make in
-            if self.messageButton.superview?.subviews.count ?? .zero > 1 {
-                make.width.equalTo(self.acceptButton)
-            }
+        guard self.stackView.arrangedSubviews.count == 2 else { return }
+        
+        self.stackView.arrangedSubviews.first?.snp.makeConstraints { make in
+            make.width.equalTo(self.messageButton)
         }
     }
     
@@ -260,6 +282,10 @@ final class OfferTableViewCell: UITableViewCell {
     
     @objc private func didTapAcceptButton() {
         self.acceptButtonAction?()
+    }
+    
+    @objc private func didTapDeleteButton() {
+        self.deleteButtonAction?()
     }
     
     @objc private func didTapBuyerAvatarImageView() {

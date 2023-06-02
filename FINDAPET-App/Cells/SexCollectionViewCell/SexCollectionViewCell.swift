@@ -10,6 +10,7 @@ import SnapKit
 
 class SexCollectionViewCell: UICollectionViewCell {
     
+//    MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -20,7 +21,7 @@ class SexCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    MARK: Properties
+//    MARK: - Properties
     static let id = String(describing: SexCollectionViewCell.self)
     
     var isMale: Bool? {
@@ -43,7 +44,7 @@ class SexCollectionViewCell: UICollectionViewCell {
         }
     }
     
-//    MARK: UI Properties
+//    MARK: - UI Properties
     private let sexLabel: UILabel = {
         let view = UILabel()
         
@@ -55,7 +56,7 @@ class SexCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-//    MARK: Setup Views
+//    MARK: - Setup Views
     private func setupViews() {
         self.clipsToBounds = true
         self.layer.masksToBounds = true
@@ -63,7 +64,7 @@ class SexCollectionViewCell: UICollectionViewCell {
         self.layer.borderColor = UIColor.accentColor.cgColor
         self.backgroundColor = .textFieldColor
         
-        self.addSubview(self.sexLabel)
+        self.contentView.addSubview(self.sexLabel)
         
         self.sexLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(15)

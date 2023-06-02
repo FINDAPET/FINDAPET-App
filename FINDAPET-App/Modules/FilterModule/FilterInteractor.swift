@@ -10,7 +10,7 @@ import Foundation
 final class FilterInteractor {
     
 //    MARK: Properties
-    private let petTypeCoreData = CoreDataManager<PetTypeEntity>()
+    private let petTypeCoreData = coreDataPetTypeManager
     
 //    MARK: User Defaults
     func getUserDefaults(_ key: UserDefaultsKeys) -> Any? {

@@ -63,7 +63,9 @@ final class SubscriptionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.presenter.getSubscriptionsProducts()
+        self.presenter.getSubscriptions { [ weak self ] _, error in
+            self?.error(error)
+        }
     }
     
 //    MARK: Setup Views
@@ -107,7 +109,7 @@ final class SubscriptionViewController: UIViewController {
 extension SubscriptionViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.presenter.products.count
+        self.presenter.subscriptions.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -118,9 +120,9 @@ extension SubscriptionViewController: UICollectionViewDataSource {
             return .init()
         }
         
-        cell.product = self.presenter.products[indexPath.item]
-                
-        if let subscription = self.presenter.getSubscription(), cell.product?.productIdentifier == subscription {
+        cell.subscription = self.presenter.subscriptions[indexPath.item]
+        
+        if let subscription = self.presenter.getSubscription(), cell.subscription?.id == subscription {
             cell.isSelected = true
         }
         
@@ -134,12 +136,12 @@ extension SubscriptionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let subscription = self.presenter.getSubscription(),
            let cell = collectionView.cellForItem(at: indexPath) as? SubscriptionCollectionViewCell,
-           cell.product?.productIdentifier != subscription {
+           cell.subscription?.id != subscription {
             collectionView.deselectItem(at: indexPath, animated: false)
             
             for i in .zero ..< collectionView.visibleCells.count {
                 guard let subCell = collectionView.visibleCells[i] as? SubscriptionCollectionViewCell,
-                      subCell.product?.productIdentifier == subscription else {
+                      subCell.subscription?.id == subscription else {
                     collectionView.selectItem(
                         at: .init(item: i, section: .zero),
                         animated: false,
@@ -153,166 +155,47 @@ extension SubscriptionViewController: UICollectionViewDelegate {
             return
         }
         
-        guard let cell = collectionView.cellForItem(at: indexPath) as? SubscriptionCollectionViewCell else {
-                    return
-                }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SubscriptionCollectionViewCell,
+              let titleSubscriptionID = cell.subscription?.id,
+              let userIDString = self.presenter.getUserID() else {
+            return
+        }
+        
+        for i in 0 ..< collectionView.visibleCells.count {
+            if cell != collectionView.visibleCells[i] {
+                collectionView.deselectItem(at: IndexPath(item: i, section: indexPath.section), animated: true)
+            }
+        }
+        
+        self.presenter.makeUserPremium(
+            .init(
+                titleSubscriptionID: titleSubscriptionID,
+                expirationDate: .init().addingTimeInterval(.init(2_592_000 * (cell.subscription?.monthsCount ?? 1))),
+                userID: .init(uuidString: userIDString)
+            )) { [ weak self ] error in
+                self?.error(error)
+                self?.presenter.setSubscription(titleSubscriptionID)
+                self?.presenter.reloadProfileScreen()
+                self?.subscriptionInformationView?.setupValues()
+                self?.subscriptionInformationView?.alpha = .zero
+                self?.presenter.setPremiumUserDate(
+                    .init().addingTimeInterval(.init(2_592_000 * (cell.subscription?.monthsCount ?? 1)))
+                )
                 
-                for i in 0 ..< collectionView.visibleCells.count {
-                    if cell != collectionView.visibleCells[i] {
-                        collectionView.deselectItem(at: IndexPath(item: i, section: indexPath.section), animated: true)
+                UIView.animate(withDuration: 0.25) {
+                    self?.collectionView.alpha = .zero
+                    self?.view.backgroundColor = .accentColor
+                    self?.navigationController?.navigationBar.alpha = .zero
+                } completion: { completed in
+                    self?.navigationController?.navigationBar.isHidden = true
+                    self?.collectionView.isHidden = true
+                    self?.subscriptionInformationView?.isHidden = false
+                    
+                    UIView.animate(withDuration: 0.25) {
+                        self?.subscriptionInformationView?.alpha = 1
                     }
                 }
-                
-                if self.presenter.products[indexPath.item].productIdentifier != self.presenter.getSubscription() {
-                    self.presenter.makePayment(self.presenter.products[indexPath.item]) { [ weak self ] error in
-                        guard let self = self, error == nil else {
-                            collectionView.deselectItem(at: indexPath, animated: true)
-                            
-                            return
-                        }
-                        
-                        self.presenter.makePayment(self.presenter.products[indexPath.item]) {
-                            self.error($0) {
-                                guard let id = ProductsID.getProductID(rawValue: self.presenter.products[indexPath.item].productIdentifier) else {
-                                    print("❌ Error: product is equal to nil.")
-                                    
-                                    collectionView.deselectItem(at: indexPath, animated: true)
-                                    self.presentAlert(title: NSLocalizedString("Error", comment: String()))
-                                    
-                                    return
-                                }
-                                
-                                self.presenter.makeUserPremium(Subscription(productID: id)) { error in
-                                    self.error(error) {
-                                        switch id {
-                                        case .premiumSubscriptionOneMonth:
-                                            self.presenter.setSubscription(id)
-                                            self.presenter.setPremiumUserDate({
-                                                var compenents = Calendar.current.dateComponents(
-                                                    [.day, .month, .hour, .year],
-                                                    from: .init()
-                                                )
-                                                
-                                                compenents.month = (compenents.month ?? .zero) + 1
-                                                
-                                                return Calendar.current.date(from: compenents) ?? .init()
-                                            }())
-                                            self.presenter.reloadProfileScreen()
-                                            self.subscriptionInformationView?.setupValues()
-                                            self.subscriptionInformationView?.alpha = .zero
-                                            
-                                            UIView.animate(withDuration: 0.25) {
-                                                self.collectionView.alpha = .zero
-                                                self.view.backgroundColor = .accentColor
-                                                self.navigationController?.navigationBar.alpha = .zero
-                                            } completion: { completed in
-                                                self.navigationController?.navigationBar.isHidden = true
-                                                self.collectionView.isHidden = true
-                                                self.subscriptionInformationView?.isHidden = false
-                                                
-                                                UIView.animate(withDuration: 0.25) {
-                                                    self.subscriptionInformationView?.alpha = 1
-                                                }
-                                            }
-                                        case .premiumSubscriptionThreeMonth:
-                                            self.presenter.setSubscription(id)
-                                            self.presenter.setPremiumUserDate({
-                                                var compenents = Calendar.current.dateComponents(
-                                                    [.day, .month, .hour, .year],
-                                                    from: .init()
-                                                )
-                                                
-                                                compenents.month = (compenents.month ?? .zero) + 3
-                                                
-                                                return Calendar.current.date(from: compenents) ?? .init()
-                                            }())
-                                            self.presenter.reloadProfileScreen()
-                                            self.subscriptionInformationView?.setupValues()
-                                            self.subscriptionInformationView?.alpha = .zero
-                                            
-                                            UIView.animate(withDuration: 0.25) {
-                                                self.collectionView.alpha = .zero
-                                                self.view.backgroundColor = .accentColor
-                                                self.navigationController?.navigationBar.alpha = .zero
-                                            } completion: { completed in
-                                                self.navigationController?.navigationBar.isHidden = true
-                                                self.collectionView.isHidden = true
-                                                self.subscriptionInformationView?.isHidden = false
-                                                
-                                                UIView.animate(withDuration: 0.25) {
-                                                    self.subscriptionInformationView?.alpha = 1
-                                                }
-                                            }
-                                        case .premiumSubscriptionSixMonth:
-                                            self.presenter.setSubscription(id)
-                                            self.presenter.setPremiumUserDate({
-                                                var compenents = Calendar.current.dateComponents(
-                                                    [.day, .month, .hour, .year],
-                                                    from: .init()
-                                                )
-                                                
-                                                compenents.month = (compenents.month ?? .zero) + 6
-                                                
-                                                return Calendar.current.date(from: compenents) ?? .init()
-                                            }())
-                                            self.presenter.reloadProfileScreen()
-                                            self.subscriptionInformationView?.setupValues()
-                                            self.subscriptionInformationView?.alpha = .zero
-                                            
-                                            UIView.animate(withDuration: 0.25) {
-                                                self.collectionView.alpha = .zero
-                                                self.view.backgroundColor = .accentColor
-                                                self.navigationController?.navigationBar.alpha = .zero
-                                            } completion: { completed in
-                                                self.navigationController?.navigationBar.isHidden = true
-                                                self.collectionView.isHidden = true
-                                                self.subscriptionInformationView?.isHidden = false
-                                                
-                                                UIView.animate(withDuration: 0.25) {
-                                                    self.subscriptionInformationView?.alpha = 1
-                                                }
-                                            }
-                                        case .premiumSubscriptionOneYear:
-                                            self.presenter.setSubscription(id)
-                                            self.presenter.setPremiumUserDate({
-                                                var compenents = Calendar.current.dateComponents(
-                                                    [.day, .month, .hour, .year],
-                                                    from: .init()
-                                                )
-                                                
-                                                compenents.year = (compenents.year ?? .zero) + 1
-                                                
-                                                print(Calendar.current.date(from: compenents) as Any)
-                                                
-                                                return Calendar.current.date(from: compenents) ?? .init()
-                                            }())
-                                            self.presenter.reloadProfileScreen()
-                                            self.subscriptionInformationView?.setupValues()
-                                            self.subscriptionInformationView?.alpha = .zero
-                                            
-                                            UIView.animate(withDuration: 0.25) {
-                                                self.collectionView.alpha = .zero
-                                                self.view.backgroundColor = .accentColor
-                                                self.navigationController?.navigationBar.alpha = .zero
-                                            } completion: { completed in
-                                                self.navigationController?.navigationBar.isHidden = true
-                                                self.collectionView.isHidden = true
-                                                self.subscriptionInformationView?.isHidden = false
-                                                
-                                                UIView.animate(withDuration: 0.25) {
-                                                    self.subscriptionInformationView?.alpha = 1
-                                                }
-                                            }
-                                        default:
-                                            collectionView.deselectItem(at: indexPath, animated: true)
-                                            self.presentAlert(title: NSLocalizedString("Error", comment: .init()))
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            }
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

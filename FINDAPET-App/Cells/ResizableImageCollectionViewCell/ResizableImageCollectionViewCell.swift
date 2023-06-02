@@ -55,7 +55,7 @@ final class ResizableImageCollectionViewCell: UICollectionViewCell {
     
 //    MARK: Setup Views
     private func setupViews() {
-        self.addSubview(self.scrollView)
+        self.contentView.addSubview(self.scrollView)
         
         self.scrollView.addSubview(self.imageView)
         

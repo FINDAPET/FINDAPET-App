@@ -68,6 +68,7 @@ final class SettingsBlockView: UIView {
         view.leftViewMode = .always
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.rightViewMode = .always
+        view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -85,6 +86,7 @@ final class SettingsBlockView: UIView {
         view.leftViewMode = .always
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.rightViewMode = .always
+        view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -131,6 +133,11 @@ final class SettingsBlockView: UIView {
 //    MARK: Setup Views
     private func setupViews() {
         self.backgroundColor = .backgroundColor
+        self.isUserInteractionEnabled = true
+        self.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
         
         self.addSubview(self.countryLabel)
         self.addSubview(self.countryTextField)
@@ -188,14 +195,37 @@ final class SettingsBlockView: UIView {
 //    MARK: Actions
     @objc private func didTapSaveButton() {
         self.presenter.setUserCurrency(Currency.getCurrency(wtih: self.currencyValueLabel.text ?? Currency.USD.rawValue) ?? Currency.USD)
-        self.presenter.setUserCountry(self.countryTextField.text ?? String())
-        self.presenter.setUserCity(self.cityTextField.text ?? String())
+        self.presenter.setUserCountry(self.countryTextField.text?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ?? true ? nil : self.countryTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))
+        self.presenter.setUserCity(self.cityTextField.text?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ?? true ? nil : self.countryTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))
         self.presenter.goTo()
-        self.presenter.changeUserBaseCurrencyName(currencyName: self.currencyValueLabel.text ?? Currency.USD.rawValue) { _ in }
+        self.presenter.changeUserBaseCurrencyName(currencyName: self.currencyValueLabel.text ?? Currency.USD.rawValue)
     }
     
     @objc private func didTapCurrencyValueTextField() {
         self.presenter.currencyValueTextFieldTapAction()
     }
+    
+    @objc private func dismissKeyboard() {
+        self.endEditing(true)
+    }
 
+}
+
+//MARK: - Extensions
+extension SettingsBlockView: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == self.countryTextField {
+            self.cityTextField.becomeFirstResponder()
+        } else {
+            textField.resignFirstResponder()
+        }
+        
+        return true
+    }
+    
 }

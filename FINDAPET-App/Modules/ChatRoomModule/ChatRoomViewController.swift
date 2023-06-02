@@ -61,6 +61,7 @@ final class ChatRoomViewController: MessagesViewController {
         view.delegate = self
         view.allowsEditing = true
         view.sourceType = .photoLibrary
+        view.navigationBar.tintColor = .accentColor
         
         return view
     }()
@@ -92,7 +93,7 @@ final class ChatRoomViewController: MessagesViewController {
             
             if !images.isEmpty {
                 self.messageInputBar.sendButton.isEnabled = true
-            } else if self.messageInputBar.inputTextView.text.isEmpty {
+            } else if self.messageInputBar.inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 self.messageInputBar.sendButton.isEnabled = false
             }
         }
@@ -198,7 +199,12 @@ final class ChatRoomViewController: MessagesViewController {
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationController?.navigationBar.isHidden = true
-                
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
+        
         self.configureMessagesCollectionView()
         self.configureMessageInputBar()
         
@@ -245,6 +251,11 @@ final class ChatRoomViewController: MessagesViewController {
         self.messagesCollectionView.messageCellDelegate = self
         self.showMessageTimestampOnSwipeLeft = true
         self.scrollsToLastItemOnKeyboardBeginsEditing = true
+        self.messagesCollectionView.isUserInteractionEnabled = true
+        self.messagesCollectionView.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
     }
     
 //    MARK: Configure Message Input Bar
@@ -297,6 +308,10 @@ final class ChatRoomViewController: MessagesViewController {
     @objc private func keyboardWillHide(notification: NSNotification) {
         self.messagesCollectionView.contentInset.bottom = .zero
         self.messagesCollectionView.verticalScrollIndicatorInsets = .zero
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
     }
     
 }
@@ -440,18 +455,18 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
             self.photosCollectionView.images = .init()
         }
         
-        guard !text.isEmpty else {
+        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return
         }
         
         self.presenter.sendMessage(.init(
-            text: text,
+            text: text.trimmingCharacters(in: .whitespacesAndNewlines),
             userID: self.presenter.getUserID() ?? .init(),
             chatRoomID: self.presenter.chatRoom?.id
         ))
         self.messagesCollectionView.scrollToLastItem()
         
-///        Maybe later. If it will be needed
+        ///Maybe later. If it will be needed
 //        self.presenter.playOnSendMessageSound()
         
         guard self.presenter.chatRoom?.id == nil else {
@@ -464,7 +479,7 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
     }
     
     func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
-        if !text.isEmpty {
+        if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             self.messageInputBar.sendButton.isEnabled = true
         } else if self.photosCollectionView.images.isEmpty {
             self.messageInputBar.sendButton.isEnabled = false

@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SPStorkController
 
 final class FeedViewController: UIViewController {
 
@@ -34,6 +35,7 @@ final class FeedViewController: UIViewController {
             let view = UIActivityIndicatorView(style: .medium)
             
             view.startAnimating()
+            view.color = .accentColor
             view.translatesAutoresizingMaskIntoConstraints = false
             
             return view
@@ -42,6 +44,7 @@ final class FeedViewController: UIViewController {
         let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
+        view.color = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -51,8 +54,8 @@ final class FeedViewController: UIViewController {
         let view = UIRefreshControl()
         
         view.addTarget(self, action: #selector(self.onRefresh), for: .valueChanged)
-        view.tintColor = .white
-        view.backgroundColor = .accentColor
+        view.backgroundColor = .clear
+        view.tintColor = .accentColor
         
         return view
     }()
@@ -62,12 +65,14 @@ final class FeedViewController: UIViewController {
         
         view.dataSource = self
         view.delegate = self
+        view.refreshControl = self.refreshControl
         view.register(NotFoundTableViewCell.self, forCellReuseIdentifier: NotFoundTableViewCell.id)
         view.register(DealTableViewCell.self, forCellReuseIdentifier: DealTableViewCell.cellID)
         view.register(AdTableViewCell.self, forCellReuseIdentifier: AdTableViewCell.cellID)
         view.separatorColor = .clear
         view.isHidden = true
         view.backgroundColor = .backgroundColor
+        view.showsVerticalScrollIndicator = false
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -101,23 +106,23 @@ final class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.setupNotifications()
+        self.presenter.setFilterCheckedIDs()
+        self.presenter.makeDealsEmpty()
+        self.activityIndicatorView.isHidden = false
+        self.tableView.isHidden = true
         self.presenter.getDeals { [ weak self ] _, error in
             self?.activityIndicatorView.isHidden = true
             self?.tableView.isHidden = false
             self?.error(error)
         }
-        self.presenter.notificationCenterManagerAddObserver(
-            self,
-            name: .reloadFeedScreen,
-            action: #selector(self.reloadScreen)
-        )
     }
     
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
+        self.tabBarController?.navigationController?.navigationBar.isHidden = true
         self.navigationController?.navigationBar.isHidden = true
-        self.navigationController?.navigationItem.setHidesBackButton(true, animated: false)
         
         self.view.addSubview(self.searchView)
         self.view.addSubview(self.statusBarView)
@@ -143,11 +148,41 @@ final class FeedViewController: UIViewController {
         }
     }
     
+//    MARK: - Setup Notifications
+    private func setupNotifications() {
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .reloadFeedScreen,
+            action: #selector(self.reloadScreen)
+        )
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .makeFeedRefreshing,
+            action: #selector(self.makeFeedRefreshing)
+        )
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .makeNilFilter,
+            action: #selector(self.makeNilFilter)
+        )
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .makeFeedEmpty,
+            action: #selector(self.makeFeedEmpty)
+        )
+    }
+    
 //    MARK: Actions
     @objc private func onRefresh() {
+//            full version
+//            self?.presenter.getRandomAd()
+        self.isRefreshing = true
         self.presenter.setFilterCheckedIDs()
-        self.presenter.makeDealsEmpty()
-        self.presenter.getDeals { [ weak self ] _, error in
+        self.presenter.getDeals(isDealsSortable: true) { [ weak self ] _, error in
+            self?.presenter.makeDealsEmpty()
+            self?.isRefreshing = false
+            self?.tableView.tableFooterView = nil
+            self?.refreshControl.endRefreshing()
             self?.error(error)
         }
     }
@@ -159,6 +194,20 @@ final class FeedViewController: UIViewController {
             self?.activityIndicatorView.isHidden = true
             self?.tableView.isHidden = false
         }
+    }
+    
+    @objc private func makeFeedRefreshing() {
+        self.activityIndicatorView.isHidden = false
+        self.tableView.isHidden = true
+    }
+    
+    @objc private func makeNilFilter() {
+        self.presenter.fullFilterDelete()
+        self.searchView.searchTextField.text = nil
+    }
+    
+    @objc private func makeFeedEmpty() {
+        self.presenter.makeDealsEmpty()
     }
         
 }
@@ -242,6 +291,7 @@ extension FeedViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard scrollView == self.tableView,
               !self.isRefreshing,
+              !self.presenter.deals.isEmpty,
               scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) else {
             return
         }
@@ -250,23 +300,24 @@ extension FeedViewController: UITableViewDelegate {
             let activityIndicatorView = UIActivityIndicatorView(style: .large)
             
             activityIndicatorView.startAnimating()
+            activityIndicatorView.color = .accentColor
             
             self.tableView.tableFooterView = activityIndicatorView
         } else {
             let activityIndicatorView = UIActivityIndicatorView(style: .gray)
             
             activityIndicatorView.startAnimating()
+            activityIndicatorView.color = .accentColor
             
             self.tableView.tableFooterView = activityIndicatorView
         }
-        
         
         self.isRefreshing = true
         self.presenter.getDeals { [ weak self ] deals, _ in
             self?.tableView.tableFooterView = nil
             self?.isRefreshing = false
             
-            if deals?.isEmpty ?? true {
+            if deals?.isEmpty ?? true && !(self?.presenter.deals.isEmpty ?? true) {
                 let label = UILabel()
                 
                 label.textColor = .accentColor
@@ -289,8 +340,11 @@ extension FeedViewController: SearchViewDelegate {
     
     func searchView(_ searchView: SearchView, didTapSearchTextField textField: UITextField) {
         self.presenter.goToSearch { [ weak self ] title in
+            searchView.searchTextField.text = title
+            
             self?.presenter.setFilterCheckedIDs()
-            self?.presenter.getRandomAd()
+//            full version
+//            self?.presenter.getRandomAd()
             self?.presenter.makeDealsEmpty()
             self?.presenter.setFilterTitle(title)
             self?.activityIndicatorView.isHidden = false
@@ -305,8 +359,11 @@ extension FeedViewController: SearchViewDelegate {
     
     func searchView(_ searchView: SearchView, didTapSearchButton button: UIButton) {
         self.presenter.goToSearch { [ weak self ] title in
+            searchView.searchTextField.text = title
+            
             self?.presenter.setFilterCheckedIDs()
-            self?.presenter.getRandomAd()
+//            full version
+//            self?.presenter.getRandomAd()
             self?.presenter.makeDealsEmpty()
             self?.presenter.setFilterTitle(title)
             self?.activityIndicatorView.isHidden = false
@@ -334,6 +391,12 @@ extension FeedViewController: SearchViewDelegate {
         ) else {
             return
         }
+        
+        let transitioningDelegate = SPStorkTransitioningDelegate()
+        
+        viewController.transitioningDelegate = transitioningDelegate
+        viewController.modalPresentationStyle = .custom
+        viewController.modalPresentationCapturesStatusBarAppearance = true
         
         self.present(viewController, animated: true)
     }

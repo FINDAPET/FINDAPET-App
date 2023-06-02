@@ -10,6 +10,30 @@ import UIKit
 
 extension UIColor {
     
+//    MARK: - Init
+    convenience init?(hex: String, alpha: Int = 1) {
+        guard hex.hasPrefix("#") else { return nil }
+        
+        let hexColor = String(hex.lowercased()[hex.index(hex.startIndex, offsetBy: 1)...])
+        
+        guard hexColor.count == 8 else { return nil }
+        
+        let scanner = Scanner(string: hexColor)
+        var hexNumber = UInt64.zero
+        
+        guard scanner.scanHexInt64(&hexNumber) else { return nil }
+                
+        self.init(
+            red: .init((hexNumber & 0xff000000) >> 24) / 255,
+            green: .init((hexNumber & 0x00ff0000) >> 16) / 255,
+            blue: .init((hexNumber & 0x0000ff00) >> 8) / 255,
+            alpha: alpha
+        )
+    }
+}
+
+extension UIColor {
+    
 //    MARK: Default App Colors
     static let textColor = UIColor.createColor(lightMode: .black, darkMode: .white)
     static let borderColor = UIColor.createColor(lightMode: .black, darkMode: .systemGray)
@@ -45,23 +69,21 @@ extension UIColor {
 extension UIColor {
     
     static func hexStringToUIColor(hex: String, alpha: CGFloat = 1) -> UIColor? {
-        var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        var rgbValue = UInt64.zero
-
-        if cString.hasPrefix("#") {
-            cString.remove(at: cString.startIndex)
-        }
-
-        guard cString.count == 6 else {
-            return nil
-        }
-
-        Scanner(string: cString).scanHexInt64(&rgbValue)
-
+        guard hex.hasPrefix("#") else { return nil }
+        
+        let hexColor = String(hex.lowercased()[hex.index(hex.startIndex, offsetBy: 1)...])
+        
+        guard hexColor.count == 8 else { return nil }
+        
+        let scanner = Scanner(string: hexColor)
+        var hexNumber = UInt64.zero
+        
+        guard scanner.scanHexInt64(&hexNumber) else { return nil }
+                
         return .init(
-            red: CGFloat(rgbValue & 0xFF0000 >> 16) / 255,
-            green: CGFloat(rgbValue & 0x00FF00 >> 8) / 255,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255,
+            red: .init((hexNumber & 0xff000000) >> 24) / 255,
+            green: .init((hexNumber & 0x00ff0000) >> 16) / 255,
+            blue: .init((hexNumber & 0x0000ff00) >> 8) / 255,
             alpha: alpha
         )
     }

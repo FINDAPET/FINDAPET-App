@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import JGProgressHUD
 
 final class EditDealViewController: UIViewController {
     
@@ -49,6 +50,37 @@ final class EditDealViewController: UIViewController {
     }
     
 //    MARK: Properties
+    private var isPriceTextFieldBeginEditting = false
+    private lazy var priceAsAgreedCheckmarkButtonIsSelected = self.presenter.deal.price == nil {
+        didSet {
+            if #available(iOS 13.0, *) {
+                self.priceAsAgreedCheckmarkButton.setImage(
+                    .init(systemName: !self.priceAsAgreedCheckmarkButtonIsSelected ? "square" : "checkmark.square"),
+                    for: .normal
+                )
+            } else {
+                self.priceAsAgreedCheckmarkButton.setImage(
+                    .init(
+                        named: !self.priceAsAgreedCheckmarkButtonIsSelected ? "square" : "checkmarksquare"
+                    )?.withRenderingMode(.alwaysTemplate),
+                    for: .normal
+                )
+            }
+            
+            self.presenter.deal.price = self.priceAsAgreedCheckmarkButtonIsSelected ? nil : .zero
+            self.priceAsAgreedCheckmarkButton.tintColor = .accentColor
+            self.priceTextField.isEnabled = !self.priceAsAgreedCheckmarkButtonIsSelected
+            self.currencyButton.isEnabled = !self.priceAsAgreedCheckmarkButtonIsSelected
+            self.priceTextField.text = self.priceAsAgreedCheckmarkButtonIsSelected ? nil : "0"
+            
+            UIView.animate(withDuration: 0.3) { [ weak self ] in
+                guard let self else { return }
+                
+                self.priceTextField.alpha = self.priceAsAgreedCheckmarkButtonIsSelected ? 0.6 : 1
+                self.currencyButton.alpha = self.priceAsAgreedCheckmarkButtonIsSelected ? 0.6 : 1
+            }
+        }
+    }
     private var photosCollectionViewHeight: CGFloat {
         (((self.presenter.deal.photoDatas.count % 2 == .zero ? .zero : 1) +
           CGFloat(Int(self.presenter.deal.photoDatas.count / 2))) *
@@ -72,6 +104,7 @@ final class EditDealViewController: UIViewController {
         view.allowsEditing = true
         view.sourceType = .photoLibrary
         view.delegate = self
+        view.navigationBar.tintColor = .accentColor
         
         return view
     }()
@@ -106,6 +139,7 @@ final class EditDealViewController: UIViewController {
             view.setImage(.init(named: "plus")?.withRenderingMode(.alwaysTemplate), for: .normal)
         }
         view.tintColor = .accentColor
+        view.imageViewSizeToButton()
         view.addTarget(self, action: #selector(self.didTapPhotosPlusButton), for: .touchUpInside)
         view.imageView?.translatesAutoresizingMaskIntoConstraints = false
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -204,7 +238,7 @@ final class EditDealViewController: UIViewController {
     private let descriptionTitleLabel: UILabel = {
         let view = UILabel()
         
-        view.text = "\(NSLocalizedString("Description", comment: .init()))(\(NSLocalizedString("optional", comment: .init()))):"
+        view.text = "\(NSLocalizedString("Description", comment: .init())) (\(NSLocalizedString("optional", comment: .init()))):"
         view.textColor = .textColor
         view.font = .systemFont(ofSize: 24, weight: .bold)
         view.numberOfLines = .zero
@@ -288,6 +322,7 @@ final class EditDealViewController: UIViewController {
         view.delegate = self
         view.register(PetTypeCollectionViewCell.self, forCellWithReuseIdentifier: PetTypeCollectionViewCell.id)
         view.isScrollEnabled = false
+        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -391,7 +426,7 @@ final class EditDealViewController: UIViewController {
     private let locationTitleLabel: UILabel = {
         let view = UILabel()
         
-        view.text = "\(NSLocalizedString("Location", comment: .init()))(\(NSLocalizedString("optional", comment: .init()))):"
+        view.text = "\(NSLocalizedString("Location", comment: .init())) (\(NSLocalizedString("optional", comment: .init()))):"
         view.textColor = .textColor
         view.font = .systemFont(ofSize: 24, weight: .bold)
         view.numberOfLines = .zero
@@ -418,6 +453,7 @@ final class EditDealViewController: UIViewController {
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.rightViewMode = .always
         view.addTarget(self, action: #selector(self.editingCountryTextField(_:)), for: .allEditingEvents)
+        view.delegate = self
          
         return view
     }()
@@ -439,6 +475,7 @@ final class EditDealViewController: UIViewController {
         view.leftViewMode = .always
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.addTarget(self, action: #selector(self.editingCityTextField(_:)), for: .allEditingEvents)
+        view.delegate = self
         view.rightViewMode = .always
          
         return view
@@ -473,6 +510,7 @@ final class EditDealViewController: UIViewController {
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.addTarget(self, action: #selector(self.editingColorTextField(_:)), for: .allEditingEvents)
         view.rightViewMode = .always
+        view.delegate = self
          
         return view
     }()
@@ -494,11 +532,15 @@ final class EditDealViewController: UIViewController {
         let view = UIDatePicker()
         
         view.setDate(ISO8601DateFormatter().date(from: self.presenter.deal.birthDate) ?? .init(), animated: false)
-        view.backgroundColor = .textFieldColor
         view.tintColor = .accentColor
         view.datePickerMode = .date
         view.addTarget(self, action: #selector(self.setBirthDate(_:)), for: .editingDidEnd)
         view.translatesAutoresizingMaskIntoConstraints = false
+                
+        if #available(iOS 13.4, *) {
+            view.subviews.first?.backgroundColor = .backgroundColor
+            view.preferredDatePickerStyle = .wheels
+        }
         
         return view
     }()
@@ -533,6 +575,11 @@ final class EditDealViewController: UIViewController {
         view.layer.cornerRadius = 25
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         view.addTarget(self, action: #selector(self.editingPriceTextField), for: .allEditingEvents)
+        view.addTarget(self, action: #selector(self.beginEdittinPriceLabel), for: .editingDidBegin)
+        view.addTarget(self, action: #selector(self.finishEdittinPriceLabel), for: .editingDidEnd)
+        view.delegate = self
+        view.isUserInteractionEnabled = !self.priceAsAgreedCheckmarkButtonIsSelected
+        view.alpha = !self.priceAsAgreedCheckmarkButtonIsSelected ? 1 : 0.7
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -593,7 +640,11 @@ final class EditDealViewController: UIViewController {
             self.presenter.getPremiumUserDate() ?? .init() > .init() ||
             self.presenter.deal.isPremiumDeal
         )
+        view.clipsToBounds = true
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 15.5
         view.tintColor = .backgroundColor
+        view.backgroundColor = .backgroundColor
         view.onTintColor = .accentColor
         view.addTarget(self, action: #selector(self.premiumDealSwitchValueChanged(_:)), for: .valueChanged)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -699,11 +750,66 @@ final class EditDealViewController: UIViewController {
         return view
     }()
     
+    private let priceAsAgreedLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = NSLocalizedString("Price as agreed", comment: .init())
+        view.textColor = .textColor
+        view.font = .systemFont(ofSize: 17)
+        view.numberOfLines = .zero
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var priceAsAgreedCheckmarkButton: UIButton = {
+        let view = UIButton()
+        
+        if #available(iOS 13.0, *) {
+            view.setImage(.init(systemName: self.presenter.deal.price != nil ? "square" : "checkmark.square"), for: .normal)
+        } else {
+            view.setImage(
+                .init(
+                    named: self.presenter.deal.price != nil ? "square" : "checkmarksquare"
+                )?.withRenderingMode(.alwaysTemplate),
+                for: .normal
+            )
+        }
+        
+        view.tintColor = .accentColor
+        view.imageViewSizeToButton()
+        view.addTarget(self, action: #selector(self.didTapPriceAsAgreedCheckmarkButton), for: .touchUpInside)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private let progressIndicator: JGProgressHUD = {
+        let view = JGProgressHUD()
+        
+        view.textLabel.text = NSLocalizedString("Loading", comment: .init())
+        
+        return view
+    }()
+    
 //    MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.presenter.getAllPetTypes()
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.keyboadWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -716,12 +822,23 @@ final class EditDealViewController: UIViewController {
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = self.presenter.isCreate
+        self.view.isUserInteractionEnabled = true
+        
+        let tapGestureRecognier = UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        )
+        
+        tapGestureRecognier.cancelsTouchesInView = false
+        
+        self.view.addGestureRecognizer(tapGestureRecognier)
         
         self.view.addSubview(self.scrollView)
         
         self.scrollView.addSubview(self.firstContentView)
         self.scrollView.addSubview(self.secondContentView)
-        self.scrollView.addSubview(self.thirdContentView)
+//        full version
+//        self.scrollView.addSubview(self.thirdContentView)
         self.scrollView.addSubview(self.createButton)
         
         self.firstContentView.addSubview(self.photosTitle)
@@ -758,10 +875,12 @@ final class EditDealViewController: UIViewController {
         self.secondContentView.addSubview(self.priceTitleLabel)
         self.secondContentView.addSubview(self.priceTextField)
         self.secondContentView.addSubview(self.currencyButton)
-        
-        self.thirdContentView.addSubview(self.premiumDealTitleLabel)
-        self.thirdContentView.addSubview(self.premiumDealSwitch)
-        self.thirdContentView.addSubview(self.premiumDealDescriptionLabel)
+        self.secondContentView.addSubview(self.priceAsAgreedLabel)
+        self.secondContentView.addSubview(self.priceAsAgreedCheckmarkButton)
+//        full version
+//        self.thirdContentView.addSubview(self.premiumDealTitleLabel)
+//        self.thirdContentView.addSubview(self.premiumDealSwitch)
+//        self.thirdContentView.addSubview(self.premiumDealDescriptionLabel)
         
         self.scrollView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.width.equalTo(self.view.safeAreaLayoutGuide)
@@ -781,11 +900,7 @@ final class EditDealViewController: UIViewController {
             make.trailing.equalToSuperview().inset(15)
             make.leading.equalTo(self.photosTitle.snp.trailing).inset(-15)
             make.centerY.equalTo(self.photosTitle)
-            make.width.height.equalTo(25)
-        }
-        
-        self.photosPlusButton.imageView?.snp.makeConstraints { make in
-            make.leading.trailing.top.bottom.equalToSuperview()
+            make.width.height.equalTo(30)
         }
         
         self.photosCollectionView.snp.makeConstraints { make in
@@ -834,7 +949,7 @@ final class EditDealViewController: UIViewController {
             make.trailing.equalToSuperview().inset(15)
             make.leading.equalTo(self.tagsTitleLabel.snp.trailing).inset(-15)
             make.centerY.equalTo(self.tagsTitleLabel)
-            make.width.height.equalTo(25)
+            make.width.height.equalTo(30)
         }
 
         self.tagsCollectionView.snp.makeConstraints { make in
@@ -937,15 +1052,19 @@ final class EditDealViewController: UIViewController {
         }
         
         self.birthDateLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(15)
-            make.trailing.equalTo(self.secondContentView.snp.centerX)
+            make.leading.trailing.equalToSuperview().inset(15)
             make.top.equalTo(self.colorTextField.snp.bottom).inset(-20)
         }
         
         self.birthDatePicker.snp.makeConstraints { make in
             make.top.equalTo(self.birthDateLabel.snp.bottom).inset(-10)
-            make.leading.trailing.equalToSuperview().inset(15)
             make.height.equalTo(50)
+            
+            if #available(iOS 13.0, *) {
+                make.leading.trailing.equalToSuperview()
+            } else {
+                make.leading.trailing.equalToSuperview().inset(15)
+            }
         }
         
         self.priceTitleLabel.snp.makeConstraints { make in
@@ -954,43 +1073,58 @@ final class EditDealViewController: UIViewController {
         }
         
         self.priceTextField.snp.makeConstraints { make in
-            make.leading.bottom.equalToSuperview().inset(15)
+            make.leading.equalToSuperview().inset(15)
             make.top.equalTo(self.priceTitleLabel.snp.bottom).inset(-10)
             make.height.equalTo(50)
         }
         
         self.currencyButton.snp.makeConstraints { make in
             make.centerY.equalTo(self.priceTextField)
-            make.trailing.bottom.equalToSuperview().inset(15)
+            make.trailing.equalToSuperview().inset(15)
             make.leading.equalTo(self.priceTextField.snp.trailing)
             make.height.equalTo(50)
             make.width.equalTo(70)
         }
         
-        self.thirdContentView.snp.makeConstraints { make in
-            make.top.equalTo(self.secondContentView.snp.bottom).inset(-15)
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+        self.priceAsAgreedLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(15)
+            make.trailing.equalTo(self.priceAsAgreedCheckmarkButton.snp.leading).inset(-10)
+            make.centerY.equalTo(self.priceAsAgreedCheckmarkButton)
         }
         
-        self.premiumDealTitleLabel.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().inset(15)
-            make.trailing.equalTo(self.premiumDealSwitch.snp.leading).inset(-15)
+        self.priceAsAgreedCheckmarkButton.snp.makeConstraints { make in
+            make.trailing.bottom.equalToSuperview().inset(15)
+            make.top.equalTo(self.priceTextField.snp.bottom).inset(-15)
+            make.width.height.equalTo(50)
         }
-        
-        self.premiumDealSwitch.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(15)
-            make.centerY.equalTo(self.premiumDealTitleLabel)
-        }
-        
-        self.premiumDealDescriptionLabel.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview().inset(15)
-            make.top.equalTo(self.premiumDealTitleLabel.snp.bottom).inset(-15)
-        }
+//        full version
+//        self.thirdContentView.snp.makeConstraints { make in
+//            make.top.equalTo(self.secondContentView.snp.bottom).inset(-15)
+//            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+//        }
+//
+//        self.premiumDealTitleLabel.snp.makeConstraints { make in
+//            make.leading.top.equalToSuperview().inset(15)
+//            make.trailing.equalTo(self.premiumDealSwitch.snp.leading).inset(-15)
+//        }
+//
+//        self.premiumDealSwitch.snp.makeConstraints { make in
+//            make.trailing.equalToSuperview().inset(15)
+//            make.centerY.equalTo(self.premiumDealTitleLabel)
+//            make.width.equalTo(49)
+//        }
+//
+//        self.premiumDealDescriptionLabel.snp.makeConstraints { make in
+//            make.leading.trailing.bottom.equalToSuperview().inset(15)
+//            make.top.equalTo(self.premiumDealTitleLabel.snp.bottom).inset(-15)
+//        }
         
         self.createButton.snp.makeConstraints { make in
             make.height.equalTo(50)
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.top.equalTo(self.thirdContentView.snp.bottom).inset(-15)
+//            full version
+//            make.top.equalTo(self.thirdContentView.snp.bottom).inset(-15)
+            make.top.equalTo(self.secondContentView.snp.bottom).inset(-15)
             make.bottom.equalToSuperview().inset(15)
         }
     }
@@ -1039,7 +1173,7 @@ final class EditDealViewController: UIViewController {
             return
         }
         
-        guard self.presenter.deal.price != nil else {
+        guard self.presenter.deal.price != nil || self.priceAsAgreedCheckmarkButtonIsSelected else {
             self.presentAlert(title: "Price field is empty", message: "Fill it")
             
             return
@@ -1051,8 +1185,11 @@ final class EditDealViewController: UIViewController {
             return
         }
         
+        self.progressIndicator.show(in: self.view)
+        
         if self.presenter.isCreate {
             self.presenter.createDeal { [ weak self ] error in
+                self?.progressIndicator.dismiss()
                 self?.error(error) {
                     self?.presenter.notificationCenterManagerPostUpdateProfileScreen()
                     self?.presenter.notificationCenterManagerPostUpdateFeedScreen()
@@ -1065,6 +1202,7 @@ final class EditDealViewController: UIViewController {
                         return
                     }
                     
+                    self.birthDatePicker.setDate(.init(), animated: true)
                     self.titleTextView.text = nil
                     self.descriptionTextView.text = nil
                     self.modeValueLabel.text = DealMode.everywhere.rawValue
@@ -1087,6 +1225,7 @@ final class EditDealViewController: UIViewController {
                     )
                     self.priceTextField.text = "0"
                     self.presentAlert(title: NSLocalizedString("You successfully posted a deal!", comment: .init()))
+                    self.priceAsAgreedCheckmarkButtonIsSelected = false
                     
                     for i in .zero ..< self.petTypeCollectionView.visibleCells.count {
                         self.petTypeCollectionView.deselectItem(at: .init(item: i, section: .zero), animated: true)
@@ -1099,6 +1238,7 @@ final class EditDealViewController: UIViewController {
             }
         } else {
             self.presenter.changeDeal { [ weak self ] error in
+                self?.progressIndicator.dismiss()
                 self?.error(error) {
                     self?.presenter.notificationCenterManagerPostUpdateProfileScreen()
                     self?.presenter.notificationCenterManagerPostUpdateFeedScreen()
@@ -1151,7 +1291,7 @@ final class EditDealViewController: UIViewController {
                 return
             }
             
-            self?.breedValueLabel.text = alertAction.title
+            self?.breedValueLabel.text = " \(alertAction.title ?? .init()) "
             
             if title.contains("Other") {
                 for name in self?.presenter.petTypes.map({ $0.name }) ?? .init() {
@@ -1201,19 +1341,29 @@ final class EditDealViewController: UIViewController {
     }
     
     @objc private func editingCountryTextField(_ sender: UITextField) {
-        self.presenter.deal.country = sender.text
+        self.presenter.deal.country = sender.text?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ?? true ? nil : sender.text?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     @objc private func editingCityTextField(_ sender: UITextField) {
-        self.presenter.deal.city = sender.text
+        self.presenter.deal.city = sender.text?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ?? true ? nil : sender.text?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     @objc private func editingColorTextField(_ sender: UITextField) {
-        self.presenter.deal.color = sender.text
+        self.presenter.deal.color = sender.text?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ?? true ? nil : sender.text?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     @objc private func editingPriceTextField(_ sender: UITextField) {
-        self.presenter.deal.price = .init(sender.text ?? .init())
+        self.presenter.deal.price = .init(sender.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? .init())
+    }
+    
+    @objc private func didTapPriceAsAgreedCheckmarkButton() {
+        self.priceAsAgreedCheckmarkButtonIsSelected.toggle()
     }
     
     @objc private func premiumDealSwitchValueChanged(_ sender: UISwitch) {
@@ -1223,16 +1373,18 @@ final class EditDealViewController: UIViewController {
         
         self.presenter.getProducts { [ weak self ] products in
             guard let product = products.first else {
+                print("❌ ERROR: product is equal to nil.")
+                
                 sender.setOn(false, animated: true)
                 
                 return
             }
             
             self?.presenter.makePayment(product) { error in
-                guard error == nil else {
-                    sender.setOn(false, animated: true)
+                if let error {
+                    print("❌ ERROR: \(error.localizedDescription)")
                     
-                    self?.error(error)
+                    sender.setOn(false, animated: true)
                     
                     return
                 }
@@ -1256,6 +1408,47 @@ final class EditDealViewController: UIViewController {
     
     @objc private func didTapPhotosPlusButton() {
         self.present(self.imagePickerController, animated: true)
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    @objc private func keyboadWillShow(notification: NSNotification) {
+        guard self.isPriceTextFieldBeginEditting else {
+            return
+        }
+        
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.scrollView.contentInset.bottom = keyboardSize.height
+            self.scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(
+                top: 0,
+                left: 0,
+                bottom: keyboardSize.height,
+                right: 0
+            )
+            self.scrollView.setContentOffset(
+                .init(x: 0, y: max(self.scrollView.contentSize.height - self.scrollView.bounds.size.height, 0) ),
+                animated: true
+            )
+        }
+    }
+    
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        guard self.isPriceTextFieldBeginEditting else {
+            return
+        }
+        
+        self.scrollView.contentInset.bottom = .zero
+        self.scrollView.verticalScrollIndicatorInsets = .zero
+    }
+    
+    @objc func beginEdittinPriceLabel() {
+        self.isPriceTextFieldBeginEditting = true
+    }
+    
+    @objc func finishEdittinPriceLabel() {
+        self.isPriceTextFieldBeginEditting = false
     }
     
 }
@@ -1323,10 +1516,6 @@ extension EditDealViewController: UICollectionViewDataSource {
             cell.petType = self.presenter.petTypes[indexPath.item]
             cell.backgroundColor = .backgroundColor
             
-            if self.presenter.deal.petTypeID == cell.petType?.id {
-                cell.isSelected = true
-            }
-            
             return cell
         } else if collectionView == self.tagsCollectionView {
             guard let cell = collectionView.dequeueReusableCell(
@@ -1349,7 +1538,7 @@ extension EditDealViewController: UICollectionViewDataSource {
         }
         
         cell.backgroundColor = .backgroundColor
-        cell.isMale = indexPath.row == 0
+        cell.isMale = indexPath.row == .zero
         
         if self.presenter.deal.isMale == cell.isMale {
             cell.isSelected = true
@@ -1365,35 +1554,31 @@ extension EditDealViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.photosCollectionView || collectionView == self.tagsCollectionView {
             collectionView.deselectItem(at: indexPath, animated: true)
-            
-            if collectionView == self.tagsCollectionView {
-                self.presentAlert(
-                    title: NSLocalizedString("Do you want delete this tag?",comment: .init()),
-                    actions: (
-                        title: NSLocalizedString("Delete", comment: .init()),
-                        style: UIAlertAction.Style.destructive,
-                        action: { [ weak self ] in
-                            self?.presenter.deal.tags.remove(at: indexPath.item)
-                        }
-                    ),
-                    (
-                        title: NSLocalizedString("No", comment: .init()),
-                        style: UIAlertAction.Style.default,
-                        action: { }
-                    )
+                        
+            self.presentAlert(
+                title: NSLocalizedString("Do you want delete this tag?",comment: .init()),
+                actions: (
+                    title: NSLocalizedString("Delete", comment: .init()),
+                    style: UIAlertAction.Style.destructive,
+                    action: { [ weak self ] in
+                        self?.presenter.deal.tags.remove(at: indexPath.item)
+                    }
+                ),
+                (
+                    title: NSLocalizedString("No", comment: .init()),
+                    style: UIAlertAction.Style.default,
+                    action: { }
                 )
-            }
+            )
         } else {
             for i in 0 ..< collectionView.visibleCells.count {
                 if collectionView.cellForItem(at: indexPath) == collectionView.visibleCells[i] {
-                    collectionView.deselectItem(at: IndexPath(item: i, section: indexPath.section), animated: true)
+                    collectionView.deselectItem(at: .init(item: i, section: indexPath.section), animated: true)
                 }
             }
             
             if collectionView == self.petTypeCollectionView {
-                guard let cell = collectionView.cellForItem(at: indexPath) as? PetTypeCollectionViewCell else {
-                    return
-                }
+                guard let cell = collectionView.cellForItem(at: indexPath) as? PetTypeCollectionViewCell else { return }
                 
                 if self.selectedPetType == cell.petType {
                     collectionView.deselectItem(at: indexPath, animated: true)
@@ -1473,10 +1658,20 @@ extension EditDealViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         if self.titleTextView == textView {
-            self.presenter.deal.title = textView.text
+            self.presenter.deal.title = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         } else {
-            self.presenter.deal.description = textView.text
+            self.presenter.deal.description = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         }
+    }
+    
+}
+
+extension EditDealViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true
     }
     
 }

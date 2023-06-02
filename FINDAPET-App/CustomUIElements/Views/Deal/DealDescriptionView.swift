@@ -124,16 +124,22 @@ final class DealDescriptionView: UIView {
         return view
     }()
     
-    private lazy var keyValueStackViews: [UIStackView] = [
-        self.createKeyValueStackView(
+    private lazy var keyValueStackViews: [UILabel] = [
+        self.createKeyValueLabel(
             key: NSLocalizedString("Sex", comment: String()),
             value: NSLocalizedString(self.deal.isMale ? "Male" : "Female", comment: String())
         ),
-        self.createKeyValueStackView(key: NSLocalizedString("Sold", comment: String()), value: self.deal.mode),
-        self.createKeyValueStackView(key: NSLocalizedString("Breed", comment: String()), value: self.deal.petBreed.name),
-        self.createKeyValueStackView(key: NSLocalizedString("Show Class", comment: String()), value: self.deal.petClass.rawValue),
-        self.createKeyValueStackView(key: NSLocalizedString("Pet Type", comment: String()), value: self.deal.petType.localizedNames[self.languageCode] ?? self.deal.petType.localizedNames["en"] ?? .init()),
-        self.createKeyValueStackView(key: NSLocalizedString("Age", comment: String()), value: { [ weak self ] in
+        self.createKeyValueLabel(key: NSLocalizedString("Sold", comment: String()), value: self.deal.mode),
+        self.createKeyValueLabel(key: NSLocalizedString("Breed", comment: String()), value: self.deal.petBreed.name),
+        self.createKeyValueLabel(
+            key: NSLocalizedString("Show Class", comment: .init()),
+            value: self.deal.petClass.rawValue
+        ),
+        self.createKeyValueLabel(
+            key: NSLocalizedString("Pet Type", comment: .init()),
+            value: self.deal.petType.localizedNames[self.languageCode] ??
+            self.deal.petType.localizedNames["en"] ?? .init()),
+        self.createKeyValueLabel(key: NSLocalizedString("Age", comment: .init()), value: { [ weak self ] in
             guard let string = self?.deal.birthDate, let date = ISO8601DateFormatter().date(from: string) else {
                 return "–"
             }
@@ -144,7 +150,7 @@ final class DealDescriptionView: UIView {
 
             return dateFormatter.string(from: date)
         }()),
-        self.createKeyValueStackView(key: NSLocalizedString("Color", comment: String()), value: self.deal.color)
+        self.createKeyValueLabel(key: NSLocalizedString("Color", comment: String()), value: self.deal.color)
     ]
         
 //    MARK: Setup Views
@@ -158,14 +164,14 @@ final class DealDescriptionView: UIView {
         self.descriptionLabel.isHidden = self.deal.description == nil
         
         if let country = self.deal.country {
-            self.keyValueStackViews.append(self.createKeyValueStackView(
+            self.keyValueStackViews.append(self.createKeyValueLabel(
                 key: NSLocalizedString("Country", comment: .init()),
                 value: country
             ))
         }
         
         if let city = self.deal.city {
-            self.keyValueStackViews.append(self.createKeyValueStackView(
+            self.keyValueStackViews.append(self.createKeyValueLabel(
                 key: NSLocalizedString("City", comment: .init()),
                 value: city
             ))

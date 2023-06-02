@@ -19,3 +19,6 @@ struct PetBreed {
         var petType: PetType.Entity?
     }
 }
+
+//MARK: - Extensions
+extension PetBreed.Output: Hashable { }

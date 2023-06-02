@@ -19,6 +19,7 @@ struct User: Decodable {
     var basicCurrencyName: String
 }
 
+//MARK: - Extensions
 extension User {
     struct Input: Encodable {
         var id: UUID?
@@ -26,20 +27,18 @@ extension User {
         var avatarData: Data?
         var documentData: Data?
         var description: String?
-        var deviceTokens: [String]
         var isCatteryWaitVerify: Bool
         var chatRoomsID: [String]
         var countryCode: String?
         var basicCurrencyName: Currency
         
-        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, deviceTokens: [String] = .init(), chatRoomsID: [String] = .init(), countryCode: String? = nil, basicCurrencyName: Currency = .USD) {
+        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, chatRoomsID: [String] = .init(), countryCode: String? = nil, basicCurrencyName: Currency = .USD) {
             self.id = id
             self.name = name
             self.avatarData = avatarData
             self.documentData = documentData
             self.description = description
             self.isCatteryWaitVerify = isCatteryWaitVerify
-            self.deviceTokens = deviceTokens
             self.chatRoomsID = chatRoomsID
             self.countryCode = countryCode
             self.basicCurrencyName = basicCurrencyName
@@ -61,7 +60,8 @@ extension User {
         var offers: [Offer.Output]
         var chatRooms: [ChatRoom.Output]
         var score: Int
-        var isPremiumUser: Bool
+        var subscription: Subscription.Output?
+        var isCatteryWaitVerify: Bool?
     }
 }
 
@@ -79,3 +79,6 @@ extension User {
         var displayName: String
     }
 }
+
+extension User.Output: Hashable { }
+extension User: Hashable { }

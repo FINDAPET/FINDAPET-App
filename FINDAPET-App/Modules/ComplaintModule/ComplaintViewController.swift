@@ -85,6 +85,11 @@ final class ComplaintViewController: UIViewController {
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = true
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
         
         self.view.addSubview(self.titleLabel)
         self.view.addSubview(self.textView)
@@ -113,13 +118,17 @@ final class ComplaintViewController: UIViewController {
         self.presenter.makeComplaint()
     }
     
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+    
 }
 
 extension ComplaintViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
-        self.sendButton.isEnabled = !self.presenter.complaint.text.isEmpty
-        self.presenter.editText(textView.text)
+        self.sendButton.isEnabled = !self.presenter.complaint.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        self.presenter.editText(textView.text.trimmingCharacters(in: .whitespacesAndNewlines))
     }
     
 }

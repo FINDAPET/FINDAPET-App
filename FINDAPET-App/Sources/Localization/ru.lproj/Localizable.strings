@@ -26,9 +26,9 @@
 "Save" = "Сохранить";
 "Main" = "Основные";
 "Your name or your cattery name" = "Ваше имя или название вашего питомника";
-"Description(optional)" = "Описание(необязательно)";
-"Register as a cattery(optional)" = "Зарегестрироваться как оффициальный питомник(необязательно)";
-"Cattery documents" = "Документ питомника(необязательно)";
+"Description(optional)" = "Описание (необязательно)";
+"Register as a cattery(optional)" = "Зарегестрироваться как оффициальный питомник (необязательно)";
+"Cattery documents" = "Документ питомника (необязательно)";
 "Name field is empty" = "Поле имени пустое";
 "Cattery document image is empty" = "Фотография документа питомника отсутствует";
 "Fill in all required fields" = "Заполните все обязательные поля";
@@ -39,7 +39,7 @@
 "Privacy policy" = "Политика конфеденциальности";
 "Do you agree with privacy policy?" = "Вы согласны с политикой конфеденциальности?";
 "You don't agree with the privacy policy" = "Вы не согласны с политикой конфиденциальности";
-"Verified catteries are always marked for the buyer" = "Прикрепите фото сертификата о регистрайии питомника. Верифицированные питомники всегда помечаются для покупателя и отображаются выше в списке. Не волнуйтесь эту фотографию увидет только наш сотрудник, который занимается проверкой сертификатов.";
+"Verified catteries are always marked for the buyer" = "Прикрепите фото сертификата о регистрайии питомника. Верифицированные питомники всегда помечаются для покупателя и отображаются выше в списке. Не волнуйтесь, эту фотографию увидет только наш сотрудник, который занимается проверкой сертификатов.";
 "My offers" = "Мои предложения";
 "Suggested offers" = "Предложения";
 "My ad" = "Моя реклама";
@@ -61,7 +61,7 @@
 "Subscription" = "Подписка";
 "Premium subscriptions increase the views of each of your deals. Premium subscriptions are available for 1, 3, 6 months and 1 year and can be automatically renewed." = "Премиум подписка увеличивает просмотры каждого вашего объявления. Премиум подписка доступна на 1, 3, 6 месяцев и 1 год и может автоматически продлятся.";
 "Name" = "Имя";
-"Link(optional)" = "Ссылка(необязательно)";
+"Link(optional)" = "Ссылка (необязательно)";
 "Info" = "Информация";
 "Contact Info" = "Контактная информация";
 "Supporting Team" = "Комманда поддержки";
@@ -86,7 +86,7 @@
 "Chats" = "Чаты";
 "Make Premium" = "Сделать премиум";
 "Search" = "Поиск";
-"By clicking the button you agree to the privacy policy" = "Нажимая кнопку вы соглашаетесь с политикой конфиденциальности";
+"I have read the privacy policy and the agreement on the processing of personal data" = "С политикой конфиденциальности и соглашением об обработки персональных данных, ознакомлен(-а).";
 "Filter" = "Фильтр";
 "A Dog" = "Собаки";
 "A Cat" = "Кошки";
@@ -146,3 +146,8 @@
 "No messages yet" = "Ещё нет сообщений";
 "Price is equal to 0" = "Цена равна 0";
 "Valid until" = "Действует до";
+"This module is under development" = "Этот модуль находится в разрабоке";
+"It will soon be available" = "Скоро он станет доступен";
+"You have not read the privacy policy and consent to data processing" = "Вы не ознакомились с политикой конфиденциальности и согласием на обработку данных.";
+"Go To Privacy Policy" = "Перейти к политике конфеденциальности";
+"Price as agreed" = "Цена по договорённости";

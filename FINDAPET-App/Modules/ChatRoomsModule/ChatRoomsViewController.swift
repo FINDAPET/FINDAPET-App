@@ -41,6 +41,7 @@ final class ChatRoomsViewController: UIViewController {
             
             view.startAnimating()
             view.isHidden = !self.presenter.chatRooms.isEmpty
+            view.color = .accentColor
             view.translatesAutoresizingMaskIntoConstraints = false
             
             return view
@@ -50,6 +51,7 @@ final class ChatRoomsViewController: UIViewController {
         
         view.startAnimating()
         view.isHidden = !self.presenter.chatRooms.isEmpty
+        view.color = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -88,8 +90,8 @@ final class ChatRoomsViewController: UIViewController {
         self.setupViews()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         self.presenter.updateUserChats()
         self.presenter.getAllChatRooms { [ weak self ] _, error in
@@ -98,6 +100,14 @@ final class ChatRoomsViewController: UIViewController {
             
             self?.error(error)
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        self.presenter.closeWS()
+        self.presenter.notififcationCenterMakeChatRoomsRefreshing(self, action: #selector(self.makeChatRoomsRefreshing))
+        self.presenter.notificationCenterMakeChatRoomsEmpty(self, action: #selector(self.makeChatRoomsEmpty))
     }
     
 //    MARK: Setup Views
@@ -123,6 +133,15 @@ final class ChatRoomsViewController: UIViewController {
 //    MARK: Actions
     @objc private func onRefresh() {
         self.presenter.getAllChatRooms { [ weak self ] _, _ in self?.refreshControl.endRefreshing() }
+    }
+    
+    @objc private func makeChatRoomsRefreshing() {
+        self.activityIndicatorView.isHidden = false
+        self.tableView.isHidden = true
+    }
+    
+    @objc private func makeChatRoomsEmpty() {
+        self.presenter.makeChatRoomsEmpty()
     }
     
 }

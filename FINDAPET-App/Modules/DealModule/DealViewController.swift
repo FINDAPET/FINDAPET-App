@@ -115,21 +115,22 @@ final class DealViewController: UIViewController {
         
         return view
     }()
-    
-    private lazy var makePremiumButton: UIButton = {
-        let view = UIButton()
-        
-        view.isHidden = self.presenter.deal?.cattery.id != self.presenter.getUserID()
-        view.addTarget(self, action: #selector(self.didTapMakePremiumButton), for: .touchUpInside)
-        view.setTitle(NSLocalizedString("Make Premium", comment: String()), for: .normal)
-        view.setTitleColor(.white, for: .normal)
-        view.layer.cornerRadius = 25
-        view.backgroundColor = .systemOrange
-        view.isEnabled = self.presenter.deal?.buyer == nil
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
+//    full version
+//    private lazy var makePremiumButton: UIButton = {
+//        let view = UIButton()
+//
+//        view.isHidden = self.presenter.deal?.cattery.id != self.presenter.getUserID()
+//        view.addTarget(self, action: #selector(self.didTapMakePremiumButton), for: .touchUpInside)
+//        view.setTitle(NSLocalizedString("Make Premium", comment: String()), for: .normal)
+//        view.setTitleColor(.white, for: .normal)
+//        view.layer.cornerRadius = 25
+//        view.backgroundColor = .systemOrange
+//        view.isEnabled = self.presenter.deal?.buyer == nil
+//        view.isHidden = true
+//        view.translatesAutoresizingMaskIntoConstraints = false
+//
+//        return view
+//    }()
     
     private lazy var dealDescriptionView: UIView = {
         guard let deal = self.presenter.deal else {
@@ -293,6 +294,11 @@ final class DealViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = false
         self.tabBarController?.tabBar.isHidden = false
         self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
         
         self.view.addSubview(self.scrollView)
         self.view.addSubview(self.translutionView)
@@ -324,8 +330,8 @@ final class DealViewController: UIViewController {
                 )
             }
             self.navigationItem.rightBarButtonItem?.tintColor = .accentColor
-
-            self.makePremiumButton.isHidden = true
+//            full version
+//            self.makePremiumButton.isHidden = true
 
             self.scrollView.addSubview(self.chatButton)
             self.scrollView.addSubview(self.createOfferButton)
@@ -383,20 +389,24 @@ final class DealViewController: UIViewController {
             self.createOfferButton.isHidden = true
                         
             if !(self.presenter.deal?.isPremiumDeal ?? false) && self.presenter.deal?.cattery.id == self.presenter.getUserID() {
-                self.scrollView.addSubview(self.makePremiumButton)
-                
-                self.makePremiumButton.snp.makeConstraints { make in
-                    make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-                    make.top.equalTo(self.priceLabel.snp.bottom).inset(-15)
-                    make.height.equalTo(50)
-                }
+//                full version
+//                self.scrollView.addSubview(self.makePremiumButton)
+//
+//                self.makePremiumButton.snp.makeConstraints { make in
+//                    make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+//                    make.top.equalTo(self.priceLabel.snp.bottom).inset(-15)
+//                    make.height.equalTo(50)
+//                }
                 
                 self.dealDescriptionView.snp.makeConstraints { make in
                     make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-                    make.top.equalTo(self.makePremiumButton.snp.bottom).inset(-15)
+//                    full version
+//                    make.top.equalTo(self.makePremiumButton.snp.bottom).inset(-15)
+                    make.top.equalTo(self.priceLabel.snp.bottom).inset(-15)
                 }
             } else {
-                self.makePremiumButton.isHidden = true
+//                full version
+//                self.makePremiumButton.isHidden = true
                 
                 self.dealDescriptionView.snp.makeConstraints { make in
                     make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
@@ -451,7 +461,7 @@ final class DealViewController: UIViewController {
 //    MARK: Setup Values
     private func setupValues() {
         self.titleLabel.text = self.presenter.deal?.title
-        self.priceLabel.text = "\(Int(self.presenter.deal?.price.rounded(.up) ?? .zero)) \(self.presenter.deal?.currencyName ?? String())"
+        self.priceLabel.text = self.presenter.deal?.price != nil ? "\(Int(self.presenter.deal?.price?.rounded(.up) ?? .zero)) \(self.presenter.deal?.currencyName ?? .init())" : NSLocalizedString("Price as agreed", comment: .init())
         self.viewsCountLabel.text = "\(self.presenter.deal?.viewsCount ?? .zero) \(NSLocalizedString("Views", comment: .init()))"
         self.viewsCountLabel.isHidden = self.presenter.deal?.photoDatas.isEmpty ?? true
         self.collectionViewItemNumberLabel.text = "1/\(self.presenter.deal?.photoDatas.count ?? 1)"
@@ -578,6 +588,8 @@ final class DealViewController: UIViewController {
                 self?.presenter.deleteDeal { error in
                     self?.error(error) {
                         self?.presenter.notificationCenterManagerPostUpdateProfileScreen()
+                        self?.presenter.notificationCenterManagerPostMakeFeedEmpty()
+                        self?.presenter.notificationCenterManagerPostMakeFeedRefreshing()
                         self?.navigationController?.popViewController(animated: true)
                     }
                 }
@@ -587,6 +599,10 @@ final class DealViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: NSLocalizedString("No", comment: String()), style: .cancel))
         
         self.present(alertController, animated: true)
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
     }
     
 }

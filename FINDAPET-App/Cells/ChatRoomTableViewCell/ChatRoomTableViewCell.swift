@@ -105,10 +105,10 @@ final class ChatRoomTableViewCell: UITableViewCell {
     private func setupViews() {
         self.backgroundColor = .clear
         
-        self.addSubview(self.avatarImageView)
-        self.addSubview(self.nameLabel)
-        self.addSubview(self.lastMessageLabel)
-        self.addSubview(self.notViewedMessagesCountLabel)
+        self.contentView.addSubview(self.avatarImageView)
+        self.contentView.addSubview(self.nameLabel)
+        self.contentView.addSubview(self.lastMessageLabel)
+        self.contentView.addSubview(self.notViewedMessagesCountLabel)
         
         self.avatarImageView.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview().inset(15)

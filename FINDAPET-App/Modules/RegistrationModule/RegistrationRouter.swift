@@ -23,4 +23,8 @@ final class RegistrationRouter: RegistrationCoordinatable {
         self.coordinatorDelegate?.goToPrivacyPolicy()
     }
     
+    func goToWebView(_ url: URL) {
+        self.coordinatorDelegate?.goToWebView(url)
+    }
+    
 }

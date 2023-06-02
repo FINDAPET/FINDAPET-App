@@ -65,7 +65,7 @@ final class FilterPresenter {
     }
     
     func resetFilter() {
-        self.filter = Filter(title: self.filter.title)
+        self.filter = .init(title: self.filter.title)
     }
     
 //    MARK: Actions

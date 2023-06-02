@@ -12,7 +12,7 @@ import UserNotifications
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     
-//    MARK: Porperties
+//    MARK: - Porperties
     var window: UIWindow?
     private let registrationCoordinator: RegistrationCoordinator = {
         let coordinator = RegistrationCoordinator()
@@ -22,7 +22,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         return coordinator
     }()
     
-//    MARK: Application
+//    MARK: - Application
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if #unavailable(iOS 13.0) {
             self.window = UIWindow(frame: UIScreen.main.bounds)
@@ -30,7 +30,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.makeKeyAndVisible()
         }
         
-        self.registerForPushNotifications()
         self.checkSusbscription()
         
         do {
@@ -43,45 +42,20 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
 //    MARK: - Notifications
-    func registerForPushNotifications() {
-      UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-        (granted, error) in
-          print("Permission granted: \(granted)")
-          
-          guard granted else { return }
-        
-          self.getNotificationSettings()
-      }
-    }
-    
-    func getNotificationSettings() {
-      UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-          print("Notification settings: \(settings)")
-          
-          guard settings.authorizationStatus == .authorized else { return }
-          
-          DispatchQueue.main.sync {
-              UIApplication.shared.registerForRemoteNotifications()
-          }
-      }
-    }
-    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let tokenParts = deviceToken.map { data -> String in
-            return String(format: "%02.2hhx", data)
-        }
-      
-        let token = tokenParts.joined()
+        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         
         UserDefaultsManager.write(data: token, key: .deviceToken)
+        NotificationManager.shared.callBack?()
         
-        print("Device Token: \(token)")
+        print("❕Device Token: \(token)")
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("Failed to register: \(error)")
+        print("❌ Failed to register for remote notifications: \(error)")
     }
     
+//    MARK: - Check Subscription
     private func checkSusbscription() {
         guard let date = UserDefaultsManager.read(key: .premiumUserDate) as? Date, date >= .init() else {
             UserDefaultsManager.write(data: nil, key: .premiumUserDate)

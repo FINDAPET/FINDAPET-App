@@ -13,7 +13,7 @@ protocol MainTabBarCoordinatable {
     var coordinatorDelegate: MainTabBarCoordinator? { get set }
 }
 
-final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
+final class MainTabBarCoordinator: NSObject, RegistrationCoordinatable, Coordinator {
     
     var coordinatorDelegate: RegistrationCoordinator?
     
@@ -68,23 +68,27 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
         self.setupViews()
         
         self.getNotificationScreens { [ weak self ] notificationScreens, error in
-            if let error = error {
+            if let error {
                 print("❌ Error: \(error.localizedDescription)")
                 
                 return
             }
             
-            guard let self = self,
-                  let IDs = self.getUserDefaultsNotificationScreensID(),
-                  let notificationScreen = (notificationScreens ?? .init())
-                .filter({ !IDs.contains($0.id?.uuidString ?? .init()) || $0.isRequired })
-                .sorted(by: { $0.isRequired == true && $1.isRequired == false }).first else {
+            guard let self,
+                  let notificationScreen = (notificationScreens ?? .init()).filter({
+                      !(self.getUserDefaultsNotificationScreensID() ?? .init())
+                        .contains($0.id?.uuidString ?? .init()) || $0.isRequired
+                  }).sorted(by: { $0.isRequired && !$1.isRequired }).first else {
                 print("❌ Error: not found.")
                 
                 return
             }
             
-            self.tabBarController.present(self.getNotificationScreen(notificationScreen), animated: true)
+            let vc = self.getNotificationScreen(notificationScreen)
+            
+            vc.modalPresentationStyle = .fullScreen
+            
+            self.tabBarController.present(vc, animated: true)
         }
         
         self.getCurrencies { currencies, error in
@@ -133,7 +137,7 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
             }
             
             for type in types {
-                _ = self.coreDataSavePetType(type)
+                self.coreDataSavePetType(type)
             }
         }
         
@@ -185,6 +189,11 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
         self.chatRoomCoordinator.getChatRoom(chatRoom: chatRoom, userID: userID)
     }
     
+//    MARK: Onboarding
+    func goToOnboarding(_ animated: Bool = true) {
+        self.coordinatorDelegate?.goToOnboarding(animated)
+    }
+    
 //    MARK: Notification Screen
     func getNotificationScreen(_ notificationScreen: NotificationScreen.Output) -> NotificationScreenViewController {
         let router = NotificationScreenRouter()
@@ -203,14 +212,14 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
     
 //    MARK: Requests
     private func getNotificationScreens(_ completionHandler: @escaping ([NotificationScreen.Output]?, Error?) -> Void) {
-        if #available(iOS 16, *), let countryCode = Locale.current.region?.identifier {
+        if #available(iOS 16, *), let countryCode = Locale.current.language.languageCode?.identifier {
             RequestManager.request(
                 method: .GET,
                 authMode: .bearer(value: self.getBearrerToken() ?? .init()),
                 url: URLConstructor.defaultHTTP.allNotificationScreens(countryCode: countryCode),
                 completionHandler: completionHandler
             )
-        } else if let countryCode = Locale.current.regionCode {
+        } else if let countryCode = Locale.current.languageCode {
             RequestManager.request(
                 method: .GET,
                 authMode: .bearer(value: self.getBearrerToken() ?? .init()),
@@ -280,11 +289,11 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
     }
     
 //    MARK: Core Data
-    private func coreDataSavePetType(
+    @discardableResult private func coreDataSavePetType(
         _ petType: PetType.Output,
         completionHandler: @escaping (Error?) -> Void = { _ in }
     ) -> PetTypeEntity? {
-        let manager = CoreDataManager<PetTypeEntity>()
+        let manager = coreDataPetTypeManager
         let context = manager.persistentContainer.newBackgroundContext()
         
         guard let description = NSEntityDescription.entity(
@@ -338,6 +347,11 @@ final class MainTabBarCoordinator: RegistrationCoordinatable, Coordinator {
             self.tabBarController.tabBar.tintColor = .accentColor
         }
         
+        self.feedCoordinator.coordinatorDelegate = self
+        self.chatRoomCoordinator.coordinatorDelegate = self
+        self.createDealCoordinator.coordinatorDelegate = self
+        self.profileCoordinator.coordinatorDelegate = self
+        self.subscriptionCoordinator.coordinatorDelegate = self
         self.tabBarController.navigationController?.navigationBar.isHidden = true
         self.tabBarController.viewControllers = [
             self.feedCoordinator.navigationController,

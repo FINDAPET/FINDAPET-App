@@ -36,11 +36,11 @@ final class SettingsBlockPresenter {
         self.interactor.userDefaultsSet(currency.rawValue, key: .currency)
     }
     
-    func setUserCountry(_ country: String) {
+    func setUserCountry(_ country: String? = nil) {
         self.interactor.userDefaultsSet(country, key: .country)
     }
     
-    func setUserCity(_ city: String) {
+    func setUserCity(_ city: String? = nil) {
         self.interactor.userDefaultsSet(city, key: .city)
     }
     
@@ -50,7 +50,7 @@ final class SettingsBlockPresenter {
     }
     
 //    MARK: Requests
-    func changeUserBaseCurrencyName(currencyName: String, completionHandler: @escaping (Error?) -> Void) {
+    func changeUserBaseCurrencyName(currencyName: String, completionHandler: @escaping (Error?) -> Void = { _ in }) {
         self.interactor.changeUserBaseCurrencyName(currencyName: currencyName, completionHandler: completionHandler)
     }
     

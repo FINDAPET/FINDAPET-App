@@ -12,11 +12,11 @@ protocol FeedCoordinatable {
     var coordinatorDelegate: FeedCoordinator? { get set }
 }
 
-final class FeedCoordinator: MainTabBarCoordinatable, Coordinator {
+final class FeedCoordinator: NSObject, MainTabBarCoordinatable, Coordinator {
     
 //    MARK: Properties
     weak var coordinatorDelegate: MainTabBarCoordinator?
-    let navigationController = UINavigationController()
+    let navigationController = CustomNavigationController()
     
 //    MARK: Start
     func start() {

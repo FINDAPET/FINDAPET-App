@@ -53,7 +53,7 @@ final class TagCollectionViewCell: UICollectionViewCell {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 25
         
-        self.addSubview(self.valueLabel)
+        self.contentView.addSubview(self.valueLabel)
         
         self.valueLabel.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview().inset(15)

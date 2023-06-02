@@ -103,6 +103,11 @@ final class SearchViewController: UIViewController {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = true
         self.tabBarController?.tabBar.isHidden = true
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
         
         NotificationCenter.default.addObserver(
             self,
@@ -151,6 +156,10 @@ final class SearchViewController: UIViewController {
     @objc private func keyboardWillHide(notification: NSNotification) {
         self.tableView.contentInset.bottom = .zero
         self.tableView.verticalScrollIndicatorInsets = .zero
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
     }
     
 }
@@ -204,7 +213,10 @@ extension SearchViewController: SearchViewDelegate {
     func searchView(_ searchView: SearchView, didTapSearchButton button: UIButton) {
         self.navigationController?.popViewController(animated: false)
         
-        guard let title = searchView.searchTextField.text else {
+        guard let title = searchView.searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !title.isEmpty else {
+            searchView.searchTextField.resignFirstResponder()
+            
             return
         }
         
@@ -220,6 +232,12 @@ extension SearchViewController: SearchViewDelegate {
     
     func searchView(_ searchView: SearchView, didTapBackButton button: UIButton) {
         self.navigationController?.popViewController(animated: false)
+    }
+    
+    func searchView(_ searchView: SearchView, editingSearchTextField textField: UITextField) {
+        searchView.searchButton.isEnabled = !(searchView.searchTextField.text?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ?? true)
     }
     
 }

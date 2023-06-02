@@ -9,6 +9,13 @@ import Foundation
 
 final class InfoRouter: ProfileCoordinatable {
     
+//    MARK: - Properties
     var coordinatorDelegate: ProfileCoordinator?
+    
+    
+//    MARK: - Web View
+    func goToWebView(_ url: URL) {
+        self.coordinatorDelegate?.goToWebView(url)
+    }
     
 }

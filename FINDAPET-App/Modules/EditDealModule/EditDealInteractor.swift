@@ -11,7 +11,7 @@ import StoreKit
 final class EditDealInteractor {
     
 //    MARK: Properties
-    private let petTypeCoreData = CoreDataManager<PetTypeEntity>()
+    private let petTypeCoreData = coreDataPetTypeManager
     
 //    MARK: Requests
     func createDeal(_ deal: Deal.Input, completionHandler: @escaping (Error?) -> Void) {

@@ -211,6 +211,7 @@ final class FilterViewController: UIViewController {
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.addTarget(self, action: #selector(self.editingCountryTextField(_:)), for: .allEditingEvents)
         view.rightViewMode = .always
+        view.delegate = self
          
         return view
     }()
@@ -233,6 +234,7 @@ final class FilterViewController: UIViewController {
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.addTarget(self, action: #selector(self.editingCityTextField(_:)), for: .allEditingEvents)
         view.rightViewMode = .always
+        view.delegate = self
          
         return view
     }()
@@ -291,6 +293,11 @@ final class FilterViewController: UIViewController {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = true
         self.tabBarController?.tabBar.isHidden = true
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
         
         self.view.addSubview(self.titleLabel)
         self.view.addSubview(self.resetButton)
@@ -481,16 +488,25 @@ final class FilterViewController: UIViewController {
     }
     
     @objc private func editingCountryTextField(_ sender: UITextField) {
-        self.presenter.setCountry(sender.text)
+        self.presenter.setCountry(sender.text?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ?? true ? nil : sender.text?.trimmingCharacters(in: .whitespacesAndNewlines))
     }
     
     @objc private func editingCityTextField(_ sender: UITextField) {
-        self.presenter.setCity(sender.text)
+        self.presenter.setCity(sender.text?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ?? true ? nil : sender.text?.trimmingCharacters(in: .whitespacesAndNewlines))
     }
     
     @objc private func didTapResetButton() {
-        self.setupValues()
         self.presenter.resetFilter()
+        self.presenter.saveFilter()
+        self.dismiss(animated: true)
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
     }
         
 }
@@ -514,6 +530,8 @@ extension FilterViewController: UICollectionViewDataSource {
             cell.petType = self.presenter.petTypes[indexPath.row]
             cell.backgroundColor = .textFieldColor
             
+            cell.isSelected = self.presenter.filter.petTypeID == cell.petType?.id
+            
             return cell
         }
         
@@ -525,6 +543,8 @@ extension FilterViewController: UICollectionViewDataSource {
         }
                 
         cell.isMale = indexPath.row == 0
+                
+        cell.isSelected = self.presenter.filter.isMale == cell.isMale
         
         return cell
     }
@@ -575,15 +595,35 @@ extension FilterViewController: UICollectionViewDelegate {
 
 extension FilterViewController: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         .init(
             width: (self.view.bounds.width - 45) / 2,
             height: collectionView == self.petTypeCollectionView ? (self.view.bounds.width - 45) / 2 : 50
         )
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        15
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat { 15 }
+    
+}
+
+extension FilterViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == self.countryTextField {
+            self.cityTextField.becomeFirstResponder()
+        } else {
+            textField.resignFirstResponder()
+        }
+        
+        return true
     }
     
 }

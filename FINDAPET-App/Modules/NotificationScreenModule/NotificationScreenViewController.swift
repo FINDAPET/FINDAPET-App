@@ -71,6 +71,16 @@ final class NotificationScreenViewController: UIViewController {
         view.text = self.presenter.notificationScreen.text
         view.textColor = .hexStringToUIColor(hex: self.presenter.notificationScreen.textColorHEX) ?? .textColor
         view.font = .systemFont(ofSize: 17)
+        view.numberOfLines = .zero
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var backgroundImageView: UIImageView = {
+        let view = UIImageView(image: .init(data: self.presenter.notificationScreen.backgroundImageData))
+        
+        view.contentMode = .scaleAspectFill
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -85,13 +95,18 @@ final class NotificationScreenViewController: UIViewController {
     
 //    MARK: Setup Views
     private func setupViews() {
-        self.view = UIImageView(image: .init(data: self.presenter.notificationScreen.backgroundImageData))
+        self.view.backgroundColor = .white
+        self.view.addSubview(self.backgroundImageView)
         
-        self.view.addSubview(self.titleLabel)
-        self.view.addSubview(self.scrollView)
-        self.view.addSubview(self.button)
+        self.backgroundImageView.addSubview(self.titleLabel)
+        self.backgroundImageView.addSubview(self.scrollView)
+        self.backgroundImageView.addSubview(self.button)
         
         self.scrollView.addSubview(self.textLabel)
+        
+        self.backgroundImageView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.top.equalToSuperview()
+        }
         
         self.titleLabel.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self.view.safeAreaLayoutGuide).inset(15)
@@ -109,7 +124,8 @@ final class NotificationScreenViewController: UIViewController {
         }
         
         self.textLabel.snp.makeConstraints { make in
-            make.leading.trailing.top.bottom.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalTo(self.backgroundImageView).inset(15)
         }
     }
     

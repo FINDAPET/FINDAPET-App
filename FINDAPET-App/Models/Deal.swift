@@ -30,7 +30,7 @@ struct Deal {
         var description: String?
         var buyerID: UUID?
         
-        init(id: UUID? = nil, title: String, photoDatas: [Data], tags: [String] = [String](), isPremiumDeal: Bool = false, isActive: Bool = true, mode: DealMode? = nil, petTypeID: UUID? = nil, petBreedID: UUID? = nil, petClass: PetClass? = nil, isMale: Bool? = nil, birthDate: Date, color: String? = nil, price: Double? = nil, currencyName: Currency = .USD, catteryID: UUID, country: String? = nil, city: String? = nil, description: String? = nil, buyerID: UUID? = nil) {
+        init(id: UUID? = nil, title: String, photoDatas: [Data], tags: [String] = .init(), isPremiumDeal: Bool = false, isActive: Bool = true, mode: DealMode? = nil, petTypeID: UUID? = nil, petBreedID: UUID? = nil, petClass: PetClass? = nil, isMale: Bool? = nil, birthDate: Date, color: String? = nil, price: Double? = nil, currencyName: Currency = .USD, catteryID: UUID, country: String? = nil, city: String? = nil, description: String? = nil, buyerID: UUID? = nil) {
             self.id = id
             self.title = title
             self.photoDatas = photoDatas
@@ -68,7 +68,7 @@ struct Deal {
         var isMale: Bool
         var birthDate: String
         var color: String
-        var price: Double
+        var price: Double?
         var currencyName: String
         var cattery: User.Output
         var country: String?
@@ -79,3 +79,6 @@ struct Deal {
         var score: Int
     }
 }
+
+//MARK: - Hashable
+extension Deal.Output: Hashable { }

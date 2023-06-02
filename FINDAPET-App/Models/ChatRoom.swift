@@ -24,3 +24,6 @@ struct ChatRoom {
         var messages: [Message.Output]
     }
 }
+
+//MARK: - Extensions
+extension ChatRoom.Output: Hashable { }

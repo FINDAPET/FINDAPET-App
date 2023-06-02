@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Icons=checkmark.square.png",
+      "filename" : "dog_dt.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Icons=checkmark.square@2x.png",
+      "filename" : "dog_dt 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Icons=checkmark.square@3x.png",
+      "filename" : "dog_dt 1-1.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

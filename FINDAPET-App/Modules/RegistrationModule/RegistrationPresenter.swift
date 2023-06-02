@@ -30,7 +30,7 @@ final class RegistrationPresenter {
     }
     
     func goToPrivacyPolicy() {
-        self.router.goToPrivacyPolicy()
+        self.router.goToWebView(URLConstructor.defaultHTTP.getPrivacyPolicy())
     }
     
 //    MARK: Requests
@@ -59,7 +59,7 @@ final class RegistrationPresenter {
         self.interactor.auth(email: email, password: password, completionHandler: newCompletionHandler)
     }
     
-    func setCurrencyRequest(_ completionHandler: @escaping (Error?) -> Void) {
+    func setCurrencyRequest(_ completionHandler: @escaping (Error?) -> Void = { _ in }) {
         if #available(iOS 16, *) {
             self.interactor.setCurrencyRequest(
                 Locale.current.currency?.identifier ?? Currency.USD.rawValue,

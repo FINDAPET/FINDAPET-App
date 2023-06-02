@@ -35,3 +35,6 @@ struct Offer {
         var cattery: User.Output
     }
 }
+
+//MARK: - Extensions
+extension Offer.Output: Hashable { }

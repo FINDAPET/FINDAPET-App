@@ -46,7 +46,7 @@ final class CreateOfferViewController: UIViewController {
         return view
     }()
     
-    private let priceTextField: UITextField = {
+    private lazy var priceTextField: UITextField = {
         let view = UITextField()
         
         view.keyboardType = .numberPad
@@ -62,6 +62,7 @@ final class CreateOfferViewController: UIViewController {
         view.rightViewMode = .always
         view.layer.cornerRadius = 25
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+        view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -113,6 +114,11 @@ final class CreateOfferViewController: UIViewController {
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
         
         self.view.addSubview(self.dealImageView)
         self.view.addSubview(self.titleLabel)
@@ -159,12 +165,12 @@ final class CreateOfferViewController: UIViewController {
         }
         
         self.titleLabel.text = self.presenter.deal.title
-        self.priceTextField.text = .init(Int(self.presenter.deal.price.rounded(.up)))
+        self.priceTextField.text = .init(Int(self.presenter.deal.price?.rounded(.up) ?? .zero))
     }
     
 //    MARK: Actions
     @objc private func didTapSendButton() {
-        guard !(self.priceTextField.text?.isEmpty ?? true) else {
+        guard !(self.priceTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) else {
             print("❌ Error: price field is empty.")
             
             self.presentAlert(title: NSLocalizedString("The price field shouldn't be empty", comment: String()))
@@ -172,9 +178,19 @@ final class CreateOfferViewController: UIViewController {
             return
         }
         
+        guard self.priceTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) != "0" else {
+            print("❌ Error: price is equal to 0.")
+            
+            self.presentAlert(title: NSLocalizedString("Price is equal to 0", comment: .init()))
+            
+            return
+        }
+        
         self.presenter.createOffer(
-            price: .init(self.priceTextField.text ?? String()) ?? .init(self.presenter.deal.price),
-            currencyName: .getCurrency(wtih: self.currencyButton.titleLabel?.text ?? String()) ?? .USD
+            price: .init(
+                self.priceTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? .init()
+            ) ?? .init(self.presenter.deal.price ?? .zero),
+            currencyName: .getCurrency(wtih: self.currencyButton.titleLabel?.text ?? .init()) ?? .USD
         ) { [ weak self ] error in
             self?.error(error) {
                 self?.callBack?()
@@ -190,6 +206,22 @@ final class CreateOfferViewController: UIViewController {
         ) { [ weak self ] alertAction in
             self?.currencyButton.setTitle(alertAction.title, for: .normal)
         }
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+}
+
+//MARK: Extesnions
+extension CreateOfferViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        self.didTapSendButton()
+        
+        return true
     }
     
 }

@@ -65,7 +65,7 @@ final class DealProfileView: UIView {
             let view = UIImageView(image: .init(systemName: "checkmark"))
             
             view.tintColor = .accentColor
-            view.isHidden = !self.user.isPremiumUser
+            view.isHidden = self.user.documentData == nil
             view.translatesAutoresizingMaskIntoConstraints = false
             
             return view
@@ -74,7 +74,7 @@ final class DealProfileView: UIView {
         let view = UIImageView(image: .init(named: "checkmark")?.withRenderingMode(.alwaysTemplate))
         
         view.tintColor = .accentColor
-        view.isHidden = !self.user.isPremiumUser
+        view.isHidden = self.user.documentData == nil
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -99,8 +99,7 @@ final class DealProfileView: UIView {
         self.addSubview(self.avatarImageView)
         self.addSubview(self.nameLabel)
         self.addSubview(self.userClosedDealsLabel)
-        
-        self.avatarImageView.addSubview(self.checkmarkImageView)
+        self.addSubview(self.checkmarkImageView)
         
         self.avatarImageView.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview().inset(15)
@@ -110,7 +109,6 @@ final class DealProfileView: UIView {
         self.nameLabel.snp.makeConstraints { make in
             make.leading.equalTo(self.avatarImageView.snp.trailing).inset(-15)
             make.top.equalTo(self.avatarImageView)
-            make.trailing.equalToSuperview().inset(15)
         }
         
         self.userClosedDealsLabel.snp.makeConstraints { make in
@@ -120,8 +118,9 @@ final class DealProfileView: UIView {
         }
         
         self.checkmarkImageView.snp.makeConstraints { make in
-            make.trailing.bottom.equalToSuperview().inset(10)
-            make.width.height.equalTo(20)
+            make.trailing.equalToSuperview().inset(15)
+            make.centerY.equalTo(self.nameLabel)
+            make.width.height.equalTo(30)
         }
     }
     

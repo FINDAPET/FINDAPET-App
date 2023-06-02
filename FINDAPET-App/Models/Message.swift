@@ -63,3 +63,6 @@ extension Message {
         var placeholderImage: UIImage
     }
 }
+
+//MARK: - Extensions
+extension Message.Output: Hashable { }

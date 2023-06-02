@@ -39,10 +39,20 @@ final class AdsViewController: UIViewController {
     }()
     
     private let activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView()
+        if #available(iOS 13.0, *) {
+            let view = UIActivityIndicatorView(style: .medium)
+            
+            view.startAnimating()
+            view.color = .accentColor
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
-        view.isHidden = true
+        view.color = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view

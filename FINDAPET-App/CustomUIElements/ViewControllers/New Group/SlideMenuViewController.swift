@@ -67,6 +67,9 @@ final class SlideMenuViewController: UIViewController {
     
 //   MARK: Setup Views
     private func setupViews() {
+        self.navigationController?.navigationBar.setBackgroundImage(.init(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = .init()
+        
         switch self.side {
         case .left:
             if #available(iOS 13.0, *) {
@@ -145,7 +148,7 @@ extension SlideMenuViewController: UITableViewDataSource {
             
             config.textProperties.font = .systemFont(ofSize: 20, weight: .semibold)
             config.textProperties.color = self.buttonActions[indexPath.row].color
-            
+            config.textProperties.numberOfLines = .zero
             config.text = self.buttonActions[indexPath.row].title
             
             cell.contentConfiguration = config
@@ -155,6 +158,7 @@ extension SlideMenuViewController: UITableViewDataSource {
         
         cell.textLabel?.text = self.buttonActions[indexPath.row].title
         cell.textLabel?.textColor = .white
+        cell.textLabel?.numberOfLines = .zero
         cell.textLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
         
         return cell

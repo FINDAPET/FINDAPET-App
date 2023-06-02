@@ -11,23 +11,23 @@ import StoreKit
 final class SubscriptionInteractor {
     
 //    MARK: - Requests
-    func makePremium(subscription: Subscription, completionHandler: @escaping (Error?) -> Void) {
+    func makePremium(subscription: Subscription.Input, completionHandler: @escaping (Error?) -> Void) {
         RequestManager.request(
             model: subscription,
-            method: .PUT,
+            method: .POST,
             authMode: .bearer(value: self.getBearrerToken() ?? .init()),
-            url: URLConstructor.defaultHTTP.makeUserPremium(),
+            url: URLConstructor.defaultHTTP.newSubscriptions(),
             completionHandler: completionHandler
         )
     }
     
-//    MARK: - Purchase
-    func getProducts(with products: [ProductsID], callBack: @escaping ([SKProduct]) -> Void) {
-        PurchaseManager.shared.getProducts(products, callBack: callBack)
-    }
-    
-    func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
-        PurchaseManager.shared.makePayment(product, callBack: callBack)
+    func getSubscrptions(completionHandler: @escaping ([TitleSubscription]?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.titleSubscriptions(),
+            completionHandler: completionHandler
+        )
     }
     
 //    MARK: - User Defaults

@@ -48,7 +48,7 @@ final class PhotoCollectionViewCell: UICollectionViewCell {
         self.clipsToBounds = true
         self.layer.masksToBounds = true
         
-        self.addSubview(self.imageView)
+        self.contentView.addSubview(self.imageView)
         
         self.imageView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview()

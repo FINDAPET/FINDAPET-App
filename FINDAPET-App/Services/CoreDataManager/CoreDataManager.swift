@@ -8,9 +8,14 @@
 import Foundation
 import CoreData
 
+//MARK: - Core Data Managers
+let coreDataPetBreedManager = CoreDataManager<PetBreedEntity>()
+let coreDataPetTypeManager = CoreDataManager<PetTypeEntity>()
+
+//MARK: - Core Data Manager
 final class CoreDataManager<T : NSManagedObject>: NSObject {
     
-//    MARK: Properties
+//    MARK: - Properties    
     let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "FINDAPET_App")
         
@@ -37,7 +42,7 @@ final class CoreDataManager<T : NSManagedObject>: NSObject {
         )
     }()
     
-//    MARK: Actions
+//    MARK: - Actions
     func all(_ completionHandler: @escaping ([T], Error?) -> Void) {
         let viewContext = self.persistentContainer.viewContext
         

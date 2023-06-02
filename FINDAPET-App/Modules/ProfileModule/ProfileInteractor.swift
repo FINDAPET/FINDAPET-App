@@ -68,6 +68,10 @@ final class ProfileInteractor {
         NotificationCenterManager.addObserver(observer, name: name, additional: parameter, action: action)
     }
     
+    func notificationCenterManagerPost(_ name: NotificationCenterManagerKeys, additional: String? = nil) {
+        NotificationCenterManager.post(name, additional: additional)
+    }
+    
 //    MARK: Keychain
     func deleteKeychainData() {
         KeychainManager.shared.write(value: nil, key: .token)

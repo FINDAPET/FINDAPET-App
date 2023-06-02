@@ -20,6 +20,7 @@ final class EditDealPresenter {
         mode: .everywhere,
         petClass: .allClass,
         birthDate: .init(),
+        price: .zero,
         currencyName: .getCurrency(wtih: self.getUserCurrency() ?? .init()) ?? .USD,
         catteryID: self.getUserID() ?? .init()
     ) {
@@ -176,7 +177,7 @@ final class EditDealPresenter {
                 types.append(type)
             }
             
-            self?.petTypes = types
+            self?.petTypes = types.sorted { ["A Cat", "Кошки"].contains($0.name) && !["A Cat", "Кошки"].contains($1.name) }
         }
         
         self.interactor.getAllPetTypes(newCompletionHandler)

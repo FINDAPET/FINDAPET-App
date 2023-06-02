@@ -44,6 +44,7 @@ final class OffersViewController: UIViewController {
             
             view.startAnimating()
             view.isHidden = true
+            view.color = .accentColor
             view.translatesAutoresizingMaskIntoConstraints = false
             
             return view
@@ -53,6 +54,7 @@ final class OffersViewController: UIViewController {
         
         view.startAnimating()
         view.isHidden = true
+        view.color = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -98,15 +100,20 @@ final class OffersViewController: UIViewController {
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         self.title = self.presenter.mode == .myOffers ? NSLocalizedString("My offers", comment: "") : NSLocalizedString("Suggested offers", comment: "")
         
-        self.view.addSubview(self.activityIndicatorView)
         self.view.addSubview(self.tableView)
-        
-        self.activityIndicatorView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
         
         self.tableView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
+        }
+        
+        guard self.presenter.userID != nil && self.presenter.offers.isEmpty else {
+            return
+        }
+        
+        self.view.addSubview(self.activityIndicatorView)
+        
+        self.activityIndicatorView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
     }
     
@@ -205,17 +212,15 @@ extension OffersViewController: UITableViewDataSource {
         
         if self.presenter.mode == .offers {
             cell.acceptButtonAction = { [ weak self ] in
-                guard let self = self else {
-                    return
-                }
+                guard let self else { return }
                 
-                self.presenter.acceptOffer(offer: self.presenter.offers[indexPath.row]) { error in
-                    self.error(error) {
-                        self.presentAlert(title: NSLocalizedString("Error", comment: ""))
-                        
-                        return
-                    }
-                }
+                self.presenter.acceptOffer(offer: self.presenter.offers[indexPath.row]) { self.error($0) }
+            }
+        } else {
+            cell.deleteButtonAction = { [ weak self ] in
+                guard let self, let id = self.presenter.offers[indexPath.row].id else { return }
+                
+                self.presenter.deleteOffer(id) { self.error($0) }
             }
         }
         

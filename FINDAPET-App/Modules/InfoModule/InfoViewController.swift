@@ -32,18 +32,6 @@ class InfoViewController: UIViewController {
         return view
     }()
     
-    private let сontactInfoTitleLabel: UILabel = {
-        let view = UILabel()
-        
-        view.text = NSLocalizedString("Contact Info", comment: "")
-        view.textColor = .textColor
-        view.font = .systemFont(ofSize: 24, weight: .bold)
-        view.numberOfLines = .zero
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
-    
     private let supportingTeamLabel: UILabel = {
         let view = UILabel()
         
@@ -90,25 +78,13 @@ class InfoViewController: UIViewController {
         return view
     }()
     
-    private let privacyPolicyTitleLabel: UILabel = {
-        let view = UILabel()
+    private lazy var privacyPolicyButton: UIButton = {
+        let view = UIButton()
         
-        view.text = NSLocalizedString("Privacy policy", comment: "")
-        view.textColor = .textColor
-        view.font = .systemFont(ofSize: 24, weight: .bold)
-        view.numberOfLines = .zero
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
-    
-    private let privacyPolicyTextLabel: UILabel = {
-        let view = UILabel()
-        
-        view.text = NSLocalizedString("Privacy Policy Text", comment: "")
-        view.textColor = .textColor
-        view.font = .systemFont(ofSize: 18, weight: .regular)
-        view.numberOfLines = .zero
+        view.setTitle("Go To Privacy Policy", for: .normal)
+        view.setTitleColor(.accentColor, for: .normal)
+        view.addTarget(self, action: #selector(self.didTapPrivacyPolicyButton), for: .touchUpInside)
+        view.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -124,31 +100,25 @@ class InfoViewController: UIViewController {
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
+        self.title = NSLocalizedString("Contact Info", comment: .init())
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         
         self.view.addSubview(self.scrollView)
         
-        self.scrollView.addSubview(self.сontactInfoTitleLabel)
         self.scrollView.addSubview(self.supportingTeamLabel)
         self.scrollView.addSubview(self.advertisingTeamLabel)
         self.scrollView.addSubview(self.supportingTeamEmailLinkButton)
         self.scrollView.addSubview(self.advertisingTeamEmailLinkButton)
-        self.scrollView.addSubview(self.privacyPolicyTitleLabel)
-        self.scrollView.addSubview(self.privacyPolicyTextLabel)
+        self.scrollView.addSubview(self.privacyPolicyButton)
         
         self.scrollView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.width.equalTo(self.view.safeAreaLayoutGuide)
         }
         
-        self.сontactInfoTitleLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.top.equalToSuperview().inset(15)
-        }
-        
         self.supportingTeamLabel.snp.makeConstraints { make in
             make.leading.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.top.equalTo(self.сontactInfoTitleLabel.snp.bottom).inset(-15)
+            make.top.equalToSuperview().inset(15)
         }
         
         self.supportingTeamEmailLinkButton.snp.makeConstraints { make in
@@ -168,19 +138,17 @@ class InfoViewController: UIViewController {
             make.centerY.equalTo(self.advertisingTeamLabel)
         }
         
-        self.privacyPolicyTitleLabel.snp.makeConstraints { make in
+        self.privacyPolicyButton.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.top.equalTo(self.advertisingTeamLabel.snp.bottom).inset(-15)
-        }
-        
-        self.privacyPolicyTextLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
-            make.top.equalTo(self.privacyPolicyTitleLabel.snp.bottom).inset(-15)
-            make.bottom.equalToSuperview().inset(15)
         }
     }
     
 //    MARK: Actions
+    @objc private func didTapPrivacyPolicyButton() {
+        self.presenter.goToPrivacyPolicy()
+    }
+    
     @objc private func didTapSuppotingTeamEmailLinkButton() {
         self.presenter.goToSupportingTeamMail()
     }

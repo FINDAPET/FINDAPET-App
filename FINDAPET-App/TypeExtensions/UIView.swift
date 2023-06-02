@@ -150,4 +150,16 @@ extension UIView {
         return stackView
     }
     
+//    MARK: - Creage Key Value Label
+    func createKeyValueLabel(key: String, value: String) -> UILabel {
+        let view = UILabel()
+        
+        view.text = "\(key): \(value)"
+        view.textColor = .textColor
+        view.font = .systemFont(ofSize: 17)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }
+    
 }

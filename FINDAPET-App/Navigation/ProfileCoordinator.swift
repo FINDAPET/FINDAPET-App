@@ -12,11 +12,11 @@ protocol ProfileCoordinatable {
     var coordinatorDelegate: ProfileCoordinator? { get set }
 }
 
-final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
+final class ProfileCoordinator: NSObject, MainTabBarCoordinatable, Coordinator {
     
 //    MARK: Properties
     weak var coordinatorDelegate: MainTabBarCoordinator?
-    let navigationController = UINavigationController()
+    let navigationController = CustomNavigationController()
     
 //    MARK: Start
     func start() {
@@ -154,7 +154,7 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getCreateOffer(deal: deal), animated: true)
     }
     
-//    MARK: Edit Profile
+//    MARK: Edit Profile    
     func goToEditProfile(user: User.Input) {
         self.coordinatorDelegate?.coordinatorDelegate?.goToEditProfile(user: user)
     }
@@ -203,6 +203,8 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         let presenter = InfoPresenter(router: router, interactor: interactor)
         let viewController = InfoViewController(presenter: presenter)
         
+        router.coordinatorDelegate = self
+        
         return viewController
     }
     
@@ -231,12 +233,8 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
     }
     
 //    MARK: Onboarding
-    func goToOnboarding() {
-        let registrationCoordinator = RegistrationCoordinator()
-        
-        registrationCoordinator.start()
-        
-        self.coordinatorDelegate?.coordinatorDelegate?.start()
+    func goToOnboarding(_ animated: Bool = true) {
+        self.coordinatorDelegate?.goToOnboarding(animated)
     }
     
 //    MARK: Browse Image
@@ -261,6 +259,18 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getEditDeal(deal, isCreate: isCreate), animated: true)
     }
     
+//    MARK: Web View
+    func getWebView(_ url: URL) -> WebViewViewController { .init(url) }
+    func getWebView(_ str: String) throws -> WebViewViewController { try .init(str) }
+    
+    func goToWebView(_ url: URL) {
+        self.navigationController.pushViewController(self.getWebView(url), animated: true)
+    }
+    
+    func goToWebView(_ str: String) throws {
+        self.navigationController.pushViewController(try self.getWebView(str), animated: true)
+    }
+       
 //    MARK: Setup Views
     private func setupViews() {
         if #available(iOS 13.0, *) {

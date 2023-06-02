@@ -12,14 +12,19 @@ protocol SubscriptionCoordinatable {
     var coordinatorDelegate: SubscriptionCoordinator? { get set }
 }
 
-final class SubscriptionCoordinator: MainTabBarCoordinatable, Coordinator {
+final class SubscriptionCoordinator: NSObject, MainTabBarCoordinatable, Coordinator {
     
     weak var coordinatorDelegate: MainTabBarCoordinator?
-    let navigationController = UINavigationController()
+    let navigationController = CustomNavigationController()
     
     func start() {
         self.setupViews()
-        self.goToSubscription()
+        
+//        full version
+//        self.goToSubscription()
+        
+//        beta version
+        self.goToSubscriptionSoon()
     }
     
 //    MARK: Subscription
@@ -48,6 +53,22 @@ final class SubscriptionCoordinator: MainTabBarCoordinatable, Coordinator {
         router.coordinatorDelegate = self
         
         return view
+    }
+    
+//    MARK: Subscription Soon
+    func getSubscriptionSoon() -> SubscriptionSoonViewController {
+        let router = SubscriptionSoonRouter()
+        let interactor = SubscriptionSoonInteractor()
+        let presenter = SubscriptionSoonPresenter(router: router, interactor: interactor)
+        let viewController = SubscriptionSoonViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        return viewController
+    }
+    
+    func goToSubscriptionSoon() {
+        self.navigationController.pushViewController(self.getSubscriptionSoon(), animated: false)
     }
     
 //    MARK: Setup Views

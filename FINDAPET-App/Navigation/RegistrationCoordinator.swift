@@ -12,10 +12,10 @@ protocol RegistrationCoordinatable {
     var coordinatorDelegate: RegistrationCoordinator? { get set }
 }
 
-final class RegistrationCoordinator: Coordinator {
+final class RegistrationCoordinator: NSObject, Coordinator {
     
 //    MARK: - Properties
-    let navigationController = UINavigationController()
+    let navigationController = CustomNavigationController()
     private let mainTabBarCoordinator = MainTabBarCoordinator()
     
 //    MARK: - Start
@@ -31,16 +31,24 @@ final class RegistrationCoordinator: Coordinator {
                     return
                 }
                 
-                guard let token = token else {
+                guard let token else {
                     self?.goToOnboarding(false)
                     
                     return
                 }
                 
+                self?.setUserID(token.user.id)
                 self?.setBearrerToken(token.value)
                 
                 if token.user.name.isEmpty {
-                    self?.goToEditProfile(user: .init(id: self?.getUserID()))
+                    if #available(iOS 16, *) {
+                        self?.goToEditProfile(user: .init(
+                            id: self?.getUserID(),
+                            countryCode: Locale.current.language.languageCode?.identifier
+                        ))
+                    } else {
+                        self?.goToEditProfile(user: .init(id: self?.getUserID(), countryCode: Locale.current.languageCode))
+                    }
                 } else {
                     self?.goToMainTabBar(false)
                 }
@@ -124,6 +132,18 @@ final class RegistrationCoordinator: Coordinator {
         self.navigationController.pushViewController(self.getLaunchScreen(), animated: true)
     }
     
+//    MARK: - Web View
+    func getWebView(_ url: URL) -> WebViewViewController { .init(url) }
+    func getWebView(_ str: String) throws -> WebViewViewController { try .init(str) }
+    
+    func goToWebView(_ url: URL) {
+        self.navigationController.pushViewController(self.getWebView(url), animated: true)
+    }
+    
+    func goToWebView(_ str: String) throws {
+        self.navigationController.pushViewController(try self.getWebView(str), animated: true)
+    }
+    
 //    MARK: User Defaults
     private func getUserID() -> UUID? {
         guard let string = UserDefaultsManager.read(key: .id) as? String else {
@@ -144,6 +164,11 @@ final class RegistrationCoordinator: Coordinator {
     
     private func setBearrerToken(_ value: String?) {
         KeychainManager.shared.write(value: value, key: .token)
+    }
+    
+//    MARK: - User Defaults
+    private func setUserID(_ id: UUID? = nil) {
+        UserDefaultsManager.write(data: id?.uuidString, key: .id)
     }
     
 //    MARK: Requests

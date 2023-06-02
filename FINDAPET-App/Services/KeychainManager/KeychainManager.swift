@@ -6,24 +6,59 @@
 //
 
 import Foundation
-import KeychainAccess
+import SimpleKeychain
 
 final class KeychainManager {
     
-    private let keychain: Keychain
+//    MARK: - Properties
+    private let keychain: SimpleKeychain
     
-    init(keychain: Keychain) {
+    
+//    MARK: - Init
+    init(keychain: SimpleKeychain) {
         self.keychain = keychain
     }
     
-    static let shared = KeychainManager(keychain: Keychain())
+//    MARK: - Shared
+    static let shared = KeychainManager(keychain: .init())
     
+//    MARK: Write
     func write(value: String?, key: KeychainKeys) {
-        self.keychain[key.rawValue] = value
+        guard let value else {
+            do {
+                try self.keychain.deleteItem(forKey: key.rawValue)
+            } catch {
+                print("❌ Error: \(error.localizedDescription)")
+            }
+
+            return
+        }
+
+        do {
+            try self.keychain.set(value, forKey: key.rawValue)
+        } catch {
+            print("❌ Error: \(error.localizedDescription)")
+        }
     }
     
+//    MARK: Read
     func read(key: KeychainKeys) -> String? {
-        self.keychain[key.rawValue]
+        do {
+            return try self.keychain.string(forKey: key.rawValue)
+        } catch {
+            print("❌ Error: \(error.localizedDescription)")
+            
+            return nil
+        }
+    }
+    
+//    MARK: - Delete All
+    func delteAll() {
+        do {
+            try self.keychain.deleteAll()
+        } catch {
+            print("❌ Error: \(error.localizedDescription)")
+        }
     }
     
 }

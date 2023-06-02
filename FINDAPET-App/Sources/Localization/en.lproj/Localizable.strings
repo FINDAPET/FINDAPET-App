@@ -26,9 +26,9 @@
 "Save" = "Save";
 "Main" = "Main";
 "Your name or your cattery name" = "Your name or your cattery name";
-"Description(optional)" = "Description(optional)";
-"Register as a cattery(optional)" = "Register as official cattery(optional)";
-"Cattery documents" = "Cattery document(optional)";
+"Description(optional)" = "Description (optional)";
+"Register as a cattery(optional)" = "Register as official cattery (optional)";
+"Cattery documents" = "Cattery document (optional)";
 "Name field is empty" = "Name field is empty";
 "Cattery document image is empty" = "Cattery document image is empty";
 "Fill in all required fields" = "Fill in all required fields";
@@ -49,7 +49,7 @@
 "Log Out" = "Log Out";
 "Settings" = "Settings";
 "Message" = "Message";
-"Accept" = "Подтвердить";
+"Accept" = "Accept";
 "Your offer is rejected" = "Your offer is rejected";
 "Buyer" = "Buyer";
 "Price" = "Price";
@@ -61,7 +61,7 @@
 "Subscription" = "Subscription";
 "Premium subscriptions increase the views of each of your deals. Premium subscriptions are available for 1, 3, 6 months and 1 year and can be automatically renewed." = "Premium subscriptions increase the views of each of your deals. Premium subscriptions are available for 1, 3, 6 months and 1 year and can be automatically renewed.";
 "Name" = "Name";
-"Link(optional)" = "Link(optional)";
+"Link(optional)" = "Link (optional)";
 "Info" = "Information";
 "Contact Info" = "Contact Information";
 "Supporting Team" = "Supporting Team";
@@ -86,7 +86,7 @@
 "Chats" = "Chats";
 "Make Premium" = "Make Premium";
 "Search" = "Search";
-"By clicking the button you agree to the privacy policy" = "By clicking the button you agree to the privacy policy";
+"I have read the privacy policy and the agreement on the processing of personal data" = "I have read the privacy policy and the agreement on the processing of personal data";
 "Filter" = "Filter";
 "A Dog" = "A Dog";
 "A Cat" = "A Cat";
@@ -146,3 +146,8 @@
 "No messages yet" = "No messages yet";
 "Price is equal to 0" = "Price is equal to 0";
 "Valid until" = "Valid until";
+"This module is under development" = "This module is under development";
+"It will soon be available" = "It will soon be available";
+"You have not read the privacy policy and consent to data processing" = "You have not read the privacy policy and consent to data processing";
+"Go To Privacy Policy" = "Go To Privacy Policy";
+"Price as agreed" = "Price as agreed";

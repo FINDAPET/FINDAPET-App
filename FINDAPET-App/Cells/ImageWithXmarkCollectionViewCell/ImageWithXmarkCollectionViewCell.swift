@@ -81,8 +81,8 @@ open class ImageWithXmarkCollectionViewCell: UICollectionViewCell {
     private func setupViews() {
         self.backgroundColor = .clear
         
-        self.addSubview(self.photoImageView)
-        self.addSubview(self.xmarkButton)
+        self.contentView.addSubview(self.photoImageView)
+        self.contentView.addSubview(self.xmarkButton)
         
         self.photoImageView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview().inset(15)

@@ -134,6 +134,7 @@ class SearchView: UIView {
         view.tintColor = self.mode == .withBack ? .accentColor : .clear
         view.addTarget(self, action: #selector(self.editingSearchTextField), for: .allEditingEvents)
         view.addTarget(self, action: #selector(self.didTapSearchTextField), for: .touchDown)
+        view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -205,6 +206,18 @@ class SearchView: UIView {
         }
         
         self.delegate?.searchView?(self, didTapBackButton: self.backButton)
+    }
+    
+}
+
+//MARK: Extesnions
+extension SearchView: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        self.delegate?.searchView(self, didTapSearchButton: self.searchButton)
+        
+        return true
     }
     
 }

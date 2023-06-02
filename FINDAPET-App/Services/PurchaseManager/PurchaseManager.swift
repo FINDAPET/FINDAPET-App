@@ -18,11 +18,17 @@ final class PurchaseManager: NSObject {
     
 //    MARK: - Methods
     func getProducts(_ productsID: [ProductsID], callBack: @escaping ([SKProduct]) -> Void) {
+        guard SKPaymentQueue.canMakePayments() else {
+            callBack(.init())
+            
+            print("❌ ERROR: cannot make payments.")
+            
+            return
+        }
+        
         self.firstCallBack = callBack
         
         let request = SKProductsRequest(productIdentifiers: Set(productsID.map { $0.rawValue }))
-        
-        print(productsID.count)
         
         request.delegate = self
         request.start()
@@ -42,7 +48,9 @@ extension PurchaseManager: SKProductsRequestDelegate {
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         DispatchQueue.main.async { [ weak self ] in
-            print(response.products.count)
+            if response.products.isEmpty {
+                print("❕NOTIFICATION: products is empty.")
+            }
             
             self?.firstCallBack?(response.products)
         }

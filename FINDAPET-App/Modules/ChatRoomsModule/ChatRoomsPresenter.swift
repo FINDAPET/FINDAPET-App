@@ -64,9 +64,27 @@ final class ChatRoomsPresenter {
         }
     }
     
+    func closeWS(_ completionHandler: @escaping (Error?) -> Void = { _ in }) {
+        self.interactor.closeWS(completionHandler)
+    }
+    
 //    MARK: Routing
     func goToChatRoom(_ chatRoom: ChatRoom.Output) {
         self.router.goToChatRoom(chatRoom)
+    }
+    
+//    MARK: - Notification Center
+    func notififcationCenterMakeChatRoomsRefreshing(_ observer: Any, action: Selector) {
+        self.interactor.notificationCenterManagerAddObserver(observer, name: .makeChatRoomsRefreshing, action: action)
+    }
+    
+    func notificationCenterMakeChatRoomsEmpty(_ observer: Any, action: Selector) {
+        self.interactor.notificationCenterManagerAddObserver(observer, name: .makeChatRoomsEmpty, action: action)
+    }
+    
+//    MARK: - Editing
+    func makeChatRoomsEmpty() {
+        self.chatRooms = .init()
     }
     
 }

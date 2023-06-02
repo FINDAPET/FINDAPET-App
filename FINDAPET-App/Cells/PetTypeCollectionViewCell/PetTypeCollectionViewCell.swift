@@ -67,7 +67,7 @@ final class PetTypeCollectionViewCell: UICollectionViewCell {
         
         return view
     }()
-        
+    
 //    MARK: Setup Views
     private func setupViews() {
         self.backgroundColor = .clear
@@ -75,8 +75,9 @@ final class PetTypeCollectionViewCell: UICollectionViewCell {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 25
         self.layer.borderColor = UIColor.accentColor.cgColor
+        self.contentView.isUserInteractionEnabled = true
         
-        self.addSubview(self.imageView)
+        self.contentView.addSubview(self.imageView)
         
         self.imageView.addSubview(self.nameLabel)
         
