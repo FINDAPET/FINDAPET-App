@@ -74,7 +74,7 @@ final class CreateOfferViewController: UIViewController {
         view.backgroundColor = .textFieldColor
         view.layer.borderWidth = 0.5
         view.layer.borderColor = UIColor.lightGray.cgColor
-        view.setTitle(self.presenter.getUserDefautlsCurrency(), for: .normal)
+        view.setTitle(self.presenter.getUserDefautlsCurrency() ?? Currency.USD.rawValue, for: .normal)
         view.setTitleColor(.accentColor, for: .normal)
         view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         view.layer.cornerRadius = 25

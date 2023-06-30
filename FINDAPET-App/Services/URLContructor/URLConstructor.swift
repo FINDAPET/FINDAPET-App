@@ -40,8 +40,8 @@ final class URLConstructor {
     
     static let localhostHTTP = URLConstructor(scheme: .http, host: .localhost, port: .localhost)
     static let localhostWS = URLConstructor(scheme: .ws, host: .localhost, port: .localhost)
-    static let defaultHTTP = URLConstructor.localhostHTTP//URLConstructor(scheme: .https, host: .base)
-    static let defaultWS = URLConstructor.localhostWS//URLConstructor(scheme: .wss, host: .base)
+    static let defaultHTTP = URLConstructor(scheme: .https, host: .base)
+    static let defaultWS = URLConstructor(scheme: .wss, host: .base)
     static let exchange = URLConstructor(scheme: .http, host: .exchange)
     
     //    MARK: Auth
@@ -426,8 +426,8 @@ final class URLConstructor {
     
     func chatRoomWithUser(userID: UUID) -> URL {
         self.baseURL
-            .appendingPathComponent(Paths.chat.rawValue)
             .appendingPathComponent(Paths.chats.rawValue)
+            .appendingPathComponent(Paths.chat.rawValue)
             .appendingPathComponent(Paths.with.rawValue)
             .appendingPathComponent(userID.uuidString)
     }

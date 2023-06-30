@@ -19,15 +19,15 @@ final class ProfileViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
         
-        self.presenter.callBack = { [ weak self ] in self?.tableView.reloadData() }
+        self.presenter.callBack = { [ weak self ] in
+            self?.tableView.reloadData()
+            self?.setupNavigationBar()
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    MARK: Propertiest
-    private var isHamburgerViewClossed = true
     
 //    MARK: UI Properties
     private lazy var activityIndicatorView: UIActivityIndicatorView = {
@@ -180,7 +180,6 @@ final class ProfileViewController: UIViewController {
     private lazy var browseImageViewController = self.presenter.getBrowseImage(dataSource: self)
     
 //    MARK: Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
                 
@@ -219,8 +218,28 @@ final class ProfileViewController: UIViewController {
         self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
         self.title = NSLocalizedString("Profile", comment: "")
         self.navigationItem.setHidesBackButton(self.presenter.userID == nil, animated: false)
+                
+        self.view.addSubview(self.activityIndicatorView)
+        self.view.addSubview(self.tableView)
         
-        if self.presenter.userID == nil {
+        self.view.insertSubview(self.translutionView, at: 10)
+        
+        self.activityIndicatorView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        
+        self.tableView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.top.equalTo(self.view.safeAreaLayoutGuide)
+        }
+        
+        self.translutionView.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview()
+        }
+    }
+    
+//    MARK: - Setup Navigation Bar
+    private func setupNavigationBar() {
+        if self.presenter.userID == nil || self.presenter.userID == self.presenter.getMyID() {
             if #available(iOS 13.0, *) {
                 self.navigationItem.rightBarButtonItem = UIBarButtonItem(
                     image: UIImage(systemName: "list.bullet"),
@@ -252,23 +271,6 @@ final class ProfileViewController: UIViewController {
                     action: #selector(self.didTapComplaintNavigationBarButton)
                 )
             }
-        }
-        
-        self.view.addSubview(self.activityIndicatorView)
-        self.view.addSubview(self.tableView)
-        
-        self.view.insertSubview(self.translutionView, at: 10)
-        
-        self.activityIndicatorView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-        
-        self.tableView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.top.equalTo(self.view.safeAreaLayoutGuide)
-        }
-        
-        self.translutionView.snp.makeConstraints { make in
-            make.leading.trailing.top.bottom.equalToSuperview()
         }
     }
     
@@ -451,7 +453,7 @@ extension ProfileViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         var number = 1
         
-        if !(self.presenter.user?.deals.isEmpty ?? true) {
+        if !(self.presenter.user?.deals.filter({ $0.buyer == nil }).isEmpty ?? true) {
             number += 1
         }
         
@@ -466,7 +468,7 @@ extension ProfileViewController: UITableViewDataSource {
         if section == .zero {
             return self.presenter.user != nil ? 1 : 0
         } else if section == 1 {
-            return self.presenter.user?.deals.count ?? 0
+            return self.presenter.user?.deals.filter({ $0.buyer == nil }).count ?? 0
         }
         
         return self.presenter.user?.boughtDeals.count ?? 0
@@ -502,8 +504,8 @@ extension ProfileViewController: UITableViewDataSource {
             return .init()
         }
         
-        if indexPath.section == 1 {
-            cell.deal = self.presenter.user?.deals[indexPath.row]
+        if indexPath.section == 1 && !(self.presenter.user?.deals.filter({ $0.buyer == nil }).isEmpty ?? true) {
+            cell.deal = self.presenter.user?.deals.filter({ $0.buyer == nil })[indexPath.row]
         } else {
             cell.deal = self.presenter.user?.boughtDeals[indexPath.row]
         }
@@ -518,10 +520,10 @@ extension ProfileViewController: UITableViewDataSource {
 extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 1 {
-            return NSLocalizedString("Deals", comment: "") + ":"
-        } else if section == 2 {
-            return NSLocalizedString("Bought Deals", comment: "") + ":"
+        if section == 1 && !(self.presenter.user?.deals.filter({ $0.buyer == nil }).isEmpty ?? true) {
+            return NSLocalizedString("Deals", comment: .init()) + ":"
+        } else if section == 2 || (section == 1 && self.presenter.user?.deals.filter({ $0.buyer == nil }).isEmpty ?? true) {
+            return NSLocalizedString("Bought", comment: .init()) + ":"
         }
         
         return nil

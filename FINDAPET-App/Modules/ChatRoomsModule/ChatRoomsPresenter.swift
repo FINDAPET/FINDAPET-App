@@ -54,14 +54,8 @@ final class ChatRoomsPresenter {
     }
     
 //    MARK: Web Socket
-    func updateUserChats() {
-        self.interactor.updateUserChats { message, error in
-            guard error == nil, message != nil else {
-                return
-            }
-            
-            self.getAllChatRooms()
-        }
+    func updateUserChats(_ completionHandler: @escaping (String?, Error?) -> Void = { _, _ in }) {
+        self.interactor.updateUserChats(completionHandler: completionHandler)
     }
     
     func closeWS(_ completionHandler: @escaping (Error?) -> Void = { _ in }) {

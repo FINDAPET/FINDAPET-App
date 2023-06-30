@@ -53,7 +53,8 @@ final class ChatRoomViewController: MessagesViewController {
     
 //    MARK: Proretries
     private var isFirstLoad = true
-        
+    
+    
 //    MARK: UI Properties
     private lazy var imagePickerController: UIImagePickerController = {
         let view = UIImagePickerController()
@@ -68,29 +69,29 @@ final class ChatRoomViewController: MessagesViewController {
     
     private let statusBarView: UIView = {
         let view = UIView()
-        
+
         view.backgroundColor = .textFieldColor
         view.translatesAutoresizingMaskIntoConstraints = false
-        
+
         return view
     }()
-    
+
     private let progressIndicator: JGProgressHUD = {
         let view = JGProgressHUD()
-        
+
         view.textLabel.text = NSLocalizedString("Loading", comment: .init())
-        
+
         return view
     }()
-    
+
     private lazy var photosCollectionView: ImageWithXmarkCollectionView = {
         let view = ImageWithXmarkCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        
+
         view.callBack = { [ weak self ] images in
             guard let self = self else {
                 return
             }
-            
+
             if !images.isEmpty {
                 self.messageInputBar.sendButton.isEnabled = true
             } else if self.messageInputBar.inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -98,24 +99,24 @@ final class ChatRoomViewController: MessagesViewController {
             }
         }
         view.translatesAutoresizingMaskIntoConstraints = false
-        
+
         return view
     }()
-    
+
     private lazy var chatRoomHeaderView: ChatRoomHeaderView = {
         let view = ChatRoomHeaderView()
-        
+
         view.user = self.presenter.chatRoom?.users.filter { [ weak self ] in $0.id != self?.presenter.getUserID() }.first
         view.didTapAvatarImageViewAction = self.presenter.goToProfile
         view.didTapBackButtonAction = { [ weak self ] in self?.navigationController?.popViewController(animated: true) }
         view.translatesAutoresizingMaskIntoConstraints = false
-        
+
         return view
     }()
-    
+
     private lazy var paperclipButton: UIButton = {
         let view = UIButton()
-        
+
         if #available(iOS 13.0, *) {
             view.setImage(.init(systemName: "paperclip"), for: .normal)
         } else {
@@ -125,33 +126,32 @@ final class ChatRoomViewController: MessagesViewController {
         view.imageViewSizeToButton()
         view.addTarget(self, action: #selector(self.didTapPaperclipButton), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
-        
+
         return view
     }()
-    
+
     private lazy var browseImagesViewController = self.presenter.getBrowseImage(self)
-        
+
 //    MARK: Life Cycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         self.setupViews()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         if self.presenter.chatRoom?.id == nil {
             self.progressIndicator.show(in: self.view, animated: true)
-            
+
             self.presenter.getChatRoom { [ weak self ] _, error in
                 self?.progressIndicator.dismiss(animated: true)
-                
-                guard self?.presenter.chatRoom?.messages
-                    .filter({ $0.id != self?.presenter.getUserID() && !$0.isViewed }).count ?? .zero != .zero else {
+
+                guard self?.presenter.chatRoom?.messages.filter({ $0.id != self?.presenter.getUserID() && !$0.isViewed }).count ?? .zero != .zero else {
                     return
                 }
-                
+
                 self?.presenter.viewAllMessages()
                 self?.presenter.notificationCenterManagerHideNotViewedMessagesCountLabel()
             }
@@ -159,40 +159,42 @@ final class ChatRoomViewController: MessagesViewController {
             self.presenter.viewAllMessages()
             self.presenter.notificationCenterManagerHideNotViewedMessagesCountLabel()
         }
-        
+
         self.presenter.chatRoom()
-        
+
         guard !(self.presenter.chatRoom?.messages.isEmpty ?? true) else {
             return
         }
-        
+
         self.messagesCollectionView.scrollToLastItem(animated: false)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         guard self.isFirstLoad else {
             return
         }
-        
+
         self.isFirstLoad = false
         self.messagesCollectionView.reloadData()
         self.messagesCollectionView.scrollToLastItem(animated: false)
-        
+
         UIView.animate(withDuration: 0.2) { [ weak self ] in
             self?.messagesCollectionView.alpha = 1
             self?.messageInputBar.alpha = 1
         }
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
+
         self.isFirstLoad = true
         self.presenter.closeWS()
+        self.presenter.notificationCenterManagerMakeChatRoomsEmpty()
+        self.presenter.notificationCenterManagerMakeChatRoomsRefreshing()
     }
-    
+
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
@@ -204,43 +206,43 @@ final class ChatRoomViewController: MessagesViewController {
             target: self,
             action: #selector(UIInputViewController.dismissKeyboard)
         ))
-        
+
         self.configureMessagesCollectionView()
         self.configureMessageInputBar()
-        
+
         self.view.addSubview(self.statusBarView)
         self.view.addSubview(self.chatRoomHeaderView)
-        
+
         for constraint in self.view.constraints {
             self.view.removeConstraint(constraint)
         }
-        
+
         self.statusBarView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.top)
             make.height.equalTo(50)
         }
-        
+
         self.chatRoomHeaderView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(self.view.safeAreaLayoutGuide)
         }
-        
+
         self.messagesCollectionView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.top.equalTo(self.chatRoomHeaderView.snp.bottom)
         }
-        
+
         self.paperclipButton.snp.makeConstraints { make in
             make.width.equalTo(23.67)
             make.height.equalTo(23.67)
         }
-        
+
         self.photosCollectionView.snp.makeConstraints { make in
             make.height.equalTo(150)
         }
     }
-    
+
 //    MARK: Configure Messages Collection View
     private func configureMessagesCollectionView() {
         self.messagesCollectionView.backgroundColor = .clear
@@ -257,14 +259,14 @@ final class ChatRoomViewController: MessagesViewController {
             action: #selector(UIInputViewController.dismissKeyboard)
         ))
     }
-    
+
 //    MARK: Configure Message Input Bar
     private func configureMessageInputBar() {
         self.messageInputBar.alpha = .zero
         self.messageInputBar.delegate = self
-        self.messageInputBar.backgroundColor = .textFieldColor
+        self.messageInputBar.backgroundView.backgroundColor = .textFieldColor
         self.messageInputBar.inputTextView.backgroundColor = .textFieldColor
-        
+
         if #available(iOS 13.0, *) {
             self.messageInputBar.sendButton.setImage(.init(systemName: "arrow.up"), for: .normal)
         } else {
@@ -283,12 +285,12 @@ final class ChatRoomViewController: MessagesViewController {
         self.messageInputBar.setLeftStackViewWidthConstant(to: 23.67, animated: false)
         self.messageInputBar.shouldManageSendButtonEnabledState = false
     }
-    
+
 //    MARK: Actions
     @objc private func didTapPaperclipButton() {
         self.present(self.imagePickerController, animated: true)
     }
-    
+
     @objc private func keyboadWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             self.messagesCollectionView.contentInset.bottom = keyboardSize.height
@@ -304,16 +306,16 @@ final class ChatRoomViewController: MessagesViewController {
             ), animated: true)
         }
     }
-    
+
     @objc private func keyboardWillHide(notification: NSNotification) {
         self.messagesCollectionView.contentInset.bottom = .zero
         self.messagesCollectionView.verticalScrollIndicatorInsets = .zero
     }
-    
+
     @objc private func dismissKeyboard() {
         self.view.endEditing(true)
     }
-    
+
 }
 
 //MARK: Extension
@@ -329,10 +331,10 @@ extension ChatRoomViewController: MessagesDataSource {
                 displayName: self.presenter.getUserName() ?? .init()
             )
         }
-        
+
         return User.SenderType(senderId: user.id?.uuidString ?? .init(), displayName: user.name)
     }
-    
+
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) -> MessageKit.MessageType {
         guard let message = self.presenter.chatRoom?.messages.sorted(by: {
             $0.createdAt ?? .init() < $1.createdAt ?? .init()
@@ -347,7 +349,7 @@ extension ChatRoomViewController: MessagesDataSource {
                 kind: .text(.init())
             )
         }
-        
+
         guard let data = message.bodyData, let image = UIImage(data: data) else {
             return Message.MessageType(
                 sender: User.SenderType(senderId: message.user.id?.uuidString ?? .init(), displayName: message.user.name),
@@ -356,7 +358,7 @@ extension ChatRoomViewController: MessagesDataSource {
                 kind: .text(message.text ?? .init())
             )
         }
-        
+
         return Message.MessageType(
             sender: User.SenderType(senderId: message.user.id?.uuidString ?? .init(), displayName: message.user.name),
             messageId: message.id?.uuidString ?? .init(),
@@ -364,50 +366,50 @@ extension ChatRoomViewController: MessagesDataSource {
             kind: .photo(Message.MediaItem(size: image.size, image: image, placeholderImage: image))
         )
     }
-    
+
     func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int {
         self.presenter.chatRoom?.messages.count ?? .zero
     }
-    
+
     func messageTimestampLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let dateFormatter = DateFormatter()
-        
+
         dateFormatter.dateFormat = "EEEE, MMM d, yyyy"
-                
+
         return .init(
             string: dateFormatter.string(from: message.sentDate),
             attributes: [.font : UIFont.boldSystemFont(ofSize: 10), .foregroundColor : UIColor.lightGray]
         )
     }
-    
+
 }
 
 extension ChatRoomViewController: MessagesDisplayDelegate {
-    
+
     func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
         if message.sender.senderId == self.presenter.getUserID()?.uuidString {
             return .accentColor
         }
-        
+
         return .textFieldColor
     }
-    
+
     func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
         if message.sender.senderId == self.presenter.getUserID()?.uuidString {
             return .white
         }
-        
+
         return .textColor
     }
-    
+
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         avatarView.isHidden = true
     }
-        
+
 }
 
 extension ChatRoomViewController: MessageCellDelegate {
-    
+
     func didTapImage(in cell: MessageCollectionViewCell) {
         if #available(iOS 13.0, *) {
             guard let index = self.presenter.chatRoom?.messages
@@ -416,12 +418,12 @@ extension ChatRoomViewController: MessageCellDelegate {
                   let viewController = self.browseImagesViewController else {
                 return
             }
-            
+
             self.navigationController?.pushViewController(viewController, animated: true)
-            
+
             viewController.scrollToImage(at: .init(item: index, section: .zero))
         }
-        
+
         guard let cell = cell as? MediaMessageCell,
               let index = self.presenter.chatRoom?.messages
             .map({ $0.bodyData })
@@ -429,55 +431,50 @@ extension ChatRoomViewController: MessageCellDelegate {
               let viewController = self.browseImagesViewController else {
             return
         }
-        
+
         self.navigationController?.pushViewController(viewController, animated: true)
-        
+
         viewController.scrollToImage(at: .init(item: index, section: .zero))
     }
-    
+
 }
 
 extension ChatRoomViewController: InputBarAccessoryViewDelegate {
-    
+
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         if let datas = self.photosCollectionView.images
             .map({ $0.jpegData(compressionQuality: 0.7) }).filter({ $0 != nil }) as? [Data] {
             for data in datas {
                 print(data)
-                
+
                 self.presenter.sendMessage(.init(
                     bodyData: data,
                     userID: self.presenter.getUserID() ?? .init(),
                     chatRoomID: self.presenter.chatRoom?.id
                 ))
             }
-            
+
             self.photosCollectionView.images = .init()
         }
-        
-        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return
-        }
-        
+
+        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+
         self.presenter.sendMessage(.init(
             text: text.trimmingCharacters(in: .whitespacesAndNewlines),
             userID: self.presenter.getUserID() ?? .init(),
             chatRoomID: self.presenter.chatRoom?.id
         ))
         self.messagesCollectionView.scrollToLastItem()
-        
+        inputBar.inputTextView.text = nil
+
         ///Maybe later. If it will be needed
 //        self.presenter.playOnSendMessageSound()
-        
-        guard self.presenter.chatRoom?.id == nil else {
-            return
-        }
-        
+
+        guard self.presenter.chatRoom?.id == nil else { return }
+
         self.presenter.addID()
-                
-        inputBar.inputTextView.text = .init()
     }
-    
+
     func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
         if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             self.messageInputBar.sendButton.isEnabled = true
@@ -485,49 +482,49 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
             self.messageInputBar.sendButton.isEnabled = false
         }
     }
-    
+
 }
 
 extension ChatRoomViewController: MessagesLayoutDelegate {
-    
+
     func avatarSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize? {
         .zero
     }
-    
+
 }
 
 extension ChatRoomViewController: UIImagePickerControllerDelegate {
-    
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let image = info[.editedImage] as? UIImage else {
             return
         }
-        
+
         self.photosCollectionView.images.append(image)
-        
+
         picker.dismiss(animated: true)
     }
-    
+
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
     }
-    
+
 }
 
 extension ChatRoomViewController: BrowseImagesViewControllerDataSource {
-    
+
     func browseImagesViewController(_ viewController: BrowseImagesViewController, collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         self.presenter.chatRoom?.messages.filter { $0.bodyData != nil }.count ?? .zero
     }
-    
+
     func browseImagesViewController(_ viewController: BrowseImagesViewController, collectionView: UICollectionView, imageForItemAt indexPath: IndexPath) -> UIImage? {
         guard let data = self.presenter.chatRoom?.messages
             .filter({ $0.bodyData != nil })
             .map({ $0.bodyData })[indexPath.item] else {
             return nil
         }
-        
+
         return .init(data: data)
     }
-    
+
 }

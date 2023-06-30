@@ -101,21 +101,26 @@ final class FeedViewController: UIViewController {
         super.viewWillAppear(animated)
         
         self.setupViews()
+        
+        guard !self.isRefreshing else { return }
+        
+        self.presenter.setFilterCheckedIDs()
+        self.presenter.makeDealsEmpty()
+        self.activityIndicatorView.isHidden = false
+        self.tableView.isHidden = true
+        self.isRefreshing = true
+        self.presenter.getDeals { [ weak self ] _, error in
+            self?.isRefreshing = false
+            self?.activityIndicatorView.isHidden = true
+            self?.tableView.isHidden = false
+            self?.error(error)
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupNotifications()
-        self.presenter.setFilterCheckedIDs()
-        self.presenter.makeDealsEmpty()
-        self.activityIndicatorView.isHidden = false
-        self.tableView.isHidden = true
-        self.presenter.getDeals { [ weak self ] _, error in
-            self?.activityIndicatorView.isHidden = true
-            self?.tableView.isHidden = false
-            self?.error(error)
-        }
     }
     
 //    MARK: Setup Views
@@ -199,6 +204,7 @@ final class FeedViewController: UIViewController {
     @objc private func makeFeedRefreshing() {
         self.activityIndicatorView.isHidden = false
         self.tableView.isHidden = true
+        self.isRefreshing = false
     }
     
     @objc private func makeNilFilter() {
@@ -208,6 +214,7 @@ final class FeedViewController: UIViewController {
     
     @objc private func makeFeedEmpty() {
         self.presenter.makeDealsEmpty()
+        self.tableView.tableFooterView = nil
     }
         
 }
@@ -292,9 +299,7 @@ extension FeedViewController: UITableViewDelegate {
         guard scrollView == self.tableView,
               !self.isRefreshing,
               !self.presenter.deals.isEmpty,
-              scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) else {
-            return
-        }
+              scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) else { return }
         
         if #available(iOS 13.0, *) {
             let activityIndicatorView = UIActivityIndicatorView(style: .large)
@@ -349,10 +354,13 @@ extension FeedViewController: SearchViewDelegate {
             self?.presenter.setFilterTitle(title)
             self?.activityIndicatorView.isHidden = false
             self?.tableView.isHidden = true
+            self?.tableView.tableFooterView = nil
+            self?.isRefreshing = true
             self?.presenter.getDeals { _, error in
                 self?.activityIndicatorView.isHidden = true
                 self?.tableView.isHidden = false
                 self?.error(error)
+                self?.isRefreshing = false
             }
         }
     }
@@ -368,10 +376,13 @@ extension FeedViewController: SearchViewDelegate {
             self?.presenter.setFilterTitle(title)
             self?.activityIndicatorView.isHidden = false
             self?.tableView.isHidden = true
+            self?.tableView.tableFooterView = nil
+            self?.isRefreshing = true
             self?.presenter.getDeals { _, error in
                 self?.activityIndicatorView.isHidden = true
                 self?.tableView.isHidden = false
                 self?.error(error)
+                self?.isRefreshing = false
             }
         }
     }

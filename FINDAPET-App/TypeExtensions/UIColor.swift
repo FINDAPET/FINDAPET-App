@@ -11,7 +11,7 @@ import UIKit
 extension UIColor {
     
 //    MARK: - Init
-    convenience init?(hex: String, alpha: Int = 1) {
+    convenience init?(hex: String, alpha: CGFloat = 1) {
         guard hex.hasPrefix("#") else { return nil }
         
         let hexColor = String(hex.lowercased()[hex.index(hex.startIndex, offsetBy: 1)...])
@@ -80,7 +80,7 @@ extension UIColor {
         
         guard scanner.scanHexInt64(&hexNumber) else { return nil }
                 
-        return .init(
+        return UIColor(
             red: .init((hexNumber & 0xff000000) >> 24) / 255,
             green: .init((hexNumber & 0x00ff0000) >> 16) / 255,
             blue: .init((hexNumber & 0x0000ff00) >> 8) / 255,

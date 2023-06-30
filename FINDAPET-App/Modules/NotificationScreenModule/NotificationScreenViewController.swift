@@ -7,11 +7,16 @@
 
 import UIKit
 import SnapKit
+import WebKit
+import JGProgressHUD
 
 final class NotificationScreenViewController: UIViewController {
 
+//   MARK: - Properties
     private let presenter: NotificationScreenPresenter
     
+    
+//    MARK: - Init
     init(presenter: NotificationScreenPresenter) {
         self.presenter = presenter
         
@@ -23,23 +28,44 @@ final class NotificationScreenViewController: UIViewController {
     }
     
 //    MARK: UI Properties
-    private lazy var titleLabel: UILabel = {
-        let view = UILabel()
+    private lazy var webView: WKWebView = {
+        let view = WKWebView()
         
-        view.text = self.presenter.notificationScreen.title
-        view.textColor = .hexStringToUIColor(hex: self.presenter.notificationScreen.textColorHEX) ?? .textColor
-        view.font = .systemFont(ofSize: 24, weight: .bold)
-        view.textAlignment = .center
-        view.numberOfLines = .zero
+        view.backgroundColor = .clear
+        view.isHidden = self.presenter.notificationScreen.webViewURL == nil
+        view.navigationDelegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
-    private let scrollView: UIScrollView = {
+    private let progressIndicator: JGProgressHUD = {
+        let view = JGProgressHUD()
+        
+        view.textLabel.text = NSLocalizedString("Loading", comment: .init())
+        
+        return view
+    }()
+    
+    private lazy var titleLabel: UILabel = {
+        let view = UILabel()
+        
+        view.text = self.presenter.notificationScreen.title
+        view.textColor = .hexStringToUIColor(hex: self.presenter.notificationScreen.textColorHEX ?? .init()) ?? .textColor
+        view.font = .systemFont(ofSize: 24, weight: .bold)
+        view.textAlignment = .center
+        view.numberOfLines = .zero
+        view.isHidden = self.presenter.notificationScreen.webViewURL != nil
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         
         view.showsVerticalScrollIndicator = false
+        view.isHidden = self.presenter.notificationScreen.webViewURL != nil
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -51,7 +77,7 @@ final class NotificationScreenViewController: UIViewController {
         view.backgroundColor = .hexStringToUIColor(
             hex: self.presenter.notificationScreen.buttonColorHEX
         ) ?? .accentColor
-        view.setTitle(self.presenter.notificationScreen.text, for: .normal)
+        view.setTitle(self.presenter.notificationScreen.buttonTitle, for: .normal)
         view.setTitleColor(
             .hexStringToUIColor(hex: self.presenter.notificationScreen.buttonTitleColorHEX) ?? .white,
             for: .normal
@@ -69,9 +95,10 @@ final class NotificationScreenViewController: UIViewController {
         let view = UILabel()
         
         view.text = self.presenter.notificationScreen.text
-        view.textColor = .hexStringToUIColor(hex: self.presenter.notificationScreen.textColorHEX) ?? .textColor
+        view.textColor = .hexStringToUIColor(hex: self.presenter.notificationScreen.textColorHEX ?? .init()) ?? .textColor
         view.font = .systemFont(ofSize: 17)
         view.numberOfLines = .zero
+        view.isHidden = self.presenter.notificationScreen.webViewURL != nil
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -87,6 +114,12 @@ final class NotificationScreenViewController: UIViewController {
     }()
     
 //    MARK: Life Cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.loadWebView()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -96,37 +129,55 @@ final class NotificationScreenViewController: UIViewController {
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .white
+        
         self.view.addSubview(self.backgroundImageView)
-        
-        self.backgroundImageView.addSubview(self.titleLabel)
-        self.backgroundImageView.addSubview(self.scrollView)
-        self.backgroundImageView.addSubview(self.button)
-        
+        self.view.addSubview(self.webView)
+        self.view.addSubview(self.titleLabel)
+        self.view.addSubview(self.scrollView)
+        self.view.addSubview(self.button)
+        self.view.insertSubview(self.webView, at: 1)
+        self.view.insertSubview(self.titleLabel, at: 1)
+        self.view.insertSubview(self.scrollView, at: 1)
+        self.view.insertSubview(self.button, at: 1)
+
         self.scrollView.addSubview(self.textLabel)
-        
+
         self.backgroundImageView.snp.makeConstraints { make in
             make.leading.trailing.bottom.top.equalToSuperview()
         }
-        
+
+        self.webView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.bottom.equalTo(self.button)
+        }
+
         self.titleLabel.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self.view.safeAreaLayoutGuide).inset(15)
         }
-        
+
         self.scrollView.snp.makeConstraints { make in
             make.top.equalTo(self.titleLabel.snp.bottom).inset(-15)
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
         }
-        
+
         self.button.snp.makeConstraints { make in
             make.top.equalTo(self.scrollView.snp.bottom).inset(-15)
             make.leading.trailing.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.height.equalTo(50)
         }
-        
+
         self.textLabel.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalTo(self.backgroundImageView).inset(15)
+            make.leading.trailing.equalTo(self.view).inset(15)
         }
+    }
+    
+//    MARK: - Load Web View
+    private func loadWebView() {
+        guard let str = self.presenter.notificationScreen.webViewURL,
+              let url = URL(string: str) else { return }
+        
+        self.webView.load(.init(url: url))
     }
     
 //    MARK: Actions
@@ -141,6 +192,19 @@ final class NotificationScreenViewController: UIViewController {
         notificationScreensID.append(id.uuidString)
                 
         self.presenter.setUserDefaultsNotificationScreensID(notificationScreensID)
+    }
+    
+}
+
+//MARK: - Extensions
+extension NotificationScreenViewController: WKNavigationDelegate {
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        self.progressIndicator.show(in: self.view)
+    }
+    
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        self.progressIndicator.dismiss(animated: true)
     }
     
 }

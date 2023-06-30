@@ -93,7 +93,11 @@ final class ChatRoomsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        self.presenter.updateUserChats()
+        self.presenter.updateUserChats { [ weak self ] message, error in
+            guard error == nil, message == "update" else { return }
+            
+            self?.presenter.getAllChatRooms()
+        }
         self.presenter.getAllChatRooms { [ weak self ] _, error in
             self?.activityIndicatorView.isHidden = true
             self?.tableView.isHidden = false
@@ -106,8 +110,6 @@ final class ChatRoomsViewController: UIViewController {
         super.viewDidDisappear(animated)
         
         self.presenter.closeWS()
-        self.presenter.notififcationCenterMakeChatRoomsRefreshing(self, action: #selector(self.makeChatRoomsRefreshing))
-        self.presenter.notificationCenterMakeChatRoomsEmpty(self, action: #selector(self.makeChatRoomsEmpty))
     }
     
 //    MARK: Setup Views
@@ -173,14 +175,13 @@ extension ChatRoomsViewController: UITableViewDataSource {
 
 extension ChatRoomsViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        130
-    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 130 }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         self.presenter.goToChatRoom(self.presenter.chatRooms[indexPath.row])
+        (tableView.cellForRow(at: indexPath) as? ChatRoomTableViewCell)?.hideNotViewedMessagesCountLabel()
     }
     
 }

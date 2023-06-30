@@ -49,12 +49,12 @@
 "Log Out" = "Выйти";
 "Settings" = "Настройки";
 "Message" = "Сообщения";
-"Accept" = "Accept";
+"Accept" = "Согласистся";
 "Your offer is rejected" = "Ваше предложение отклонено";
 "Buyer" = "Покупатель";
 "Price" = "Цена";
 "Deals" = "Обьявления";
-"Bought Deals" = "Купленные обьявления";
+"Bought" = "Купленные";
 "Currency" = "Валюта";
 "Country" = "Страна";
 "City" = "Город";
@@ -151,3 +151,5 @@
 "You have not read the privacy policy and consent to data processing" = "Вы не ознакомились с политикой конфиденциальности и согласием на обработку данных.";
 "Go To Privacy Policy" = "Перейти к политике конфеденциальности";
 "Price as agreed" = "Цена по договорённости";
+"You accepted a deal" = "Вы согласились на сделку";
+"Congretulations" = "Поздравляем";

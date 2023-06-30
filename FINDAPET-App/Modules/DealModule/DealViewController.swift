@@ -50,7 +50,7 @@ final class DealViewController: UIViewController {
         return view
     }()
     
-    private let collectionViewItemNumberLabel: UILabel = {
+    private lazy var collectionViewItemNumberLabel: UILabel = {
         let view = UILabel()
         
         view.backgroundColor = .black
@@ -61,6 +61,7 @@ final class DealViewController: UIViewController {
         view.textColor = .white
         view.font = .systemFont(ofSize: 16)
         view.textAlignment = .center
+        view.isHidden = self.presenter.deal?.photoDatas.count ?? .zero <= 1
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -205,11 +206,15 @@ final class DealViewController: UIViewController {
             UIView.animate(withDuration: 0.2) {
                 viewController?.view.alpha = .zero
                 self?.translutionView.alpha = .zero
+                self?.navigationController?.navigationBar.layer.zPosition = 1
+                self?.tabBarController?.tabBar.layer.zPosition = 1
             } completion: { isComplete in
-                if isComplete {
-                    self?.translutionView.isHidden = true
-                    viewController?.view.removeFromSuperview()
-                }
+                guard isComplete else { return }
+                
+                viewController?.view.removeFromSuperview()
+                self?.translutionView.isHidden = true
+                self?.navigationController?.navigationBar.isHidden = false
+                self?.tabBarController?.tabBar.isHidden = false
             }
         }
         viewController?.view.translatesAutoresizingMaskIntoConstraints = false
@@ -228,11 +233,15 @@ final class DealViewController: UIViewController {
             UIView.animate(withDuration: 0.2) {
                 viewController?.view.alpha = .zero
                 self?.translutionView.alpha = .zero
+                self?.navigationController?.navigationBar.layer.zPosition = 1
+                self?.tabBarController?.tabBar.layer.zPosition = 1
             } completion: { isComplete in
-                if isComplete {
-                    self?.translutionView.isHidden = true
-                    viewController?.view.removeFromSuperview()
-                }
+                guard isComplete else { return }
+                
+                viewController?.view.removeFromSuperview()
+                self?.translutionView.isHidden = true
+                self?.navigationController?.navigationBar.isHidden = false
+                self?.tabBarController?.tabBar.isHidden = false
             }
         }
         viewController?.view.translatesAutoresizingMaskIntoConstraints = false
@@ -261,12 +270,19 @@ final class DealViewController: UIViewController {
         super.viewDidLoad()
         
         if self.presenter.dealID != nil {
+            self.scrollView.alpha = .zero
             self.progressIndicator.show(in: self.view, animated: true)
             self.presenter.getDeal { [ weak self ] _, error in
                 self?.progressIndicator.dismiss(animated: true)
                 
                 self?.error(error) {
                     self?.setupValues()
+                    
+                    UIView.animate(withDuration: 0.2) { [ weak self ] in
+                        self?.scrollView.alpha = 1
+                    }
+                } onErrorAction: { [ weak self ] in
+                    self?.navigationController?.popViewController(animated: true)
                 }
             }
         } else {
@@ -313,7 +329,7 @@ final class DealViewController: UIViewController {
         self.scrollView.addSubview(self.collectionViewItemNumberLabel)
         self.scrollView.insertSubview(self.collectionViewItemNumberLabel, at: 8)
         
-        if self.presenter.deal?.cattery.id != self.presenter.getUserID() {
+        if self.presenter.deal?.buyer == nil, self.presenter.deal?.cattery.id != self.presenter.getUserID() {
             if #available(iOS 13.0, *) {
                 self.navigationItem.rightBarButtonItem = UIBarButtonItem(
                     image: .init(systemName: "exclamationmark.triangle"),
@@ -353,36 +369,38 @@ final class DealViewController: UIViewController {
                 make.top.equalTo(self.createOfferButton.snp.bottom).inset(-15)
             }
         } else {
-            if #available(iOS 13.0, *) {
-                self.navigationItem.rightBarButtonItems = [
-                    .init(
-                        image: .init(systemName: "trash"),
-                        style: .plain,
-                        target: self,
-                        action: #selector(self.didTapDeleteNavigationBarButton)
-                    ),
-                    .init(
-                        image: .init(systemName: "square.and.pencil"),
-                        style: .plain,
-                        target: self,
-                        action: #selector(self.didTapEditBarButtonItem)
-                    )
-                ]
-            } else {
-                self.navigationItem.rightBarButtonItems = [
-                    .init(
-                        image: .init(named: "trash")?.withRenderingMode(.alwaysTemplate),
-                        style: .plain,
-                        target: self,
-                        action: #selector(self.didTapDeleteNavigationBarButton)
-                    ),
-                    .init(
-                        image: .init(named: "square.and.pencil")?.withRenderingMode(.alwaysTemplate),
-                        style: .plain,
-                        target: self,
-                        action: #selector(self.didTapEditBarButtonItem)
-                    )
-                ]
+            if self.presenter.deal?.buyer == nil {
+                if #available(iOS 13.0, *) {
+                    self.navigationItem.rightBarButtonItems = [
+                        .init(
+                            image: .init(systemName: "trash"),
+                            style: .plain,
+                            target: self,
+                            action: #selector(self.didTapDeleteNavigationBarButton)
+                        ),
+                        .init(
+                            image: .init(systemName: "square.and.pencil"),
+                            style: .plain,
+                            target: self,
+                            action: #selector(self.didTapEditBarButtonItem)
+                        )
+                    ]
+                } else {
+                    self.navigationItem.rightBarButtonItems = [
+                        .init(
+                            image: .init(named: "trash")?.withRenderingMode(.alwaysTemplate),
+                            style: .plain,
+                            target: self,
+                            action: #selector(self.didTapDeleteNavigationBarButton)
+                        ),
+                        .init(
+                            image: .init(named: "square.and.pencil")?.withRenderingMode(.alwaysTemplate),
+                            style: .plain,
+                            target: self,
+                            action: #selector(self.didTapEditBarButtonItem)
+                        )
+                    ]
+                }
             }
             
             self.chatButton.isHidden = true
@@ -465,6 +483,7 @@ final class DealViewController: UIViewController {
         self.viewsCountLabel.text = "\(self.presenter.deal?.viewsCount ?? .zero) \(NSLocalizedString("Views", comment: .init()))"
         self.viewsCountLabel.isHidden = self.presenter.deal?.photoDatas.isEmpty ?? true
         self.collectionViewItemNumberLabel.text = "1/\(self.presenter.deal?.photoDatas.count ?? 1)"
+        self.collectionViewItemNumberLabel.isHidden = self.presenter.deal?.photoDatas.count ?? .zero <= 1
     }
     
 //    MARK: Actions
@@ -519,13 +538,15 @@ final class DealViewController: UIViewController {
             self?.createOfferViewController?.view.alpha = .zero
             self?.complaintViewController?.view.alpha = .zero
             self?.translutionView.alpha = .zero
-            self?.navigationController?.navigationBar.layer.zPosition = .zero
-            self?.tabBarController?.tabBar.layer.zPosition = .zero
+            self?.navigationController?.navigationBar.layer.zPosition = 1
+            self?.tabBarController?.tabBar.layer.zPosition = 1
         } completion: { [ weak self ] isComplete in
             if isComplete {
                 self?.translutionView.isHidden = true
                 self?.createOfferViewController?.view.removeFromSuperview()
                 self?.complaintViewController?.view.removeFromSuperview()
+                self?.navigationController?.navigationBar.isHidden = false
+                self?.tabBarController?.tabBar.isHidden = false
             }
         }
     }
@@ -659,7 +680,7 @@ extension DealViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 30
+        30
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

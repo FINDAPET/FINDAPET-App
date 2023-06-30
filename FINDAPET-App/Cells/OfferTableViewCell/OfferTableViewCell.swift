@@ -20,7 +20,7 @@ final class OfferTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    MARK: Properties
+//    MARK: - Properties
     static let cellID = String(describing: OfferTableViewCell.self)
     
     var messageButtonAction: (() -> Void)?
@@ -29,29 +29,35 @@ final class OfferTableViewCell: UITableViewCell {
             self.setupViews()
         }
     }
-    var deleteButtonAction: (() -> Void)?
+    var deleteButtonAction: (() -> Void)? {
+        didSet {
+            self.setupViews()
+        }
+    }
     var buyerAvatarImageViewAction: ((UUID) -> Void)?
+    var didTapPhotoAction: (() -> Void)?
     var offer: Offer.Output? {
         didSet {
             guard let offer = self.offer else {
                 return
             }
             
-            if let data = offer.deal.photoDatas.first {
-                self.dealImageView.image = UIImage(data: data)
+            if !offer.deal.photoDatas.isEmpty {
+                self.photosCollectionView.reloadData()
             }
             
             if let data = offer.buyer.avatarData {
-                self.avatarImageView.image = UIImage(data: data)
+                self.avatarImageView.image = .init(data: data)
             }
             
+            self.avatarImageView.image = offer.buyer.avatarData != nil ? .init(data: offer.buyer.avatarData ?? .init()) : .init(named: "empty avatar")
             self.titleLabel.text = offer.deal.title
             self.priceLabel.text = "\(offer.price) \(offer.currencyName)"
             self.nameLabel.text = offer.buyer.name
         }
     }
     
-//    MARK: UI Properties
+//    MARK: - UI Properties
     private let containerView: UIView = {
         let view = UIView()
         
@@ -64,12 +70,16 @@ final class OfferTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let dealImageView: UIImageView = {
-        let view = UIImageView()
+    private lazy var photosCollectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         
-        view.clipsToBounds = true
-        view.layer.masksToBounds = true
-        view.layer.cornerRadius = 50
+        view.dataSource = self
+        view.delegate = self
+        view.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: PhotoCollectionViewCell.id)
+        view.showsHorizontalScrollIndicator = false
+        view.isPagingEnabled = true
+        view.backgroundColor = .clear
+        (view.collectionViewLayout as? UICollectionViewFlowLayout)?.scrollDirection = .horizontal
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -197,13 +207,13 @@ final class OfferTableViewCell: UITableViewCell {
         return view
     }()
     
-//    MARK: Setup Views
+//    MARK: - Setup Views
     private func setupViews() {
         self.backgroundColor = .clear
         
         self.contentView.addSubview(self.containerView)
         
-        self.containerView.addSubview(self.dealImageView)
+        self.containerView.addSubview(self.photosCollectionView)
         self.containerView.addSubview(self.titleLabel)
         self.containerView.addSubview(self.priceLabel)
         self.containerView.addSubview(self.stackView)
@@ -224,13 +234,13 @@ final class OfferTableViewCell: UITableViewCell {
             make.leading.trailing.top.bottom.equalToSuperview().inset(15)
         }
         
-        self.dealImageView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview().inset(15)
-            make.height.equalTo(self.dealImageView.snp.width)
+        self.photosCollectionView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.height.equalTo(self.photosCollectionView.snp.width)
         }
         
         self.titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.dealImageView.snp.bottom).inset(-15)
+            make.top.equalTo(self.photosCollectionView.snp.bottom).inset(-15)
             make.leading.trailing.equalToSuperview().inset(15)
         }
         
@@ -270,12 +280,12 @@ final class OfferTableViewCell: UITableViewCell {
         
         guard self.stackView.arrangedSubviews.count == 2 else { return }
         
-        self.stackView.arrangedSubviews.first?.snp.makeConstraints { make in
+        self.stackView.arrangedSubviews.last?.snp.makeConstraints { make in
             make.width.equalTo(self.messageButton)
         }
     }
     
-//    MARK: Actions
+//    MARK: - Actions
     @objc private func didTapMessageButton() {
         self.messageButtonAction?()
     }
@@ -296,4 +306,71 @@ final class OfferTableViewCell: UITableViewCell {
         self.buyerAvatarImageViewAction?(id)
     }
 
+}
+
+//MARK: - Extensions
+extension OfferTableViewCell: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        self.offer?.deal.photoDatas.count ?? .zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: PhotoCollectionViewCell.id,
+            for: indexPath
+        ) as? PhotoCollectionViewCell,
+              let data = self.offer?.deal.photoDatas[indexPath.row] else {
+            return .init()
+        }
+        
+        cell.image = .init(data: data)
+        
+        return cell
+    }
+    
+}
+
+extension OfferTableViewCell: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        self.didTapPhotoAction?()
+    }
+    
+}
+
+extension OfferTableViewCell: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        .init(
+            width: collectionView.frame.width - 30,
+            height: collectionView.frame.width - 30
+        )
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat { 30 }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        .init(
+            top: .zero,
+            left: (collectionView.frame.width - (collectionView.frame.width - 30)) / 2,
+            bottom: .zero,
+            right: (collectionView.frame.width - (collectionView.frame.width - 30)) / 2
+        )
+    }
+    
 }

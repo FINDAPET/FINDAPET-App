@@ -30,7 +30,7 @@ final class ChatRoomPresenter {
         var chatRoom = chatRoom
         
         chatRoom.messages = chatRoom.messages.sorted {
-            ISO8601DateFormatter().date(from: $0.createdAt ?? .init()) ?? .init() <
+            ISO8601DateFormatter().date(from: $0.createdAt ?? .init()) ?? .init() >
                 ISO8601DateFormatter().date(from: $1.createdAt ?? .init()) ?? .init()
         }
         
@@ -70,9 +70,7 @@ final class ChatRoomPresenter {
         let newCompletionHandler: (ChatRoom.Output?, Error?) -> Void = { [ weak self ] chatRoom, error in
             comletionHandler(chatRoom, error)
             
-            guard error == nil, let chatRoom = chatRoom else {
-                return
-            }
+            guard error == nil, let chatRoom = chatRoom else { return }
             
             self?.chatRoom = chatRoom
         }
@@ -105,9 +103,7 @@ final class ChatRoomPresenter {
         let newCompletionHandler: (Message.Output?, Error?) -> Void = { [ weak self ] message, error in
             completionHandler(message, error)
             
-            guard error == nil, let message = message, self?.chatRoom != nil else {
-                return
-            }
+            guard error == nil, let message else { return }
             
             self?.chatRoom?.messages.append(message)
         }
@@ -117,7 +113,7 @@ final class ChatRoomPresenter {
     
     func sendMessage(_ message: Message.Input) {
         if let chatRoom = self.chatRoom, let user = chatRoom.users.filter({ $0.id == message.userID }).first {
-            self.chatRoom?.messages.append(Message.Output(
+            self.chatRoom?.messages.append(.init(
                 text: message.text,
                 isViewed: message.isViewed,
                 bodyData: message.bodyData,
@@ -178,6 +174,14 @@ final class ChatRoomPresenter {
             .hideNotViewedMessagesCountLabelInChatRoomWithID,
             additional: self.chatRoom?.id
         )
+    }
+    
+    func notificationCenterManagerMakeChatRoomsEmpty() {
+        self.interactor.notificationCenterManagerPost(.makeChatRoomsEmpty)
+    }
+    
+    func notificationCenterManagerMakeChatRoomsRefreshing() {
+        self.interactor.notificationCenterManagerPost(.makeChatRoomsRefreshing)
     }
     
 //    MARK: Routing

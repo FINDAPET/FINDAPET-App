@@ -35,15 +35,15 @@ final class ProfilePresenter {
     }
     
     func goToOffers() {
-        self.router.goToOffers(mode: .offers, offers: self.user?.offers ?? [Offer.Output]())
+        self.router.goToOffers(mode: .offers, userID: self.user?.id)
     }
     
     func goToMyOffers() {
-        self.router.goToOffers(mode: .myOffers, offers: self.user?.myOffers ?? [Offer.Output]())
+        self.router.goToOffers(mode: .myOffers, userID: self.user?.id)
     }
     
     func goToAds() {
-        self.router.goToAds(ads: self.user?.ads ?? [Ad.Output]())
+        self.router.goToAds(userID: self.user?.id)
     }
     
     func goToCreateAd() {

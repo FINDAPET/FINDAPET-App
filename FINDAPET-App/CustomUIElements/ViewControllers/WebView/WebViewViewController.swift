@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import WebKit
+import JGProgressHUD
 
 final class WebViewViewController: UIViewController {
     
@@ -35,9 +36,18 @@ final class WebViewViewController: UIViewController {
     }
     
 //    MARK: - UI Properties
+    private let progressIndicator: JGProgressHUD = {
+        let view = JGProgressHUD()
+        
+        view.textLabel.text = NSLocalizedString("Loading", comment: .init())
+        
+        return view
+    }()
+    
     private lazy var webView: WKWebView = {
         let view = WKWebView()
         
+        view.backgroundColor = .clear
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -66,6 +76,19 @@ final class WebViewViewController: UIViewController {
         self.webView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
+    }
+    
+}
+
+//MARK: - Extensions
+extension WebViewViewController: WKNavigationDelegate {
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        self.progressIndicator.show(in: self.view)
+    }
+    
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        self.progressIndicator.dismiss(animated: true)
     }
     
 }

@@ -54,7 +54,7 @@
 "Buyer" = "Buyer";
 "Price" = "Price";
 "Deals" = "Deals";
-"Bought Deals" = "Bought Deals";
+"Bought" = "Bought";
 "Currency" = "Currency";
 "Country" = "Country";
 "City" = "City";
@@ -151,3 +151,5 @@
 "You have not read the privacy policy and consent to data processing" = "You have not read the privacy policy and consent to data processing";
 "Go To Privacy Policy" = "Go To Privacy Policy";
 "Price as agreed" = "Price as agreed";
+"You accepted a deal" = "You accepted a deal";
+"Congretulations" = "Congretulations";

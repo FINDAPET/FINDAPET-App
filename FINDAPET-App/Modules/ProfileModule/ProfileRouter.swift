@@ -15,12 +15,12 @@ final class ProfileRouter: ProfileCoordinatable {
         self.coordinatorDelegate?.goToOnboarding(animated)
     }
     
-    func goToOffers(mode: OffersMode, offers: [Offer.Output]) {
-        self.coordinatorDelegate?.goToOffers(mode: mode, offers: offers)
+    func goToOffers(mode: OffersMode, userID: UUID? = nil) {
+        self.coordinatorDelegate?.goToOffers(mode: mode, userID: userID)
     }
     
-    func goToAds(ads: [Ad.Output]) {
-        self.coordinatorDelegate?.goToAds(ads: ads)
+    func goToAds(userID: UUID? = nil) {
+        self.coordinatorDelegate?.goToAds(userID: userID)
     }
     
     func goToEditProfile(user: User.Input) {

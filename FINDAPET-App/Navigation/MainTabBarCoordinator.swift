@@ -15,8 +15,8 @@ protocol MainTabBarCoordinatable {
 
 final class MainTabBarCoordinator: NSObject, RegistrationCoordinatable, Coordinator {
     
+//    MARK: - Properties
     var coordinatorDelegate: RegistrationCoordinator?
-    
     let tabBarController = UITabBarController()
     
     private lazy var feedCoordinator: FeedCoordinator = {
@@ -64,6 +64,7 @@ final class MainTabBarCoordinator: NSObject, RegistrationCoordinatable, Coordina
         return coordinator
     }()
     
+//    MARK: - Start
     func start() {
         self.setupViews()
         
@@ -84,11 +85,7 @@ final class MainTabBarCoordinator: NSObject, RegistrationCoordinatable, Coordina
                 return
             }
             
-            let vc = self.getNotificationScreen(notificationScreen)
-            
-            vc.modalPresentationStyle = .fullScreen
-            
-            self.tabBarController.present(vc, animated: true)
+            self.tabBarController.present(self.getNotificationScreen(notificationScreen), animated: true)
         }
         
         self.getCurrencies { currencies, error in
@@ -205,6 +202,7 @@ final class MainTabBarCoordinator: NSObject, RegistrationCoordinatable, Coordina
         )
         let viewController = NotificationScreenViewController(presenter: presenter)
         
+        viewController.modalPresentationStyle = .fullScreen
         router.coordinatorDelegate = self
         
         return viewController

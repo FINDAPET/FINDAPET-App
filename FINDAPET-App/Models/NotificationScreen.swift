@@ -11,23 +11,25 @@ struct NotificationScreen {
     struct Input: Encodable {
         var id: UUID?
         var backgroundImageData: Data
-        var title: String
-        var text: String
+        var title: String?
+        var text: String?
         var buttonTitle: String
-        var textColorHEX: String
+        var textColorHEX: String?
         var buttonTitleColorHEX: String
         var buttonColorHEX: String
+        var webViewURL: String?
         var isRequired: Bool
         
         init(
             id: UUID? = nil,
             backgroundImageData: Data,
-            title: String,
-            text: String,
+            title: String? = nil,
+            text: String? = nil,
             buttonTitle: String,
-            textColorHEX: String,
+            textColorHEX: String? = nil,
             buttonTitleColorHEX: String,
             buttonColorHEX: String,
+            webViewURL: String? = nil,
             isRequired: Bool
         ) {
             self.id = id
@@ -38,6 +40,7 @@ struct NotificationScreen {
             self.textColorHEX = textColorHEX
             self.buttonTitleColorHEX = buttonTitleColorHEX
             self.buttonColorHEX = buttonColorHEX
+            self.webViewURL = webViewURL
             self.isRequired = isRequired
         }
     }
@@ -45,12 +48,13 @@ struct NotificationScreen {
     struct Output: Decodable {
         var id: UUID?
         var backgroundImageData: Data
-        var title: String
-        var text: String
+        var title: String?
+        var text: String?
         var buttonTitle: String
-        var textColorHEX: String
+        var textColorHEX: String?
         var buttonTitleColorHEX: String
         var buttonColorHEX: String
+        var webViewURL: String?
         var isRequired: Bool
     }
 }

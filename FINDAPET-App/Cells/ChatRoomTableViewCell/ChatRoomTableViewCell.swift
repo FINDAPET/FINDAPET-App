@@ -30,9 +30,8 @@ final class ChatRoomTableViewCell: UITableViewCell {
                 return
             }
             
-            if let user = chatRoom.users.filter({ [ weak self ] user in user.id != self?.getUserID() }).first,
-               let avatarData = user.avatarData {
-                self.avatarImageView.image = .init(data: avatarData)
+            if let user = chatRoom.users.filter({ [ weak self ] user in user.id != self?.getUserID() }).first {
+                self.avatarImageView.image = .init(data: user.avatarData ?? .init()) ?? .init(named: "empty avatar")
                 self.nameLabel.text = user.name
             }
             

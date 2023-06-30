@@ -86,7 +86,11 @@ final class AdsViewController: UIViewController {
         if self.presenter.userID != nil {
             self.activityIndicatorView.isHidden = false
             self.tableView.isHidden = true
-            self.getAds()
+            self.presenter.getAds { [ weak self ] _, error in
+                self?.activityIndicatorView.isHidden = true
+                self?.tableView.isHidden = false
+                self?.error(error)
+            }
         }
     }
     

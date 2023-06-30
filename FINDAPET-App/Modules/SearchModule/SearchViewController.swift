@@ -48,29 +48,23 @@ final class SearchViewController: UIViewController {
     }()
     
     private lazy var tableView: UITableView = {
-        if #available(iOS 13.0, *) {
-            let view = UITableView(frame: .zero, style: .insetGrouped)
-            
-            view.backgroundColor = .clear
-            view.delegate = self
-            view.dataSource = self
-            view.alpha = .zero
-            view.clipsToBounds = true
-            view.layer.masksToBounds = true
-            view.register(SearchTitleTableViewCell.self, forCellReuseIdentifier: SearchTitleTableViewCell.id)
-            view.translatesAutoresizingMaskIntoConstraints = false
-            
-            return view
-        }
+//        if #available(iOS 13.0, *) {
+//            let view = UITableView(frame: .zero, style: .insetGrouped)
+//
+//            view.backgroundColor = .clear
+//            view.delegate = self
+//            view.dataSource = self
+//            view.register(SearchTitleTableViewCell.self, forCellReuseIdentifier: SearchTitleTableViewCell.id)
+//            view.translatesAutoresizingMaskIntoConstraints = false
+//
+//            return view
+//        }
         
         let view = UITableView(frame: .zero, style: .plain)
         
         view.backgroundColor = .clear
         view.delegate = self
         view.dataSource = self
-        view.alpha = .zero
-        view.clipsToBounds = true
-        view.layer.masksToBounds = true
         view.register(SearchTitleTableViewCell.self, forCellReuseIdentifier: SearchTitleTableViewCell.id)
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -104,10 +98,6 @@ final class SearchViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
         self.tabBarController?.tabBar.isHidden = true
         self.view.isUserInteractionEnabled = true
-        self.view.addGestureRecognizer(UITapGestureRecognizer(
-            target: self,
-            action: #selector(UIInputViewController.dismissKeyboard)
-        ))
         
         NotificationCenter.default.addObserver(
             self,
@@ -136,7 +126,7 @@ final class SearchViewController: UIViewController {
         }
     }
     
-//    MARK: Extensions
+//    MARK: - Actions
     @objc private func keyboadWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             self.tableView.contentInset.bottom = keyboardSize.height
@@ -167,10 +157,7 @@ final class SearchViewController: UIViewController {
 //MARK: Extensions
 extension SearchViewController: UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.presenter.titles.count
-    }
-    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { self.presenter.titles.count }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: SearchTitleTableViewCell.id,
@@ -191,16 +178,11 @@ extension SearchViewController: UITableViewDataSource {
 
 extension SearchViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        UITableView.automaticDimension
-    }
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { UITableView.automaticDimension }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let title = (tableView.cellForRow(at: indexPath) as? SearchTitleTableViewCell)?.searchTitle?.title else {
-            return
-        }
+        guard let title = (tableView.cellForRow(at: indexPath) as? SearchTitleTableViewCell)?.searchTitle?.title else { return }
         
         self.navigationController?.popViewController(animated: false)
         self.presenter.onTapSearchButtonAction(title)
@@ -230,14 +212,9 @@ extension SearchViewController: SearchViewDelegate {
         
     }
     
-    func searchView(_ searchView: SearchView, didTapBackButton button: UIButton) {
-        self.navigationController?.popViewController(animated: false)
-    }
-    
+    func searchView(_ searchView: SearchView, didTapBackButton button: UIButton) { self.navigationController?.popViewController(animated: false) }
     func searchView(_ searchView: SearchView, editingSearchTextField textField: UITextField) {
-        searchView.searchButton.isEnabled = !(searchView.searchTextField.text?.trimmingCharacters(
-            in: .whitespacesAndNewlines
-        ).isEmpty ?? true)
+        searchView.searchButton.isEnabled = !(searchView.searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
     }
     
 }

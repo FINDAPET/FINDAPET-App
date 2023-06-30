@@ -87,6 +87,7 @@ final class RegistrationViewController: UIViewController {
         view.leftViewMode = .always
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.rightViewMode = .always
+        view.keyboardType = .emailAddress
         view.delegate = self
          
         return view
@@ -301,7 +302,7 @@ final class RegistrationViewController: UIViewController {
                 password: self.passwordTextField.text ?? .init()
             ) { [ weak self ] token, error in
                 self?.progressIndicator.dismiss(animated: true)
-                self?.error(error) {
+                self?.error(error, withoutCodes: .init()) {
                     guard let token = token else {
                         self?.presentAlert(title: NSLocalizedString("Failed to make a request", comment: ""))
                         
