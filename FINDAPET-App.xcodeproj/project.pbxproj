@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E30065062916900500FAB319 /* ChatRoomCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30065052916900500FAB319 /* ChatRoomCoordinator.swift */; };
 		E30065092916933600FAB319 /* ChatRoomsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30065082916933600FAB319 /* ChatRoomsRouter.swift */; };
 		E300650B2916934400FAB319 /* ChatRoomsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E300650A2916934400FAB319 /* ChatRoomsInteractor.swift */; };
 		E300650D2916935000FAB319 /* ChatRoomsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E300650C2916935000FAB319 /* ChatRoomsPresenter.swift */; };
@@ -51,7 +50,6 @@
 		E325351D28F58C6500878A7F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E325351C28F58C6500878A7F /* Message.swift */; };
 		E325351F28F58CE600878A7F /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E325351E28F58CE600878A7F /* ChatRoom.swift */; };
 		E32AC0D728FB182F00081886 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E32AC0D628FB182F00081886 /* SnapKit */; };
-		E33130A1292A82F0009C26A1 /* EditDealCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130A0292A82F0009C26A1 /* EditDealCoordinator.swift */; };
 		E33130AE293243E7009C26A1 /* EditDealRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130AD293243E7009C26A1 /* EditDealRouter.swift */; };
 		E33130B0293243F8009C26A1 /* EditDealInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130AF293243F8009C26A1 /* EditDealInteractor.swift */; };
 		E33130B229324407009C26A1 /* EditDealPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33130B129324407009C26A1 /* EditDealPresenter.swift */; };
@@ -63,6 +61,8 @@
 		E334BAFA2917D0F0009AAB91 /* WebSocketSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334BAF92917D0F0009AAB91 /* WebSocketSender.swift */; };
 		E334DFCD28A82687000A2316 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E334DFCC28A82687000A2316 /* NotificationManager.swift */; };
 		E343E8A629CF1BDB005BE2FE /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = E343E8A529CF1BDB005BE2FE /* Gzip */; };
+		E347060D2A4F5DBE00312D4A /* ChatRoomCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E347060C2A4F5DBE00312D4A /* ChatRoomCoordinator.swift */; };
+		E347060F2A4F661000312D4A /* EditDealCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E347060E2A4F661000312D4A /* EditDealCoordinator.swift */; };
 		E347A5482901B3690089271F /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E347A5472901B3690089271F /* UIView.swift */; };
 		E34A3AD5293E08C00038625F /* ComplaintRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3AD4293E08C00038625F /* ComplaintRouter.swift */; };
 		E34A3AD7293E08D70038625F /* ComplaintInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A3AD6293E08D70038625F /* ComplaintInteractor.swift */; };
@@ -231,7 +231,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E30065052916900500FAB319 /* ChatRoomCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomCoordinator.swift; sourceTree = "<group>"; };
 		E30065082916933600FAB319 /* ChatRoomsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomsRouter.swift; sourceTree = "<group>"; };
 		E300650A2916934400FAB319 /* ChatRoomsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomsInteractor.swift; sourceTree = "<group>"; };
 		E300650C2916935000FAB319 /* ChatRoomsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomsPresenter.swift; sourceTree = "<group>"; };
@@ -274,7 +273,6 @@
 		E320ACC629C7A387004B640D /* SoundFileName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundFileName.swift; sourceTree = "<group>"; };
 		E325351C28F58C6500878A7F /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		E325351E28F58CE600878A7F /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
-		E33130A0292A82F0009C26A1 /* EditDealCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDealCoordinator.swift; sourceTree = "<group>"; };
 		E33130AD293243E7009C26A1 /* EditDealRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDealRouter.swift; sourceTree = "<group>"; };
 		E33130AF293243F8009C26A1 /* EditDealInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDealInteractor.swift; sourceTree = "<group>"; };
 		E33130B129324407009C26A1 /* EditDealPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDealPresenter.swift; sourceTree = "<group>"; };
@@ -287,6 +285,8 @@
 		E334DFC728A81D9F000A2316 /* FINDAPET-App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "FINDAPET-App.entitlements"; sourceTree = "<group>"; };
 		E334DFCC28A82687000A2316 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E337A3EF28F7132700FA6417 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		E347060C2A4F5DBE00312D4A /* ChatRoomCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomCoordinator.swift; sourceTree = "<group>"; };
+		E347060E2A4F661000312D4A /* EditDealCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDealCoordinator.swift; sourceTree = "<group>"; };
 		E347A5472901B3690089271F /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		E34A3AD4293E08C00038625F /* ComplaintRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplaintRouter.swift; sourceTree = "<group>"; };
 		E34A3AD6293E08D70038625F /* ComplaintInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplaintInteractor.swift; sourceTree = "<group>"; };
@@ -1078,8 +1078,8 @@
 				E3CEE67C28ABD6D400468ED2 /* ProfileCoordinator.swift */,
 				E3CEE68128ABE4DC00468ED2 /* RegistrationCoordinator.swift */,
 				E3993F72290B14F9000C218C /* SubscriptionCoordinator.swift */,
-				E30065052916900500FAB319 /* ChatRoomCoordinator.swift */,
-				E33130A0292A82F0009C26A1 /* EditDealCoordinator.swift */,
+				E347060C2A4F5DBE00312D4A /* ChatRoomCoordinator.swift */,
+				E347060E2A4F661000312D4A /* EditDealCoordinator.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -1506,7 +1506,6 @@
 				E37437A0292248F70077FA28 /* FilterRouter.swift in Sources */,
 				E30560FB290EF9DE00E0881C /* PhotoCollectionViewCell.swift in Sources */,
 				E3993F68290AF889000C218C /* InfoRouter.swift in Sources */,
-				E30065062916900500FAB319 /* ChatRoomCoordinator.swift in Sources */,
 				E347A5482901B3690089271F /* UIView.swift in Sources */,
 				E37DD7B72A180F0A00194F6C /* Platform.swift in Sources */,
 				E34A3ADF293E0ADA0038625F /* NotificationScreen.swift in Sources */,
@@ -1664,7 +1663,7 @@
 				E3E05D0D291FAF6C00605F49 /* UIButton.swift in Sources */,
 				E34ABC3C28A7BD4300A7D2C8 /* HTTPMethods.swift in Sources */,
 				E3E1D186290313D80069EE46 /* SettingsBlockView.swift in Sources */,
-				E33130A1292A82F0009C26A1 /* EditDealCoordinator.swift in Sources */,
+				E347060D2A4F5DBE00312D4A /* ChatRoomCoordinator.swift in Sources */,
 				E3E1EB53290063D200F536F4 /* AdsInteractor.swift in Sources */,
 				E313B89E28ACE39800E33975 /* RegistrationViewController.swift in Sources */,
 				E3F82C91296453220049F398 /* CoreDataManager.swift in Sources */,
@@ -1680,6 +1679,7 @@
 				E3EB1E33298AC18F009805A8 /* PurchaseManager.swift in Sources */,
 				E37AC6A628F82CF1003AC7D3 /* DealTableViewCell.swift in Sources */,
 				E30560F6290ECE8300E0881C /* DealInteractor.swift in Sources */,
+				E347060F2A4F661000312D4A /* EditDealCoordinator.swift in Sources */,
 				E3E05D19292149E700605F49 /* PetClass.swift in Sources */,
 				E34A3ADB293E08F40038625F /* ComplaintViewController.swift in Sources */,
 				E3E1D18D290326B80069EE46 /* SettingsPresenter.swift in Sources */,

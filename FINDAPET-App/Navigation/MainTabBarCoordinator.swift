@@ -182,7 +182,7 @@ final class MainTabBarCoordinator: NSObject, RegistrationCoordinatable, Coordina
     }
     
 //    MARK: Chat Room
-    func getChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) -> ChatRoomViewController {
+    func getChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) -> ChatRoomViewController? {
         self.chatRoomCoordinator.getChatRoom(chatRoom: chatRoom, userID: userID)
     }
     
