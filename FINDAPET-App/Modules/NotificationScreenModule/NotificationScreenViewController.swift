@@ -148,7 +148,7 @@ final class NotificationScreenViewController: UIViewController {
 
         self.webView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
-            make.bottom.equalTo(self.button)
+            make.bottom.equalTo(self.button.snp.top).inset(-10)
         }
 
         self.titleLabel.snp.makeConstraints { make in
@@ -178,6 +178,7 @@ final class NotificationScreenViewController: UIViewController {
               let url = URL(string: str) else { return }
         
         self.webView.load(.init(url: url))
+        self.progressIndicator.show(in: self.webView)
     }
     
 //    MARK: Actions
@@ -200,10 +201,6 @@ final class NotificationScreenViewController: UIViewController {
 extension NotificationScreenViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        self.progressIndicator.show(in: self.view)
-    }
-    
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         self.progressIndicator.dismiss(animated: true)
     }
     

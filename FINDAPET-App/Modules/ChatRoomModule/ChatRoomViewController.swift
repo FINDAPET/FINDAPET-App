@@ -151,7 +151,7 @@ final class ChatRoomViewController: MessagesViewController {
                 guard self?.presenter.chatRoom?.messages.filter({ $0.id != self?.presenter.getUserID() && !$0.isViewed }).count ?? .zero != .zero else {
                     return
                 }
-
+                
                 self?.presenter.viewAllMessages()
                 self?.presenter.notificationCenterManagerHideNotViewedMessagesCountLabel()
             }
@@ -165,16 +165,14 @@ final class ChatRoomViewController: MessagesViewController {
         guard !(self.presenter.chatRoom?.messages.isEmpty ?? true) else {
             return
         }
-
+        
         self.messagesCollectionView.scrollToLastItem(animated: false)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        guard self.isFirstLoad else {
-            return
-        }
+        guard self.isFirstLoad, self.presenter.chatRoom?.id != nil else { return }
 
         self.isFirstLoad = false
         self.messagesCollectionView.reloadData()
@@ -206,7 +204,7 @@ final class ChatRoomViewController: MessagesViewController {
             target: self,
             action: #selector(UIInputViewController.dismissKeyboard)
         ))
-
+        
         self.configureMessagesCollectionView()
         self.configureMessageInputBar()
 
@@ -251,13 +249,8 @@ final class ChatRoomViewController: MessagesViewController {
         self.messagesCollectionView.messagesLayoutDelegate = self
         self.messagesCollectionView.messagesDisplayDelegate = self
         self.messagesCollectionView.messageCellDelegate = self
-        self.showMessageTimestampOnSwipeLeft = true
         self.scrollsToLastItemOnKeyboardBeginsEditing = true
-        self.messagesCollectionView.isUserInteractionEnabled = true
-        self.messagesCollectionView.addGestureRecognizer(UITapGestureRecognizer(
-            target: self,
-            action: #selector(UIInputViewController.dismissKeyboard)
-        ))
+        self.maintainPositionOnKeyboardFrameChanged = true
     }
 
 //    MARK: Configure Message Input Bar
@@ -272,6 +265,7 @@ final class ChatRoomViewController: MessagesViewController {
         } else {
             self.messageInputBar.sendButton.setImage(.init(named: "arrow.up")?.withRenderingMode(.alwaysTemplate), for: .normal)
         }
+        
         self.messageInputBar.sendButton.setTitle(nil, for: .normal)
         self.messageInputBar.sendButton.backgroundColor = .textFieldColor
         self.messageInputBar.sendButton.tintColor = .accentColor
@@ -320,19 +314,10 @@ final class ChatRoomViewController: MessagesViewController {
 
 //MARK: Extension
 extension ChatRoomViewController: UINavigationControllerDelegate { }
-
 extension ChatRoomViewController: MessagesDataSource {
+    
     func currentSender() -> MessageKit.SenderType {
-        guard let user = self.presenter.chatRoom?.users.first(where: { [ weak self ] user in
-            user.id == self?.presenter.getUserID()
-        }) else {
-            return User.SenderType(
-                senderId: self.presenter.getUserID()?.uuidString ?? .init(),
-                displayName: self.presenter.getUserName() ?? .init()
-            )
-        }
-
-        return User.SenderType(senderId: user.id?.uuidString ?? .init(), displayName: user.name)
+        User.SenderType(senderId: self.presenter.myID?.uuidString ?? .init(), displayName: self.presenter.myName ?? .init())
     }
 
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) -> MessageKit.MessageType {
@@ -371,38 +356,28 @@ extension ChatRoomViewController: MessagesDataSource {
         self.presenter.chatRoom?.messages.count ?? .zero
     }
 
-    func messageTimestampLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.dateFormat = "EEEE, MMM d, yyyy"
-
-        return .init(
-            string: dateFormatter.string(from: message.sentDate),
-            attributes: [.font : UIFont.boldSystemFont(ofSize: 10), .foregroundColor : UIColor.lightGray]
-        )
-    }
-
 }
 
 extension ChatRoomViewController: MessagesDisplayDelegate {
 
     func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        if message.sender.senderId == self.presenter.getUserID()?.uuidString {
-            return .accentColor
-        }
-
-        return .textFieldColor
+        self.isFromCurrentSender(message: message) ? .accentColor : .textFieldColor
     }
 
     func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        if message.sender.senderId == self.presenter.getUserID()?.uuidString {
-            return .white
-        }
-
-        return .textColor
+        self.isFromCurrentSender(message: message) ? .white : .textColor
     }
-
-    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+    
+    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+        .bubbleTail(self.isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft, .pointedEdge)
+    }
+    
+    func configureAvatarView(
+        _ avatarView: AvatarView,
+        for message: MessageType,
+        at indexPath: IndexPath,
+        in messagesCollectionView: MessagesCollectionView
+    ) {
         avatarView.isHidden = true
     }
 
@@ -412,9 +387,7 @@ extension ChatRoomViewController: MessageCellDelegate {
 
     func didTapImage(in cell: MessageCollectionViewCell) {
         if #available(iOS 13.0, *) {
-            guard let index = self.presenter.chatRoom?.messages
-                .map({ $0.bodyData })
-                .firstIndex(of: cell.largeContentImage?.pngData()),
+            guard let index = self.presenter.chatRoom?.messages.map(\.bodyData).firstIndex(of: cell.largeContentImage?.pngData()),
                   let viewController = self.browseImagesViewController else {
                 return
             }
@@ -425,9 +398,7 @@ extension ChatRoomViewController: MessageCellDelegate {
         }
 
         guard let cell = cell as? MediaMessageCell,
-              let index = self.presenter.chatRoom?.messages
-            .map({ $0.bodyData })
-            .firstIndex(of: cell.imageView.image?.pngData()),
+              let index = self.presenter.chatRoom?.messages.map(\.bodyData).firstIndex(of: cell.imageView.image?.pngData()),
               let viewController = self.browseImagesViewController else {
             return
         }
@@ -442,8 +413,7 @@ extension ChatRoomViewController: MessageCellDelegate {
 extension ChatRoomViewController: InputBarAccessoryViewDelegate {
 
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-        if let datas = self.photosCollectionView.images
-            .map({ $0.jpegData(compressionQuality: 0.7) }).filter({ $0 != nil }) as? [Data] {
+        if let datas = self.photosCollectionView.images.map({ $0.jpegData(compressionQuality: 0.7) }).filter({ $0 != nil }) as? [Data] {
             for data in datas {
                 print(data)
 
@@ -487,18 +457,14 @@ extension ChatRoomViewController: InputBarAccessoryViewDelegate {
 
 extension ChatRoomViewController: MessagesLayoutDelegate {
 
-    func avatarSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize? {
-        .zero
-    }
+    func avatarSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize? { .zero }
 
 }
 
 extension ChatRoomViewController: UIImagePickerControllerDelegate {
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let image = info[.editedImage] as? UIImage else {
-            return
-        }
+        guard let image = info[.editedImage] as? UIImage else { return }
 
         self.photosCollectionView.images.append(image)
 
@@ -518,11 +484,7 @@ extension ChatRoomViewController: BrowseImagesViewControllerDataSource {
     }
 
     func browseImagesViewController(_ viewController: BrowseImagesViewController, collectionView: UICollectionView, imageForItemAt indexPath: IndexPath) -> UIImage? {
-        guard let data = self.presenter.chatRoom?.messages
-            .filter({ $0.bodyData != nil })
-            .map({ $0.bodyData })[indexPath.item] else {
-            return nil
-        }
+        guard let data = self.presenter.chatRoom?.messages.filter({ $0.bodyData != nil }).map({ $0.bodyData })[indexPath.item] else { return nil }
 
         return .init(data: data)
     }

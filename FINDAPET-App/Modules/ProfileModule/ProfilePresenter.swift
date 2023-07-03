@@ -24,6 +24,8 @@ final class ProfilePresenter {
 //    MARK: Properties
     var user: User.Output? {
         didSet {
+            print(user?.deals.count ?? .zero)
+            
             self.saveDealsID()
             self.callBack?()
         }

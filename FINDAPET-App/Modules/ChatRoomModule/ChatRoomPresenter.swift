@@ -11,7 +11,6 @@ final class ChatRoomPresenter {
     
 //    MARK: Properties
     var callBack: (() -> Void)?
-    var secondCallBack: (() -> Void)?
     private(set) var chatRoom: ChatRoom.Output? {
         didSet {
             if let id = self.getUserID(), self.userID == nil {
@@ -22,16 +21,17 @@ final class ChatRoomPresenter {
         }
     }
     private var userID: UUID?
+    private(set) lazy var myID = self.getUserID()
+    private(set) lazy var myName = self.getUserName()
     private let router: ChatRoomRouter
     private let interactor: ChatRoomInteractor
     
 //    MARK: Init
     init(chatRoom: ChatRoom.Output, router: ChatRoomRouter, interactor: ChatRoomInteractor) {
         var chatRoom = chatRoom
-        
+
         chatRoom.messages = chatRoom.messages.sorted {
-            ISO8601DateFormatter().date(from: $0.createdAt ?? .init()) ?? .init() >
-                ISO8601DateFormatter().date(from: $1.createdAt ?? .init()) ?? .init()
+            ISO8601DateFormatter().date(from: $0.createdAt ?? .init()) ?? .init() > ISO8601DateFormatter().date(from: $1.createdAt ?? .init()) ?? .init()
         }
         
         self.chatRoom = chatRoom
@@ -111,19 +111,21 @@ final class ChatRoomPresenter {
         self.interactor.chatRoom(with: id, completionHandler: newCompletionHandler)
     }
     
-    func sendMessage(_ message: Message.Input) {
-        if let chatRoom = self.chatRoom, let user = chatRoom.users.filter({ $0.id == message.userID }).first {
-            self.chatRoom?.messages.append(.init(
+    func sendMessage(_ message: Message.Input, completionHandler: @escaping () -> Void = { }) {
+        guard let chatRoom, let user = chatRoom.users.first(where: { $0.id == message.userID }) else { return }
+        
+        self.chatRoom?.messages.append(
+            .init(
                 text: message.text,
                 isViewed: message.isViewed,
                 bodyData: message.bodyData,
                 user: user,
                 createdAt: ISO8601DateFormatter().string(from: .init()),
                 chatRoom: chatRoom
-            ))
-        }
-        
+            )
+        )
         self.interactor.sendMessage(message: message)
+        completionHandler()
     }
     
     func sendString(_ string: String) {
