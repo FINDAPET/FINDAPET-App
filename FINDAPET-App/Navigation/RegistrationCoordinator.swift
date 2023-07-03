@@ -21,40 +21,60 @@ final class RegistrationCoordinator: NSObject, Coordinator {
 //    MARK: - Start
     func start() {
         self.setupViews()
-        
-        if let email = self.getEmail(), let password = self.getPassword() {
-            self.goToLaunchScreen()
-            self.logIn(email: email, password: password) { [ weak self ] token, error in
-                if error != nil {
-                    self?.goToOnboarding(false)
-                    
-                    return
-                }
+        self.goToLaunchScreen()
+        self.getBaseURL { [ weak self ] hostURL, error in
+            guard let self else { return }
+            
+            if let error {
+                print("❌ ERROR: \(error.localizedDescription)")
+            } else if let hostURL {
+                print(
+"""
+❕WARNING: 1) http host set to \(hostURL.http)
+           2) ws host set to \(hostURL.ws)
+"""
+                )
                 
-                guard let token else {
-                    self?.goToOnboarding(false)
-                    
-                    return
-                }
-                
-                self?.setUserID(token.user.id)
-                self?.setBearrerToken(token.value)
-                
-                if token.user.name.isEmpty {
-                    if #available(iOS 16, *) {
-                        self?.goToEditProfile(user: .init(
-                            id: self?.getUserID(),
-                            countryCode: Locale.current.language.languageCode?.identifier
-                        ))
-                    } else {
-                        self?.goToEditProfile(user: .init(id: self?.getUserID(), countryCode: Locale.current.languageCode))
-                    }
-                } else {
-                    self?.goToMainTabBar(false)
-                }
+                self.setHostHTTP(hostURL.http)
+                self.setHostWS(hostURL.ws)
+            } else {
+                print("❕WARNING: host url is equal to nil.")
             }
-        } else {
-            self.goToOnboarding(false)
+            
+            if let email = self.getEmail(), let password = self.getPassword() {
+                self.goToLaunchScreen()
+                self.logIn(email: email, password: password) { [ weak self ] token, error in
+                    if error != nil {
+                        self?.goToOnboarding(false)
+                        
+                        return
+                    }
+                    
+                    guard let token else {
+                        self?.goToOnboarding(false)
+                        
+                        return
+                    }
+                    
+                    self?.setUserID(token.user.id)
+                    self?.setBearrerToken(token.value)
+                    
+                    if token.user.name.isEmpty {
+                        if #available(iOS 16, *) {
+                            self?.goToEditProfile(user: .init(
+                                id: self?.getUserID(),
+                                countryCode: Locale.current.language.languageCode?.identifier
+                            ))
+                        } else {
+                            self?.goToEditProfile(user: .init(id: self?.getUserID(), countryCode: Locale.current.languageCode))
+                        }
+                    } else {
+                        self?.goToMainTabBar(false)
+                    }
+                }
+            } else {
+                self.goToOnboarding(false)
+            }
         }
     }
     
@@ -153,6 +173,14 @@ final class RegistrationCoordinator: NSObject, Coordinator {
         return .init(uuidString: string)
     }
     
+    private func setHostHTTP(_ string: String) {
+        UserDefaultsManager.write(data: string, key: .hostHTTP)
+    }
+    
+    private func setHostWS(_ string: String) {
+        UserDefaultsManager.write(data: string, key: .hostHTTP)
+    }
+    
 //    MARK: Keychain
     private func getEmail() -> String? {
         KeychainManager.shared.read(key: .email)
@@ -179,6 +207,10 @@ final class RegistrationCoordinator: NSObject, Coordinator {
             url: URLConstructor.defaultHTTP.auth(),
             completionHandler: completionHandler
         )
+    }
+    
+    private func getBaseURL(_ completionHandler: @escaping (HostURL?, Error?) -> Void) {
+        RequestManager.request(method: .GET, url: URLConstructor.blueSeaCattery.getBaseURL(), completionHandler: completionHandler)
     }
     
 //    MARK: Setup Views

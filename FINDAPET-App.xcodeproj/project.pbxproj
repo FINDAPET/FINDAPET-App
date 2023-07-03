@@ -93,6 +93,7 @@
 		E34ABC5928A7D48300A7D2C8 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */; };
 		E34ABC5C28A7D6BF00A7D2C8 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */; };
 		E34ABC5E28A7D77800A7D2C8 /* WSAuthentaficationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */; };
+		E34DF49C2A53515D006D0327 /* HostURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34DF49B2A53515D006D0327 /* HostURL.swift */; };
 		E35BBA9728BE6C590048F525 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */; };
 		E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */; };
 		E35E09F228F739F200B310D1 /* YandexMobileMetricaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */; };
@@ -317,6 +318,7 @@
 		E34ABC5828A7D48300A7D2C8 /* KeychainKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
 		E34ABC5B28A7D6BF00A7D2C8 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		E34ABC5D28A7D77800A7D2C8 /* WSAuthentaficationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSAuthentaficationMode.swift; sourceTree = "<group>"; };
+		E34DF49B2A53515D006D0327 /* HostURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostURL.swift; sourceTree = "<group>"; };
 		E35BBA9628BE6C590048F525 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 		E35E09EB28F735A000B310D1 /* PurchaseErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseErrors.swift; sourceTree = "<group>"; };
 		E35E09F128F739F200B310D1 /* YandexMobileMetricaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexMobileMetricaManager.swift; sourceTree = "<group>"; };
@@ -708,6 +710,7 @@
 				E37D546E29C0F37E00816450 /* SearchTitle.swift */,
 				E396609F29E44BA200A70620 /* TitleSubscription.swift */,
 				E37DD7B82A180F5B00194F6C /* DeviceToken.swift */,
+				E34DF49B2A53515D006D0327 /* HostURL.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1525,6 +1528,7 @@
 				E37D546729C0F2F900816450 /* SearchRouter.swift in Sources */,
 				E37437A22922492A0077FA28 /* FilterInteractor.swift in Sources */,
 				E34ABC4028A7BDD500A7D2C8 /* Headers.swift in Sources */,
+				E34DF49C2A53515D006D0327 /* HostURL.swift in Sources */,
 				E3F4B04A28FD7F430083815E /* SideMenuSides.swift in Sources */,
 				E313B89828ACE36200E33975 /* RegistrationRouter.swift in Sources */,
 				E320ACC729C7A387004B640D /* SoundFileName.swift in Sources */,

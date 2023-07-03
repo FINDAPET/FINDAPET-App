@@ -38,10 +38,19 @@ final class URLConstructor {
         }
     }
     
+    static let blueSeaCattery = URLConstructor(scheme: .https, host: .blueSeaCattery)
     static let localhostHTTP = URLConstructor(scheme: .http, host: .localhost, port: .localhost)
     static let localhostWS = URLConstructor(scheme: .ws, host: .localhost, port: .localhost)
-    static let defaultHTTP = URLConstructor(scheme: .https, host: .base)
-    static let defaultWS = URLConstructor(scheme: .wss, host: .base)
+    static let defaultHTTP: URLConstructor = {
+        if let string = UserDefaultsManager.read(key: .hostHTTP) as? String, URL(string: string) != nil { return .init(string: string) }
+        
+        return .init(scheme: .https, host: .base)
+    }()
+    static let defaultWS: URLConstructor = {
+        if let string = UserDefaultsManager.read(key: .hostWS) as? String, URL(string: string) != nil { return .init(string: string) }
+        
+        return .init(scheme: .wss, host: .base)
+    }()
     static let exchange = URLConstructor(scheme: .http, host: .exchange)
     
     //    MARK: Auth
@@ -734,6 +743,13 @@ final class URLConstructor {
 //    MARK: Mail
     func mailTo() -> URL {
         self.baseURL
+    }
+    
+//    MARK: - Base URL
+    func getBaseURL() -> URL {
+        self.baseURL
+            .appendingPathComponent(Paths.base.rawValue)
+            .appendingPathComponent(Paths.url.rawValue)
     }
     
 }
