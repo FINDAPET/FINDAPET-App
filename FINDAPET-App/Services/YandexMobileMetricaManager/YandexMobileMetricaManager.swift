@@ -15,6 +15,8 @@ final class YandexMobileMetricaManager {
             throw YandexMobileMetricaErrors.configurationIsEqualToNil
         }
         
+        configuration.crashReporting = false
+                
         YMMYandexMetrica.activate(with: configuration)
     }
     

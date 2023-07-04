@@ -39,17 +39,27 @@ final class AdsViewController: UIViewController {
     }()
     
     private let activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView()
+        if #available(iOS 13.0, *) {
+            let view = UIActivityIndicatorView(style: .medium)
+            
+            view.startAnimating()
+            view.color = .accentColor
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
-        view.isHidden = true
+        view.color = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
     private lazy var tableView: UITableView = {
-        let view = UITableView(frame: .zero, style: .insetGrouped)
+        let view = UITableView(frame: .zero, style: .plain)
         
         view.delegate = self
         view.dataSource = self
@@ -76,7 +86,11 @@ final class AdsViewController: UIViewController {
         if self.presenter.userID != nil {
             self.activityIndicatorView.isHidden = false
             self.tableView.isHidden = true
-            self.getAds()
+            self.presenter.getAds { [ weak self ] _, error in
+                self?.activityIndicatorView.isHidden = true
+                self?.tableView.isHidden = false
+                self?.error(error)
+            }
         }
     }
     

@@ -30,7 +30,7 @@ final class RegistrationPresenter {
     }
     
     func goToPrivacyPolicy() {
-        self.router.goToPrivacyPolicy()
+        self.router.goToWebView(URLConstructor.defaultHTTP.getPrivacyPolicy())
     }
     
 //    MARK: Requests
@@ -59,10 +59,28 @@ final class RegistrationPresenter {
         self.interactor.auth(email: email, password: password, completionHandler: newCompletionHandler)
     }
     
+    func setCurrencyRequest(_ completionHandler: @escaping (Error?) -> Void = { _ in }) {
+        if #available(iOS 16, *) {
+            self.interactor.setCurrencyRequest(
+                Locale.current.currency?.identifier ?? Currency.USD.rawValue,
+                completionHandler: completionHandler
+            )
+        } else {
+            self.interactor.setCurrencyRequest(
+                Locale.current.currencyCode ?? Currency.USD.rawValue,
+                completionHandler: completionHandler
+            )
+        }
+    }
+    
 //    MARK: User Defaults
     
     func writeUserID(id: UUID?) {
         self.interactor.write(key: .id, data: id?.uuidString as Any)
+    }
+    
+    func setCurrency(_ currencyName: String) {
+        self.interactor.write(key: .currency, data: currencyName)
     }
     
 //    MARK: Keychain

@@ -30,20 +30,27 @@ class SubscriptionCollectionViewCell: UICollectionViewCell {
                 self.backgroundColor = .accentColor
                 self.nameLabel.textColor = .white
                 self.priceLabel.textColor = .white
-                self.layer.borderWidth = .zero
             } else {
-                self.backgroundColor = .backgroundColor
+                self.backgroundColor = .textFieldColor
                 self.nameLabel.textColor = .textColor
                 self.priceLabel.textColor = .textColor
-                self.layer.borderWidth = 1
             }
         }
     }
     
-    var product: SKProduct? {
+    var subscription: TitleSubscription? {
         didSet {
-            self.nameLabel.text = self.product?.localizedDescription
-            self.priceLabel.text = "\(self.product?.price.stringValue ?? String())\(self.product?.priceLocale.currencySymbol ?? String())"
+            guard let subscription = self.subscription else {
+                return
+            }
+            
+            if #available(iOS 16, *) {
+                self.nameLabel.text = subscription.localizedNames[Locale.current.language.languageCode?.identifier ?? .init()]
+            } else {
+                self.nameLabel.text = subscription.localizedNames[Locale.current.languageCode ?? .init()]
+            }
+            
+            self.priceLabel.text = "\(subscription.price)\(UserDefaultsManager.read(key: .currency) as? String ?? .init())"
         }
     }
     
@@ -73,13 +80,13 @@ class SubscriptionCollectionViewCell: UICollectionViewCell {
     
 //    MARK: Setup Views
     private func setupViews() {
-        self.backgroundColor = .backgroundColor
+        self.backgroundColor = .textFieldColor
+        self.clipsToBounds = true
+        self.layer.masksToBounds = true
         self.layer.cornerRadius = 25
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.textColor.cgColor
         
-        self.addSubview(self.nameLabel)
-        self.addSubview(self.priceLabel)
+        self.contentView.addSubview(self.nameLabel)
+        self.contentView.addSubview(self.priceLabel)
         
         self.nameLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(15)

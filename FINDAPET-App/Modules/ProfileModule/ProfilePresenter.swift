@@ -24,26 +24,28 @@ final class ProfilePresenter {
 //    MARK: Properties
     var user: User.Output? {
         didSet {
+            print(user?.deals.count ?? .zero)
+            
             self.saveDealsID()
             self.callBack?()
         }
     }
         
 //    MARK: Routing
-    func goToOnboarding() {
-        self.router.goToOnboarding()
+    func goToOnboarding(_ animated: Bool = true) {
+        self.router.goToOnboarding(animated)
     }
     
     func goToOffers() {
-        self.router.goToOffers(mode: .offers, offers: self.user?.offers ?? [Offer.Output]())
+        self.router.goToOffers(mode: .offers, userID: self.user?.id)
     }
     
     func goToMyOffers() {
-        self.router.goToOffers(mode: .myOffers, offers: self.user?.myOffers ?? [Offer.Output]())
+        self.router.goToOffers(mode: .myOffers, userID: self.user?.id)
     }
     
     func goToAds() {
-        self.router.goToAds(ads: self.user?.ads ?? [Ad.Output]())
+        self.router.goToAds(userID: self.user?.id)
     }
     
     func goToCreateAd() {
@@ -59,22 +61,38 @@ final class ProfilePresenter {
     }
     
     func goToEditProfile() {
-        self.router.goToEditProfile(user: User.Input(
+        self.router.goToEditProfile(user: .init(
             id: self.user?.id,
-            name: self.user?.name ?? String(),
+            name: self.user?.name ?? .init(),
             avatarData: self.user?.avatarData,
             documentData: self.user?.documentData,
             description: self.user?.description,
-            chatRoomsID: self.user?.chatRooms.map { $0.id ?? UUID() } ?? [UUID]()
+            isCatteryWaitVerify: self.user?.isCatteryWaitVerify ?? false,
+            chatRoomsID: self.user?.chatRooms.map { $0.id ?? .init() } ?? .init()
         ))
+    }
+    
+    func getBrowseImage(dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {
+        self.router.getBrowseImage(dataSource: dataSource)
     }
     
     func goToDeal(deal: Deal.Output) {
         self.router.goToDeal(deal: deal)
     }
     
-//    MARK: Requests
+    func getComplaint() -> ComplaintViewController? {
+        guard let id = self.getMyID() else {
+            return nil
+        }
+        
+        return self.router.getComplaint(.init(text: .init(), senderID: id))
+    }
     
+    func getDeal(_ deal: Deal.Output) -> DealViewController? {
+        self.router.getDeal(deal: deal)
+    }
+    
+//    MARK: Requests
     func getUser(completionHandler: @escaping (User.Output?, Error?) -> Void) {
         self.interactor.getUser(completionHandler: completionHandler)
     }
@@ -89,19 +107,37 @@ final class ProfilePresenter {
         self.interactor.logOut(completionHandler: completionHandler)
     }
     
-//    MARK: Currency Converter
-    
-    func convert(
-        _ first: String,
-        to second: String,
-        value: Int,
-        completionHandler: @escaping (ExchangeConvert.Output?, Error?) -> Void
+//    MARK: Notification Center
+    func notificationCenterManagerAddObserver(
+        _ observer: Any,
+        name: NotificationCenterManagerKeys,
+        additional parameter: String? = nil,
+        action: Selector
     ) {
-        self.interactor.convert(first, to: second, value: value, completionHandler: completionHandler)
+        self.interactor.notificationCenterManagerAddObserver(observer, name: name, additional: parameter, action: action)
+    }
+    
+    func notificationCenterManagerPostMakeChatRoomsRefreshing() {
+        self.interactor.notificationCenterManagerPost(.makeChatRoomsRefreshing)
+    }
+    
+    func notificationCenterManagerPostMakeFeedRefreshing() {
+        self.interactor.notificationCenterManagerPost(.makeFeedRefreshing)
+    }
+    
+    func notificationCenterManagerPostMakeNilFilter() {
+        self.interactor.notificationCenterManagerPost(.makeNilFilter)
+    }
+    
+    func notificationCenterManagerPostMakeFeedEmpty() {
+        self.interactor.notificationCenterManagerPost(.makeFeedEmpty)
+    }
+    
+    func notificationCenterManagerPostMakeChatRoomsEmpty() {
+        self.interactor.notificationCenterManagerPost(.makeChatRoomsEmpty)
     }
     
 //    MARK: User Defaults
-    
     func getMyID() -> UUID? {
         self.interactor.getMyID()
     }
@@ -112,6 +148,38 @@ final class ProfilePresenter {
     
     func writeIsFirstEditing() {
         self.interactor.writeIsFirstEditing()
+    }
+    
+    func deleteUserID() {
+        self.interactor.setUserDefaults(nil, with: .id)
+    }
+    
+    func deleteDealsID() {
+        self.interactor.setUserDefaults(nil, with: .dealsID)
+    }
+    
+    func deleteDeviceToken() {
+        self.interactor.setUserDefaults(nil, with: .deviceToken)
+    }
+    
+    func deleteUserName() {
+        self.interactor.setUserDefaults(nil, with: .userName)
+    }
+    
+    func deleteUserCurrency() {
+        self.interactor.setUserDefaults(nil, with: .currency)
+    }
+    
+    func deleteNotificationScreensID() {
+        self.interactor.setUserDefaults(nil, with: .notificationScreensID)
+    }
+    
+    func deleteCountry() {
+        self.interactor.setUserDefaults(nil, with: .country)
+    }
+    
+    func deleteCity() {
+        self.interactor.setUserDefaults(nil, with: .city)
     }
     
     private func saveDealsID() {
@@ -126,7 +194,6 @@ final class ProfilePresenter {
     }
     
 //    MARK: Keychain
-    
     func deleteKeychainData() {
         self.interactor.deleteKeychainData()
     }

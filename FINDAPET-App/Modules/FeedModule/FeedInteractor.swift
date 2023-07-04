@@ -13,7 +13,7 @@ final class FeedInteractor {
     func getDeals(_ filter: Filter, completionHandler: @escaping ([Deal.Output]?, Error?) -> Void) {
         RequestManager.request(
             sendModel: filter,
-            method: .GET,
+            method: .PUT,
             authMode: .bearer(value: self.getBearrerToken() ?? .init()),
             url: URLConstructor.defaultHTTP.allDeals(),
             completionHandler: completionHandler
@@ -32,6 +32,16 @@ final class FeedInteractor {
 //    MARK: Aplication Requests
     func goTo(url: URL) {
         ApplicationRequestManager.request(url)
+    }
+    
+//    MARK: Notification Center
+    func notificationCenterManagerAddObserver(
+        _ observer: Any,
+        name: NotificationCenterManagerKeys,
+        additional parameter: String? = nil,
+        action: Selector
+    ) {
+        NotificationCenterManager.addObserver(observer, name: name, additional: parameter, action: action)
     }
     
 //    MARK: Keychain

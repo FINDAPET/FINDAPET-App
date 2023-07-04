@@ -19,11 +19,16 @@ final class InfoPresenter {
     
 //    MARK: Application Requests
     func goToSupportingTeamMail() {
-        self.interactor.applicationGo(to: URLConstructor(mailTo: suportingTeamEmail).mailTo())
+        self.interactor.applicationGo(to: URLConstructor(mailTo: .init(suportingTeamEmail)).mailTo())
     }
     
     func goToAdvertisingTeamMail() {
-        self.interactor.applicationGo(to: URLConstructor(mailTo: advertisingTeamEmail).mailTo())
+        self.interactor.applicationGo(to: URLConstructor(mailTo: .init(advertisingTeamEmail)).mailTo())
+    }
+    
+//    MARK: Router
+    func goToPrivacyPolicy() {
+        self.router.goToWebView(URLConstructor.defaultHTTP.getPrivacyPolicy())
     }
     
 }

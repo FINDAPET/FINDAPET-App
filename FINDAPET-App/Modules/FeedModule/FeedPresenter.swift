@@ -20,9 +20,10 @@ final class FeedPresenter {
     }
     
 //    MARK: Properties
-    private var filter = Filter()
+    private(set) var filter = Filter()
     private(set) var deals = [Deal.Output]() {
-        didSet {
+        didSet {            
+            self.filter.checkedIDs = self.deals.map(\.id).filter { $0 != nil } as? [UUID] ?? .init()
             self.callBack?()
         }
     }
@@ -37,20 +38,44 @@ final class FeedPresenter {
         self.filter.title = title
     }
     
+    func setFilterCheckedIDs(_ checkedIDs: [UUID] = .init()) {
+        self.filter.checkedIDs = checkedIDs
+    }
+    
     func deleteFilter() {
-        self.filter = Filter(title: self.filter.title)
+        self.filter = .init(title: self.filter.title)
+    }
+    
+    func fullFilterDelete() {
+        self.filter = .init()
+    }
+    
+    func makeDealsEmpty() {
+        self.deals = .init()
+    }
+    
+    func sortDeals() {
+        self.deals = .init(Set(self.deals)).sorted { $0.score > $1.score }
+    }
+    
+//    MARK: Notification Center
+    func notificationCenterManagerAddObserver(
+        _ observer: Any,
+        name: NotificationCenterManagerKeys,
+        additional parameter: String? = nil,
+        action: Selector
+    ) {
+        self.interactor.notificationCenterManagerAddObserver(observer, name: name, additional: parameter, action: action)
     }
     
 //    MARK: Requests
-    func getDeals(completionHandler: @escaping ([Deal.Output]?, Error?) -> Void) {
+    func getDeals(isDealsSortable: Bool = false, _ completionHandler: @escaping ([Deal.Output]?, Error?) -> Void) {
         let newCompletionHandler: ([Deal.Output]?, Error?) -> Void = { [ weak self ] deals, error in
-            completionHandler(deals?.sorted { $0.score > $1.score }, error)
+            completionHandler(deals?.filter(\.isActive).sorted { $0.score > $1.score }, error)
             
-            guard error == nil else {
-                return
-            }
+            guard error == nil else { return }
             
-            self?.deals = deals?.sorted { $0.score > $1.score } ?? .init()
+            self?.deals += .init(Set(deals ?? .init())).filter(\.isActive).sorted { $0.score > $1.score }
         }
         
         self.interactor.getDeals(self.filter, completionHandler: newCompletionHandler)
@@ -72,7 +97,11 @@ final class FeedPresenter {
     
 //    MARK: Aplication Requests
     func goToUrl() {
-        self.interactor.goTo(url: URL(string: self.ad?.link ?? .init()) ?? .init(fileURLWithPath: .init()))
+        if #available(iOS 16.0, *) {
+            self.interactor.goTo(url: .init(string: self.ad?.link ?? .init()) ?? .init(filePath: .init()))
+        } else {
+            self.interactor.goTo(url: .init(string: self.ad?.link ?? .init()) ?? .init(fileURLWithPath: .init()))
+        }
     }
     
 //    MARK: Routing
@@ -84,12 +113,22 @@ final class FeedPresenter {
         self.router.goToProfile(userID: self.ad?.cattery?.id)
     }
     
-    func getFilter(completionHandler: @escaping ([Deal.Output]?, Error?) -> Void) -> FilterViewController? {
-        self.router.getFilter(filter: self.filter) { filter in
-            self.filter = filter
+    func goToSearch(_ onTapSearchButtonAction: @escaping (String) -> Void) {
+        self.router.goToSearch(with: self.filter.title, onTapSearchButtonAction)
+    }
+    
+    func getFilter(
+        startHandler: @escaping () -> Void = { },
+        completionHandler: @escaping ([Deal.Output]?, Error?) -> Void
+    ) -> FilterViewController? {
+        self.router.getFilter(filter: self.filter) { [ weak self ] filter in
+            startHandler()
             
-            self.getDeals(completionHandler: completionHandler)
-            self.getRandomAd()
+            self?.filter = filter
+            self?.makeDealsEmpty()
+            self?.setFilterCheckedIDs()
+            self?.getDeals(completionHandler)
+            self?.getRandomAd()
         }
     }
     

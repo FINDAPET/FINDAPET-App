@@ -30,7 +30,7 @@ final class PhotoCollectionViewCell: UICollectionViewCell {
     }
     
 //    MARK: UI Properties
-    private let imageView: UIImageView = {
+    let imageView: UIImageView = {
         let view = UIImageView()
         
         view.clipsToBounds = true
@@ -48,7 +48,7 @@ final class PhotoCollectionViewCell: UICollectionViewCell {
         self.clipsToBounds = true
         self.layer.masksToBounds = true
         
-        self.addSubview(self.imageView)
+        self.contentView.addSubview(self.imageView)
         
         self.imageView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview()

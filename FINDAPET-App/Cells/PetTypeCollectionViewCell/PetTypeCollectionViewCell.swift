@@ -25,7 +25,7 @@ final class PetTypeCollectionViewCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
-            if self.isSelected {
+            if self.isSelected {                
                 self.layer.borderWidth = 3
             } else {
                 self.layer.borderWidth = .zero
@@ -33,14 +33,14 @@ final class PetTypeCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var petType: PetType? {
+    var petType: PetType.Entity? {
         didSet {
             guard let petType = self.petType else {
                 return
             }
-            
-            self.imageView.image = .init(named: petType == .cat ? "cat logo" : "dog logo")
-            self.nameLabel.text = NSLocalizedString(petType.rawValue, comment: .init())
+                        
+            self.imageView.image = .init(data: petType.imageData)
+            self.nameLabel.text = petType.name
         }
     }
     
@@ -67,7 +67,7 @@ final class PetTypeCollectionViewCell: UICollectionViewCell {
         
         return view
     }()
-        
+    
 //    MARK: Setup Views
     private func setupViews() {
         self.backgroundColor = .clear
@@ -75,8 +75,9 @@ final class PetTypeCollectionViewCell: UICollectionViewCell {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 25
         self.layer.borderColor = UIColor.accentColor.cgColor
+        self.contentView.isUserInteractionEnabled = true
         
-        self.addSubview(self.imageView)
+        self.contentView.addSubview(self.imageView)
         
         self.imageView.addSubview(self.nameLabel)
         

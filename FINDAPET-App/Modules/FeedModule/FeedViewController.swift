@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SPStorkController
 
 final class FeedViewController: UIViewController {
 
@@ -16,6 +17,8 @@ final class FeedViewController: UIViewController {
         self.presenter = presenter
         
         super.init(nibName: nil, bundle: nil)
+        
+        self.presenter.callBack = { [ weak self ] in self?.tableView.reloadData() }
     }
     
     required init?(coder: NSCoder) {
@@ -23,13 +26,25 @@ final class FeedViewController: UIViewController {
     }
     
 //    MARK: UI Properties
+    private var isRefreshing = false
     private var isEmptyTableView = true
     
 //    MARK: UI Properties
     private let activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .medium)
+        if #available(iOS 13.0, *) {
+            let view = UIActivityIndicatorView(style: .medium)
+            
+            view.startAnimating()
+            view.color = .accentColor
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
+        view.color = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -39,8 +54,8 @@ final class FeedViewController: UIViewController {
         let view = UIRefreshControl()
         
         view.addTarget(self, action: #selector(self.onRefresh), for: .valueChanged)
-        view.tintColor = .white
-        view.backgroundColor = .accentColor
+        view.backgroundColor = .clear
+        view.tintColor = .accentColor
         
         return view
     }()
@@ -50,19 +65,21 @@ final class FeedViewController: UIViewController {
         
         view.dataSource = self
         view.delegate = self
+        view.refreshControl = self.refreshControl
         view.register(NotFoundTableViewCell.self, forCellReuseIdentifier: NotFoundTableViewCell.id)
         view.register(DealTableViewCell.self, forCellReuseIdentifier: DealTableViewCell.cellID)
         view.register(AdTableViewCell.self, forCellReuseIdentifier: AdTableViewCell.cellID)
         view.separatorColor = .clear
         view.isHidden = true
         view.backgroundColor = .backgroundColor
+        view.showsVerticalScrollIndicator = false
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
     private lazy var searchView: SearchView = {
-        let view = SearchView()
+        let view = SearchView(mode: .withFilter)
         
         view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -84,21 +101,32 @@ final class FeedViewController: UIViewController {
         super.viewWillAppear(animated)
         
         self.setupViews()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
         
+        guard !self.isRefreshing else { return }
+        
+        self.presenter.setFilterCheckedIDs()
+        self.presenter.makeDealsEmpty()
+        self.activityIndicatorView.isHidden = false
+        self.tableView.isHidden = true
+        self.isRefreshing = true
         self.presenter.getDeals { [ weak self ] _, error in
+            self?.isRefreshing = false
             self?.activityIndicatorView.isHidden = true
             self?.tableView.isHidden = false
             self?.error(error)
         }
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.setupNotifications()
+    }
+    
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
+        self.tabBarController?.navigationController?.navigationBar.isHidden = true
         self.navigationController?.navigationBar.isHidden = true
         
         self.view.addSubview(self.searchView)
@@ -125,15 +153,73 @@ final class FeedViewController: UIViewController {
         }
     }
     
+//    MARK: - Setup Notifications
+    private func setupNotifications() {
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .reloadFeedScreen,
+            action: #selector(self.reloadScreen)
+        )
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .makeFeedRefreshing,
+            action: #selector(self.makeFeedRefreshing)
+        )
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .makeNilFilter,
+            action: #selector(self.makeNilFilter)
+        )
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .makeFeedEmpty,
+            action: #selector(self.makeFeedEmpty)
+        )
+    }
+    
 //    MARK: Actions
     @objc private func onRefresh() {
-        self.presenter.getDeals { [ weak self ] _, error in
+//            full version
+//            self?.presenter.getRandomAd()
+        self.isRefreshing = true
+        self.presenter.setFilterCheckedIDs()
+        self.presenter.getDeals(isDealsSortable: true) { [ weak self ] _, error in
+            self?.presenter.makeDealsEmpty()
+            self?.isRefreshing = false
+            self?.tableView.tableFooterView = nil
+            self?.refreshControl.endRefreshing()
             self?.error(error)
         }
+    }
+    
+    @objc private func reloadScreen() {
+        self.presenter.setFilterCheckedIDs()
+        self.presenter.makeDealsEmpty()
+        self.presenter.getDeals { [ weak self ] _, error in
+            self?.activityIndicatorView.isHidden = true
+            self?.tableView.isHidden = false
+        }
+    }
+    
+    @objc private func makeFeedRefreshing() {
+        self.activityIndicatorView.isHidden = false
+        self.tableView.isHidden = true
+        self.isRefreshing = false
+    }
+    
+    @objc private func makeNilFilter() {
+        self.presenter.fullFilterDelete()
+        self.searchView.searchTextField.text = nil
+    }
+    
+    @objc private func makeFeedEmpty() {
+        self.presenter.makeDealsEmpty()
+        self.tableView.tableFooterView = nil
     }
         
 }
 
+//MARK: Extensions
 extension FeedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -209,28 +295,119 @@ extension FeedViewController: UITableViewDelegate {
         self.presenter.goToDeal(deal: self.presenter.deals[indexPath.row - (self.presenter.ad != nil ? 1 : 0)])
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView == self.tableView,
+              !self.isRefreshing,
+              !self.presenter.deals.isEmpty,
+              scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) else { return }
+        
+        if #available(iOS 13.0, *) {
+            let activityIndicatorView = UIActivityIndicatorView(style: .large)
+            
+            activityIndicatorView.startAnimating()
+            activityIndicatorView.color = .accentColor
+            
+            self.tableView.tableFooterView = activityIndicatorView
+        } else {
+            let activityIndicatorView = UIActivityIndicatorView(style: .gray)
+            
+            activityIndicatorView.startAnimating()
+            activityIndicatorView.color = .accentColor
+            
+            self.tableView.tableFooterView = activityIndicatorView
+        }
+        
+        self.isRefreshing = true
+        self.presenter.getDeals { [ weak self ] deals, _ in
+            self?.tableView.tableFooterView = nil
+            self?.isRefreshing = false
+            
+            if deals?.isEmpty ?? true && !(self?.presenter.deals.isEmpty ?? true) {
+                let label = UILabel()
+                
+                label.textColor = .accentColor
+                label.text = NSLocalizedString("All deals viewed", comment: .init())
+                label.font = .systemFont(ofSize: 18, weight: .semibold)
+                label.numberOfLines = .zero
+                label.textAlignment = .center
+                
+                self?.tableView.tableFooterView = label
+                self?.isRefreshing = true
+                
+                label.sizeToFit()
+            }
+        }
+    }
+    
 }
 
 extension FeedViewController: SearchViewDelegate {
     
-    func searchView(_ searchView: SearchView, editingSearchTextField textField: UITextField) {
-        self.presenter.setFilterTitle(textField.text ?? .init())
+    func searchView(_ searchView: SearchView, didTapSearchTextField textField: UITextField) {
+        self.presenter.goToSearch { [ weak self ] title in
+            searchView.searchTextField.text = title
+            
+            self?.presenter.setFilterCheckedIDs()
+//            full version
+//            self?.presenter.getRandomAd()
+            self?.presenter.makeDealsEmpty()
+            self?.presenter.setFilterTitle(title)
+            self?.activityIndicatorView.isHidden = false
+            self?.tableView.isHidden = true
+            self?.tableView.tableFooterView = nil
+            self?.isRefreshing = true
+            self?.presenter.getDeals { _, error in
+                self?.activityIndicatorView.isHidden = true
+                self?.tableView.isHidden = false
+                self?.error(error)
+                self?.isRefreshing = false
+            }
+        }
     }
     
     func searchView(_ searchView: SearchView, didTapSearchButton button: UIButton) {
-        self.presenter.deleteFilter()
-        self.presenter.getRandomAd()
-        self.presenter.getDeals { [ weak self ] _, error in
-            self?.error(error)
+        self.presenter.goToSearch { [ weak self ] title in
+            searchView.searchTextField.text = title
+            
+            self?.presenter.setFilterCheckedIDs()
+//            full version
+//            self?.presenter.getRandomAd()
+            self?.presenter.makeDealsEmpty()
+            self?.presenter.setFilterTitle(title)
+            self?.activityIndicatorView.isHidden = false
+            self?.tableView.isHidden = true
+            self?.tableView.tableFooterView = nil
+            self?.isRefreshing = true
+            self?.presenter.getDeals { _, error in
+                self?.activityIndicatorView.isHidden = true
+                self?.tableView.isHidden = false
+                self?.error(error)
+                self?.isRefreshing = false
+            }
         }
     }
     
     func searchView(_ searchView: SearchView, didTapFilterButton button: UIButton) {
-        guard let viewController = self.presenter.getFilter(completionHandler: { [ weak self ] _, error in
-            self?.error(error)
-        }) else {
+        guard let viewController = self.presenter.getFilter(
+            startHandler: { [ weak self ] in
+                self?.tableView.isHidden = true
+                self?.activityIndicatorView.isHidden = false
+                self?.presenter.setFilterCheckedIDs()
+            },
+            completionHandler: { [ weak self ] _, error in
+                self?.tableView.isHidden = false
+                self?.activityIndicatorView.isHidden = true
+                self?.error(error)
+            }
+        ) else {
             return
         }
+        
+        let transitioningDelegate = SPStorkTransitioningDelegate()
+        
+        viewController.transitioningDelegate = transitioningDelegate
+        viewController.modalPresentationStyle = .custom
+        viewController.modalPresentationCapturesStatusBarAppearance = true
         
         self.present(viewController, animated: true)
     }

@@ -11,16 +11,16 @@ final class ProfileRouter: ProfileCoordinatable {
     
     var coordinatorDelegate: ProfileCoordinator?
     
-    func goToOnboarding() {
-        self.coordinatorDelegate?.goToOnboarding()
+    func goToOnboarding(_ animated: Bool = true) {
+        self.coordinatorDelegate?.goToOnboarding(animated)
     }
     
-    func goToOffers(mode: OffersMode, offers: [Offer.Output]) {
-        self.coordinatorDelegate?.goToOffers(mode: mode, offers: offers)
+    func goToOffers(mode: OffersMode, userID: UUID? = nil) {
+        self.coordinatorDelegate?.goToOffers(mode: mode, userID: userID)
     }
     
-    func goToAds(ads: [Ad.Output]) {
-        self.coordinatorDelegate?.goToAds(ads: ads)
+    func goToAds(userID: UUID? = nil) {
+        self.coordinatorDelegate?.goToAds(userID: userID)
     }
     
     func goToEditProfile(user: User.Input) {
@@ -41,6 +41,18 @@ final class ProfileRouter: ProfileCoordinatable {
     
     func goToDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) {
         self.coordinatorDelegate?.goToDeal(dealID: dealID, deal: deal)
+    }
+    
+    func getComplaint(_ complaint: Complaint.Input) -> ComplaintViewController? {
+        self.coordinatorDelegate?.getComplaint(complaint)
+    }
+    
+    func getDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) -> DealViewController? {
+        self.coordinatorDelegate?.getDeal(dealID: dealID, deal: deal)
+    }
+    
+    func getBrowseImage(dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {
+        self.coordinatorDelegate?.getBrowseImage(dataSource)
     }
     
 }

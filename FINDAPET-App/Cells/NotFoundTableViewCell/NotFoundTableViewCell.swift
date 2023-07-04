@@ -42,7 +42,7 @@ final class NotFoundTableViewCell: UITableViewCell {
         self.backgroundColor = .clear
         self.selectionStyle = .none
         
-        self.addSubview(self.notFoundLabel)
+        self.contentView.addSubview(self.notFoundLabel)
         
         self.notFoundLabel.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview().inset(15)

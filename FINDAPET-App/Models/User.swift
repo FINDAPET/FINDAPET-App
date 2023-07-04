@@ -16,8 +16,10 @@ struct User: Decodable {
     var avatarPath: String?
     var documentPath: String?
     var description: String?
+    var basicCurrencyName: String
 }
 
+//MARK: - Extensions
 extension User {
     struct Input: Encodable {
         var id: UUID?
@@ -25,20 +27,18 @@ extension User {
         var avatarData: Data?
         var documentData: Data?
         var description: String?
-        var deviceToken: String?
         var isCatteryWaitVerify: Bool
-        var chatRoomsID: [UUID]
+        var chatRoomsID: [String]
         var countryCode: String?
         var basicCurrencyName: Currency
         
-        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, deviceToken: String? = nil, chatRoomsID: [UUID] = [UUID](), countryCode: String? = nil, basicCurrencyName: Currency = .USD) {
+        init(id: UUID? = nil, name: String = "", avatarData: Data? = nil, documentData: Data? = nil, description: String? = nil, isCatteryWaitVerify: Bool = false, chatRoomsID: [String] = .init(), countryCode: String? = nil, basicCurrencyName: Currency = .USD) {
             self.id = id
             self.name = name
             self.avatarData = avatarData
             self.documentData = documentData
             self.description = description
             self.isCatteryWaitVerify = isCatteryWaitVerify
-            self.deviceToken = deviceToken
             self.chatRoomsID = chatRoomsID
             self.countryCode = countryCode
             self.basicCurrencyName = basicCurrencyName
@@ -59,7 +59,9 @@ extension User {
         var myOffers: [Offer.Output]
         var offers: [Offer.Output]
         var chatRooms: [ChatRoom.Output]
-        var isPremiumUser: Bool
+        var score: Int
+        var subscription: Subscription.Output?
+        var isCatteryWaitVerify: Bool?
     }
 }
 
@@ -71,9 +73,12 @@ extension User {
     }
 }
 
-extension User.Output: SenderType {
-    
-    var senderId: String { self.id?.uuidString ?? String() }
-    var displayName: String { self.name }
-    
+extension User {
+    struct SenderType: MessageKit.SenderType {
+        var senderId: String
+        var displayName: String
+    }
 }
+
+extension User.Output: Hashable { }
+extension User: Hashable { }

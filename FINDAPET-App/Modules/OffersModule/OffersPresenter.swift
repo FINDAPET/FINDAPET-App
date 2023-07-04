@@ -10,15 +10,15 @@ import Foundation
 final class OffersPresenter {
     
     var callBack: (() -> Void)?
-    var offers = [Offer.Output]() {
+    let mode: OffersMode
+    private(set) var offers = [Offer.Output]() {
         didSet {
             self.callBack?()
         }
     }
-    let mode: OffersMode
+    private(set) var userID: UUID?
     private let router: OffersRouter
     private let interactor: OffersInteractor
-    private(set) var userID: UUID? = nil
     
     init(router: OffersRouter, interactor: OffersInteractor, mode: OffersMode, offers: [Offer.Output]) {
         self.mode = mode
@@ -44,7 +44,13 @@ final class OffersPresenter {
             return
         }
         
-        self.interactor.getUserOffers(userID: userID, completionHandler: completionHandler)
+        self.interactor.getUserOffers(userID: userID) { [ weak self ] offers, error in
+            completionHandler(offers, error)
+            
+            guard error == nil, let offers else { return }
+            
+            self?.offers = offers
+        }
     }
     
     func getUserMyOffers(completionHandler: @escaping ([Offer.Output]?, Error?) -> Void) {
@@ -56,7 +62,13 @@ final class OffersPresenter {
             return
         }
         
-        self.interactor.getUserMyOffers(userID: userID, completionHandler: completionHandler)
+        self.interactor.getUserMyOffers(userID: userID) { [ weak self ] offers, error in
+            completionHandler(offers, error)
+            
+            guard error == nil, let offers else { return }
+            
+            self?.offers = offers
+        }
     }
     
     func acceptOffer(offer: Offer.Output, completionHandler: @escaping (Error?) -> Void) {
@@ -71,13 +83,22 @@ final class OffersPresenter {
         self.interactor.acceptOffer(dealID: dealID, offerID: offerID, completionHandler: completionHandler)
     }
     
+    func deleteOffer(_ offerID: UUID, completionHandler: @escaping (Error?) -> Void = { _ in }) {
+        self.offers.removeAll { $0.id == offerID }
+        self.interactor.deleteOffer(offerID: offerID, completionHandler: completionHandler)
+    }
+    
 //    MARK: Routing
-    func goToChatRoom(userID: UUID? = nil) {
-        self.router.goToChatRoom(userID: userID)
+    func goToChatRoom(_ chatRoom: ChatRoom.Output) {
+        self.router.goToChatRoom(chatRoom: chatRoom)
     }
     
     func goToProfile(userID: UUID? = nil) {
         self.router.goToProfile(userID: userID)
+    }
+    
+    func goToDeal(_ deal: Deal.Output) {
+        self.router.goToDeal(deal: deal)
     }
     
 }

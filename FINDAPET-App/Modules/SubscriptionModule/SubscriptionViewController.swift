@@ -42,6 +42,17 @@ final class SubscriptionViewController: UIViewController {
         return view
     }()
     
+    private lazy var subscriptionInformationView: SubscriptionInformationView? = {
+        let view = self.presenter.getSubscriptionInforamation()
+        
+        view?.setupValues()
+        view?.alpha = self.presenter.getSubscription() == nil ? .zero : 1
+        view?.isHidden = self.presenter.getSubscription() == nil
+        view?.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
 //    MARK: Life Cycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -52,7 +63,9 @@ final class SubscriptionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.presenter.getSubscriptionProducts()
+        self.presenter.getSubscriptions { [ weak self ] _, error in
+            self?.error(error)
+        }
     }
     
 //    MARK: Setup Views
@@ -69,6 +82,26 @@ final class SubscriptionViewController: UIViewController {
             make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
         }
+        
+        guard let subscriptionInformationView = self.subscriptionInformationView else {
+            return
+        }
+        
+        self.view.addSubview(subscriptionInformationView)
+        self.view.insertSubview(subscriptionInformationView, at: 10)
+        
+        subscriptionInformationView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+        }
+        
+        if self.presenter.getSubscription() != nil {
+            self.navigationController?.navigationBar.isHidden = true
+            self.collectionView.isHidden = true
+            subscriptionInformationView.isHidden = false
+            subscriptionInformationView.alpha = 1
+            subscriptionInformationView.setupValues()
+        }
     }
 
 }
@@ -76,17 +109,20 @@ final class SubscriptionViewController: UIViewController {
 extension SubscriptionViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.presenter.products.count
+        self.presenter.subscriptions.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SubscriptionCollectionViewCell.cellID, for: indexPath) as? SubscriptionCollectionViewCell else {
-            return UICollectionViewCell()
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: SubscriptionCollectionViewCell.cellID,
+            for: indexPath
+        ) as? SubscriptionCollectionViewCell else {
+            return .init()
         }
         
-        cell.product = self.presenter.products[indexPath.item]
+        cell.subscription = self.presenter.subscriptions[indexPath.item]
         
-        if let subscription = self.presenter.getSubscription(), cell.product?.productIdentifier == subscription {
+        if let subscription = self.presenter.getSubscription(), cell.subscription?.id == subscription {
             cell.isSelected = true
         }
         
@@ -98,7 +134,30 @@ extension SubscriptionViewController: UICollectionViewDataSource {
 extension SubscriptionViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? SubscriptionCollectionViewCell else {
+        if let subscription = self.presenter.getSubscription(),
+           let cell = collectionView.cellForItem(at: indexPath) as? SubscriptionCollectionViewCell,
+           cell.subscription?.id != subscription {
+            collectionView.deselectItem(at: indexPath, animated: false)
+            
+            for i in .zero ..< collectionView.visibleCells.count {
+                guard let subCell = collectionView.visibleCells[i] as? SubscriptionCollectionViewCell,
+                      subCell.subscription?.id == subscription else {
+                    collectionView.selectItem(
+                        at: .init(item: i, section: .zero),
+                        animated: false,
+                        scrollPosition: .centeredHorizontally
+                    )
+                    
+                    continue
+                }
+            }
+            
+            return
+        }
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SubscriptionCollectionViewCell,
+              let titleSubscriptionID = cell.subscription?.id,
+              let userIDString = self.presenter.getUserID() else {
             return
         }
         
@@ -108,58 +167,35 @@ extension SubscriptionViewController: UICollectionViewDelegate {
             }
         }
         
-        if self.presenter.products[indexPath.item].productIdentifier != self.presenter.getSubscription() {
-            self.presenter.makePayment(self.presenter.products[indexPath.item]) { [ weak self ] error in
-                guard let self = self, error == nil else {
-                    return
-                }
+        self.presenter.makeUserPremium(
+            .init(
+                titleSubscriptionID: titleSubscriptionID,
+                expirationDate: .init().addingTimeInterval(.init(2_592_000 * (cell.subscription?.monthsCount ?? 1))),
+                userID: .init(uuidString: userIDString)
+            )) { [ weak self ] error in
+                self?.error(error)
+                self?.presenter.setSubscription(titleSubscriptionID)
+                self?.presenter.reloadProfileScreen()
+                self?.subscriptionInformationView?.setupValues()
+                self?.subscriptionInformationView?.alpha = .zero
+                self?.presenter.setPremiumUserDate(
+                    .init().addingTimeInterval(.init(2_592_000 * (cell.subscription?.monthsCount ?? 1)))
+                )
                 
-                self.presenter.makePayment(self.presenter.products[indexPath.item]) {
-                    self.error($0) {
-                        guard let id = ProductsID.getProductID(rawValue: self.presenter.products[indexPath.item].productIdentifier) else {
-                            print("❌ Error: product is equal to nil.")
-                            
-                            self.presentAlert(title: NSLocalizedString("Error", comment: String()))
-                            
-                            return
-                        }
-                        
-                        self.presenter.makeUserPremium(Subscription(productID: id)) { error in
-                            self.error(error) {
-                                switch id {
-                                case .premiumSubscriptionOneMonth:
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(month: 1),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                case .premiumSubscriptionThreeMonth:
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(month: 3),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                case .premiumSubscriptionSixMonth:
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(month: 6),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                case .premiumSubscriptionOneYear:
-                                    self.presenter.setPremiumUserDate(Calendar.current.nextDate(
-                                        after: .init(),
-                                        matching: .init(year: 1),
-                                        matchingPolicy: .previousTimePreservingSmallerComponents
-                                    ) ?? .init())
-                                default:
-                                    self.presentAlert(title: NSLocalizedString("Error", comment: .init()))
-                                }
-                            }
-                        }
+                UIView.animate(withDuration: 0.25) {
+                    self?.collectionView.alpha = .zero
+                    self?.view.backgroundColor = .accentColor
+                    self?.navigationController?.navigationBar.alpha = .zero
+                } completion: { completed in
+                    self?.navigationController?.navigationBar.isHidden = true
+                    self?.collectionView.isHidden = true
+                    self?.subscriptionInformationView?.isHidden = false
+                    
+                    UIView.animate(withDuration: 0.25) {
+                        self?.subscriptionInformationView?.alpha = 1
                     }
                 }
             }
-        }
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

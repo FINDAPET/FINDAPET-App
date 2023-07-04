@@ -12,12 +12,13 @@ protocol FeedCoordinatable {
     var coordinatorDelegate: FeedCoordinator? { get set }
 }
 
-final class FeedCoordinator: MainTabBarCoordinatable, Coordinator {
+final class FeedCoordinator: NSObject, MainTabBarCoordinatable, Coordinator {
     
-    var coordinatorDelegate: MainTabBarCoordinator?
+//    MARK: Properties
+    weak var coordinatorDelegate: MainTabBarCoordinator?
+    let navigationController = CustomNavigationController()
     
-    let navigationController = UINavigationController()
-    
+//    MARK: Start
     func start() {
         self.setupViews()
         self.goToFeed()
@@ -40,38 +41,29 @@ final class FeedCoordinator: MainTabBarCoordinatable, Coordinator {
     }
     
 //    MARK: Deal
-    func getDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) -> DealViewController {
-        let coordinator = ProfileCoordinator()
-        
-        coordinator.start()
-        
-        return coordinator.getDeal(dealID: dealID, deal: deal)
+    func getDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) -> DealViewController? {
+        self.coordinatorDelegate?.getDeal(dealID: dealID, deal: deal)
     }
     
     func goToDeal(dealID: UUID? = nil, deal: Deal.Output? = nil) {
-        self.navigationController.pushViewController(self.getDeal(dealID: dealID, deal: deal), animated: true)
-    }
-    
-    private func setupViews() {
-        self.navigationController.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Feed", comment: ""),
-            image: UIImage(systemName: "house"),
-            selectedImage: UIImage(systemName: "house")
-        )
-        self.navigationController.navigationBar.isHidden = true
+        guard let dealViewController = self.getDeal(dealID: dealID, deal: deal) else {
+            return
+        }
+        
+        self.navigationController.pushViewController(dealViewController, animated: true)
     }
     
 //    MARK: Profile
-    func getProfile(userID: UUID? = nil) -> ProfileViewController {
-        let coordinator = ProfileCoordinator()
-        
-        coordinator.start()
-        
-        return coordinator.getProfile(userID: userID)
+    func getProfile(userID: UUID? = nil) -> ProfileViewController? {
+        self.coordinatorDelegate?.getProfile(userID: userID)
     }
     
     func goToProfile(userID: UUID? = nil) {
-        self.navigationController.pushViewController(self.getProfile(userID: userID), animated: true)
+        guard let profileViewController = self.getProfile(userID: userID) else {
+            return
+        }
+        
+        self.navigationController.pushViewController(profileViewController, animated: true)
     }
     
 //    MARK: Filter
@@ -88,6 +80,47 @@ final class FeedCoordinator: MainTabBarCoordinatable, Coordinator {
     
     func goToFilter(filter: Filter, saveAction: @escaping (Filter) -> Void) {
         self.navigationController.pushViewController(self.getFilter(filter: filter, saveAction: saveAction), animated: true)
+    }
+    
+//    MARK: Search
+    func getSearch(with title: String?, _ onTapSearchButtonAction: @escaping (String) -> Void) -> SearchViewController {
+        let router = SearchRouter()
+        let interactor = SearchInteractor()
+        let presenter = SearchPresenter(
+            router: router,
+            interactor: interactor,
+            title: title,
+            onTapSearchButtonAction: onTapSearchButtonAction
+        )
+        let viewController = SearchViewController(presenter: presenter)
+        
+        router.coordinatorDelegate = self
+        
+        return viewController
+    }
+    
+    func goToSearch(with title: String?, _ onTapSearchButtonAction: @escaping (String) -> Void) {
+        self.navigationController.pushViewController(self.getSearch(with: title, onTapSearchButtonAction), animated: false)
+    }
+    
+//    MARK: Setup Views
+    private func setupViews() {
+        if #available(iOS 13.0, *) {
+            self.navigationController.tabBarItem = UITabBarItem(
+                title: NSLocalizedString("Feed", comment: ""),
+                image: UIImage(systemName: "house"),
+                selectedImage: UIImage(systemName: "house")
+            )
+        } else {
+            self.navigationController.navigationBar.tintColor = .accentColor
+            self.navigationController.tabBarItem = UITabBarItem(
+                title: NSLocalizedString("Feed", comment: ""),
+                image: UIImage(named: "house")?.withRenderingMode(.alwaysTemplate),
+                selectedImage: UIImage(named: "house")?.withRenderingMode(.alwaysTemplate)
+            )
+        }
+        
+        self.navigationController.navigationBar.isHidden = true
     }
     
 }

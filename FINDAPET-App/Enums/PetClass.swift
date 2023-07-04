@@ -22,3 +22,6 @@ enum PetClass: String, CaseIterable, Codable {
         return nil
     }
 }
+
+//MARK: - Etensions
+extension PetClass: Hashable { }

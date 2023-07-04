@@ -48,6 +48,15 @@ final class DealInteractor {
         )
     }
     
+    func viewDeal(with id: UUID, completionHandler: @escaping (Error?) -> Void) {
+        RequestManager.request(
+            method: .PUT,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.viewDeal(dealID: id),
+            completionHandler: completionHandler
+        )
+    }
+    
 //    MARK: User Defaults
     func getUserDefaults(_ key: UserDefaultsKeys) -> Any? {
         UserDefaultsManager.read(key: key)
@@ -58,8 +67,17 @@ final class DealInteractor {
     }
     
 //    MARK: Notification Center
-    func notificationCenterManagerPost(_ key: NotificationCenterManagerKeys) {
-        NotificationCenterManager.post(key)
+    func notificationCenterManagerPost(_ key: NotificationCenterManagerKeys, additional parameter: String? = nil) {
+        NotificationCenterManager.post(key, additional: parameter)
+    }
+    
+    func notificationCenterManagerAddObserver(
+        _ observer: Any,
+        name: NotificationCenterManagerKeys,
+        additional parameter: String? = nil,
+        action: Selector
+    ) {
+        NotificationCenterManager.addObserver(observer, name: name, additional: parameter, action: action)
     }
     
 //    MARK: Keychain

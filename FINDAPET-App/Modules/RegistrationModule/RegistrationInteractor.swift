@@ -29,6 +29,15 @@ final class RegistrationInteractor {
         )
     }
     
+    func setCurrencyRequest(_ currency: String, completionHandler: @escaping (Error?) -> Void) {
+        RequestManager.request(
+            method: .PUT,
+            authMode: .bearer(value: self.getBearrer() ?? .init()),
+            url: URLConstructor.defaultHTTP.changeUser(baseCurrencyName: currency),
+            completionHandler: completionHandler
+        )
+    }
+    
 //    MARK: Keychain
     
     func writeKeychainBasic(email: String, password: String) {
@@ -38,6 +47,10 @@ final class RegistrationInteractor {
     
     func writeKeychainBearer(token: String) {
         KeychainManager.shared.write(value: token, key: .token)
+    }
+    
+    func getBearrer() -> String? {
+        KeychainManager.shared.read(key: .token)
     }
     
 //    MARK: Registration

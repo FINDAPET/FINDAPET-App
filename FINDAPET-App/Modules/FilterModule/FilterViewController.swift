@@ -16,6 +16,12 @@ final class FilterViewController: UIViewController {
         self.presenter = presenter
         
         super.init(nibName: nil, bundle: nil)
+        
+        self.presenter.callBack = { [ weak self ] in
+            self?.selectedPetType = self?.presenter.petTypes.first { $0.id == self?.presenter.filter.petTypeID }
+            self?.sexCollectionView.reloadData()
+            self?.petTypeCollectionView.reloadData()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -23,10 +29,14 @@ final class FilterViewController: UIViewController {
     }
     
 //    MARK: Properties
-    private var selectedIsMale: Bool?
-    private var selectedPetType: PetType? {
-        didSet {
-            self.breedValueLabel.text = PetBreed.other.rawValue
+    private lazy var selectedIsMale = self.presenter.filter.isMale
+    private lazy var selectedPetType = self.presenter.petTypes.first(where: { [ weak self ] petType in
+        petType.id == self?.presenter.filter.petTypeID
+    }) {
+        willSet {
+            if self.selectedPetType != nil && self.selectedPetType?.id != newValue?.id {
+                self.breedValueLabel.text = NSLocalizedString("Not Selected(breed)", comment: .init())
+            }
         }
     }
     
@@ -92,8 +102,10 @@ final class FilterViewController: UIViewController {
     
     private lazy var breedValueLabel: UILabel = {
         let view = UILabel()
+        let filterPetBreedID = self.presenter.filter.petBreedID
         
-        view.text = self.presenter.filter.petBreed?.rawValue ?? "–"
+        view.text = self.presenter.allBreeds
+            .first { $0.id == filterPetBreedID }?.name ?? NSLocalizedString("Not Selected(breed)", comment: .init())
         view.textColor = .accentColor
         view.backgroundColor = .textFieldColor
         view.font = .systemFont(ofSize: 24, weight: .semibold)
@@ -126,7 +138,7 @@ final class FilterViewController: UIViewController {
     private lazy var petClassValueLabel: UILabel = {
         let view = UILabel()
         
-        view.text = self.presenter.filter.petClass?.rawValue ?? PetClass.allClass.rawValue
+        view.text = self.presenter.filter.petClass?.rawValue ?? NSLocalizedString("Not Selected(class)", comment: .init())
         view.textColor = .accentColor
         view.backgroundColor = .textFieldColor
         view.font = .systemFont(ofSize: 24, weight: .semibold)
@@ -184,6 +196,7 @@ final class FilterViewController: UIViewController {
     private lazy var countryTextField: UITextField = {
         let view = UITextField()
          
+        view.text = self.presenter.filter.country
         view.textColor = .textColor
         view.backgroundColor = .textFieldColor
         view.placeholder = NSLocalizedString("Country", comment: "")
@@ -198,6 +211,7 @@ final class FilterViewController: UIViewController {
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.addTarget(self, action: #selector(self.editingCountryTextField(_:)), for: .allEditingEvents)
         view.rightViewMode = .always
+        view.delegate = self
          
         return view
     }()
@@ -205,6 +219,7 @@ final class FilterViewController: UIViewController {
     private lazy var cityTextField: UITextField = {
         let view = UITextField()
          
+        view.text = self.presenter.filter.city
         view.textColor = .textColor
         view.backgroundColor = .textFieldColor
         view.placeholder = NSLocalizedString("City", comment: "")
@@ -219,6 +234,7 @@ final class FilterViewController: UIViewController {
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.addTarget(self, action: #selector(self.editingCityTextField(_:)), for: .allEditingEvents)
         view.rightViewMode = .always
+        view.delegate = self
          
         return view
     }()
@@ -239,10 +255,37 @@ final class FilterViewController: UIViewController {
     }()
     
     //    MARK: Life Cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.presenter.getAllPetTypes()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.setupViews()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let selectedPetType, let id = selectedPetType.id,
+           let index = self.presenter.petTypes.firstIndex(where: { $0.id == id }) {
+            self.petTypeCollectionView.selectItem(
+                at: .init(item: index, section: .zero),
+                animated: true,
+                scrollPosition: .bottom
+            )
+        }
+        
+        if let selectedIsMale {
+            self.sexCollectionView.selectItem(
+                at: .init(item: selectedIsMale ? .zero : 1, section: .zero),
+                animated: true,
+                scrollPosition: .bottom
+            )
+        }
     }
     
     //    MARK: Setup Views
@@ -250,6 +293,11 @@ final class FilterViewController: UIViewController {
         self.view.backgroundColor = .backgroundColor
         self.navigationController?.navigationBar.isHidden = true
         self.tabBarController?.tabBar.isHidden = true
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
         
         self.view.addSubview(self.titleLabel)
         self.view.addSubview(self.resetButton)
@@ -352,10 +400,10 @@ final class FilterViewController: UIViewController {
     
 //    MARK: Setup Values
     private func setupValues() {
-        self.breedValueLabel.text = "–"
-        self.petClassValueLabel.text = PetClass.allClass.rawValue
-        self.countryTextField.text = .init()
-        self.cityTextField.text = .init()
+        self.breedValueLabel.text = NSLocalizedString("Not Selected(breed)", comment: .init())
+        self.petClassValueLabel.text = NSLocalizedString("Not Selected(class)", comment: .init())
+        self.countryTextField.text = nil
+        self.cityTextField.text = nil
         self.selectedIsMale = nil
         self.selectedPetType = nil
         
@@ -376,46 +424,89 @@ final class FilterViewController: UIViewController {
     
     @objc private func didTapBreedValueLabel() {
         var breedList = [String]()
-        
-        switch self.selectedPetType {
-        case .cat:
-            breedList = PetBreed.allCatBreeds.map { $0.rawValue }.sorted(by: <)
-        case .dog:
-            breedList = PetBreed.allDogBreeds.map { $0.rawValue }.sorted(by: <)
-        default:
-            breedList = PetBreed.allCases.map { $0.rawValue }.sorted(by: <)
+                
+        for petBreed in self.selectedPetType?.petBreeds ?? self.presenter.allBreeds.map({
+            var petBreed = $0
+            
+            if petBreed.name == "Other", let name = petBreed.petType?.name {
+                petBreed.name += "(\(name))"
+            }
+            
+            return petBreed
+        }) {
+            breedList.append(petBreed.name)
         }
         
         self.presentActionsSheet(
             title: NSLocalizedString("Breed", comment: .init()),
             contents: breedList
         ) { [ weak self ] alertAction in
+            guard var title = alertAction.title else {
+                return
+            }
+            
             self?.breedValueLabel.text = alertAction.title
-            self?.presenter.setPetBreed(alertAction.title)
+            
+            if title.contains("Other") {
+                for name in self?.presenter.petTypes.map({ $0.name }) ?? .init() {
+                    if title.contains(name) {
+                        title = title.replacingOccurrences(of: "(\(name))", with: String())
+                        
+                        break
+                    }
+                }
+            }
+            
+            if let petBreed = self?.presenter.allBreeds.filter({ $0.name == title }).first {
+                self?.presenter.setPetBreed(petBreed.id)
+                self?.presenter.setPetType(petBreed.petType?.id)
+                self?.selectedPetType = self?.presenter.petTypes.first { $0.id == petBreed.petType?.id }
+                
+                guard let index = self?.presenter.petTypes.firstIndex(where: { $0.id == petBreed.petType?.id }) else {
+                    return
+                }
+                
+                self?.petTypeCollectionView.selectItem(
+                    at: .init(item: index, section: .zero),
+                    animated: true,
+                    scrollPosition: .centeredHorizontally
+                )
+            }
         }
     }
     
     @objc private func didTapPetClassValueLabel() {
         self.presentActionsSheet(
             title: NSLocalizedString("Pet Class", comment: .init()),
-            contents: PetClass.allCases.map { $0.rawValue }.sorted(by: <)
+            contents: (self.presenter.getPetClasses() ?? PetClass.allCases.map { $0.rawValue }).sorted(by: <)
         ) { [ weak self ] alertAction in
             self?.petClassValueLabel.text = alertAction.title
-            self?.presenter.setPetClass(alertAction.title)
+            self?.presenter.setPetClass(
+                alertAction.title == NSLocalizedString("Not Selected(class)", comment: .init()) ? nil : alertAction.title
+            )
         }
     }
     
     @objc private func editingCountryTextField(_ sender: UITextField) {
-        self.presenter.setCountry(sender.text)
+        self.presenter.setCountry(sender.text?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ?? true ? nil : sender.text?.trimmingCharacters(in: .whitespacesAndNewlines))
     }
     
     @objc private func editingCityTextField(_ sender: UITextField) {
-        self.presenter.setCountry(sender.text)
+        self.presenter.setCity(sender.text?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ).isEmpty ?? true ? nil : sender.text?.trimmingCharacters(in: .whitespacesAndNewlines))
     }
     
     @objc private func didTapResetButton() {
-        self.setupValues()
         self.presenter.resetFilter()
+        self.presenter.saveFilter()
+        self.dismiss(animated: true)
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
     }
         
 }
@@ -424,7 +515,7 @@ final class FilterViewController: UIViewController {
 extension FilterViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        collectionView == self.petTypeCollectionView ? PetType.allCases.count : 2
+        collectionView == self.petTypeCollectionView ? self.presenter.petTypes.count : 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -436,11 +527,10 @@ extension FilterViewController: UICollectionViewDataSource {
                 return .init()
             }
                     
-            cell.petType = PetType.allCases[indexPath.row]
+            cell.petType = self.presenter.petTypes[indexPath.row]
+            cell.backgroundColor = .textFieldColor
             
-            if self.presenter.filter.petType == cell.petType {
-                cell.isSelected = true
-            }
+            cell.isSelected = self.presenter.filter.petTypeID == cell.petType?.id
             
             return cell
         }
@@ -453,10 +543,8 @@ extension FilterViewController: UICollectionViewDataSource {
         }
                 
         cell.isMale = indexPath.row == 0
-        
-        if self.presenter.filter.isMale == cell.isMale {
-            cell.isSelected = true
-        }
+                
+        cell.isSelected = self.presenter.filter.isMale == cell.isMale
         
         return cell
     }
@@ -483,7 +571,7 @@ extension FilterViewController: UICollectionViewDelegate {
                 self.presenter.setPetType()
                 self.selectedPetType = nil
             } else {
-                self.presenter.setPetType(cell.petType?.rawValue)
+                self.presenter.setPetType(cell.petType?.id)
                 self.selectedPetType = cell.petType
             }
         } else {
@@ -507,15 +595,35 @@ extension FilterViewController: UICollectionViewDelegate {
 
 extension FilterViewController: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         .init(
             width: (self.view.bounds.width - 45) / 2,
             height: collectionView == self.petTypeCollectionView ? (self.view.bounds.width - 45) / 2 : 50
         )
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        15
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat { 15 }
+    
+}
+
+extension FilterViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == self.countryTextField {
+            self.cityTextField.becomeFirstResponder()
+        } else {
+            textField.resignFirstResponder()
+        }
+        
+        return true
     }
     
 }

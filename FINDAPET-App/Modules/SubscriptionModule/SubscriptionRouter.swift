@@ -11,4 +11,8 @@ final class SubscriptionRouter: SubscriptionCoordinatable {
     
     var coordinatorDelegate: SubscriptionCoordinator?
     
+    func getSubscriptionInforamation() -> SubscriptionInformationView? {
+        self.coordinatorDelegate?.getSubscriptionInformation()
+    }
+    
 }

@@ -12,7 +12,7 @@ final class DealPresenter {
     
     var callBack: (() -> Void)?
     private(set) var deal: Deal.Output? {
-        didSet {
+        didSet {            
             self.callBack?()
         }
     }
@@ -47,8 +47,8 @@ final class DealPresenter {
     }
     
 //    MARK: Requests
-    func getDeal(completionHandler: @escaping (Deal.Output?, Error?) -> Void) {
-        guard let dealID = self.dealID else {
+    func getDeal(completionHandler: @escaping (Deal.Output?, Error?) -> Void = { _, _ in }) {
+        guard let dealID = self.dealID ?? self.deal?.id else {
             completionHandler(nil, nil)
             
             return
@@ -85,24 +85,18 @@ final class DealPresenter {
                 isPremiumDeal: deal.isPremiumDeal,
                 isActive: deal.isActive,
                 mode: DealMode.getDealMode(deal.mode) ?? .everywhere,
-                petType: PetType.getPetType(deal.petType) ?? .cat,
-                petBreed: PetBreed.getPetBreed(deal.petBreed) ?? .other,
-                petClass: PetClass.getPetClass(deal.petClass) ?? .allClass,
+                petTypeID: deal.petType.id,
+                petBreedID: deal.petBreed.id,
+                petClass: deal.petClass,
                 isMale: deal.isActive,
-                age: deal.age,
+                birthDate: ISO8601DateFormatter().date(from: deal.birthDate) ?? .init(),
                 color: deal.color,
-                price: Double(deal.price),
+                price: deal.price != nil ? Double(deal.price ?? .zero) : nil,
                 currencyName: Currency.getCurrency(wtih: deal.currencyName) ?? .USD,
                 catteryID: deal.cattery.id ?? UUID(),
                 country: deal.country,
                 city: deal.city,
                 description: deal.description,
-                whatsappNumber: deal.whatsappNumber,
-                telegramUsername: deal.telegramUsername,
-                instagramUsername: deal.instagramUsername,
-                facebookUsername: deal.facebookUsername,
-                vkUsername: deal.vkUsername,
-                mail: deal.mail,
                 buyerID: deal.buyer?.id
             ),
             completionHandler: completionHandler
@@ -121,6 +115,26 @@ final class DealPresenter {
         self.interactor.deleteDeal(with: dealID, competionHandler: completionHandler)
     }
     
+    func viewDeal(completionHandler: @escaping (Error?) -> Void = { _ in }) {
+        guard self.deal?.cattery.id != self.getUserID() else {
+            print("❌ Error: bad request")
+            
+            completionHandler(RequestErrors.statusCodeError(statusCode: 500))
+            
+            return
+        }
+        
+        guard let id = self.deal?.id else {
+            print("❌ Error: deal id is equal to nil.")
+            
+            completionHandler(RequestErrors.statusCodeError(statusCode: 404))
+            
+            return
+        }
+        
+        self.interactor.viewDeal(with: id, completionHandler: completionHandler)
+    }
+    
 //    MARK: User Defaults
     func getUserID() -> UUID? {
         guard let string = self.interactor.getUserDefaults(.id) as? String else {
@@ -135,21 +149,99 @@ final class DealPresenter {
         self.interactor.notificationCenterManagerPost(.reloadProfileScreen)
     }
     
+    func notificationCenterManagerPostMakeFeedEmpty() {
+        self.interactor.notificationCenterManagerPost(.makeFeedEmpty)
+    }
+    
+    func notificationCenterManagerPostMakeFeedRefreshing() {
+        self.interactor.notificationCenterManagerPost(.makeFeedRefreshing)
+    }
+    
+    func notificationCenterManagerAddObserverUpdateDealScreen(
+        _ observer: Any,
+        action: Selector
+    ) {
+        self.interactor.notificationCenterManagerAddObserver(
+            observer,
+            name: .reloadDealScreen,
+            additional: self.deal?.id?.uuidString,
+            action: action
+        )
+    }
+    
 //    MARK: Routing
-    func goToProfile() {
-        self.router.goToProfile(with: self.deal?.cattery.id)
+    func getProfile(with id: UUID? = nil) -> ProfileViewController? {
+        self.router.getProfile(with: id)
     }
     
-    func goToChatRoom() {
-        self.router.goToChatRoom(userID: self.deal?.cattery.id)
+    func getChatRoom() -> ChatRoomViewController? {
+        guard let cattery = self.deal?.cattery else {
+            return nil
+        }
+        
+        return self.router.getChatRoom(chatRoom: .init(users: [cattery, .init(
+            id: self.getUserID(),
+            name: .init(),
+            deals: .init(),
+            boughtDeals: .init(),
+            ads: .init(),
+            myOffers: .init(),
+            offers: .init(),
+            chatRooms: .init(),
+            score: .zero
+        )], messages: .init()))
     }
     
-    func getCreateOffer() -> CreateOfferViewController?{
+    func getCreateOffer() -> CreateOfferViewController? {
         guard let deal = self.deal else {
             return nil
         }
         
         return self.router.getCreateOffer(deal: deal)
+    }
+    
+    func getComplaint() -> ComplaintViewController? {
+        guard let id = self.getUserID() else {
+            return nil
+        }
+        
+        return self.router.getComplaint(.init(text: .init(), senderID: id, dealID: self.deal?.id))
+    }
+    
+    func getBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {
+        self.router.getBrowseImage(dataSource)
+    }
+    
+    func getEditDeal() -> EditDealViewController? {
+        guard let deal = self.deal else {
+            return nil
+        }
+        
+        return self.router.getEditDeal(
+            .init(
+                id: deal.id,
+                title: deal.title,
+                photoDatas: deal.photoDatas,
+                tags: deal.tags,
+                isPremiumDeal: deal.isPremiumDeal,
+                isActive: deal.isActive,
+                mode: .getDealMode(deal.mode),
+                petTypeID: deal.petType.id,
+                petBreedID: deal.petBreed.id,
+                petClass: deal.petClass,
+                isMale: deal.isMale,
+                birthDate: ISO8601DateFormatter().date(from: deal.birthDate) ?? .init(),
+                color: deal.color,
+                price: deal.price,
+                currencyName: .getCurrency(wtih: deal.currencyName) ?? .USD,
+                catteryID: deal.cattery.id ?? .init(),
+                country: deal.country,
+                city: deal.city,
+                description: deal.description,
+                buyerID: deal.buyer?.id
+            ),
+            isCreate: false
+        )
     }
     
 }

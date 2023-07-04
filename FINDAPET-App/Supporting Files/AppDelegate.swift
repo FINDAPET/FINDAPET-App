@@ -10,20 +10,30 @@ import CoreData
 import UserNotifications
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        self.registerForPushNotifications()
-        self.checkSusbscription()
+//    MARK: - Porperties
+    var window: UIWindow?
+    private let registrationCoordinator: RegistrationCoordinator = {
+        let coordinator = RegistrationCoordinator()
         
-        if #available(iOS 16, *) {
-            self.setCurrency(Locale.current.currency?.identifier ?? Currency.USD.rawValue)
-        } else {
-            self.setCurrency(Locale.current.currencyCode ?? Currency.USD.rawValue)
+        coordinator.start()
+        
+        return coordinator
+    }()
+    
+//    MARK: - Application
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        if #unavailable(iOS 13.0) {
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            self.window?.rootViewController = self.registrationCoordinator.navigationController
+            self.window?.makeKeyAndVisible()
         }
         
+        self.checkSusbscription()
+        
         do {
-            try YandexMobileMetricaManager.start(with: ymmYnadexMetricaAPIKey)
+            try YandexMobileMetricaManager.start(with: .init(ymmYnadexMetricaAPIKey))
         } catch {
             print("❌ Error: \(error.localizedDescription)")
         }
@@ -31,75 +41,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "FINDAPET_App")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-
-    // MARK: - Core Data Saving support
-
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
-    
-    func registerForPushNotifications() {
-      UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-        (granted, error) in
-          print("Permission granted: \(granted)")
-          
-          guard granted else { return }
-        
-          self.getNotificationSettings()
-      }
-    }
-    
-    func getNotificationSettings() {
-      UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-          print("Notification settings: \(settings)")
-          
-          guard settings.authorizationStatus == .authorized else { return }
-          
-          DispatchQueue.main.sync {
-              UIApplication.shared.registerForRemoteNotifications()
-          }
-      }
-    }
-    
+//    MARK: - Notifications
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let tokenParts = deviceToken.map { data -> String in
-            return String(format: "%02.2hhx", data)
-        }
-      
-        let token = tokenParts.joined()
+        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         
         UserDefaultsManager.write(data: token, key: .deviceToken)
+        NotificationManager.shared.callBack?()
         
-        print("Device Token: \(token)")
+        print("❕Device Token: \(token)")
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("Failed to register: \(error)")
+        print("❌ Failed to register for remote notifications: \(error)")
     }
     
-    private func setCurrency(_ value: String) {
-        UserDefaultsManager.write(data: value, key: .currency)
-    }
-    
+//    MARK: - Check Subscription
     private func checkSusbscription() {
         guard let date = UserDefaultsManager.read(key: .premiumUserDate) as? Date, date >= .init() else {
             UserDefaultsManager.write(data: nil, key: .premiumUserDate)

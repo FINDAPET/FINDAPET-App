@@ -52,10 +52,17 @@ class SettingsViewController: UIViewController {
     private func setupViews() {
         self.view.backgroundColor = .accentColor
         self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationController?.navigationBar.setBackgroundImage(.init(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = .init()
         self.title = NSLocalizedString("Settings", comment: "")
         self.navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor : UIColor.white]
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIInputViewController.dismissKeyboard)
+        ))
         
         guard let settigsBlockView = self.settigsBlockView else {
             return
@@ -72,6 +79,11 @@ class SettingsViewController: UIViewController {
 //    MARK: Setup Datas
     private func setupSettingsBlockViewText(_ text: String) {
         self.settigsBlockView?.setupCurrencyValueText(text)
+    }
+    
+//    MARK: Actions
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
     }
 
 }

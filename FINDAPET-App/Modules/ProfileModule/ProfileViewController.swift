@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import SideMenu
+import JGProgressHUD
 
 final class ProfileViewController: UIViewController {
 
@@ -18,10 +19,9 @@ final class ProfileViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
         
-        self.presenter.callBack = { [ weak self ] in self?.tableView.reloadData() }
-        
-        if self.presenter.userID == nil {
-            NotificationCenterManager.addObserver(self, name: .reloadProfileScreen, action: #selector(self.refreshScreen))
+        self.presenter.callBack = { [ weak self ] in
+            self?.tableView.reloadData()
+            self?.setupNavigationBar()
         }
     }
     
@@ -29,20 +29,33 @@ final class ProfileViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    MARK: Propertiest
-    private var isHamburgerViewClossed = true
-    
 //    MARK: UI Properties
     private lazy var activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .medium)
+        if #available(iOS 13.0, *) {
+            let view = UIActivityIndicatorView(style: .medium)
+            
+            view.startAnimating()
+            view.isHidden = self.presenter.user != nil
+            view.color = .accentColor
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
-        view.isHidden = true
+        view.isHidden = self.presenter.user != nil
+        view.color = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
-        if self.presenter.user == nil {
-            view.isHidden = false
-        }
+        return view
+    }()
+    
+    private let progressIndicator: JGProgressHUD = {
+        let view = JGProgressHUD()
+        
+        view.textLabel.text = NSLocalizedString("Loading", comment: .init())
         
         return view
     }()
@@ -60,18 +73,15 @@ final class ProfileViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         
-        view.backgroundColor = .clear
+        view.backgroundColor = .backgroundColor
         view.dataSource = self
         view.delegate = self
         view.refreshControl = self.refreshControl
         view.register(ProfileTableViewCell.self, forCellReuseIdentifier: ProfileTableViewCell.id)
         view.register(DealTableViewCell.self, forCellReuseIdentifier: DealTableViewCell.cellID)
         view.separatorColor = .clear
+        view.isHidden = self.presenter.user == nil
         view.translatesAutoresizingMaskIntoConstraints = false
-        
-        if self.presenter.user == nil {
-            view.isHidden = true
-        }
         
         return view
     }()
@@ -90,15 +100,17 @@ final class ProfileViewController: UIViewController {
                 (title: NSLocalizedString("Suggested offers", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToOffers()
             }),
-                (title: NSLocalizedString("My ad", comment: ""), color: .white, action: { [ weak self ] in
-                    self?.presenter.goToAds()
-            }),
+//                full version
+//                (title: NSLocalizedString("My ad", comment: ""), color: .white, action: { [ weak self ] in
+//                    self?.presenter.goToAds()
+//            }),
                 (title: NSLocalizedString("Edit profile", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToEditProfile()
             }),
-                (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: { [ weak self ] in
-                    self?.presenter.goToCreateAd()
-            }),
+//                full version
+//                (title: NSLocalizedString("Create ad", comment: ""), color: .white, action: { [ weak self ] in
+//                    self?.presenter.goToCreateAd()
+//            }),
                 (title: NSLocalizedString("Settings", comment: ""), color: .white, action: { [ weak self ] in
                     self?.presenter.goToSettings()
             }),
@@ -112,6 +124,7 @@ final class ProfileViewController: UIViewController {
         )
         
         view.view.backgroundColor = .accentColor
+        view.view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         view.view.layer.cornerRadius = 25
         
         return view
@@ -120,29 +133,65 @@ final class ProfileViewController: UIViewController {
     private lazy var sideMenuViewController: SideMenuNavigationController = {
         let view = SideMenuNavigationController(rootViewController: self.slideMenuViewController)
         
+        view.navigationBar.backgroundColor = .clear
         view.presentationStyle = .menuSlideIn
-        view.menuWidth = 220
+        view.menuWidth = 230
         
         return view
     }()
     
-    private let translutionView: UIView = {
+    private lazy var complaintViewController: ComplaintViewController? = {
+        let viewController = self.presenter.getComplaint()
+        
+        viewController?.view.clipsToBounds = true
+        viewController?.view.layer.masksToBounds = true
+        viewController?.view.layer.cornerRadius = 25
+        viewController?.view.alpha = .zero
+        viewController?.didTapSendButtonCallBack = { [ weak self ] in
+            UIView.animate(withDuration: 0.2) {
+                viewController?.view.alpha = .zero
+                self?.translutionView.alpha = .zero
+            } completion: { isComplete in
+                if isComplete {
+                    self?.translutionView.isHidden = true
+                    viewController?.view.removeFromSuperview()
+                    viewController?.removeFromParent()
+                }
+            }
+        }
+        viewController?.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return viewController
+    }()
+    
+    private lazy var translutionView: UIView = {
         let view = UIView()
         
         view.alpha = .zero
         view.backgroundColor = .black
         view.isHidden = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapTranslutionView)))
+        view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
-//    MARK: Life Cycle
+    private lazy var browseImageViewController = self.presenter.getBrowseImage(dataSource: self)
     
+//    MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+                
+        guard self.presenter.userID == nil else {
+            return
+        }
         
-        self.getUser()
+        self.presenter.notificationCenterManagerAddObserver(
+            self,
+            name: .reloadProfileScreen,
+            action: #selector(self.refreshScreen)
+        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -151,26 +200,25 @@ final class ProfileViewController: UIViewController {
         self.setupViews()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.getUser()
+    }
+    
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         self.tabBarController?.tabBar.isHidden = false
+        self.tabBarController?.navigationController?.navigationBar.isHidden = true
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor : UIColor.textColor]
         self.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: String())
         self.title = NSLocalizedString("Profile", comment: "")
-        
-        if self.presenter.userID == nil {
-            self.navigationItem.setHidesBackButton(true, animated: false)
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "list.bullet"),
-                style: .plain,
-                target: self,
-                action: #selector(self.didTapSlideMenuBarButton)
-            )
-        }
-        
+        self.navigationItem.setHidesBackButton(self.presenter.userID == nil, animated: false)
+                
         self.view.addSubview(self.activityIndicatorView)
         self.view.addSubview(self.tableView)
         
@@ -186,6 +234,43 @@ final class ProfileViewController: UIViewController {
         
         self.translutionView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview()
+        }
+    }
+    
+//    MARK: - Setup Navigation Bar
+    private func setupNavigationBar() {
+        if self.presenter.userID == nil || self.presenter.userID == self.presenter.getMyID() {
+            if #available(iOS 13.0, *) {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: UIImage(systemName: "list.bullet"),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapSlideMenuBarButton)
+                )
+            } else {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: UIImage(named: "list.bullet")?.withRenderingMode(.alwaysTemplate),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapSlideMenuBarButton)
+                )
+            }
+        } else if self.presenter.userID != self.presenter.getMyID() {
+            if #available(iOS 13.0, *) {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: UIImage(systemName: "exclamationmark.triangle"),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapComplaintNavigationBarButton)
+                )
+            } else {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                    image: UIImage(named: "exclamationmark.triangle")?.withRenderingMode(.alwaysTemplate),
+                    style: .plain,
+                    target: self,
+                    action: #selector(self.didTapComplaintNavigationBarButton)
+                )
+            }
         }
     }
     
@@ -231,18 +316,66 @@ final class ProfileViewController: UIViewController {
     }
     
     private func logOut() {
-        self.presenter.logOut {  [ weak self ] error in
-            self?.error(error) { [ weak self ] in
+        self.progressIndicator.show(in: self.view)
+        self.presenter.logOut { [ weak self ] error in
+            self?.progressIndicator.dismiss(animated: true)
+            self?.error(error) {
                 self?.presenter.writeIsFirstEditing()
                 self?.presenter.deleteKeychainData()
-                self?.presenter.goToOnboarding()
+                self?.presenter.deleteCity()
+                self?.presenter.deleteCountry()
+                self?.presenter.deleteUserID()
+                self?.presenter.deleteDealsID()
+                self?.presenter.deleteUserName()
+                self?.presenter.deleteDeviceToken()
+                self?.presenter.deleteUserCurrency()
+                self?.presenter.deleteNotificationScreensID()
+                self?.presenter.notificationCenterManagerPostMakeChatRoomsRefreshing()
+                self?.presenter.notificationCenterManagerPostMakeFeedRefreshing()
+                self?.presenter.notificationCenterManagerPostMakeNilFilter()
+                self?.presenter.notificationCenterManagerPostMakeFeedEmpty()
+                self?.presenter.notificationCenterManagerPostMakeChatRoomsEmpty()
+                self?.activityIndicatorView.isHidden = false
+                self?.tableView.isHidden = true
+                self?.tabBarController?.selectedIndex = .zero
+                
+                if self?.tabBarController?.navigationController?.viewControllers.first is OnboardingViewController {
+                    guard !(self?.tabBarController?.navigationController?.viewControllers.isEmpty ?? true),
+                          let viewController = self?.tabBarController?.navigationController?.viewControllers.first else {
+                        return
+                    }
+                    
+                    self?.tabBarController?.navigationController?.popToViewController(viewController, animated: true)
+                } else if self?.tabBarController?.navigationController?.viewControllers.first is LaunchScreenViewController
+                            && !(self?.tabBarController?.navigationController?.viewControllers[1] is UITabBarController) {
+                    guard self?.tabBarController?.navigationController?.viewControllers.count ?? .zero >= 2,
+                          let viewController = self?.tabBarController?.navigationController?.viewControllers[1] else {
+                        return
+                    }
+                    
+                    self?.tabBarController?.navigationController?.popToViewController(viewController, animated: true)
+                } else {
+                    guard !(self?.tabBarController?.navigationController?.viewControllers.isEmpty ?? true),
+                          let viewController = self?.tabBarController?.navigationController?.viewControllers.first else {
+                        return
+                    }
+                    
+                    self?.tabBarController?.navigationController?.popToViewController(viewController, animated: false)
+                    self?.presenter.goToOnboarding(false)
+                }
             }
         }
     }
     
 //    MARK: Actions
     @objc private func didTapSlideMenuBarButton() {
+        self.translutionView.alpha = .zero
+        self.translutionView.isHidden = false
+        
         self.present(self.sideMenuViewController, animated: true)
+        UIView.animate(withDuration: 0.2) { [ weak self ] in
+            self?.translutionView.alpha = 0.5
+        }
     }
     
     @objc private func onRefresh() {
@@ -250,7 +383,66 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func refreshScreen() {
+        self.activityIndicatorView.isHidden = false
+        self.tableView.isHidden = true
         self.getUser()
+    }
+    
+    @objc private func didTapTranslutionView() {
+        guard let viewController = self.complaintViewController,
+              viewController.parent != nil,
+              viewController.view.superview != nil else {
+            self.sideMenuViewController.dismiss(animated: true)
+            
+            UIView.animate(withDuration: 0.2) { [ weak self ] in
+                self?.translutionView.alpha = .zero
+            } completion: { [ weak self ] isCompleted in
+                guard isCompleted else {
+                    return
+                }
+                
+                self?.translutionView.isHidden = true
+            }
+            
+            return
+        }
+        
+        self.sideMenuViewController.dismiss(animated: true)
+        
+        UIView.animate(withDuration: 0.2) { [ weak self ] in
+            viewController.view.alpha = .zero
+            self?.translutionView.alpha = .zero
+        } completion: { [ weak self ] isComplete in
+            if isComplete {
+                self?.translutionView.isHidden = true
+                viewController.view.removeFromSuperview()
+                viewController.removeFromParent()
+            }
+        }
+    }
+    
+    @objc private func didTapComplaintNavigationBarButton() {
+        guard self.presenter.user != nil, let complaintViewController  = self.complaintViewController else {
+            return
+        }
+        
+        self.addChild(complaintViewController)
+        self.view.addSubview(complaintViewController.view)
+        self.view.insertSubview(complaintViewController.view, at: 10)
+        
+        complaintViewController.view.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(25)
+        }
+        
+        self.translutionView.isHidden = false
+        
+        UIView.animate(withDuration: 0.2) { [ weak self ] in
+            self?.complaintViewController?.view.alpha = 1
+            self?.translutionView.alpha = 0.5
+            self?.navigationController?.navigationBar.layer.zPosition = -1
+            self?.tabBarController?.tabBar.layer.zPosition = -1
+        }
     }
 
 }
@@ -261,7 +453,7 @@ extension ProfileViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         var number = 1
         
-        if !(self.presenter.user?.deals.isEmpty ?? true) {
+        if !(self.presenter.user?.deals.filter({ $0.buyer == nil }).isEmpty ?? true) {
             number += 1
         }
         
@@ -276,7 +468,7 @@ extension ProfileViewController: UITableViewDataSource {
         if section == .zero {
             return self.presenter.user != nil ? 1 : 0
         } else if section == 1 {
-            return self.presenter.user?.deals.count ?? 0
+            return self.presenter.user?.deals.filter({ $0.buyer == nil }).count ?? 0
         }
         
         return self.presenter.user?.boughtDeals.count ?? 0
@@ -284,22 +476,36 @@ extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == .zero {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.id) as? ProfileTableViewCell else {
-                return UITableViewCell()
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ProfileTableViewCell.id
+            ) as? ProfileTableViewCell else {
+                return .init()
             }
             
+            cell.didTapChervonDescriptionButtonAction = { [ weak tableView ] in
+                tableView?.beginUpdates()
+                tableView?.endUpdates()
+            }
+            cell.didTapAvatarImageViewAction = { [ weak self ] imageView in
+                guard let browseImageViewController = self?.browseImageViewController,
+                      self?.presenter.user?.avatarData != nil else { return }
+                
+                self?.navigationController?.pushViewController(browseImageViewController, animated: true)
+            }
             cell.selectionStyle = .none
             cell.user = self.presenter.user
             
             return cell
         }
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DealTableViewCell.cellID) as? DealTableViewCell else {
-            return UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DealTableViewCell.cellID
+        ) as? DealTableViewCell else {
+            return .init()
         }
         
-        if indexPath.section == 1 {
-            cell.deal = self.presenter.user?.deals[indexPath.row]
+        if indexPath.section == 1 && !(self.presenter.user?.deals.filter({ $0.buyer == nil }).isEmpty ?? true) {
+            cell.deal = self.presenter.user?.deals.filter({ $0.buyer == nil })[indexPath.row]
         } else {
             cell.deal = self.presenter.user?.boughtDeals[indexPath.row]
         }
@@ -314,23 +520,46 @@ extension ProfileViewController: UITableViewDataSource {
 extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 1 {
-            return NSLocalizedString("Deals", comment: "") + ":"
-        } else if section == 2 {
-            return NSLocalizedString("Bought Deals", comment: "") + ":"
+        if section == 1 && !(self.presenter.user?.deals.filter({ $0.buyer == nil }).isEmpty ?? true) {
+            return NSLocalizedString("Deals", comment: .init()) + ":"
+        } else if section == 2 || (section == 1 && self.presenter.user?.deals.filter({ $0.buyer == nil }).isEmpty ?? true) {
+            return NSLocalizedString("Bought", comment: .init()) + ":"
         }
         
         return nil
     }
     
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let view = view as? UITableViewHeaderFooterView else { return }
+        
+        view.contentView.backgroundColor = .backgroundColor
+        view.textLabel?.textColor = .textColor
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard indexPath.section != 0, let user = self.presenter.user else {
+        guard indexPath.section != .zero, let user = self.presenter.user else {
             return
         }
         
-        self.presenter.goToDeal(deal: user.deals[indexPath.row])
+        if self.presenter.userID == nil {
+            if indexPath.section == 1 {
+                self.presenter.goToDeal(deal: user.deals[indexPath.row])
+            } else {
+                self.presenter.goToDeal(deal: user.boughtDeals[indexPath.row])
+            }
+        } else {
+            guard let viewController = indexPath.section == .zero ? self.presenter.getDeal(
+                user.deals[indexPath.row]
+            ) : self.presenter.getDeal(
+                user.boughtDeals[indexPath.row]
+            ) else {
+                return
+            }
+            
+            self.navigationController?.pushViewController(viewController, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -355,6 +584,22 @@ extension ProfileViewController: SideMenuNavigationControllerDelegate {
         } completion: { [ weak self ] _ in
             self?.translutionView.isHidden = true
         }
+    }
+    
+}
+
+extension ProfileViewController: BrowseImagesViewControllerDataSource {
+    
+    func browseImagesViewController(
+        _ viewController: BrowseImagesViewController,
+        collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int { 1 }
+    
+    func browseImagesViewController(_ viewController: BrowseImagesViewController, collectionView: UICollectionView, imageForItemAt indexPath: IndexPath) -> UIImage? {
+        guard let data = self.presenter.user?.avatarData else { return nil }
+        
+        return .init(data: data)
     }
     
 }

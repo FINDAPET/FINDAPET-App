@@ -12,12 +12,13 @@ protocol ProfileCoordinatable {
     var coordinatorDelegate: ProfileCoordinator? { get set }
 }
 
-final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
+final class ProfileCoordinator: NSObject, MainTabBarCoordinatable, Coordinator {
     
-    var coordinatorDelegate: MainTabBarCoordinator?
+//    MARK: Properties
+    weak var coordinatorDelegate: MainTabBarCoordinator?
+    let navigationController = CustomNavigationController()
     
-    let navigationController = UINavigationController()
-    
+//    MARK: Start
     func start() {
         self.setupViews()
         self.goToProfile()
@@ -153,7 +154,7 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getCreateOffer(deal: deal), animated: true)
     }
     
-//    MARK: Edit Profile
+//    MARK: Edit Profile    
     func goToEditProfile(user: User.Input) {
         self.coordinatorDelegate?.coordinatorDelegate?.goToEditProfile(user: user)
     }
@@ -183,16 +184,16 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
     }
     
 //    MARK: Chat Room
-    func getChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) -> ChatRoomViewController {
-        let coordinator = ChatRoomCoordinator()
-        
-        coordinator.start()
-        
-        return coordinator.getChatRoom(chatRoom: chatRoom, userID: userID)
+    func getChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) -> ChatRoomViewController? {
+        self.coordinatorDelegate?.getChatRoom(chatRoom: chatRoom, userID: userID)
     }
     
     func goToChatRoom(chatRoom: ChatRoom.Output? = nil, userID: UUID? = nil) {
-        self.navigationController.pushViewController(self.getChatRoom(chatRoom: chatRoom, userID: userID), animated: true)
+        guard let chatRoomViewController = self.getChatRoom(chatRoom: chatRoom, userID: userID) else {
+            return
+        }
+        
+        self.navigationController.pushViewController(chatRoomViewController, animated: true)
     }
     
 //    MARK: Info
@@ -202,6 +203,8 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         let presenter = InfoPresenter(router: router, interactor: interactor)
         let viewController = InfoViewController(presenter: presenter)
         
+        router.coordinatorDelegate = self
+        
         return viewController
     }
     
@@ -209,22 +212,82 @@ final class ProfileCoordinator: MainTabBarCoordinatable, Coordinator {
         self.navigationController.pushViewController(self.getInfo(), animated: true)
     }
     
-//    MARK: Onboarding
-    func goToOnboarding() {
-        let registrationCoordinator = RegistrationCoordinator()
+//    MARK: Complaint
+    func getComplaint(_ complaint: Complaint.Input) -> ComplaintViewController {
+        let router = ComplaintRouter()
+        let interactor = ComplaintInteractor()
+        let presenter = ComplaintPresenter(complaint: complaint, router: router, interactor: interactor)
+        let viewController = ComplaintViewController(presenter: presenter)
         
-        registrationCoordinator.start()
+        router.coordinatorDelegate = self
         
-        self.coordinatorDelegate?.coordinatorDelegate?.start()
+        return viewController
     }
     
+    func goToComlaint(_ complaint: Complaint.Input, didTapSendButtonCallBack: (() -> Void)? = nil) {
+        let viewController = self.getComplaint(complaint)
+        
+        viewController.didTapSendButtonCallBack = didTapSendButtonCallBack
+        
+        self.navigationController.pushViewController(viewController, animated: true)
+    }
+    
+//    MARK: Onboarding
+    func goToOnboarding(_ animated: Bool = true) {
+        self.coordinatorDelegate?.goToOnboarding(animated)
+    }
+    
+//    MARK: Browse Image
+    func getBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController {
+        let viewController = BrowseImagesViewController()
+        
+        viewController.dataSource = dataSource
+        
+        return viewController
+    }
+    
+    func goToBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) {
+        self.navigationController.pushViewController(self.getBrowseImage(dataSource), animated: true)
+    }
+    
+//    MARK: Edit Deal
+    func getEditDeal(_ deal: Deal.Input, isCreate: Bool = true) -> EditDealViewController {
+        EditDealCoordinator().getEditDeal(deal: deal, isCreate: isCreate)
+    }
+    
+    func goToEditDeal(_ deal: Deal.Input, isCreate: Bool = true) {
+        self.navigationController.pushViewController(self.getEditDeal(deal, isCreate: isCreate), animated: true)
+    }
+    
+//    MARK: Web View
+    func getWebView(_ url: URL) -> WebViewViewController { .init(url) }
+    func getWebView(_ str: String) throws -> WebViewViewController { try .init(str) }
+    
+    func goToWebView(_ url: URL) {
+        self.navigationController.pushViewController(self.getWebView(url), animated: true)
+    }
+    
+    func goToWebView(_ str: String) throws {
+        self.navigationController.pushViewController(try self.getWebView(str), animated: true)
+    }
+       
 //    MARK: Setup Views
     private func setupViews() {
-        self.navigationController.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Profile", comment: ""),
-            image: UIImage(systemName: "person"),
-            selectedImage: UIImage(systemName: "person")
-        )
+        if #available(iOS 13.0, *) {
+            self.navigationController.tabBarItem = UITabBarItem(
+                title: NSLocalizedString("Profile", comment: ""),
+                image: UIImage(systemName: "person"),
+                selectedImage: UIImage(systemName: "person")
+            )
+        } else {
+            self.navigationController.navigationBar.tintColor = .accentColor
+            self.navigationController.tabBarItem = UITabBarItem(
+                title: NSLocalizedString("Profile", comment: ""),
+                image: UIImage(named: "person")?.withRenderingMode(.alwaysTemplate),
+                selectedImage: UIImage(named: "person")?.withRenderingMode(.alwaysTemplate)
+            )
+        }
+        
         self.navigationController.navigationBar.isHidden = true
     }
     

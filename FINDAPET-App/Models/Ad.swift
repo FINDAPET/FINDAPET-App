@@ -32,3 +32,6 @@ struct Ad {
         var cattery: User.Output?
     }
 }
+
+//MARK: - Extensions
+extension Ad.Output: Hashable { }

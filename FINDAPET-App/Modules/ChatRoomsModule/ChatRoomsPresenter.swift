@@ -35,14 +35,18 @@ final class ChatRoomsPresenter {
                 return
             }
             
-            self?.chatRooms = chatRooms.sorted {
-                $0.messages.sorted {
-                    $0.sentDate < $1.sentDate
+            self?.chatRooms = chatRooms.sorted { first, second in
+                let firstMessages = first.messages.sorted {
+                    ISO8601DateFormatter().date(from: $0.createdAt ?? .init()) ?? .init() >
+                    ISO8601DateFormatter().date(from: $1.createdAt ?? .init()) ?? .init()
                 }
-                .first?.sentDate ?? Date() < $1.messages.sorted {
-                    $0.sentDate < $1.sentDate
+                let secondMessages = second.messages.sorted {
+                    ISO8601DateFormatter().date(from: $0.createdAt ?? .init()) ?? .init() >
+                    ISO8601DateFormatter().date(from: $1.createdAt ?? .init()) ?? .init()
                 }
-                .first?.sentDate ?? Date()
+                
+                return ISO8601DateFormatter().date(from: firstMessages.first?.createdAt ?? .init()) ?? .init() >
+                ISO8601DateFormatter().date(from: secondMessages.first?.createdAt ?? .init()) ?? .init()
             }
         }
         
@@ -50,19 +54,31 @@ final class ChatRoomsPresenter {
     }
     
 //    MARK: Web Socket
-    func updateUserChats() {
-        self.interactor.updateUserChats { message, error in
-            guard error == nil, message != nil else {
-                return
-            }
-            
-            self.getAllChatRooms()
-        }
+    func updateUserChats(_ completionHandler: @escaping (String?, Error?) -> Void = { _, _ in }) {
+        self.interactor.updateUserChats(completionHandler: completionHandler)
+    }
+    
+    func closeWS(_ completionHandler: @escaping (Error?) -> Void = { _ in }) {
+        self.interactor.closeWS(completionHandler)
     }
     
 //    MARK: Routing
     func goToChatRoom(_ chatRoom: ChatRoom.Output) {
         self.router.goToChatRoom(chatRoom)
+    }
+    
+//    MARK: - Notification Center
+    func notififcationCenterMakeChatRoomsRefreshing(_ observer: Any, action: Selector) {
+        self.interactor.notificationCenterManagerAddObserver(observer, name: .makeChatRoomsRefreshing, action: action)
+    }
+    
+    func notificationCenterMakeChatRoomsEmpty(_ observer: Any, action: Selector) {
+        self.interactor.notificationCenterManagerAddObserver(observer, name: .makeChatRoomsEmpty, action: action)
+    }
+    
+//    MARK: - Editing
+    func makeChatRoomsEmpty() {
+        self.chatRooms = .init()
     }
     
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 extension UIView {
     
@@ -64,12 +65,16 @@ extension UIView {
                 view.rightViewMode = .always
                 view.translatesAutoresizingMaskIntoConstraints = false
                 
-                if i == 0 {
-                    view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-                    view.layer.cornerRadius = 10
-                } else if i == fields.count - 1 {
-                    view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-                    view.layer.cornerRadius = 10
+                if .zero != fields.count - 1 {
+                    if i == 0 {
+                        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+                        view.layer.cornerRadius = 10
+                    } else if i == fields.count - 1 {
+                        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+                        view.layer.cornerRadius = 10
+                    }
+                } else {
+                    view.layer.cornerRadius = 25
                 }
                 
                 return view
@@ -80,6 +85,10 @@ extension UIView {
             }
             
             stackView.addArrangedSubview(textField)
+        }
+        
+        if stackView.arrangedSubviews.count == 1 {
+            stackView.layer.cornerRadius = 25
         }
         
         return mainStackView
@@ -109,7 +118,8 @@ extension UIView {
             
             view.text = "\(key):"
             view.textColor = .textColor
-            view.font = .systemFont(ofSize: 24, weight: .semibold)
+            view.adjustsFontSizeToFitWidth = true
+            view.setContentHuggingPriority(.required, for: .horizontal)
             view.translatesAutoresizingMaskIntoConstraints = false
             
             return view
@@ -120,7 +130,7 @@ extension UIView {
             
             view.text = value
             view.textColor = .textColor
-            view.font = .systemFont(ofSize: 24)
+            view.adjustsFontSizeToFitWidth = true
             view.translatesAutoresizingMaskIntoConstraints = false
             
             return view
@@ -138,6 +148,18 @@ extension UIView {
         }()
         
         return stackView
+    }
+    
+//    MARK: - Creage Key Value Label
+    func createKeyValueLabel(key: String, value: String) -> UILabel {
+        let view = UILabel()
+        
+        view.text = "\(key): \(value)"
+        view.textColor = .textColor
+        view.font = .systemFont(ofSize: 17)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
     }
     
 }

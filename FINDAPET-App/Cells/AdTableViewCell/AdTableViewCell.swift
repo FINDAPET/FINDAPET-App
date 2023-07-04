@@ -65,7 +65,7 @@ class AdTableViewCell: UITableViewCell {
     }()
     
     private let avatarImageView: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView(image: .init(named: "empty avatar"))
         
         view.layer.cornerRadius = 25
         view.layer.masksToBounds = true
@@ -101,7 +101,7 @@ class AdTableViewCell: UITableViewCell {
     private func setupViews() {
         self.backgroundColor = .backgroundColor
         
-        self.addSubview(self.containerView)
+        self.contentView.addSubview(self.containerView)
         
         self.containerView.addSubview(self.contentImageView)
         self.containerView.addSubview(self.nameLabel)
@@ -128,5 +128,5 @@ class AdTableViewCell: UITableViewCell {
             make.height.equalTo(self.contentImageView.snp.width)
         }
     }
-
+    
 }

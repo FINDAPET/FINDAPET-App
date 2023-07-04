@@ -10,27 +10,27 @@ import StoreKit
 
 final class SubscriptionInteractor {
     
-//    MARK: Requests
-    func makePremium(subscription: Subscription, completionHandler: @escaping (Error?) -> Void) {
+//    MARK: - Requests
+    func makePremium(subscription: Subscription.Input, completionHandler: @escaping (Error?) -> Void) {
         RequestManager.request(
             model: subscription,
-            method: .PUT,
-            authMode: .bearer(value: self.getBearrerToken() ?? String()),
-            url: URLConstructor.defaultHTTP.makeUserPremium(),
+            method: .POST,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.newSubscriptions(),
             completionHandler: completionHandler
         )
     }
     
-//    MARK: Purchase
-    func getProducts(with productsID: [ProductsID], callBack: @escaping ([SKProduct]) -> Void) {
-        PurchaseManager.shared.getProducts(productsID, callBack: callBack)
+    func getSubscrptions(completionHandler: @escaping ([TitleSubscription]?, Error?) -> Void) {
+        RequestManager.request(
+            method: .GET,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.titleSubscriptions(),
+            completionHandler: completionHandler
+        )
     }
     
-    func makePayment(_ product: SKProduct, callBack: @escaping (Error?) -> Void) {
-        PurchaseManager.shared.makePayment(product, callBack: callBack)
-    }
-    
-//    MARK: User Defaults
+//    MARK: - User Defaults
     func get(_ key: UserDefaultsKeys) -> Any? {
         UserDefaultsManager.read(key: key)
     }
@@ -39,7 +39,12 @@ final class SubscriptionInteractor {
         UserDefaultsManager.write(data: value, key: key)
     }
     
-//    MARK: Keychain
+//    MARK: Notification Center
+    func notificationCenterManagerPost(_ key: NotificationCenterManagerKeys, additional parameters: String? = nil) {
+        NotificationCenterManager.post(key, additional: parameters)
+    }
+    
+//    MARK: - Keychain
     private func getBearrerToken() -> String? {
         KeychainManager.shared.read(key: .token)
     }

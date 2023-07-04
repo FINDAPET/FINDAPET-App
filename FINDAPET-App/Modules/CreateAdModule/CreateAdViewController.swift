@@ -23,16 +23,6 @@ final class CreateAdViewController: UIViewController {
     }
     
 //    MARK: UI Properties
-    private let activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .medium)
-        
-        view.startAnimating()
-        view.isHidden = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
-    
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
         
@@ -48,6 +38,7 @@ final class CreateAdViewController: UIViewController {
         view.allowsEditing = true
         view.sourceType = .photoLibrary
         view.delegate = self
+        view.navigationBar.tintColor = .accentColor
         
         return view
     }()
@@ -58,12 +49,29 @@ final class CreateAdViewController: UIViewController {
         view.allowsEditing = true
         view.sourceType = .photoLibrary
         view.delegate = self
+        view.navigationBar.tintColor = .accentColor
         
         return view
     }()
     
     private lazy var avatarImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(systemName: "plus"))
+        if #available(iOS 13.0, *) {
+            let view = UIImageView(image: UIImage(systemName: "plus"))
+            
+            view.backgroundColor = .textFieldColor
+            view.tintColor = .lightGray
+            view.clipsToBounds = true
+            view.layer.masksToBounds = true
+            view.layer.cornerRadius = 75
+            view.layer.borderColor = UIColor.lightGray.cgColor
+            view.layer.borderWidth = 2
+            view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapAvatarImageView)))
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIImageView(image: UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate))
         
         view.backgroundColor = .textFieldColor
         view.tintColor = .lightGray
@@ -79,7 +87,23 @@ final class CreateAdViewController: UIViewController {
     }()
     
     private lazy var contentImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(systemName: "plus"))
+        if #available(iOS 13.0, *) {
+            let view = UIImageView(image: UIImage(systemName: "plus"))
+            
+            view.backgroundColor = .textFieldColor
+            view.tintColor = .lightGray
+            view.clipsToBounds = true
+            view.layer.masksToBounds = true
+            view.layer.cornerRadius = 25
+            view.layer.borderColor = UIColor.lightGray.cgColor
+            view.layer.borderWidth = 2
+            view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapContentImageView)))
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIImageView(image: UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate))
         
         view.backgroundColor = .textFieldColor
         view.tintColor = .lightGray
@@ -94,7 +118,7 @@ final class CreateAdViewController: UIViewController {
         return view
     }()
     
-    private let nameTextField: UITextField = {
+    private lazy var nameTextField: UITextField = {
         let view = UITextField()
         
         view.backgroundColor = .textFieldColor
@@ -106,12 +130,13 @@ final class CreateAdViewController: UIViewController {
         view.leftViewMode = .always
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.rightViewMode = .always
+        view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
-    private let linkTextField: UITextField = {
+    private lazy var linkTextField: UITextField = {
         let view = UITextField()
         
         view.backgroundColor = .textFieldColor
@@ -123,6 +148,7 @@ final class CreateAdViewController: UIViewController {
         view.leftViewMode = .always
         view.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         view.rightViewMode = .always
+        view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -188,17 +214,12 @@ final class CreateAdViewController: UIViewController {
         
         
         self.view.addSubview(self.scrollView)
-        self.view.addSubview(self.activityIndicatorView)
         
         self.scrollView.addSubview(self.avatarImageView)
         self.scrollView.addSubview(self.nameTextField)
         self.scrollView.addSubview(self.contentImageView)
         self.scrollView.addSubview(self.linkTextField)
         self.scrollView.addSubview(self.saveButton)
-        
-        self.activityIndicatorView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
         
         self.scrollView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
@@ -240,14 +261,10 @@ final class CreateAdViewController: UIViewController {
 //    MARK: Setup Values
     private func setupValues() {
         guard let user = self.presenter.user else {
-            self.scrollView.isHidden = true
-            self.activityIndicatorView.isHidden = false
-            
             return
         }
         
         self.scrollView.isHidden = false
-        self.activityIndicatorView.isHidden = true
         self.nameTextField.text = user.name
         
         if let data = user.avatarData {
@@ -266,10 +283,14 @@ final class CreateAdViewController: UIViewController {
     
     @objc private func didTapSaveButton() {
         self.presenter.createAd(
-            ad: Ad.Input(
-                contentData: self.contentImageView.image?.pngData() ?? Data(),
-                customerName: self.nameTextField.text,
-                link: self.linkTextField.text,
+            ad: .init(
+                contentData: self.contentImageView.image?.jpegData(compressionQuality: 0.7) ?? Data(),
+                customerName: self.nameTextField.text?.trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                ).isEmpty ?? true ? nil : self.nameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+                link: self.linkTextField.text?.trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                ).isEmpty ?? true ? nil : self.linkTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
                 catteryID: self.presenter.user?.id
             )
         ) { [ weak self ] error in
@@ -320,6 +341,16 @@ extension CreateAdViewController: UIImagePickerControllerDelegate {
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
+    }
+    
+}
+
+extension CreateAdViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true
     }
     
 }

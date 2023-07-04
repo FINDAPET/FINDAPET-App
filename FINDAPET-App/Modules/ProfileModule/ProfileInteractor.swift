@@ -10,7 +10,6 @@ import Foundation
 final class ProfileInteractor {
     
 //    MARK: Requests
-    
     func getUser(completionHandler: @escaping (User.Output?, Error?) -> Void) {
         RequestManager.request(
             method: .GET,
@@ -38,19 +37,7 @@ final class ProfileInteractor {
         )
     }
     
-//    MARK: Currency Converter
-    
-    func convert(
-        _ first: String,
-        to second: String,
-        value: Int,
-        completionHandler: @escaping (ExchangeConvert.Output?, Error?) -> Void
-    ) {
-        CurrencyConverter.convert(first, to: second, value: value, completionHandler: completionHandler)
-    }
-    
 //    MARK: User Defaults
-    
     func getMyID() -> UUID? {
         guard let string = UserDefaultsManager.read(key: .id) as? String else {
             return nil
@@ -71,8 +58,21 @@ final class ProfileInteractor {
         UserDefaultsManager.write(data: value, key: key)
     }
     
-//    MARK: Keychain
+//    MARK: Notification Center
+    func notificationCenterManagerAddObserver(
+        _ observer: Any,
+        name: NotificationCenterManagerKeys,
+        additional parameter: String? = nil,
+        action: Selector
+    ) {
+        NotificationCenterManager.addObserver(observer, name: name, additional: parameter, action: action)
+    }
     
+    func notificationCenterManagerPost(_ name: NotificationCenterManagerKeys, additional: String? = nil) {
+        NotificationCenterManager.post(name, additional: additional)
+    }
+    
+//    MARK: Keychain
     func deleteKeychainData() {
         KeychainManager.shared.write(value: nil, key: .token)
         KeychainManager.shared.write(value: nil, key: .email)

@@ -39,17 +39,29 @@ final class OffersViewController: UIViewController {
     }()
     
     private let activityIndicatorView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .medium)
+        if #available(iOS 13.0, *) {
+            let view = UIActivityIndicatorView(style: .medium)
+            
+            view.startAnimating()
+            view.isHidden = true
+            view.color = .accentColor
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }
+        
+        let view = UIActivityIndicatorView(style: .gray)
         
         view.startAnimating()
         view.isHidden = true
+        view.color = .accentColor
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
     }()
     
     private lazy var tableView: UITableView = {
-        let view = UITableView ()
+        let view = UITableView()
         
         view.backgroundColor = .clear
         view.delegate = self
@@ -76,27 +88,47 @@ final class OffersViewController: UIViewController {
         if self.presenter.userID != nil && self.presenter.offers.isEmpty {
             self.activityIndicatorView.isHidden = false
             self.tableView.isHidden = true
-            self.getOffers()
+            
+            switch self.presenter.mode {
+            case .myOffers:
+                self.presenter.getUserMyOffers { [ weak self ] _, error in
+                    self?.activityIndicatorView.isHidden = true
+                    self?.tableView.isHidden = false
+                    self?.error(error)
+                }
+            case .offers:
+                self.presenter.getUserOffers { [ weak self ] _, error in
+                    self?.activityIndicatorView.isHidden = true
+                    self?.tableView.isHidden = false
+                    self?.error(error)
+                }
+            }
         }
     }
     
 //    MARK: Setup Views
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
+        self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
         self.navigationController?.navigationItem.backButtonTitle = NSLocalizedString("Back", comment: "")
         self.title = self.presenter.mode == .myOffers ? NSLocalizedString("My offers", comment: "") : NSLocalizedString("Suggested offers", comment: "")
         
-        self.view.addSubview(self.activityIndicatorView)
         self.view.addSubview(self.tableView)
-        
-        self.activityIndicatorView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
         
         self.tableView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
+        }
+        
+        guard self.presenter.userID != nil && self.presenter.offers.isEmpty else {
+            return
+        }
+        
+        self.view.addSubview(self.activityIndicatorView)
+        
+        self.activityIndicatorView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
     }
     
@@ -104,7 +136,7 @@ final class OffersViewController: UIViewController {
     private func getOffers(isRefreshing: Bool = false) {
         switch self.presenter.mode {
         case .myOffers:
-            self.presenter.getUserMyOffers { [ weak self ] offers, error in
+            self.presenter.getUserMyOffers { [ weak self ] _, error in
                 self?.activityIndicatorView.isHidden = true
                 self?.tableView.isHidden = false
                 self?.refreshControl.endRefreshing()
@@ -116,19 +148,9 @@ final class OffersViewController: UIViewController {
                     
                     return
                 }
-                
-                guard let offers = offers else {
-                    if isRefreshing {
-                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
-                    }
-                    
-                    return
-                }
-                
-                self?.presenter.offers = offers
             }
         case .offers:
-            self.presenter.getUserOffers { [ weak self ] offers, error in
+            self.presenter.getUserOffers { [ weak self ] _, error in
                 self?.activityIndicatorView.isHidden = true
                 self?.tableView.isHidden = false
                 self?.refreshControl.endRefreshing()
@@ -140,16 +162,6 @@ final class OffersViewController: UIViewController {
                     
                     return
                 }
-                
-                guard let offers = offers else {
-                    if isRefreshing {
-                        self?.presentAlert(title: NSLocalizedString("Not Found", comment: ""))
-                    }
-                    
-                    return
-                }
-                
-                self?.presenter.offers = offers
             }
         }
     }
@@ -189,23 +201,41 @@ extension OffersViewController: UITableViewDataSource {
         cell.buyerAvatarImageViewAction = { [ weak self ] id in
             self?.presenter.goToProfile(userID: id)
         }
-        cell.messageButtonAction = { [ weak self ] in
-            self?.presenter.goToChatRoom(userID: self?.presenter.offers[indexPath.row].buyer.id)
+        cell.messageButtonAction = { [ weak self, weak cell ] in
+            guard let self, let cattery = cell?.offer?.cattery, let buyer = cell?.offer?.buyer else { return }
+                        
+            self.presenter.goToChatRoom(.init(users: [cattery, buyer], messages: .init()))
+        }
+        cell.didTapPhotoAction = { [ weak self ] in
+            guard let self else { return }
+            
+            self.presenter.goToDeal(self.presenter.offers[indexPath.row].deal)
         }
         
         if self.presenter.mode == .offers {
             cell.acceptButtonAction = { [ weak self ] in
-                guard let self = self else {
-                    return
-                }
+                guard let self else { return }
                 
-                self.presenter.acceptOffer(offer: self.presenter.offers[indexPath.row]) { error in
-                    self.error(error) {
-                        self.presentAlert(title: NSLocalizedString("Error", comment: ""))
-                        
-                        return
+                self.presenter.acceptOffer(offer: self.presenter.offers[indexPath.row]) {
+                    self.error($0) {
+                        self.activityIndicatorView.isHidden = false
+                        self.tableView.isHidden = true
+                        self.presentAlert(
+                            title: NSLocalizedString("Congretulations", comment: .init()) + "! 🎉",
+                            message: NSLocalizedString("You accepted a deal", comment: .init()) + "!"
+                        )
+                        self.presenter.getUserOffers { _, _ in
+                            self.activityIndicatorView.isHidden = true
+                            self.tableView.isHidden = false
+                        }
                     }
                 }
+            }
+        } else {
+            cell.deleteButtonAction = { [ weak self ] in
+                guard let self, let id = self.presenter.offers[indexPath.row].id else { return }
+                
+                self.presenter.deleteOffer(id) { self.error($0) }
             }
         }
         
@@ -218,6 +248,12 @@ extension OffersViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        
+        self.presenter.goToDeal(self.presenter.offers[indexPath.row].deal)
     }
     
 }

@@ -10,6 +10,9 @@ import StoreKit
 
 final class EditDealInteractor {
     
+//    MARK: Properties
+    private let petTypeCoreData = coreDataPetTypeManager
+    
 //    MARK: Requests
     func createDeal(_ deal: Deal.Input, completionHandler: @escaping (Error?) -> Void) {
         RequestManager.request(
@@ -21,9 +24,19 @@ final class EditDealInteractor {
         )
     }
     
+    func changeDeal(_ deal: Deal.Input, completionHandler: @escaping (Error?) -> Void) {
+        RequestManager.request(
+            model: deal,
+            method: .PUT,
+            authMode: .bearer(value: self.getBearrerToken() ?? .init()),
+            url: URLConstructor.defaultHTTP.changeDeal(),
+            completionHandler: completionHandler
+        )
+    }
+    
 //    MARK: Notification Center
-    func notificationCenterManagerPost(_ key: NotificationCenterManagerKeys) {
-        NotificationCenterManager.post(key)
+    func notificationCenterManagerPost(_ key: NotificationCenterManagerKeys, additional parameters: String? = nil) {
+        NotificationCenterManager.post(key, additional: parameters)
     }
     
 //    MARK: User Defaults
@@ -47,6 +60,11 @@ final class EditDealInteractor {
 //    MARK: Keychain
     private func getBearrerToken() -> String? {
         KeychainManager.shared.read(key: .token)
+    }
+    
+//    MARK: Core Data
+    func getAllPetTypes(_ completionHandler: @escaping ([PetTypeEntity], Error?) -> Void) {
+        self.petTypeCoreData.all(completionHandler)
     }
     
 }
