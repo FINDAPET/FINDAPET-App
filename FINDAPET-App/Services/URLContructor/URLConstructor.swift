@@ -44,12 +44,12 @@ final class URLConstructor {
     static let defaultHTTP: URLConstructor = {
         if let string = UserDefaultsManager.read(key: .hostHTTP) as? String, URL(string: string) != nil { return .init(string: string) }
         
-        return .init(scheme: .https, host: .base)
+        return .init(scheme: .http, host: .base)
     }()
     static let defaultWS: URLConstructor = {
         if let string = UserDefaultsManager.read(key: .hostWS) as? String, URL(string: string) != nil { return .init(string: string) }
         
-        return .init(scheme: .wss, host: .base)
+        return .init(scheme: .ws, host: .base)
     }()
     static let exchange = URLConstructor(scheme: .http, host: .exchange)
     
