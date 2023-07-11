@@ -339,28 +339,10 @@ final class ProfileViewController: UIViewController {
                 self?.tableView.isHidden = true
                 self?.tabBarController?.selectedIndex = .zero
                 
-                if self?.tabBarController?.navigationController?.viewControllers.first is OnboardingViewController {
-                    guard !(self?.tabBarController?.navigationController?.viewControllers.isEmpty ?? true),
-                          let viewController = self?.tabBarController?.navigationController?.viewControllers.first else {
-                        return
-                    }
-                    
-                    self?.tabBarController?.navigationController?.popToViewController(viewController, animated: true)
-                } else if self?.tabBarController?.navigationController?.viewControllers.first is LaunchScreenViewController
-                            && !(self?.tabBarController?.navigationController?.viewControllers[1] is UITabBarController) {
-                    guard self?.tabBarController?.navigationController?.viewControllers.count ?? .zero >= 2,
-                          let viewController = self?.tabBarController?.navigationController?.viewControllers[1] else {
-                        return
-                    }
-                    
-                    self?.tabBarController?.navigationController?.popToViewController(viewController, animated: true)
+                if let vc = self?.tabBarController?.navigationController?.viewControllers.first(where: { $0 is OnboardingViewController }) {
+                    self?.tabBarController?.navigationController?.popToViewController(vc, animated: true)
                 } else {
-                    guard !(self?.tabBarController?.navigationController?.viewControllers.isEmpty ?? true),
-                          let viewController = self?.tabBarController?.navigationController?.viewControllers.first else {
-                        return
-                    }
-                    
-                    self?.tabBarController?.navigationController?.popToViewController(viewController, animated: false)
+                    self?.tabBarController?.navigationController?.popViewController(animated: false)
                     self?.presenter.goToOnboarding(false)
                 }
             }

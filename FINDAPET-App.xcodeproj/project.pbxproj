@@ -1126,7 +1126,6 @@
 				E3D9570C28B0125B00CCF566 /* CustomUIElements */,
 				E3CEE67528ABD2E200468ED2 /* Navigation */,
 				E34ABC4A28A7CEB100A7D2C8 /* TypeExtensions */,
-				E34ABC4128A7C31400A7D2C8 /* Errors */,
 				E34ABC3028A7722800A7D2C8 /* Models */,
 				E34ABC2D28A771A600A7D2C8 /* Services */,
 				E3D74F6728A6A4F8004C5172 /* Sources */,
@@ -1297,6 +1296,7 @@
 		E3E1D176290310720069EE46 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
+				E34ABC4128A7C31400A7D2C8 /* Errors */,
 				E3F4B04928FD7F430083815E /* SideMenuSides.swift */,
 				E3E1D177290310840069EE46 /* Currency.swift */,
 				E3E05D122921440300605F49 /* DealMode.swift */,
