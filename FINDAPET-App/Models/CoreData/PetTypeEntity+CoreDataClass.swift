@@ -2,7 +2,7 @@
 //  PetTypeEntity+CoreDataClass.swift
 //  FINDAPET-App
 //
-//  Created by Artemiy Zuzin on 19.03.2023.
+//  Created by Artemiy Zuzin on 13.07.2023.
 //
 //
 

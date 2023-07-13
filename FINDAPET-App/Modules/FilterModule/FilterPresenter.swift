@@ -104,7 +104,7 @@ final class FilterPresenter {
             for newPetType in Set(newPetTypes) {
                 var type = PetType.Entity(
                     id: newPetType.id,
-                    name: newPetType.name,
+                    name: newPetType.getLocalizedName() ?? .init(),
                     imageData: newPetType.imageData,
                     petBreeds: .init()
                 )

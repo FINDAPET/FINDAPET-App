@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F82" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="LocalizedPetTypeNameEntity" representedClassName="LocalizedPetTypeNameEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="languageCode" attributeType="String"/>
+        <attribute name="value" attributeType="String"/>
+        <relationship name="petType" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PetTypeEntity" inverseName="localizedNames" inverseEntity="PetTypeEntity"/>
+    </entity>
     <entity name="PetBreedEntity" representedClassName="PetBreedEntity" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
@@ -8,25 +13,16 @@
             <uniquenessConstraint>
                 <constraint value="id"/>
             </uniquenessConstraint>
-            <uniquenessConstraint>
-                <constraint value="name"/>
-            </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
     <entity name="PetTypeEntity" representedClassName=".PetTypeEntity" syncable="YES">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="imageData" attributeType="Binary"/>
-        <attribute name="name" attributeType="String"/>
+        <relationship name="localizedNames" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LocalizedPetTypeNameEntity" inverseName="petType" inverseEntity="LocalizedPetTypeNameEntity"/>
         <relationship name="petBreeds" toMany="YES" deletionRule="Nullify" destinationEntity="PetBreedEntity" inverseName="petType" inverseEntity="PetBreedEntity"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
-            </uniquenessConstraint>
-            <uniquenessConstraint>
-                <constraint value="imageData"/>
-            </uniquenessConstraint>
-            <uniquenessConstraint>
-                <constraint value="name"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
