@@ -291,8 +291,7 @@ final class MainTabBarCoordinator: NSObject, RegistrationCoordinatable, Coordina
         _ petType: PetType.Output,
         completionHandler: @escaping (Error?) -> Void = { _ in }
     ) -> PetTypeEntity? {
-        let manager = coreDataPetTypeManager
-        let context = manager.persistentContainer.newBackgroundContext()
+        let context = coreDataPetTypeManager.persistentContainer.newBackgroundContext()
         
         guard let description = NSEntityDescription.entity(
             forEntityName: .init(describing: PetTypeEntity.self),
@@ -305,25 +304,28 @@ final class MainTabBarCoordinator: NSObject, RegistrationCoordinatable, Coordina
         
         let model = PetTypeEntity(entity: description, insertInto: context)
         
-        var languageCode = String()
-        
-        if #available(iOS 16, *) {
-            languageCode = Locale.current.language.languageCode?.identifier ?? .init()
-        } else {
-            languageCode = Locale.current.languageCode ?? .init()
-        }
-        
         model.id = petType.id
-        model.name = petType.localizedNames[languageCode] ?? petType.localizedNames["en"] ?? "-"
         model.imageData = petType.imageData
+        
+        for localizedName in petType.localizedNames {
+            guard let localizedNameDescription = NSEntityDescription.entity(
+                forEntityName: .init(describing: LocalizedPetTypeNameEntity.self),
+                in: context
+            ) else { continue }
+            
+            let name = LocalizedPetTypeNameEntity(entity: localizedNameDescription, insertInto: context)
+            
+            name.languageCode = localizedName.key
+            name.value = localizedName.value
+            
+            model.addToLocalizedNames(name)
+        }
         
         for petBreed in petType.petBreeds {
             guard let petBreedDescription = NSEntityDescription.entity(
                 forEntityName: .init(describing: PetBreedEntity.self),
                 in: context
-            ) else {
-                continue
-            }
+            ) else { continue }
             
             let breed = PetBreedEntity(entity: petBreedDescription, insertInto: context)
             
@@ -334,7 +336,7 @@ final class MainTabBarCoordinator: NSObject, RegistrationCoordinatable, Coordina
             model.addToPetBreeds(breed)
         }
         
-        manager.save(model, completionHandler: completionHandler)
+        coreDataPetTypeManager.save(model, completionHandler: completionHandler)
         
         return model
     }

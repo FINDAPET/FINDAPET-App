@@ -10,6 +10,7 @@ import CoreData
 
 //MARK: - Core Data Managers
 let coreDataPetBreedManager = CoreDataManager<PetBreedEntity>()
+let coreDataLocalizedPetTypeName = CoreDataManager<LocalizedPetTypeNameEntity>()
 let coreDataPetTypeManager = CoreDataManager<PetTypeEntity>()
 
 //MARK: - Core Data Manager
@@ -32,7 +33,7 @@ final class CoreDataManager<T : NSManagedObject>: NSObject {
     private(set) lazy var fetchedResultController: NSFetchedResultsController<T> = {
         let request = NSFetchRequest<T>(entityName: .init(describing: T.self))
         
-        request.sortDescriptors = [.init(key: "name", ascending: false)]
+        request.sortDescriptors = [.init(key: "id", ascending: false)]
         
         return .init(
             fetchRequest: request,

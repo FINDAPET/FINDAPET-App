@@ -141,7 +141,7 @@ final class EditDealPresenter {
             completionHandler(newPetTypes, error)
             
             var types = [PetType.Entity]()
-                                    
+            
             if let error = error {
                 print("❌ Error: \(error.localizedDescription)")
                 
@@ -157,7 +157,7 @@ final class EditDealPresenter {
             for newPetType in Set(newPetTypes) {
                 var type = PetType.Entity(
                     id: newPetType.id,
-                    name: newPetType.name,
+                    name: newPetType.getLocalizedName() ?? .init(),
                     imageData: newPetType.imageData,
                     petBreeds: .init()
                 )

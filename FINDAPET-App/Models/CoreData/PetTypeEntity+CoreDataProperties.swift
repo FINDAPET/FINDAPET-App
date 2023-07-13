@@ -2,7 +2,7 @@
 //  PetTypeEntity+CoreDataProperties.swift
 //  FINDAPET-App
 //
-//  Created by Artemiy Zuzin on 19.03.2023.
+//  Created by Artemiy Zuzin on 13.07.2023.
 //
 //
 
@@ -18,8 +18,20 @@ extension PetTypeEntity {
 
     @NSManaged public var id: UUID?
     @NSManaged public var imageData: Data
-    @NSManaged public var name: String
     @NSManaged public var petBreeds: Set<PetBreedEntity>
+    @NSManaged public var localizedNames: Set<LocalizedPetTypeNameEntity>
+    
+    func getLocalizedName(for languageCode: String) -> String? {
+        self.localizedNames.first { $0.languageCode == languageCode }?.value
+    }
+    
+    func getLocalizedName() -> String? {
+        if #available(iOS 16, *) {
+            return self.getLocalizedName(for: Locale.current.language.languageCode?.identifier ?? .init())
+        }
+        
+        return self.getLocalizedName(for: Locale.current.languageCode ?? .init())
+    }
 
 }
 
@@ -40,5 +52,19 @@ extension PetTypeEntity {
 
 }
 
-//MARK: Extension Identifiable
-extension PetTypeEntity: Identifiable { }
+// MARK: Generated accessors for localizedNames
+extension PetTypeEntity {
+
+    @objc(addLocalizedNamesObject:)
+    @NSManaged public func addToLocalizedNames(_ value: LocalizedPetTypeNameEntity)
+
+    @objc(removeLocalizedNamesObject:)
+    @NSManaged public func removeFromLocalizedNames(_ value: LocalizedPetTypeNameEntity)
+
+    @objc(addLocalizedNames:)
+    @NSManaged public func addToLocalizedNames(_ values: Set<LocalizedPetTypeNameEntity>)
+
+    @objc(removeLocalizedNames:)
+    @NSManaged public func removeFromLocalizedNames(_ values: Set<LocalizedPetTypeNameEntity>)
+
+}

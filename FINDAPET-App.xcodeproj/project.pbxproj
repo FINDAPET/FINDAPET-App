@@ -41,8 +41,6 @@
 		E313B89C28ACE38D00E33975 /* RegistrationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E313B89B28ACE38D00E33975 /* RegistrationPresenter.swift */; };
 		E313B89E28ACE39800E33975 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E313B89D28ACE39800E33975 /* RegistrationViewController.swift */; };
 		E313B8A028AD01A500E33975 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E313B89F28AD01A500E33975 /* UIViewController.swift */; };
-		E320ACBD29C746C2004B640D /* PetTypeEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E320ACBB29C746C2004B640D /* PetTypeEntity+CoreDataClass.swift */; };
-		E320ACBE29C746C2004B640D /* PetTypeEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E320ACBC29C746C2004B640D /* PetTypeEntity+CoreDataProperties.swift */; };
 		E320ACC129C79FB5004B640D /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E320ACC029C79FB5004B640D /* SoundManager.swift */; };
 		E320ACC329C79FDB004B640D /* SoundManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E320ACC229C79FDB004B640D /* SoundManagerError.swift */; };
 		E320ACC529C7A125004B640D /* SoundFileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E320ACC429C7A125004B640D /* SoundFileType.swift */; };
@@ -153,6 +151,8 @@
 		E3B7DDAF295CA62E00D570F3 /* LaunchScreenInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7DDAE295CA62E00D570F3 /* LaunchScreenInteractor.swift */; };
 		E3B7DDB1295CA63A00D570F3 /* LaunchScreenPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7DDB0295CA63A00D570F3 /* LaunchScreenPresenter.swift */; };
 		E3B7DDB3295CA64700D570F3 /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B7DDB2295CA64700D570F3 /* LaunchScreenViewController.swift */; };
+		E3CD26D42A6077270086F95E /* PetTypeEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CD26D22A6077270086F95E /* PetTypeEntity+CoreDataClass.swift */; };
+		E3CD26D52A6077270086F95E /* PetTypeEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CD26D32A6077270086F95E /* PetTypeEntity+CoreDataProperties.swift */; };
 		E3CE7300291BB4F300577206 /* ChatRoomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CE72FF291BB4F300577206 /* ChatRoomHeaderView.swift */; };
 		E3CEE67728ABD33600468ED2 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */; };
 		E3CEE67928ABD3BA00468ED2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEE67828ABD3BA00468ED2 /* UIColor.swift */; };
@@ -266,8 +266,6 @@
 		E313B89B28ACE38D00E33975 /* RegistrationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationPresenter.swift; sourceTree = "<group>"; };
 		E313B89D28ACE39800E33975 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		E313B89F28AD01A500E33975 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
-		E320ACBB29C746C2004B640D /* PetTypeEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PetTypeEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
-		E320ACBC29C746C2004B640D /* PetTypeEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PetTypeEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E320ACC029C79FB5004B640D /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		E320ACC229C79FDB004B640D /* SoundManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManagerError.swift; sourceTree = "<group>"; };
 		E320ACC429C7A125004B640D /* SoundFileType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundFileType.swift; sourceTree = "<group>"; };
@@ -374,6 +372,8 @@
 		E3B7DDAE295CA62E00D570F3 /* LaunchScreenInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenInteractor.swift; sourceTree = "<group>"; };
 		E3B7DDB0295CA63A00D570F3 /* LaunchScreenPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenPresenter.swift; sourceTree = "<group>"; };
 		E3B7DDB2295CA64700D570F3 /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
+		E3CD26D22A6077270086F95E /* PetTypeEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PetTypeEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E3CD26D32A6077270086F95E /* PetTypeEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PetTypeEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E3CE72FF291BB4F300577206 /* ChatRoomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomHeaderView.swift; sourceTree = "<group>"; };
 		E3CEE67628ABD33600468ED2 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
 		E3CEE67828ABD3BA00468ED2 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -641,8 +641,8 @@
 		E349B6A2297AFF5E00A7FCFE /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				E320ACBB29C746C2004B640D /* PetTypeEntity+CoreDataClass.swift */,
-				E320ACBC29C746C2004B640D /* PetTypeEntity+CoreDataProperties.swift */,
+				E3CD26D22A6077270086F95E /* PetTypeEntity+CoreDataClass.swift */,
+				E3CD26D32A6077270086F95E /* PetTypeEntity+CoreDataProperties.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -1510,6 +1510,7 @@
 				E30560FB290EF9DE00E0881C /* PhotoCollectionViewCell.swift in Sources */,
 				E3993F68290AF889000C218C /* InfoRouter.swift in Sources */,
 				E347A5482901B3690089271F /* UIView.swift in Sources */,
+				E3CD26D42A6077270086F95E /* PetTypeEntity+CoreDataClass.swift in Sources */,
 				E37DD7B72A180F0A00194F6C /* Platform.swift in Sources */,
 				E34A3ADF293E0ADA0038625F /* NotificationScreen.swift in Sources */,
 				E3E8C58D29C4E42B005CC294 /* SubscriptionInformationRouter.swift in Sources */,
@@ -1660,6 +1661,7 @@
 				E305EC7928ACCC8100A3AAD3 /* OnboardingViewController.swift in Sources */,
 				E3E1D18F290326DE0069EE46 /* SettingsViewController.swift in Sources */,
 				E33130B0293243F8009C26A1 /* EditDealInteractor.swift in Sources */,
+				E3CD26D52A6077270086F95E /* PetTypeEntity+CoreDataProperties.swift in Sources */,
 				E3993F6A290AF898000C218C /* InfoInteractor.swift in Sources */,
 				E34ABC3828A7961E00A7D2C8 /* Deal.swift in Sources */,
 				E3E05CFF291EB45700605F49 /* FeedInteractor.swift in Sources */,
@@ -1690,7 +1692,6 @@
 				E3E05D03291EB47B00605F49 /* FeedViewController.swift in Sources */,
 				E35E09EC28F735A000B310D1 /* PurchaseErrors.swift in Sources */,
 				E35E09F628F73B9D00B310D1 /* YandexMobileMetrica.swift in Sources */,
-				E320ACBD29C746C2004B640D /* PetTypeEntity+CoreDataClass.swift in Sources */,
 				E34ABC3428A7906500A7D2C8 /* User.swift in Sources */,
 				E325351F28F58CE600878A7F /* ChatRoom.swift in Sources */,
 				E3E2442529EB18360055E044 /* CustomNavigationController.swift in Sources */,
@@ -1703,7 +1704,6 @@
 				E360300D29E885F2005D2047 /* WebViewError.swift in Sources */,
 				E3993F632909B658000C218C /* CreateAdPresenter.swift in Sources */,
 				E3D876DF2968588900D67ACD /* ImageWithXmarkCollectionViewCell.swift in Sources */,
-				E320ACBE29C746C2004B640D /* PetTypeEntity+CoreDataProperties.swift in Sources */,
 				E3E4D6A428B92BFE002B0BE6 /* PrivacyPolicyPresenter.swift in Sources */,
 				E3993F5C2907EB73000C218C /* SubscriptionCollectionViewCell.swift in Sources */,
 				E3E1EB57290063F000F536F4 /* AdsViewController.swift in Sources */,
