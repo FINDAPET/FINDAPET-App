@@ -22,15 +22,15 @@ extension PetTypeEntity {
     @NSManaged public var localizedNames: Set<LocalizedPetTypeNameEntity>
     
     func getLocalizedName(for languageCode: String) -> String? {
-        self.localizedNames.first { $0.languageCode == languageCode }?.value
+        self.localizedNames.first { $0.languageCode == languageCode }?.value ?? self.localizedNames.first { $0.languageCode == "en" }?.value
     }
     
     func getLocalizedName() -> String? {
         if #available(iOS 16, *) {
-            return self.getLocalizedName(for: Locale.current.language.languageCode?.identifier ?? .init())
+            return self.getLocalizedName(for: Locale.current.language.languageCode?.identifier.lowercased() ?? "en") ?? self.getLocalizedName(for: "en")
         }
         
-        return self.getLocalizedName(for: Locale.current.languageCode ?? .init())
+        return self.getLocalizedName(for: Locale.current.languageCode?.lowercased() ?? "en") ?? self.getLocalizedName(for: "en")
     }
 
 }
