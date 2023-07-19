@@ -108,6 +108,8 @@ final class ChatRoomPresenter {
             self?.chatRoom?.messages.append(message)
         }
         
+        print(id)
+        
         self.interactor.chatRoom(with: id, completionHandler: newCompletionHandler)
     }
     
@@ -187,8 +189,8 @@ final class ChatRoomPresenter {
     }
     
 //    MARK: Routing
-    func goToProfile() {
-        self.router.goToProfile(userID: self.userID)
+    func getProfile() -> ProfileViewController? {
+        self.router.getProfile(userID: self.userID)
     }
     
     func getBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {

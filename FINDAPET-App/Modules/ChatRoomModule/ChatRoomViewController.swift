@@ -30,7 +30,6 @@ final class ChatRoomViewController: MessagesViewController {
                 
                 UIView.animate(withDuration: 0.1) {
                     self?.messagesCollectionView.alpha = 1
-                    self?.messageInputBar.alpha = 1
                 }
             } else {
                 self?.messagesCollectionView.reloadDataAndKeepOffset()
@@ -107,7 +106,11 @@ final class ChatRoomViewController: MessagesViewController {
         let view = ChatRoomHeaderView()
 
         view.user = self.presenter.chatRoom?.users.filter { [ weak self ] in $0.id != self?.presenter.getUserID() }.first
-        view.didTapAvatarImageViewAction = self.presenter.goToProfile
+        view.didTapAvatarImageViewAction = { [ weak self ] in
+            guard let vc = self?.presenter.getProfile() else { return }
+            
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
         view.didTapBackButtonAction = { [ weak self ] in self?.navigationController?.popViewController(animated: true) }
         view.translatesAutoresizingMaskIntoConstraints = false
 
@@ -180,7 +183,6 @@ final class ChatRoomViewController: MessagesViewController {
 
         UIView.animate(withDuration: 0.2) { [ weak self ] in
             self?.messagesCollectionView.alpha = 1
-            self?.messageInputBar.alpha = 1
         }
     }
 
@@ -249,13 +251,12 @@ final class ChatRoomViewController: MessagesViewController {
         self.messagesCollectionView.messagesLayoutDelegate = self
         self.messagesCollectionView.messagesDisplayDelegate = self
         self.messagesCollectionView.messageCellDelegate = self
-        self.scrollsToLastItemOnKeyboardBeginsEditing = true
+//        self.scrollsToLastItemOnKeyboardBeginsEditing = true
         self.maintainPositionOnKeyboardFrameChanged = true
     }
 
 //    MARK: Configure Message Input Bar
     private func configureMessageInputBar() {
-        self.messageInputBar.alpha = .zero
         self.messageInputBar.delegate = self
         self.messageInputBar.backgroundView.backgroundColor = .textFieldColor
         self.messageInputBar.inputTextView.backgroundColor = .textFieldColor

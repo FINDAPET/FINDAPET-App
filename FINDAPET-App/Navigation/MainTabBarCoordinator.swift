@@ -351,14 +351,16 @@ final class MainTabBarCoordinator: NSObject, RegistrationCoordinatable, Coordina
         self.chatRoomCoordinator.coordinatorDelegate = self
         self.createDealCoordinator.coordinatorDelegate = self
         self.profileCoordinator.coordinatorDelegate = self
-        self.subscriptionCoordinator.coordinatorDelegate = self
+//        full version
+//        self.subscriptionCoordinator.coordinatorDelegate = self
         self.tabBarController.navigationController?.navigationBar.isHidden = true
         self.tabBarController.viewControllers = [
             self.feedCoordinator.navigationController,
             self.chatRoomCoordinator.navigationController,
             self.createDealCoordinator.navigationController,
-            self.profileCoordinator.navigationController,
-            self.subscriptionCoordinator.navigationController
+            self.profileCoordinator.navigationController//,
+//            full version
+//            self.subscriptionCoordinator.navigationController
         ]
     }
     

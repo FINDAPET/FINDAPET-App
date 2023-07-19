@@ -11,8 +11,8 @@ final class ChatRoomRouter: ChatRoomCoordinatable {
     
     var coordinatorDelegate: ChatRoomCoordinator?
     
-    func goToProfile(userID: UUID? = nil) {
-        self.coordinatorDelegate?.goToProfile(userID: userID)
+    func getProfile(userID: UUID? = nil) -> ProfileViewController? {
+        self.coordinatorDelegate?.getProfile(userID: userID)
     }
     
     func getBrowseImage(_ dataSource: BrowseImagesViewControllerDataSource) -> BrowseImagesViewController? {
