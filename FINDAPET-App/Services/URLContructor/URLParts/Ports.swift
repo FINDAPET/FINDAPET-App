@@ -9,4 +9,5 @@ import Foundation
 
 enum Ports: Int {
     case localhost = 8080
+    case hostHTTP, hostWS = 80
 }

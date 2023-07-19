@@ -40,7 +40,7 @@ final class ChatRoomInteractor {
                 guard let data = (try? data?.gunzipped()) ?? data,
                       let model = try? JSONSerialization.jsonObject(with: data) as? [String : Any],
                       let isViewed = model["isViewed"] as? Bool else {
-                    print("❌ Error: decodint failed.")
+                    print("❌ Error: decoding failed.")
                     
                     DispatchQueue.main.async {
                         completionHandler(nil, RequestErrors.decodingFailed)
