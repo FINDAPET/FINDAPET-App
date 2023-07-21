@@ -278,10 +278,10 @@ final class ProfileViewController: UIViewController {
     private func getUser(isRefreshing: Bool = false) {
         if self.presenter.userID != nil {
             self.presenter.getSomeUser { [ weak self ] user, error in
+                self?.refreshControl.endRefreshing()
                 self?.error(error) {
                     self?.activityIndicatorView.isHidden = true
                     self?.tableView.isHidden = false
-                    self?.refreshControl.endRefreshing()
                     
                     guard let user = user, let self = self else {
                         if isRefreshing {
@@ -297,9 +297,9 @@ final class ProfileViewController: UIViewController {
         } else {
             self.presenter.getUser { [ weak self ] user, error in
                 self?.error(error) {
+                    self?.refreshControl.endRefreshing()
                     self?.activityIndicatorView.isHidden = true
                     self?.tableView.isHidden = false
-                    self?.refreshControl.endRefreshing()
                     
                     guard let user = user, let self = self else {
                         if isRefreshing {
